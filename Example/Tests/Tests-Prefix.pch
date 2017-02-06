@@ -2,7 +2,8 @@
 
 #ifdef __OBJC__
 
-  @import Specta;
-  @import Expecta;
+#import <Specta/Specta.h>
+#define EXP_SHORTHAND
+#import "Expecta.h"
 
 #endif
