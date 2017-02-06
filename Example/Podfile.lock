@@ -1,7 +1,18 @@
 PODS:
   - Expecta (1.0.5)
+  - Google-Mobile-Ads-SDK (7.16.0)
+  - InMobiSDK (6.0.1)
   - Specta (1.0.5)
-  - YumiMediationAdapters (0.1.0)
+  - YumiMediationAdapters (0.1.0):
+    - YumiMediationAdapters/AdMob (= 0.1.0)
+    - YumiMediationAdapters/InMobi (= 0.1.0)
+  - YumiMediationAdapters/AdMob (0.1.0):
+    - Google-Mobile-Ads-SDK (~> 7.0)
+    - YUMISDK (~> 1.6.2)
+  - YumiMediationAdapters/InMobi (0.1.0):
+    - InMobiSDK (~> 6.0.0)
+    - YUMISDK (~> 1.6.2)
+  - YUMISDK (1.6.21)
 
 DEPENDENCIES:
   - Expecta
@@ -14,9 +25,12 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Expecta: e1c022fcd33910b6be89c291d2775b3fe27a89fe
+  Google-Mobile-Ads-SDK: 92dff0e9ce1cfdfe640d9d80ab86d5e4371e478f
+  InMobiSDK: f3ad134f9e16766829761de56aef48ff9458a1df
   Specta: ac94d110b865115fe60ff2c6d7281053c6f8e8a2
-  YumiMediationAdapters: ca255a369885aab65570292e53942aa950334838
+  YumiMediationAdapters: 89f318de99cd24a66b5c2bfe3b975cfd9a033be0
+  YUMISDK: 810fa10e2e4360118272e6e111d2dddb23faa6b2
 
-PODFILE CHECKSUM: fe003979abd6d3511e53dd82b2a81152dbb72ff7
+PODFILE CHECKSUM: b6de178f3a750856ef5f891110f367cdd504beb4
 
 COCOAPODS: 1.1.1
