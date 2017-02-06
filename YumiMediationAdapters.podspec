@@ -9,17 +9,8 @@
 Pod::Spec.new do |s|
   s.name             = 'YumiMediationAdapters'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of YumiMediationAdapters.'
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
-
-  s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
+  s.summary          = 'Yumi Mediation Adapters.'
+  s.description      = 'This is the Yumi Mediation Adapters 0.1.0. Please proceed to http://developers.yumimobi.com/IosSdk/index for more information.'
 
   s.homepage         = 'https://github.com/yumimobi/YumiMediationAdapters-iOS'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
