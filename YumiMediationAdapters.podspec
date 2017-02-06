@@ -42,4 +42,10 @@ TODO: Add long description of the pod here.
     sp.dependency 'YUMISDK', '~> 1.6.2'
     sp.dependency 'Google-Mobile-Ads-SDK', '~> 7.0'
   end
+
+  s.subspec 'InMobi' do |sp|
+    sp.source_files = 'YumiMediationAdapters/InMobi/*.{h,m}'
+    sp.dependency 'YUMISDK', '~> 1.6.2'
+    sp.dependency 'InMobiSDK', '~> 6.0.0'
+  end
 end
