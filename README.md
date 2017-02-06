@@ -1,6 +1,6 @@
 # YumiMediationAdapters
 
-[![CI Status](http://img.shields.io/travis/on99/YumiMediationAdapters.svg?style=flat)](https://travis-ci.org/on99/YumiMediationAdapters)
+[![CI Status](http://img.shields.io/travis/yumimobi/YumiMediationAdapters.svg?style=flat)](https://travis-ci.org/yumimobi/YumiMediationAdapters)
 [![Version](https://img.shields.io/cocoapods/v/YumiMediationAdapters.svg?style=flat)](http://cocoapods.org/pods/YumiMediationAdapters)
 [![License](https://img.shields.io/cocoapods/l/YumiMediationAdapters.svg?style=flat)](http://cocoapods.org/pods/YumiMediationAdapters)
 [![Platform](https://img.shields.io/cocoapods/p/YumiMediationAdapters.svg?style=flat)](http://cocoapods.org/pods/YumiMediationAdapters)
