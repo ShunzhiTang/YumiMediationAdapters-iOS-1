@@ -23,6 +23,7 @@
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
+		D620C56C61759EDB8CBB0888 /* libPods-YumiMediationAdapters_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C0A49322BB8925BCC8AE681B /* libPods-YumiMediationAdapters_Tests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		0DCF16F913BF4A6CA7AA4617 /* libPods-YumiMediationAdapters_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YumiMediationAdapters_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E753DA598AC19548D4D39B2 /* Pods-YumiMediationAdapters_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YumiMediationAdapters_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YumiMediationAdapters_Tests/Pods-YumiMediationAdapters_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* YumiMediationAdapters_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YumiMediationAdapters_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -58,6 +60,7 @@
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		9BBE3EB59E5664E194D27A6C /* Pods-YumiMediationAdapters_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YumiMediationAdapters_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-YumiMediationAdapters_Tests/Pods-YumiMediationAdapters_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		B5D1102D422FD33AC0721EEA /* Pods-YumiMediationAdapters_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YumiMediationAdapters_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-YumiMediationAdapters_Example/Pods-YumiMediationAdapters_Example.release.xcconfig"; sourceTree = "<group>"; };
 		BADC81D4A611CA98876BB4E1 /* YumiMediationAdapters.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = YumiMediationAdapters.podspec; path = ../YumiMediationAdapters.podspec; sourceTree = "<group>"; };
 		C0A49322BB8925BCC8AE681B /* libPods-YumiMediationAdapters_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YumiMediationAdapters_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,6 +88,7 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
+				D620C56C61759EDB8CBB0888 /* libPods-YumiMediationAdapters_Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,6 +190,8 @@
 			children = (
 				FF980CA9A8A9D0F99AC1463B /* Pods-YumiMediationAdapters_Example.debug.xcconfig */,
 				B5D1102D422FD33AC0721EEA /* Pods-YumiMediationAdapters_Example.release.xcconfig */,
+				3E753DA598AC19548D4D39B2 /* Pods-YumiMediationAdapters_Tests.debug.xcconfig */,
+				9BBE3EB59E5664E194D27A6C /* Pods-YumiMediationAdapters_Tests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -217,9 +223,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6003F5C2195388D20070C39A /* Build configuration list for PBXNativeTarget "YumiMediationAdapters_Tests" */;
 			buildPhases = (
+				72685CDFB7134581A2EFFBC7 /* [CP] Check Pods Manifest.lock */,
 				6003F5AA195388D20070C39A /* Sources */,
 				6003F5AB195388D20070C39A /* Frameworks */,
 				6003F5AC195388D20070C39A /* Resources */,
+				0C8E2D5428B7DE8E3FD19F93 /* [CP] Embed Pods Frameworks */,
+				A9EE7A59D29E0B1DB3702AC7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -288,6 +297,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0C8E2D5428B7DE8E3FD19F93 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YumiMediationAdapters_Tests/Pods-YumiMediationAdapters_Tests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		5092D7C24E2D88FBD86C07A1 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -303,6 +327,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YumiMediationAdapters_Example/Pods-YumiMediationAdapters_Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		72685CDFB7134581A2EFFBC7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		98FE98624D59CBB83668052F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -316,6 +355,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		A9EE7A59D29E0B1DB3702AC7 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YumiMediationAdapters_Tests/Pods-YumiMediationAdapters_Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AD6062E2C64E9D42D625CDA6 /* [CP] Embed Pods Frameworks */ = {
@@ -507,6 +561,7 @@
 		};
 		6003F5C3195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3E753DA598AC19548D4D39B2 /* Pods-YumiMediationAdapters_Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -530,6 +585,7 @@
 		};
 		6003F5C4195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9BBE3EB59E5664E194D27A6C /* Pods-YumiMediationAdapters_Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
