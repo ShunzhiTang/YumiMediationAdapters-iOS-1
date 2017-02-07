@@ -1,12 +1,7 @@
 # use_frameworks!
 
 target 'YumiMediationAdapters_Example' do
-  pod 'YumiMediationAdapters', :path => '../'
 
-  target 'YumiMediationAdapters_Tests' do
-    inherit! :search_paths
+pod 'YumiMediationAdapters', :subspecs => ['InMobi', 'AdMob']
 
-    pod 'Specta'
-    pod 'Expecta'
-  end
 end
