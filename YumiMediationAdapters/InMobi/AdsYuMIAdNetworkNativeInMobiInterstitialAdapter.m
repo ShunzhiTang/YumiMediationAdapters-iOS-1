@@ -7,7 +7,7 @@
 //
 
 #import "AdsYuMIAdNetworkNativeInMobiInterstitialAdapter.h"
-#import "AdsYuMiInterstitialNativeViewController.h"
+#import <YumiMediationSDK/AdsYuMIKit/AdsYuMiInterstitialNativeViewController.h>
 #import <InMobiSDK/InMobiSDK.h>
 
 @interface AdsYuMIAdNetworkNativeInMobiInterstitialAdapter ()<AdsYuMiInterstitialNativeViewControllerDelegate,IMNativeDelegate>
