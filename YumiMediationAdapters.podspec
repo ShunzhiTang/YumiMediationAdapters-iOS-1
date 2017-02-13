@@ -8,18 +8,18 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YumiMediationAdapters'
-  s.version          = '0.4.0'
+  s.version          = '0.4.1'
   s.summary          = 'Yumi Mediation Adapters.'
   s.description      = 'This is the Yumi Mediation Adapters. Please proceed to http://developers.yumimobi.com/IosSdk/index for more information.'
 
   s.homepage         = 'https://github.com/yumimobi/YumiMediationAdapters-iOS'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'on99' => 'nanohugh@gmail.com' }
+  s.author           = { 'zplay sdk team' => 'ad-client@zplay.cn' }
   s.source           = { :git => 'https://github.com/yumimobi/YumiMediationAdapters-iOS.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '7.0'
 
-  s.dependency 'YumiMediationSDK', '>= 0.6.0'
+  s.dependency 'YumiMediationSDK', '>= 0.6.2'
 
   s.subspec 'AdMob' do |sp|
     sp.source_files = 'YumiMediationAdapters/AdMob/*.{h,m}'
