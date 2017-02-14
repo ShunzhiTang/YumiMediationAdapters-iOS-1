@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 AdsYuMI. All rights reserved.
 //
 
-#import <YumiMediationSDK/AdsYuMIKit/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import <InMobiSDK/InMobiSDK.h>
 
 @interface AdsYuMIAdNetworkInMobiAdapter : AdsYuMIAdNetworkAdapter <IMBannerDelegate>

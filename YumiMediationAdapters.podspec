@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YumiMediationAdapters'
-  s.version          = '0.4.1'
+  s.version          = '0.4.2'
   s.summary          = 'Yumi Mediation Adapters.'
   s.description      = 'This is the Yumi Mediation Adapters. Please proceed to http://developers.yumimobi.com/IosSdk/index for more information.'
 
@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '7.0'
 
-  s.dependency 'YumiMediationSDK', '>= 0.6.2'
+  s.dependency 'YumiMediationSDK', '~> 0.6.6'
 
   s.subspec 'AdMob' do |sp|
     sp.source_files = 'YumiMediationAdapters/AdMob/*.{h,m}'
