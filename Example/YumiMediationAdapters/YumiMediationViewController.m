@@ -7,9 +7,9 @@
 //
 
 #import "YumiMediationViewController.h"
-#import <AdsYuMIKit/AdsYuMIView.h>
-#import <AdsYuMIKit/YuMIInterstitial.h>
-#import <AdsYuMIKit/YuMIInterstitialManager.h>
+#import <YumiMediationSDK/AdsYuMIView.h>
+#import <YumiMediationSDK/YuMIInterstitial.h>
+#import <YumiMediationSDK/YuMIInterstitialManager.h>
 //#import "AdsYUMILogCenter.h"
 //#import <YuMIDebugCenter/YuMIDebugCenter.h>
 //#import "AdsYuMIDeviceInfo.h"
@@ -33,86 +33,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[AdsYuMILogCenter shareInstance] setLogLeveFlag:9];
-    
-    [[AdsYuMIDeviceInfo shareDevice] removeTestService];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"请选择服务器" message:nil delegate:self cancelButtonTitle:@"测试服务器" otherButtonTitles:@"正式服务器", nil];
-    alert.tag = 112;
-    [alert show];
-    
 }
 
-- (IBAction)showDebug:(id)sender {
-    [[YuMIDebugCenter shareInstance] startDebugging:self];
-}
-
-
-- (IBAction)initVideo:(id)sender {
-    videoManager=[YMVideoManager startWithYuMIId:YUMIVIDEO_ID channleId:YUMI_CHANNELID versionNumber:YUMI_VERSIONID delegate:self];
-    
-}
-
-- (IBAction)isExistVideo:(id)sender {
-    if ( [[YMVideoManager sharedVideoManager]isReadVideo]) {
-        UIAlertView * alertView =[[UIAlertView alloc]initWithTitle:@"提示" message:@"可以播放广告" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [alertView show];
-    }else{
-        UIAlertView * alertView =[[UIAlertView alloc]initWithTitle:@"提示" message:@"没广告" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [alertView show];
-    }
-}
-- (IBAction)playVideo:(id)sender {
-    [[YMVideoManager sharedVideoManager]playVideo];
-}
-
-
-//预加载插屏
-- (IBAction)clickInterstitialUpload:(id)sender {
-    
-    inter= [[YuMIInterstitialManager shareInstance]adYuMIInterstitialByAppKey:YUMIINTERSTITIAL_ID channleId:YUMI_CHANNELID versionNumber:YUMI_VERSIONID isStopRotation:NO];
-    inter.delegate=self;
-    
-}
-
-//插屏展示
-- (IBAction)clickInterstitialShow:(id)sender {
-    if (inter) {
-        [inter interstitialShow:NO];
-    }
-}
-
-
-- (IBAction)removeBanner:(id)sender {
-    if (adView) {
-        [adView removeFromSuperview];
-    }
-}
-
-- (IBAction)createBanner:(id)sender {
-    
-    float h;
-    float w = [UIScreen mainScreen].bounds.size.width;
-    
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        float proportion = 90.0f/728.0f;
-        h = w * proportion;
-    }else{
-        float proportion = 50.0f/320.0f;
-        h = w * proportion;
-    }
-    
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        adView =[[AdsYuMIView alloc]initWithAppKey:YUMIBANNER_ID channleId:YUMI_CHANNELID versionNumber:YUMI_VERSIONID AdViewType:AdViewYMTypeLargeBanner StopRotation:NO
-                                      isAutoAdSize:YES];
-        adView.frame=CGRectMake(0,self.view.frame.size.height-h,0, 0);
-    }else {
-        adView =[[AdsYuMIView alloc]initWithAppKey:YUMIBANNER_ID channleId:YUMI_CHANNELID versionNumber:YUMI_VERSIONID AdViewType:AdViewYMTypeNormalBanner StopRotation:NO
-                                      isAutoAdSize:YES];
-        adView.frame=CGRectMake(0,self.view.frame.size.height-h,0, 0);
-    }
-    adView.delegate=self;
-    [self.view addSubview:adView];
-}
 
 
 #pragma mark - YUMIBanner delegate
@@ -213,19 +135,6 @@
     
 }
 
-#pragma mark - AlertView delegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    switch (buttonIndex) {
-        case 0:
-            [[AdsYuMIDeviceInfo shareDevice] openTestService:YES];
-            break;
-        case 1:
-            [[AdsYuMIDeviceInfo shareDevice] openTestService:NO];
-            break;
-        default:
-            break;
-    }
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
