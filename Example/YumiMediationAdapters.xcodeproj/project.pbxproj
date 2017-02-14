@@ -250,6 +250,9 @@
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = on99;
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = VG25A6M88T;
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
@@ -534,6 +537,13 @@
 			baseConfigurationReference = FF980CA9A8A9D0F99AC1463B /* Pods-YumiMediationAdapters_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = VG25A6M88T;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Google-Mobile-Ads-SDK/Frameworks/frameworks\"",
+					"\"${PODS_ROOT}/InMobiSDK\"",
+					"\"${PODS_ROOT}/YumiMediationSDK/Frameworks\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YumiMediationAdapters/YumiMediationAdapters-Prefix.pch";
 				INFOPLIST_FILE = "YumiMediationAdapters/YumiMediationAdapters-Info.plist";
@@ -549,6 +559,13 @@
 			baseConfigurationReference = B5D1102D422FD33AC0721EEA /* Pods-YumiMediationAdapters_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = VG25A6M88T;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Google-Mobile-Ads-SDK/Frameworks/frameworks\"",
+					"\"${PODS_ROOT}/InMobiSDK\"",
+					"\"${PODS_ROOT}/YumiMediationSDK/Frameworks\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YumiMediationAdapters/YumiMediationAdapters-Prefix.pch";
 				INFOPLIST_FILE = "YumiMediationAdapters/YumiMediationAdapters-Info.plist";
