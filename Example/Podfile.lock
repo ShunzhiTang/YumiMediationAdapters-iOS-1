@@ -3,16 +3,16 @@ PODS:
   - Google-Mobile-Ads-SDK (7.17.0)
   - InMobiSDK (6.0.1)
   - Specta (1.0.6)
-  - YumiMediationAdapters (0.4.1):
-    - YumiMediationAdapters/AdMob (= 0.4.1)
-    - YumiMediationAdapters/InMobi (= 0.4.1)
-    - YumiMediationSDK (~> 0.6.5)
-  - YumiMediationAdapters/AdMob (0.4.1):
+  - YumiMediationAdapters (0.4.2):
+    - YumiMediationAdapters/AdMob (= 0.4.2)
+    - YumiMediationAdapters/InMobi (= 0.4.2)
+    - YumiMediationSDK (~> 0.6.6)
+  - YumiMediationAdapters/AdMob (0.4.2):
     - Google-Mobile-Ads-SDK (~> 7.0)
-    - YumiMediationSDK (~> 0.6.5)
-  - YumiMediationAdapters/InMobi (0.4.1):
+    - YumiMediationSDK (~> 0.6.6)
+  - YumiMediationAdapters/InMobi (0.4.2):
     - InMobiSDK (~> 6.0.0)
-    - YumiMediationSDK (~> 0.6.5)
+    - YumiMediationSDK (~> 0.6.6)
   - YumiMediationSDK (0.6.6)
 
 DEPENDENCIES:
@@ -29,7 +29,7 @@ SPEC CHECKSUMS:
   Google-Mobile-Ads-SDK: a8bf4211624999b73e4184be516f94770b139525
   InMobiSDK: f3ad134f9e16766829761de56aef48ff9458a1df
   Specta: f506f3a8361de16bc0dcf3b17b75e269072ba465
-  YumiMediationAdapters: 49fe9622f92d809e9d82f02eef1a13724bab6295
+  YumiMediationAdapters: 3d9bff50b781862544e14a82d82cd639ecee0566
   YumiMediationSDK: 9cf0429292745cdab812a2ddb6650e628e9e3069
 
 PODFILE CHECKSUM: 8657346519ec47bba6db6701018223f6bf7f2340
