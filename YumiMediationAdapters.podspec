@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YumiMediationAdapters'
-  s.version          = '0.4.2'
+  s.version          = '0.4.3'
   s.summary          = 'Yumi Mediation Adapters.'
   s.description      = 'This is the Yumi Mediation Adapters. Please proceed to http://developers.yumimobi.com/IosSdk/index for more information.'
 
@@ -29,6 +29,10 @@ Pod::Spec.new do |s|
   s.subspec 'InMobi' do |sp|
     sp.source_files = 'YumiMediationAdapters/InMobi/*.{h,m}'
     sp.dependency 'InMobiSDK', '~> 6.0.0'
+  end
+
+  s.subspec 'Facebook' do |sp|
+    sp.dependency 'FBAudienceNetwork', '~> 4.19.0'
   end
 
 end
