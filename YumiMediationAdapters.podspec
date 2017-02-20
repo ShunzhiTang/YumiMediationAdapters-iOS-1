@@ -32,6 +32,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'Facebook' do |sp|
+    sp.source_files = 'YumiMediationAdapters/Facebook/*.{h,m}'
     sp.dependency 'FBAudienceNetwork', '~> 4.19.0'
   end
 
