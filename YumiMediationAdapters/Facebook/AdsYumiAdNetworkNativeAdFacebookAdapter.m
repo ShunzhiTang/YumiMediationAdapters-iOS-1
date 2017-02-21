@@ -25,7 +25,14 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
 
 #import "AdsYumiAdNetworkNativeAdFacebookAdapter.h"
 
-@implementation AdsYumiAdNetworkNativeAdFacebookAdapter
+@implementation AdsYumiAdNetworkNativeAdFacebookAdapter{
+    //视图间隔
+    float interval;
+    //banner 高度
+    float height;
+    //banner 宽度
+    float width;
+}
 
 + (NSString*)networkType{
     return AdsYuMIAdNetworkAdFacebook;
@@ -38,33 +45,6 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
 -(void)getAd{
     
     isReading=NO;
-    FBAdSize adSize =  kFBAdSize320x50;
-    switch (self.adType) {
-        case AdViewYMTypeNormalBanner:
-        case AdViewYMTypeiPadNormalBanner:
-            adSize = kFBAdSizeHeight50Banner;
-            break;
-        case AdViewYMTypeRectangle:
-            adSize = kFBAdSizeHeight250Rectangle;
-            break;
-        case AdViewYMTypeMediumBanner:
-            adSize = kFBAdSizeInterstitial;
-            break;
-        case AdViewYMTypeLargeBanner:
-            adSize = kFBAdSizeHeight90Banner;
-            break;
-        default:
-            [self adapter:self didFailAd:nil];
-            break;
-    }
-    
-    if (self.IsAutoAdSize) {
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-            adSize = kFBAdSizeHeight90Banner;
-        }else {
-            adSize = kFBAdSizeHeight50Banner;
-        }
-    }
     
     [self adDidStartRequestAd];
     
@@ -100,28 +80,32 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
         h = w * proportion;
     }
 
+    width = w;
+    height = h;
+    
     self.AdUIView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, w, h)];
     //小图
     float space = (h-50)/2;
-    self.adIconImageView = [[UIImageView alloc]initWithFrame:CGRectMake1(space, space, 50, 50)];
+    interval = space;
+    self.adIconImageView = [[UIImageView alloc]initWithFrame:CGRectMake1(0, space, 50, 50)];
     
     //tittle
-    self.adTitleLable = [[UILabel alloc]initWithFrame:CGRectMake1(space*2+50, space, 180, 30)];
+    self.adTitleLable = [[UILabel alloc]initWithFrame:CGRectMake1(space+50, space, 180, 30)];
     
     //adSocialContext
-    self.adSocialContext = [[UILabel alloc]initWithFrame:CGRectMake1(space*2+50, space*2+20, 180, 10)];
+    self.adSocialContext = [[UILabel alloc]initWithFrame:CGRectMake1(space+50, space*2+20, 180, 10)];
     
     //button
-    self.adCallToActionButton = [[UIButton alloc]initWithFrame:CGRectMake1(space*3+50+180, (h-30)/2, 90, 30)];
+    self.adCallToActionButton = [[UIButton alloc]initWithFrame:CGRectMake1(space*2+50+180, (h-30)/1.5, 90, 30)];
     self.adCallToActionButton.backgroundColor = [UIColor colorWithRed:74/255.0 green:123/255.0 blue:251/255.0 alpha:1.0];
     
     //backgroundView
-    UIView *backgroundView = [[UIView alloc]initWithFrame:CGRectMake((w-(space+self.adCallToActionButton.frame.origin.x+self.adCallToActionButton.frame.size.width))/2, 0, space+self.adCallToActionButton.frame.origin.x+self.adCallToActionButton.frame.size.width, h)];
-    [backgroundView addSubview:self.adIconImageView];
-    [backgroundView addSubview:self.adTitleLable];
-    [backgroundView addSubview:self.adSocialContext];
-    [backgroundView addSubview:self.adCallToActionButton];
-    [self.AdUIView addSubview:backgroundView];
+    self.backgroundView = [[UIView alloc]initWithFrame:CGRectMake((w-(self.adCallToActionButton.frame.origin.x+self.adCallToActionButton.frame.size.width))/2, 0, self.adCallToActionButton.frame.origin.x+self.adCallToActionButton.frame.size.width, h)];
+    [self.backgroundView addSubview:self.adIconImageView];
+    [self.backgroundView addSubview:self.adTitleLable];
+    [self.backgroundView addSubview:self.adSocialContext];
+    [self.backgroundView addSubview:self.adCallToActionButton];
+    [self.AdUIView addSubview:self.backgroundView];
 }
 
 -(void)stopAd {
@@ -185,6 +169,13 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
     self.adSocialContext.text = self.nativeAd.socialContext;
     [self.adCallToActionButton setTitle:self.nativeAd.callToAction
                                forState:UIControlStateNormal];
+    //adChoicesView
+    self.adChoicesView = [[FBAdChoicesView alloc]initWithNativeAd:self.nativeAd];
+    self.adChoicesView.nativeAd = nativeAd;
+    self.adChoicesView.corner = UIRectCornerTopRight;
+    self.adChoicesView.hidden = NO;
+    [self.backgroundView addSubview:self.adChoicesView];
+    [self.adChoicesView updateFrameFromSuperview];
     
 }
 
