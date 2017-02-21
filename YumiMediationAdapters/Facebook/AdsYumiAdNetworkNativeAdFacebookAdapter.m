@@ -112,15 +112,15 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
     self.adSocialContext = [[UILabel alloc]initWithFrame:CGRectMake1(space*2+50, space*2+20, 180, 10)];
     
     //button
-    self.adCallToActionaButton = [[UIButton alloc]initWithFrame:CGRectMake1(space*3+50+180, (h-30)/2, 90, 30)];
-    self.adCallToActionaButton.backgroundColor = [UIColor colorWithRed:74/255.0 green:123/255.0 blue:251/255.0 alpha:1.0];
+    self.adCallToActionButton = [[UIButton alloc]initWithFrame:CGRectMake1(space*3+50+180, (h-30)/2, 90, 30)];
+    self.adCallToActionButton.backgroundColor = [UIColor colorWithRed:74/255.0 green:123/255.0 blue:251/255.0 alpha:1.0];
     
     //backgroundView
-    UIView *backgroundView = [[UIView alloc]initWithFrame:CGRectMake((w-(space+self.adCallToActionaButton.frame.origin.x+self.adCallToActionaButton.frame.size.width))/2, 0, space+self.adCallToActionaButton.frame.origin.x+self.adCallToActionaButton.frame.size.width, h)];
+    UIView *backgroundView = [[UIView alloc]initWithFrame:CGRectMake((w-(space+self.adCallToActionButton.frame.origin.x+self.adCallToActionButton.frame.size.width))/2, 0, space+self.adCallToActionButton.frame.origin.x+self.adCallToActionButton.frame.size.width, h)];
     [backgroundView addSubview:self.adIconImageView];
     [backgroundView addSubview:self.adTitleLable];
     [backgroundView addSubview:self.adSocialContext];
-    [backgroundView addSubview:self.adCallToActionaButton];
+    [backgroundView addSubview:self.adCallToActionButton];
     [self.AdUIView addSubview:backgroundView];
 }
 
@@ -240,7 +240,7 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
         self.AdUIView = nil;
         self.adTitleLable = nil;
         self.adSocialContext = nil;
-        self.adCallToActionaButton = nil;
+        self.adCallToActionButton = nil;
         self.nativeAd.delegate = nil;
         self.nativeAd = nil;
 }
