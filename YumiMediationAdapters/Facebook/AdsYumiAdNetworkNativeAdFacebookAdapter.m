@@ -123,6 +123,7 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
     [backgroundView addSubview:self.adCallToActionaButton];
     [self.AdUIView addSubview:backgroundView];
 }
+
 -(void)stopAd {
     isStop = YES;
     [self stopTimer];
@@ -182,7 +183,7 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
     // Render native ads onto UIView
     self.adTitleLable.text = self.nativeAd.title;
     self.adSocialContext.text = self.nativeAd.socialContext;
-    [self.adCallToActionaButton setTitle:self.nativeAd.callToAction
+    [self.adCallToActionButton setTitle:self.nativeAd.callToAction
                                forState:UIControlStateNormal];
     
 }

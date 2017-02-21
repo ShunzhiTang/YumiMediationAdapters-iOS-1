@@ -6,7 +6,7 @@
 //
 //
 
-#import "AdsYuMIAdNetworkAdapter.h"
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
 
 @interface AdsYumiAdNetworkNativeAdFacebookAdapter : AdsYuMIAdNetworkAdapter<FBNativeAdDelegate>
@@ -20,6 +20,6 @@
 @property (strong,nonatomic) UIImageView *adIconImageView;
 @property (strong,nonatomic) UILabel *adTitleLable;
 @property (strong,nonatomic) UILabel *adSocialContext;
-@property (strong,nonatomic) UIButton *adCallToActionaButton;
+@property (strong,nonatomic) UIButton *adCallToActionButton;
 
 @end

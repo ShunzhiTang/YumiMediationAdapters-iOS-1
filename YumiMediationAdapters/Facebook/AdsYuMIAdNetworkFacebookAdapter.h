@@ -6,8 +6,7 @@
 //  Copyright (c) 2015年 AdsYuMI. All rights reserved.
 //
 
-#import "AdsYuMIAdNetworkAdapter.h"
-
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import <FBAudienceNetwork/FBAdView.h>
 
 @interface AdsYuMIAdNetworkFacebookAdapter : AdsYuMIAdNetworkAdapter <FBAdViewDelegate>
