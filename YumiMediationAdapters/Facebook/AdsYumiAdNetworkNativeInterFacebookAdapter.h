@@ -8,8 +8,9 @@
 
 #import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
+#import "YumiFacebookAdapterInterstitialVc.h"
 
-@interface AdsYumiAdNetworkNativeInterFacebookAdapter : AdsYuMIAdNetworkAdapter
+@interface AdsYumiAdNetworkNativeInterFacebookAdapter : AdsYuMIAdNetworkAdapter<FBNativeAdDelegate,FBMediaViewDelegate>
 {
     NSTimer * timer;
     BOOL isReading;
@@ -27,5 +28,6 @@
 @property (strong, nonatomic)  UIView *adUIView;
 //关闭按钮
 @property (strong,nonatomic) UIButton *closeButton;
+@property (strong,nonatomic) YumiFacebookAdapterInterstitialVc *intestitialView;
 
 @end
