@@ -55,6 +55,8 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
     else{
         timer = [NSTimer scheduledTimerWithTimeInterval:8 target:self selector:@selector(timeOutTimer) userInfo:nil repeats:NO];
     }
+    //计算自适应宽高
+    [self autoLayoutWidthAndHeight];
     
     //竖屏
     [self createBannerView];
@@ -67,8 +69,7 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
     self.adNetworkView = self.AdUIView;
   
 }
-
--(void)createBannerView{
+-(void)autoLayoutWidthAndHeight{
     float h;
     float w = [UIScreen mainScreen].bounds.size.width;
     
@@ -79,13 +80,17 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
         float proportion = 50.0f/320.0f;
         h = w * proportion;
     }
-
+    
     width = w;
     height = h;
+
+}
+
+-(void)createBannerView{
     
-    self.AdUIView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, w, h)];
+    self.AdUIView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, width, height)];
     //小图
-    float space = (h-50)/2;
+    float space = (height-50)/2;
     interval = space;
     self.adIconImageView = [[UIImageView alloc]initWithFrame:CGRectMake1(0, space, 50, 50)];
     
@@ -96,11 +101,11 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
     self.adSocialContext = [[UILabel alloc]initWithFrame:CGRectMake1(space+50, space*2+20, 180, 10)];
     
     //button
-    self.adCallToActionButton = [[UIButton alloc]initWithFrame:CGRectMake1(space*2+50+180, (h-30)/1.5, 90, 30)];
+    self.adCallToActionButton = [[UIButton alloc]initWithFrame:CGRectMake1(space*2+50+180, (height-30)/1.5, 90, 30)];
     self.adCallToActionButton.backgroundColor = [UIColor colorWithRed:74/255.0 green:123/255.0 blue:251/255.0 alpha:1.0];
     
     //backgroundView
-    self.backgroundView = [[UIView alloc]initWithFrame:CGRectMake((w-(self.adCallToActionButton.frame.origin.x+self.adCallToActionButton.frame.size.width))/2, 0, self.adCallToActionButton.frame.origin.x+self.adCallToActionButton.frame.size.width, h)];
+    self.backgroundView = [[UIView alloc]initWithFrame:CGRectMake((width-(self.adCallToActionButton.frame.origin.x+self.adCallToActionButton.frame.size.width))/2, 0, self.adCallToActionButton.frame.origin.x+self.adCallToActionButton.frame.size.width, height)];
     [self.backgroundView addSubview:self.adIconImageView];
     [self.backgroundView addSubview:self.adTitleLable];
     [self.backgroundView addSubview:self.adSocialContext];
@@ -232,6 +237,8 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
         self.adTitleLable = nil;
         self.adSocialContext = nil;
         self.adCallToActionButton = nil;
+        self.backgroundView = nil;
+        self.adChoicesView = nil;
         self.nativeAd.delegate = nil;
         self.nativeAd = nil;
 }
