@@ -8,6 +8,7 @@
 
 #import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
+#import "YumiFaceboolAdapterBannerVC.h"
 
 @interface AdsYumiAdNetworkNativeAdFacebookAdapter : AdsYuMIAdNetworkAdapter<FBNativeAdDelegate>
 {
@@ -15,6 +16,7 @@
     NSTimer * timer;
     BOOL isReading;
 }
+@property (strong,nonatomic) YumiFaceboolAdapterBannerVC *bannerVC;
 @property (strong, nonatomic) FBNativeAd *nativeAd;
 @property (strong,nonatomic) UIView *AdUIView;
 @property (strong,nonatomic) UIImageView *adIconImageView;

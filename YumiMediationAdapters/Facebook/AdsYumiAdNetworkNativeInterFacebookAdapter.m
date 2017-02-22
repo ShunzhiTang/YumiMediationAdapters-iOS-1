@@ -92,23 +92,6 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
         return vc;
 }
 
--(UIViewController *)createInterView{
-    //关闭按钮
-    UIImage *closeImage = [self getBundleResourcesFromCustomBundle:@"adsyumi_adClose2"type:@"png"];
-    //interstitial view
-    UIViewController *interstitial = [self getNibResourceFromCustomBundle:@"YumiFacebookInterstitialNativeAdapter" type:@"nib"] ;
-    self.adUIView = [interstitial.view viewWithTag:10010];
-    self.adIconImageView = [interstitial.view viewWithTag:10011];
-    self.adTitleLabel = [interstitial.view viewWithTag:10012];
-    self.adCoverMediaView = [self.adUIView viewWithTag:10013];
-    self.adBodyLabel = [interstitial.view viewWithTag:10014];
-    self.adSocialContextLabel = [interstitial.view viewWithTag:10015];
-    self.sponsoredLabel = [interstitial.view viewWithTag:10016];
-    self.adCallToActionButton = [interstitial.view viewWithTag:10017];
-    self.adChoicesView = [interstitial.view viewWithTag:10018];
-    return interstitial;
-}
-
 -(YumiFacebookAdapterInterstitialVc *)createInterstitialVc{
     //关闭按钮
     UIImage *closeImage = [self getBundleResourcesFromCustomBundle:@"adsyumi_adClose2"type:@"png"];
@@ -146,10 +129,8 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
 
 -(void)preasentInterstitial{
     if (isReady) {
-        
         UIViewController *vc = [self viewControllerForWillPresentInterstitialModalView];
         [vc presentViewController:self.intestitialView animated:YES completion:^{
-            
         }];
     }
 }
@@ -200,12 +181,6 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
     [nativeAd registerViewForInteraction:self.intestitialView.adUIView
                       withViewController:self];
     
-    // Or you can replace above call with following function, so you can specify the clickable areas.
-    // NSArray *clickableViews = @[self.adCallToActionButton, self.adCoverMediaView];
-    // [nativeAd registerViewForInteraction:self.adUIView
-    //                   withViewController:self
-    //                   withClickableViews:clickableViews];
-    
     // Update AdChoices view
     self.intestitialView.adChoicesView.nativeAd = nativeAd;
     self.intestitialView.adChoicesView.corner = UIRectCornerTopRight;
@@ -234,7 +209,7 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
     }
     isReading=YES;
     [self stopTimer];
-    [self adapter:self didInterstitialFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"Facebook no ad"]];
+    [self adapter:self didInterstitialFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:[NSString stringWithFormat:@"Facebook no ad !!! error:%@",error]]];
 }
 
 /**
@@ -257,6 +232,9 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
     
 }
 //关闭回调
+-(void)closeFacebookIntestitial{
+    [[self viewControllerForWillPresentInterstitialModalView] dismissViewControllerAnimated:YES completion:nil];;
+}
 
 #pragma mark FBMediaViewDelegate
 /**
