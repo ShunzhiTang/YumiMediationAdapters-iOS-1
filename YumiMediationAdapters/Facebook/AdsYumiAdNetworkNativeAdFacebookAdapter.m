@@ -32,8 +32,6 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
     float height;
     //banner 宽度
     float width;
-    //是否竖屏
-    BOOL isV;
 }
 
 + (NSString*)networkType{
@@ -47,16 +45,15 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
 -(void)getAd{
     
     isReading=NO;
-    isV = NO;
     [self adDidStartRequestAd];
     
-//    id _timeInterval = self.provider.outTime;
-//    if ([_timeInterval isKindOfClass:[NSNumber class]]) {
-//        timer = [NSTimer scheduledTimerWithTimeInterval:[_timeInterval doubleValue] target:self selector:@selector(timeOutTimer) userInfo:nil repeats:NO];
-//    }
-//    else{
-//        timer = [NSTimer scheduledTimerWithTimeInterval:8 target:self selector:@selector(timeOutTimer) userInfo:nil repeats:NO];
-//    }
+    id _timeInterval = self.provider.outTime;
+    if ([_timeInterval isKindOfClass:[NSNumber class]]) {
+        timer = [NSTimer scheduledTimerWithTimeInterval:[_timeInterval doubleValue] target:self selector:@selector(timeOutTimer) userInfo:nil repeats:NO];
+    }
+    else{
+        timer = [NSTimer scheduledTimerWithTimeInterval:8 target:self selector:@selector(timeOutTimer) userInfo:nil repeats:NO];
+    }
     [self autoLayoutWidthAndHeight];
     [self getNibResourceFromCustomBundle];
     

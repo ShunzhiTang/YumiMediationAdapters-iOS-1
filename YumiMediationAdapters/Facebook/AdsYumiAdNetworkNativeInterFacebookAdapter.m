@@ -27,6 +27,11 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
 
 @implementation AdsYumiAdNetworkNativeInterFacebookAdapter{
     BOOL isReady;
+    //banner 高度
+    float height;
+    //banner 宽度
+    float width;
+
 }
 
 + (NSString*)networkType{
@@ -92,12 +97,33 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
         return vc;
 }
 
+-(void)autoLayoutWidthAndHeight{
+    float h;
+    float w = [UIScreen mainScreen].bounds.size.width;
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        float proportion = 90.0f/728.0f;
+        h = w * proportion;
+    }else{
+        float proportion = 50.0f/320.0f;
+        h = w * proportion;
+    }
+    
+    width = w;
+    height = h;
+    
+}
+
 -(YumiFacebookAdapterInterstitialVc *)createInterstitialVc{
     //关闭按钮
     UIImage *closeImage = [self getBundleResourcesFromCustomBundle:@"adsyumi_adClose2"type:@"png"];
-    
+    UIButton *closeButton = [[UIButton alloc]initWithFrame:CGRectMake(width-25, 0, 25, 25)];
+    [closeButton addTarget:self action:@selector(closeFacebookIntestitial) forControlEvents:UIControlEventTouchUpInside];
     YumiFacebookAdapterInterstitialVc *interstitial = [self getNibResourceFromCustomBundle:@"YumiFacebookInterstitialNativeAdapter" type:@"nib"] ;
-    
+    UIImageView *backImage = [[UIImageView alloc]initWithFrame:interstitial.view.frame];
+    backImage.image = closeImage;
+    [interstitial.view addSubview:backImage];
+    [interstitial.view addSubview:closeButton];
     return interstitial;
 }
 
