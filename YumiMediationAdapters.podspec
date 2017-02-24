@@ -41,6 +41,11 @@ Pod::Spec.new do |s|
     sp.dependency 'AdColony', '~> 2.6.3'
     end
 
+    s.subspec 'Chartboost' do |sp|
+    sp.source_files = 'YumiMediationAdapters/Chartboost/*.{h,m}'
+    sp.dependency 'ChartboostSDK', '~> 6.6.1'
+    end
+
 
   s.subspec 'Facebook' do |sp|
     sp.source_files = 'YumiMediationAdapters/Facebook/*.{h,m}'

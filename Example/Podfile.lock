@@ -1,22 +1,37 @@
 PODS:
+  - AdColony (2.6.3)
+  - ChartboostSDK (6.6.1)
   - Expecta (1.0.5)
   - FBAudienceNetwork (4.19.0)
   - Google-Mobile-Ads-SDK (7.17.0)
   - InMobiSDK (6.0.1)
   - Specta (1.0.6)
+  - VungleSDK-iOS (4.0.9)
   - YumiMediationAdapters (0.4.3):
+    - YumiMediationAdapters/AdColony (= 0.4.3)
     - YumiMediationAdapters/AdMob (= 0.4.3)
+    - YumiMediationAdapters/Chartboost (= 0.4.3)
     - YumiMediationAdapters/Facebook (= 0.4.3)
     - YumiMediationAdapters/InMobi (= 0.4.3)
+    - YumiMediationAdapters/Vungle (= 0.4.3)
+    - YumiMediationSDK (~> 0.6.6)
+  - YumiMediationAdapters/AdColony (0.4.3):
+    - AdColony (~> 2.6.3)
     - YumiMediationSDK (~> 0.6.6)
   - YumiMediationAdapters/AdMob (0.4.3):
     - Google-Mobile-Ads-SDK (~> 7.0)
+    - YumiMediationSDK (~> 0.6.6)
+  - YumiMediationAdapters/Chartboost (0.4.3):
+    - ChartboostSDK (~> 6.6.1)
     - YumiMediationSDK (~> 0.6.6)
   - YumiMediationAdapters/Facebook (0.4.3):
     - FBAudienceNetwork (~> 4.19.0)
     - YumiMediationSDK (~> 0.6.6)
   - YumiMediationAdapters/InMobi (0.4.3):
     - InMobiSDK (~> 6.0.0)
+    - YumiMediationSDK (~> 0.6.6)
+  - YumiMediationAdapters/Vungle (0.4.3):
+    - VungleSDK-iOS (~> 4.0.8)
     - YumiMediationSDK (~> 0.6.6)
   - YumiMediationSDK (0.6.6)
 
@@ -30,12 +45,15 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
+  AdColony: 8a84d65b0d7f0e218813902890ce3bd48d870a8d
+  ChartboostSDK: d8a43d8913910b0445f12ae64364c683499e57b6
   Expecta: e1c022fcd33910b6be89c291d2775b3fe27a89fe
   FBAudienceNetwork: 6081a5ce8c54419582b06267f777682d40c26c7a
   Google-Mobile-Ads-SDK: a8bf4211624999b73e4184be516f94770b139525
   InMobiSDK: f3ad134f9e16766829761de56aef48ff9458a1df
   Specta: f506f3a8361de16bc0dcf3b17b75e269072ba465
-  YumiMediationAdapters: 4f1efd0e7a315e9a89012d1dee02b5b4d44db0a5
+  VungleSDK-iOS: 053446955ef1fa777fd699b6bea6635cac604524
+  YumiMediationAdapters: 4f5bf58c63af3c88acaaa3932804b14e3f95077d
   YumiMediationSDK: 9cf0429292745cdab812a2ddb6650e628e9e3069
 
 PODFILE CHECKSUM: 8657346519ec47bba6db6701018223f6bf7f2340
