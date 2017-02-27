@@ -31,15 +31,15 @@ Pod::Spec.new do |s|
     sp.dependency 'InMobiSDK', '~> 6.0.0'
   end
 
-    s.subspec 'Vungle' do |sp|
-    sp.source_files = 'YumiMediationAdapters/Vungle/*.{h,m}'
-    sp.dependency 'VungleSDK-iOS', '~> 4.0.8'
-    end
+#   s.subspec 'Vungle' do |sp|
+#   sp.source_files = 'YumiMediationAdapters/Vungle/*.{h,m}'
+#   sp.dependency 'VungleSDK-iOS', '~> 4.0.8'
+#   end
 
-    s.subspec 'AdColony' do |sp|
-    sp.source_files = 'YumiMediationAdapters/AdColony/*.{h,m}'
-    sp.dependency 'AdColony', '~> 2.6.3'
-    end
+#s.subspec 'AdColony' do |sp|
+#   sp.source_files = 'YumiMediationAdapters/AdColony/*.{h,m}'
+#    sp.dependency 'AdColony', '~> 2.6.3'
+#    end
 
     s.subspec 'Chartboost' do |sp|
     sp.source_files = 'YumiMediationAdapters/Chartboost/*.{h,m}'
