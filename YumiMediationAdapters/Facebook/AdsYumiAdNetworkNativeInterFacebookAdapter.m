@@ -119,9 +119,13 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
     UIImage *closeImage = [self getBundleResourcesFromCustomBundle:@"adsyumi_adClose2"type:@"png"];
     UIButton *closeButton = [[UIButton alloc]initWithFrame:CGRectMake(width-25, 0, 25, 25)];
     [closeButton addTarget:self action:@selector(closeFacebookIntestitial) forControlEvents:UIControlEventTouchUpInside];
+    closeButton.imageView.image = closeImage;
+    
     YumiFacebookAdapterInterstitialVc *interstitial = [self getNibResourceFromCustomBundle:@"YumiFacebookInterstitialNativeAdapter" type:@"nib"] ;
-    UIImageView *backImage = [[UIImageView alloc]initWithFrame:interstitial.view.frame];
-    backImage.image = closeImage;
+   //背景图片
+    UIImage *backImage = [self getBundleResourcesFromCustomBundle:@"Admob" type:@"jpg"];
+    UIImageView *backImageView = [[UIImageView alloc]initWithFrame:interstitial.view.frame];
+    backImageView.image = backImage;
     [interstitial.view addSubview:backImage];
     [interstitial.view addSubview:closeButton];
     return interstitial;
