@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina3_5" orientation="landscape">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="GADNativeAppInstallAdView">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="320"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Admob.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="aYZ-aR-b0A">
+                    <rect key="frame" x="-1" y="0.0" width="482" height="320"/>
+                </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lgS-Jd-N6i">
+                    <rect key="frame" x="85" y="15" width="310" height="290"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Gd-vd-F61">
+                            <rect key="frame" x="58" y="8" width="162" height="23"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wrN-j0-RP3">
+                            <rect key="frame" x="5" y="8" width="45" height="45"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PaL-gi-ojY">
+                            <rect key="frame" x="58" y="39" width="67" height="14"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cX5-Rl-Ele" customClass="GADMediaView">
+                            <rect key="frame" x="5" y="60" width="300" height="173"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </view>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="免费" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sg9-yb-T5z">
+                            <rect key="frame" x="128" y="39" width="55" height="14"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" red="0.87630890049999999" green="0.37605898910000002" blue="0.055613648789999998" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o5O-PL-l0d">
+                            <rect key="frame" x="217" y="247" width="85" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.31507330201363426" green="0.61899080009206831" blue="0.99835759401321411" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <state key="normal" title="立即安装">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G8y-d7-ggH">
+                            <rect key="frame" x="8" y="236" width="204" height="46"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="290" id="Dsf-ec-72q"/>
+                        <constraint firstAttribute="width" constant="310" id="coS-TA-CKj"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QG9-0B-VKg">
+                    <rect key="frame" x="0.0" y="0.0" width="480" height="320"/>
+                </button>
+                <button opaque="NO" tag="120" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kum-b5-rFj">
+                    <rect key="frame" x="449" y="10" width="25" height="25"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="25" id="WHV-Ft-3Jz"/>
+                        <constraint firstAttribute="height" constant="25" id="yGM-7E-kOb"/>
+                    </constraints>
+                    <state key="normal" backgroundImage="admob_close.png"/>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="aYZ-aR-b0A" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" id="0Fy-8h-nim"/>
+                <constraint firstItem="aYZ-aR-b0A" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="7b1-jB-SU8"/>
+                <constraint firstItem="aYZ-aR-b0A" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" constant="2" id="Abh-fj-X71"/>
+                <constraint firstItem="lgS-Jd-N6i" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="DEc-qI-C96"/>
+                <constraint firstItem="QG9-0B-VKg" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" id="PQg-vj-YSm"/>
+                <constraint firstItem="QG9-0B-VKg" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="W3Y-kL-xrJ"/>
+                <constraint firstItem="QG9-0B-VKg" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="b3C-00-stE"/>
+                <constraint firstItem="QG9-0B-VKg" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" id="fhk-v4-81H"/>
+                <constraint firstItem="aYZ-aR-b0A" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="-1" id="t3U-3q-Wfe"/>
+                <constraint firstItem="kum-b5-rFj" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="vth-oe-xrh"/>
+                <constraint firstAttribute="trailing" secondItem="kum-b5-rFj" secondAttribute="trailing" constant="6" id="wh7-mb-oll"/>
+                <constraint firstItem="lgS-Jd-N6i" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="y6w-Cn-Diy"/>
+            </constraints>
+            <connections>
+                <outlet property="bodyView" destination="G8y-d7-ggH" id="Trb-wc-c9i"/>
+                <outlet property="callToActionView" destination="QG9-0B-VKg" id="tdL-cD-rTz"/>
+                <outlet property="headlineView" destination="1Gd-vd-F61" id="glR-fn-PbG"/>
+                <outlet property="iconView" destination="wrN-j0-RP3" id="jW8-xh-frc"/>
+                <outlet property="mediaView" destination="cX5-Rl-Ele" id="6lo-pW-WoG"/>
+                <outlet property="priceView" destination="Sg9-yb-T5z" id="zYZ-Yd-ld2"/>
+                <outlet property="starRatingView" destination="PaL-gi-ojY" id="Sds-1q-xCn"/>
+            </connections>
+            <point key="canvasLocation" x="-8595" y="-3931"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="Admob.jpg" width="768" height="576"/>
+        <image name="admob_close.png" width="72" height="72"/>
+    </resources>
+</document>
