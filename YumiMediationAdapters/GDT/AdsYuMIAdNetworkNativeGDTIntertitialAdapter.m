@@ -6,8 +6,8 @@
 //  Copyright © 2016年 AdsYuMI. All rights reserved.
 //
 
+#import <YumiMediationSDK/AdsYuMiInterstitialNativeViewController.h>
 #import "AdsYuMIAdNetworkNativeGDTIntertitialAdapter.h"
-#import "AdsYuMiInterstitialNativeViewController.h"
 
 @interface AdsYuMIAdNetworkNativeGDTIntertitialAdapter ()<GDTNativeAdDelegate,AdsYuMiInterstitialNativeViewControllerDelegate>
 {

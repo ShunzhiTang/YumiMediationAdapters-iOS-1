@@ -6,7 +6,7 @@
 //  Copyright © 2016年 AdsYuMI. All rights reserved.
 //
 
-#import "AdsYuMIAdNetworkAdapter.h"
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import "MPAdView.h"
 
 @interface AdsYuMiMoPubBannerViewAdapter : AdsYuMIAdNetworkAdapter<MPAdViewDelegate>{
