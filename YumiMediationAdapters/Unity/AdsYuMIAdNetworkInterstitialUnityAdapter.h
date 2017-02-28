@@ -6,7 +6,7 @@
 //  Copyright © 2017年 AdsYuMI. All rights reserved.
 //
 
-#import "AdsYuMIAdNetworkAdapter.h"
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import <UnityAds/UnityAds.h>
 
 @interface AdsYuMIAdNetworkInterstitialUnityAdapter : AdsYuMIAdNetworkAdapter<UnityAdsDelegate>

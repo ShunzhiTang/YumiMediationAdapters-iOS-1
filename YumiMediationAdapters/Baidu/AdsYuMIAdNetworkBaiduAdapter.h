@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 AdsYuMI. All rights reserved.
 //
 
-#import "AdsYuMIAdNetworkAdapter.h"
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import <BaiduMobAdSDK/BaiduMobAdView.h>
 
 @interface AdsYuMIAdNetworkBaiduAdapter : AdsYuMIAdNetworkAdapter <BaiduMobAdViewDelegate>
