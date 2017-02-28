@@ -1,39 +1,59 @@
 PODS:
-  - AdColony (2.6.3)
   - ChartboostSDK (6.6.1)
   - Expecta (1.0.5)
   - FBAudienceNetwork (4.19.0)
-  - Google-Mobile-Ads-SDK (7.17.0)
+  - Google-Mobile-Ads-SDK (7.18.0)
   - InMobiSDK (6.0.1)
   - Specta (1.0.6)
-  - VungleSDK-iOS (4.0.9)
+  - YumiAppLovinSDK (3.4.3)
+  - YumiBaiduSDK (4.5.0)
+  - YumiGDTSDK (4.5.5)
   - YumiMediationAdapters (0.4.3):
-    - YumiMediationAdapters/AdColony (= 0.4.3)
     - YumiMediationAdapters/AdMob (= 0.4.3)
+    - YumiMediationAdapters/AppLovin (= 0.4.3)
+    - YumiMediationAdapters/Baidu (= 0.4.3)
     - YumiMediationAdapters/Chartboost (= 0.4.3)
     - YumiMediationAdapters/Facebook (= 0.4.3)
+    - YumiMediationAdapters/GDT (= 0.4.3)
     - YumiMediationAdapters/InMobi (= 0.4.3)
-    - YumiMediationAdapters/Vungle (= 0.4.3)
-    - YumiMediationSDK (~> 0.6.6)
-  - YumiMediationAdapters/AdColony (0.4.3):
-    - AdColony (~> 2.6.3)
-    - YumiMediationSDK (~> 0.6.6)
+    - YumiMediationAdapters/Mopub (= 0.4.3)
+    - YumiMediationAdapters/StartApp (= 0.4.3)
+    - YumiMediationAdapters/Unity (= 0.4.3)
+    - YumiMediationSDK (~> 0.7.3)
   - YumiMediationAdapters/AdMob (0.4.3):
     - Google-Mobile-Ads-SDK (~> 7.0)
-    - YumiMediationSDK (~> 0.6.6)
+    - YumiMediationSDK (~> 0.7.3)
+  - YumiMediationAdapters/AppLovin (0.4.3):
+    - YumiAppLovinSDK (~> 3.4.3)
+    - YumiMediationSDK (~> 0.7.3)
+  - YumiMediationAdapters/Baidu (0.4.3):
+    - YumiBaiduSDK (~> 4.5.0)
+    - YumiMediationSDK (~> 0.7.3)
   - YumiMediationAdapters/Chartboost (0.4.3):
     - ChartboostSDK (~> 6.6.1)
-    - YumiMediationSDK (~> 0.6.6)
+    - YumiMediationSDK (~> 0.7.3)
   - YumiMediationAdapters/Facebook (0.4.3):
     - FBAudienceNetwork (~> 4.19.0)
-    - YumiMediationSDK (~> 0.6.6)
+    - YumiMediationSDK (~> 0.7.3)
+  - YumiMediationAdapters/GDT (0.4.3):
+    - YumiGDTSDK (~> 4.5.5)
+    - YumiMediationSDK (~> 0.7.3)
   - YumiMediationAdapters/InMobi (0.4.3):
     - InMobiSDK (~> 6.0.0)
-    - YumiMediationSDK (~> 0.6.6)
-  - YumiMediationAdapters/Vungle (0.4.3):
-    - VungleSDK-iOS (~> 4.0.8)
-    - YumiMediationSDK (~> 0.6.6)
-  - YumiMediationSDK (0.6.6)
+    - YumiMediationSDK (~> 0.7.3)
+  - YumiMediationAdapters/Mopub (0.4.3):
+    - YumiMediationSDK (~> 0.7.3)
+    - YumiMopubSDK (~> 4.11.1)
+  - YumiMediationAdapters/StartApp (0.4.3):
+    - YumiMediationSDK (~> 0.7.3)
+    - YumiStartAppSDK (~> 3.4.1)
+  - YumiMediationAdapters/Unity (0.4.3):
+    - YumiMediationSDK (~> 0.7.3)
+    - YumiUnitySDK (~> 2.0.0)
+  - YumiMediationSDK (0.7.3)
+  - YumiMopubSDK (4.11.1)
+  - YumiStartAppSDK (3.4.1)
+  - YumiUnitySDK (2.0.0)
 
 DEPENDENCIES:
   - Expecta
@@ -45,16 +65,20 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AdColony: 8a84d65b0d7f0e218813902890ce3bd48d870a8d
   ChartboostSDK: d8a43d8913910b0445f12ae64364c683499e57b6
   Expecta: e1c022fcd33910b6be89c291d2775b3fe27a89fe
   FBAudienceNetwork: 6081a5ce8c54419582b06267f777682d40c26c7a
-  Google-Mobile-Ads-SDK: a8bf4211624999b73e4184be516f94770b139525
+  Google-Mobile-Ads-SDK: 658065b4cb5a299bea254c4d24bf7786b6d3e75d
   InMobiSDK: f3ad134f9e16766829761de56aef48ff9458a1df
   Specta: f506f3a8361de16bc0dcf3b17b75e269072ba465
-  VungleSDK-iOS: 053446955ef1fa777fd699b6bea6635cac604524
-  YumiMediationAdapters: 4f5bf58c63af3c88acaaa3932804b14e3f95077d
-  YumiMediationSDK: 9cf0429292745cdab812a2ddb6650e628e9e3069
+  YumiAppLovinSDK: 1e1e4294983bceb024b7ba4f5e70df5f95c2c9d2
+  YumiBaiduSDK: 2f13f6367c3185594dea2ce9e8ab9276422758c6
+  YumiGDTSDK: 558214f3ae5a56f91477d2f7af9968f51bdf6ce7
+  YumiMediationAdapters: 15d302da85e8678c5ea2badd5e1b5bd875e6bf7a
+  YumiMediationSDK: ec786f884ed0ab1f587ae0df79b7c42c44cadb5b
+  YumiMopubSDK: 6275757206e787692564977aa8b6769139b0e4d3
+  YumiStartAppSDK: 452083919d73195db682fe549b0ae8b6a0e0c886
+  YumiUnitySDK: 2f552b7cb306e5c977741a96c466e7fdf19a3d60
 
 PODFILE CHECKSUM: 8657346519ec47bba6db6701018223f6bf7f2340
 
