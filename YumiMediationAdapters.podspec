@@ -31,56 +31,56 @@ Pod::Spec.new do |s|
     sp.dependency 'InMobiSDK', '~> 6.0.0'
   end
 
-#   s.subspec 'Vungle' do |sp|
-#   sp.source_files = 'YumiMediationAdapters/Vungle/*.{h,m}'
-#   sp.dependency 'VungleSDK-iOS', '~> 4.0.8'
-#   end
+  # s.subspec 'Vungle' do |sp|
+  #   sp.source_files = 'YumiMediationAdapters/Vungle/*.{h,m}'
+  #   sp.dependency 'VungleSDK-iOS', '~> 4.0.8'
+  # end
 
-#s.subspec 'AdColony' do |sp|
-#   sp.source_files = 'YumiMediationAdapters/AdColony/*.{h,m}'
-#    sp.dependency 'AdColony', '~> 2.6.3'
-#    end
+  # s.subspec 'AdColony' do |sp|
+  #   sp.source_files = 'YumiMediationAdapters/AdColony/*.{h,m}'
+  #   sp.dependency 'AdColony', '~> 2.6.3'
+  # end
 
-    s.subspec 'Chartboost' do |sp|
+  s.subspec 'Chartboost' do |sp|
     sp.source_files = 'YumiMediationAdapters/Chartboost/*.{h,m}'
     sp.dependency 'ChartboostSDK', '~> 6.6.1'
-    end
+  end
 
-    s.subspec 'AppLovin' do |sp|
+  s.subspec 'AppLovin' do |sp|
     sp.source_files = 'YumiMediationAdapters/AppLovin/*.{h,m}'
     sp.dependency 'YumiAppLovinSDK', '~> 3.4.3'
-    end
+  end
 
-    s.subspec 'GDT' do |sp|
+  s.subspec 'GDT' do |sp|
     sp.source_files = 'YumiMediationAdapters/GDT/*.{h,m}'
     sp.dependency 'YumiGDTSDK', '~> 4.5.5'
-    end
+  end
 
-    s.subspec 'Mopub' do |sp|
+  s.subspec 'Mopub' do |sp|
     sp.source_files = 'YumiMediationAdapters/Mopub/*.{h,m}'
     sp.dependency 'YumiMopubSDK', '~> 4.11.1'
-    end
+  end
 
-    s.subspec 'StartApp' do |sp|
+  s.subspec 'StartApp' do |sp|
     sp.source_files = 'YumiMediationAdapters/StartApp/*.{h,m}'
     sp.dependency 'YumiStartAppSDK', '~> 3.4.1'
-    end
+  end
 
-    s.subspec 'Unity' do |sp|
+  s.subspec 'Unity' do |sp|
     sp.source_files = 'YumiMediationAdapters/Unity/*.{h,m}'
     sp.dependency 'YumiUnitySDK', '~> 2.0.0'
-    end
+  end
 
-    s.subspec 'Baidu' do |sp|
+  s.subspec 'Baidu' do |sp|
     sp.source_files = 'YumiMediationAdapters/Baidu/*.{h,m}'
     sp.dependency 'YumiBaiduSDK', '~> 4.5.0'
-    end
+  end
 
-    s.subspec 'Facebook' do |sp|
+  s.subspec 'Facebook' do |sp|
     sp.source_files = 'YumiMediationAdapters/Facebook/*.{h,m}'
     sp.resource_bundles = {
-        'YumiFacebookAdapter' => ['YumiMediationAdapters/Facebook/*.{nib,png}']
-     }
+      'YumiFacebookAdapter' => ['YumiMediationAdapters/Facebook/*.{nib,png}']
+    }
     sp.dependency 'FBAudienceNetwork', '~> 4.19.0'
   end
 
