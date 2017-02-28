@@ -64,6 +64,7 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
                                                 repeats:NO];
     }
     
+    [self autoLayoutWidthAndHeight];
     self.intestitialView = [self createInterstitialVc];
     
     FBNativeAd *nativeAd = [[FBNativeAd alloc] initWithPlacementID:self.provider.key1];
@@ -80,7 +81,7 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
         NSString *resourcesPath = [bundle pathForResource:[NSString stringWithFormat:@"%@%@",name,@"@2x"] ofType:type];
         UIImage *storyMenuItemImage = [UIImage imageWithContentsOfFile:resourcesPath];
         if (storyMenuItemImage==nil) {
-            NSLog(@"facebook 加载素材失败");
+             [self adapter:self didInterstitialFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:[NSString stringWithFormat:@"facebook 加载素材失败"]]];
         }
         return storyMenuItemImage;
 }
@@ -92,7 +93,7 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
     NSBundle *bundle = [NSBundle bundleWithPath:path];
     UIViewController *vc = [bundle loadNibNamed:name owner:nil options:nil].firstObject;
         if (vc == nil) {
-            NSLog(@"facebook 加载素材失败");
+             [self adapter:self didInterstitialFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:[NSString stringWithFormat:@"facebook 加载素材失败"]]];
         }
         return vc;
 }
@@ -117,7 +118,7 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
 -(YumiFacebookAdapterInterstitialVc *)createInterstitialVc{
     //关闭按钮
     UIImage *closeImage = [self getBundleResourcesFromCustomBundle:@"adsyumi_adClose2"type:@"png"];
-    UIButton *closeButton = [[UIButton alloc]initWithFrame:CGRectMake(width-25, 0, 25, 25)];
+    UIButton *closeButton = [[UIButton alloc]initWithFrame:CGRectMake(width-25, 50, 25, 25)];
     [closeButton addTarget:self action:@selector(closeFacebookIntestitial) forControlEvents:UIControlEventTouchUpInside];
     closeButton.imageView.image = closeImage;
     
