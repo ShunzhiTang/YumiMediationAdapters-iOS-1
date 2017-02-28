@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YumiMediationAdapters'
-  s.version          = '0.4.3'
+  s.version          = '0.4.4'
   s.summary          = 'Yumi Mediation Adapters.'
   s.description      = 'This is the Yumi Mediation Adapters. Please proceed to http://developers.yumimobi.com/IosSdk/index for more information.'
 
@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'AdMob' do |sp|
     sp.source_files = 'YumiMediationAdapters/AdMob/*.{h,m}'
-    sp.dependency 'Google-Mobile-Ads-SDK', '~> 7.0'
+    sp.dependency 'Google-Mobile-Ads-SDK', '~> 7.8.1'
   end
 
   s.subspec 'InMobi' do |sp|
@@ -41,10 +41,10 @@ Pod::Spec.new do |s|
   #   sp.dependency 'AdColony', '~> 2.6.3'
   # end
 
-  s.subspec 'Chartboost' do |sp|
-    sp.source_files = 'YumiMediationAdapters/Chartboost/*.{h,m}'
-    sp.dependency 'ChartboostSDK', '~> 6.6.1'
-  end
+# s.subspec 'Chartboost' do |sp|
+#  sp.source_files = 'YumiMediationAdapters/Chartboost/*.{h,m}'
+#  sp.dependency 'ChartboostSDK', '~> 6.6.1'
+#  end
 
   s.subspec 'AppLovin' do |sp|
     sp.source_files = 'YumiMediationAdapters/AppLovin/*.{h,m}'
@@ -79,9 +79,9 @@ Pod::Spec.new do |s|
   s.subspec 'Facebook' do |sp|
     sp.source_files = 'YumiMediationAdapters/Facebook/*.{h,m}'
     sp.resource_bundles = {
-      'YumiFacebookAdapter' => ['YumiMediationAdapters/Facebook/*.{nib,png}']
-    }
-    sp.dependency 'FBAudienceNetwork', '~> 4.19.0'
+        'YumiFacebookAdapter' => ['YumiMediationAdapters/Facebook/*.{nib,png}']
+     }
+    sp.dependency 'FBAudienceNetwork', '~> 4.17.0'
   end
 
 end

@@ -2,13 +2,30 @@
 //  YumiMediationAdaptersTests.m
 //  YumiMediationAdaptersTests
 //
-//  Created by on99 on 02/06/2017.
-//  Copyright (c) 2017 on99. All rights reserved.
+//  Created by JiaDingYi on 02/28/2017.
+//  Copyright (c) 2017 JiaDingYi. All rights reserved.
 //
 
 // https://github.com/Specta/Specta
 
 SpecBegin(InitialSpecs)
+
+describe(@"these will fail", ^{
+
+    it(@"can do maths", ^{
+        expect(1).to.equal(2);
+    });
+
+    it(@"can read", ^{
+        expect(@"number").to.equal(@"string");
+    });
+    
+    it(@"will wait for 10 seconds and fail", ^{
+        waitUntil(^(DoneCallback done) {
+        
+        });
+    });
+});
 
 describe(@"these will pass", ^{
     

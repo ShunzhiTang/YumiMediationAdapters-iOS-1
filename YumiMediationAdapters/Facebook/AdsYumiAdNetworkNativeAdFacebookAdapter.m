@@ -45,7 +45,6 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
 -(void)getAd{
     
     isReading=NO;
-    
     [self adDidStartRequestAd];
     
     id _timeInterval = self.provider.outTime;
@@ -55,20 +54,18 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
     else{
         timer = [NSTimer scheduledTimerWithTimeInterval:8 target:self selector:@selector(timeOutTimer) userInfo:nil repeats:NO];
     }
-    //计算自适应宽高
     [self autoLayoutWidthAndHeight];
-    
-    //竖屏
-    [self createBannerView];
+    [self getNibResourceFromCustomBundle];
     
     FBNativeAd *nativeAd = [[FBNativeAd alloc] initWithPlacementID:self.provider.key1];
     nativeAd.delegate = self;
     nativeAd.mediaCachePolicy = FBNativeAdsCachePolicyAll;
     [nativeAd loadAd];
-    
-    self.adNetworkView = self.AdUIView;
-  
+
+    self.bannerVC.frame = CGRectMake(0, 0, width, height);
+    self.adNetworkView = self.bannerVC;
 }
+
 -(void)autoLayoutWidthAndHeight{
     float h;
     float w = [UIScreen mainScreen].bounds.size.width;
@@ -83,34 +80,18 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
     
     width = w;
     height = h;
-
+    
 }
 
--(void)createBannerView{
-    
-    self.AdUIView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, width, height)];
-    //小图
-    float space = (height-50)/2;
-    interval = space;
-    self.adIconImageView = [[UIImageView alloc]initWithFrame:CGRectMake1(0, space, 50, 50)];
-    
-    //tittle
-    self.adTitleLable = [[UILabel alloc]initWithFrame:CGRectMake1(space+50, space, 180, 30)];
-    
-    //adSocialContext
-    self.adSocialContext = [[UILabel alloc]initWithFrame:CGRectMake1(space+50, space*2+20, 180, 10)];
-    
-    //button
-    self.adCallToActionButton = [[UIButton alloc]initWithFrame:CGRectMake1(space*2+50+180, (height-30)/1.5, 90, 30)];
-    self.adCallToActionButton.backgroundColor = [UIColor colorWithRed:74/255.0 green:123/255.0 blue:251/255.0 alpha:1.0];
-    
-    //backgroundView
-    self.backgroundView = [[UIView alloc]initWithFrame:CGRectMake((width-(self.adCallToActionButton.frame.origin.x+self.adCallToActionButton.frame.size.width))/2, 0, self.adCallToActionButton.frame.origin.x+self.adCallToActionButton.frame.size.width, height)];
-    [self.backgroundView addSubview:self.adIconImageView];
-    [self.backgroundView addSubview:self.adTitleLable];
-    [self.backgroundView addSubview:self.adSocialContext];
-    [self.backgroundView addSubview:self.adCallToActionButton];
-    [self.AdUIView addSubview:self.backgroundView];
+-(void)getNibResourceFromCustomBundle{
+    NSBundle *mainBundle = [NSBundle bundleForClass:[self class]];
+    NSString *path = [mainBundle pathForResource:@"YumiFacebookAdapter" ofType:@"bundle"];
+    NSBundle *bundle = [NSBundle bundleWithPath:path];
+    YumiFaceboolAdapterBannerVC *vc = [bundle loadNibNamed:@"YumiFacebookBannerNativeAdapter" owner:nil options:nil].firstObject;
+    if (vc == nil) {
+        NSLog(@"facebook 加载素材失败");
+    }
+    self.bannerVC = vc;
 }
 
 -(void)stopAd {
@@ -158,30 +139,27 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
     
     self.nativeAd = nativeAd;
     // Wire up UIView with the native ad; the whole UIView will be clickable.
-    [nativeAd registerViewForInteraction:self.AdUIView
+    [nativeAd registerViewForInteraction:self.bannerVC.adUIView
                       withViewController:[self viewControllerForPresentModalView]];
     
-    __weak typeof(self) weakSelf = self;
     [self.nativeAd.icon loadImageAsyncWithBlock:^(UIImage *image) {
-        __strong typeof(self) strongSelf = weakSelf;
-        strongSelf.adIconImageView.image = image;
+        self.bannerVC.adIconImageView.image = image;
         [self stopTimer];
         [self adapter:self didReceiveAdView:self.adNetworkView];
     }];
     
     // Render native ads onto UIView
-    self.adTitleLable.text = self.nativeAd.title;
-    self.adSocialContext.text = self.nativeAd.socialContext;
-    [self.adCallToActionButton setTitle:self.nativeAd.callToAction
+    self.bannerVC.adTitleLabel.text = self.nativeAd.title;
+    self.bannerVC.adSocialContextLabel.text = self.nativeAd.socialContext;
+    [self.bannerVC.adCallToActionButton setTitle:self.nativeAd.callToAction
                                forState:UIControlStateNormal];
     //adChoicesView
     self.adChoicesView = [[FBAdChoicesView alloc]initWithNativeAd:self.nativeAd];
     self.adChoicesView.nativeAd = nativeAd;
     self.adChoicesView.corner = UIRectCornerTopRight;
     self.adChoicesView.hidden = NO;
-    [self.backgroundView addSubview:self.adChoicesView];
+    [self.bannerVC.adUIView addSubview:self.adChoicesView];
     [self.adChoicesView updateFrameFromSuperview];
-    
 }
 
 /**
@@ -208,7 +186,7 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
     }
     isReading=YES;
     [self stopTimer];
-    [self adapter:self didFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"Facebook no ad"]];
+    [self adapter:self didFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:[NSString stringWithFormat:@"Facebook no ad !!! error:%@",error]]];
 }
 
 /**
@@ -232,16 +210,7 @@ CGRectMake1(CGFloat x,CGFloat y,CGFloat width,CGFloat height){
 }
 
 - (void)dealloc {
-    if (self.adNetworkView) {
-        self.AdUIView = nil;
-        self.adTitleLable = nil;
-        self.adSocialContext = nil;
-        self.adCallToActionButton = nil;
-        self.backgroundView = nil;
-        self.adChoicesView = nil;
-        self.nativeAd.delegate = nil;
-        self.nativeAd = nil;
-}
+    
 }
 
 @end

@@ -7,7 +7,7 @@
     "8ABA5C75D4433CE02E7F40BF1D770C227CCC07E7" : 9223372036854775807,
     "8EF01DB351E9958A50E6023E82CDF023553A9E3F" : 9223372036854775807
   },
-  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "9311F4BA-5D7B-41F9-BC9D-5B650FA5FC06",
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "423A00AA-330C-47A1-9B6F-F6DD9D1411BA",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
     "8ABA5C75D4433CE02E7F40BF1D770C227CCC07E7" : "YumiMediationAdapters-iOS\/",
     "8EF01DB351E9958A50E6023E82CDF023553A9E3F" : ""
@@ -22,7 +22,7 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "8ABA5C75D4433CE02E7F40BF1D770C227CCC07E7"
     },
     {
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/xiaoleiwei\/YumiMediationSDK-iOS.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/JiaDingYi\/YumiMediationSDK-iOS.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "8EF01DB351E9958A50E6023E82CDF023553A9E3F"
     }
