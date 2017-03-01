@@ -7,23 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		18E993EB743959C85A201284 /* Pods_YumiMediationAdapters_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 610E957A1D66E7AE3BD73908 /* Pods_YumiMediationAdapters_Example.framework */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
-		6003F598195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F596195388D20070C39A /* InfoPlist.strings */; };
-		6003F59A195388D20070C39A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F599195388D20070C39A /* main.m */; };
-		6003F59E195388D20070C39A /* YumiAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F59D195388D20070C39A /* YumiAppDelegate.m */; };
-		6003F5A7195388D20070C39A /* YumiViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5A6195388D20070C39A /* YumiViewController.m */; };
-		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
 		6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F5AF195388D20070C39A /* XCTest.framework */; };
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
-		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
-		74DC39481026CDB96D5E157B /* Pods_YumiMediationAdapters_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 631DBBDDEC4D698E8A99C80E /* Pods_YumiMediationAdapters_Tests.framework */; };
-		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
+		9D06BF7475DEAF938DA8B219 /* libPods-YumiMediationAdapters_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 54B82CD9FBD5C9DE9765EF5D /* libPods-YumiMediationAdapters_Tests.a */; };
+		B96286EE1E656FAC00A5F4C5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B96286E01E656FAC00A5F4C5 /* LaunchScreen.storyboard */; };
+		B96286EF1E656FAC00A5F4C5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B96286E21E656FAC00A5F4C5 /* Main.storyboard */; };
+		B96286F01E656FAC00A5F4C5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B96286E41E656FAC00A5F4C5 /* InfoPlist.strings */; };
+		B96286F11E656FAC00A5F4C5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B96286E61E656FAC00A5F4C5 /* Images.xcassets */; };
+		B96286F21E656FAC00A5F4C5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B96286E71E656FAC00A5F4C5 /* main.m */; };
+		B96286F31E656FAC00A5F4C5 /* YumiMediationAdapters-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B96286E81E656FAC00A5F4C5 /* YumiMediationAdapters-Info.plist */; };
+		B96286F41E656FAC00A5F4C5 /* YumiMediationAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B96286EB1E656FAC00A5F4C5 /* YumiMediationAppDelegate.m */; };
+		B96286F51E656FAC00A5F4C5 /* YumiMediationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B96286ED1E656FAC00A5F4C5 /* YumiMediationViewController.m */; };
+		ED97E7639A9137BFCF256177 /* libPods-YumiMediationAdapters_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9107AC78C9380FC3750D1756 /* libPods-YumiMediationAdapters_Example.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,34 +39,34 @@
 
 /* Begin PBXFileReference section */
 		2B79BBCB8E5647AB4234A849 /* Pods-YumiMediationAdapters_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YumiMediationAdapters_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-YumiMediationAdapters_Tests/Pods-YumiMediationAdapters_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		49F2E9DE88A2D7DA10061656 /* YumiMediationAdapters.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = YumiMediationAdapters.podspec; path = ../YumiMediationAdapters.podspec; sourceTree = "<group>"; };
-		554A66E14FA5B8336E720319 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		49F2E9DE88A2D7DA10061656 /* YumiMediationAdapters.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = YumiMediationAdapters.podspec; path = ../YumiMediationAdapters.podspec; sourceTree = "<group>"; };
+		54B82CD9FBD5C9DE9765EF5D /* libPods-YumiMediationAdapters_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YumiMediationAdapters_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		554A66E14FA5B8336E720319 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		5CDDF852B6B6D366B60CF976 /* Pods-YumiMediationAdapters_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YumiMediationAdapters_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YumiMediationAdapters_Tests/Pods-YumiMediationAdapters_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* YumiMediationAdapters_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YumiMediationAdapters_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		6003F591195388D20070C39A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		6003F595195388D20070C39A /* YumiMediationAdapters-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "YumiMediationAdapters-Info.plist"; sourceTree = "<group>"; };
-		6003F597195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6003F599195388D20070C39A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		6003F59B195388D20070C39A /* YumiMediationAdapters-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YumiMediationAdapters-Prefix.pch"; sourceTree = "<group>"; };
-		6003F59C195388D20070C39A /* YumiAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YumiAppDelegate.h; sourceTree = "<group>"; };
-		6003F59D195388D20070C39A /* YumiAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YumiAppDelegate.m; sourceTree = "<group>"; };
-		6003F5A5195388D20070C39A /* YumiViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YumiViewController.h; sourceTree = "<group>"; };
-		6003F5A6195388D20070C39A /* YumiViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YumiViewController.m; sourceTree = "<group>"; };
-		6003F5A8195388D20070C39A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6003F5AE195388D20070C39A /* YumiMediationAdapters_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YumiMediationAdapters_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		6003F5B7195388D20070C39A /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
-		610E957A1D66E7AE3BD73908 /* Pods_YumiMediationAdapters_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YumiMediationAdapters_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		631DBBDDEC4D698E8A99C80E /* Pods_YumiMediationAdapters_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YumiMediationAdapters_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8572F566AF3D82DC5036394B /* Pods-YumiMediationAdapters_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YumiMediationAdapters_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-YumiMediationAdapters_Example/Pods-YumiMediationAdapters_Example.release.xcconfig"; sourceTree = "<group>"; };
-		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		B60C9273F7F4C0CF6D23B9AD /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		9107AC78C9380FC3750D1756 /* libPods-YumiMediationAdapters_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YumiMediationAdapters_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B60C9273F7F4C0CF6D23B9AD /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		B96286E11E656FAC00A5F4C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B96286E31E656FAC00A5F4C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		B96286E51E656FAC00A5F4C5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		B96286E61E656FAC00A5F4C5 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		B96286E71E656FAC00A5F4C5 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		B96286E81E656FAC00A5F4C5 /* YumiMediationAdapters-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "YumiMediationAdapters-Info.plist"; sourceTree = "<group>"; };
+		B96286E91E656FAC00A5F4C5 /* YumiMediationAdapters-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "YumiMediationAdapters-Prefix.pch"; sourceTree = "<group>"; };
+		B96286EA1E656FAC00A5F4C5 /* YumiMediationAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YumiMediationAppDelegate.h; sourceTree = "<group>"; };
+		B96286EB1E656FAC00A5F4C5 /* YumiMediationAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YumiMediationAppDelegate.m; sourceTree = "<group>"; };
+		B96286EC1E656FAC00A5F4C5 /* YumiMediationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YumiMediationViewController.h; sourceTree = "<group>"; };
+		B96286ED1E656FAC00A5F4C5 /* YumiMediationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YumiMediationViewController.m; sourceTree = "<group>"; };
 		BDD7AFEC91DACD04ABD78A7A /* Pods-YumiMediationAdapters_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YumiMediationAdapters_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YumiMediationAdapters_Example/Pods-YumiMediationAdapters_Example.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -77,7 +78,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				18E993EB743959C85A201284 /* Pods_YumiMediationAdapters_Example.framework in Frameworks */,
+				ED97E7639A9137BFCF256177 /* libPods-YumiMediationAdapters_Example.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,7 +89,7 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				74DC39481026CDB96D5E157B /* Pods_YumiMediationAdapters_Tests.framework in Frameworks */,
+				9D06BF7475DEAF938DA8B219 /* libPods-YumiMediationAdapters_Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,7 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				60FF7A9C1954A5C5007DD14C /* Podspec Metadata */,
-				6003F593195388D20070C39A /* Example for YumiMediationAdapters */,
+				B96286DF1E656FAC00A5F4C5 /* YumiMediationAdapters */,
 				6003F5B5195388D20070C39A /* Tests */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
@@ -134,37 +135,10 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
-				610E957A1D66E7AE3BD73908 /* Pods_YumiMediationAdapters_Example.framework */,
-				631DBBDDEC4D698E8A99C80E /* Pods_YumiMediationAdapters_Tests.framework */,
+				9107AC78C9380FC3750D1756 /* libPods-YumiMediationAdapters_Example.a */,
+				54B82CD9FBD5C9DE9765EF5D /* libPods-YumiMediationAdapters_Tests.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		6003F593195388D20070C39A /* Example for YumiMediationAdapters */ = {
-			isa = PBXGroup;
-			children = (
-				6003F59C195388D20070C39A /* YumiAppDelegate.h */,
-				6003F59D195388D20070C39A /* YumiAppDelegate.m */,
-				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
-				6003F5A5195388D20070C39A /* YumiViewController.h */,
-				6003F5A6195388D20070C39A /* YumiViewController.m */,
-				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
-				6003F5A8195388D20070C39A /* Images.xcassets */,
-				6003F594195388D20070C39A /* Supporting Files */,
-			);
-			name = "Example for YumiMediationAdapters";
-			path = YumiMediationAdapters;
-			sourceTree = "<group>";
-		};
-		6003F594195388D20070C39A /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				6003F595195388D20070C39A /* YumiMediationAdapters-Info.plist */,
-				6003F596195388D20070C39A /* InfoPlist.strings */,
-				6003F599195388D20070C39A /* main.m */,
-				6003F59B195388D20070C39A /* YumiMediationAdapters-Prefix.pch */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		6003F5B5195388D20070C39A /* Tests */ = {
@@ -194,6 +168,24 @@
 				B60C9273F7F4C0CF6D23B9AD /* LICENSE */,
 			);
 			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		B96286DF1E656FAC00A5F4C5 /* YumiMediationAdapters */ = {
+			isa = PBXGroup;
+			children = (
+				B96286E01E656FAC00A5F4C5 /* LaunchScreen.storyboard */,
+				B96286E21E656FAC00A5F4C5 /* Main.storyboard */,
+				B96286E41E656FAC00A5F4C5 /* InfoPlist.strings */,
+				B96286E61E656FAC00A5F4C5 /* Images.xcassets */,
+				B96286E71E656FAC00A5F4C5 /* main.m */,
+				B96286E81E656FAC00A5F4C5 /* YumiMediationAdapters-Info.plist */,
+				B96286E91E656FAC00A5F4C5 /* YumiMediationAdapters-Prefix.pch */,
+				B96286EA1E656FAC00A5F4C5 /* YumiMediationAppDelegate.h */,
+				B96286EB1E656FAC00A5F4C5 /* YumiMediationAppDelegate.m */,
+				B96286EC1E656FAC00A5F4C5 /* YumiMediationViewController.h */,
+				B96286ED1E656FAC00A5F4C5 /* YumiMediationViewController.m */,
+			);
+			path = YumiMediationAdapters;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -279,10 +271,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
-				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
-				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
-				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
+				B96286EE1E656FAC00A5F4C5 /* LaunchScreen.storyboard in Resources */,
+				B96286F11E656FAC00A5F4C5 /* Images.xcassets in Resources */,
+				B96286F01E656FAC00A5F4C5 /* InfoPlist.strings in Resources */,
+				B96286F31E656FAC00A5F4C5 /* YumiMediationAdapters-Info.plist in Resources */,
+				B96286EF1E656FAC00A5F4C5 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,9 +387,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6003F59E195388D20070C39A /* YumiAppDelegate.m in Sources */,
-				6003F5A7195388D20070C39A /* YumiViewController.m in Sources */,
-				6003F59A195388D20070C39A /* main.m in Sources */,
+				B96286F21E656FAC00A5F4C5 /* main.m in Sources */,
+				B96286F41E656FAC00A5F4C5 /* YumiMediationAppDelegate.m in Sources */,
+				B96286F51E656FAC00A5F4C5 /* YumiMediationViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,14 +412,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		6003F596195388D20070C39A /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6003F597195388D20070C39A /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		6003F5B8195388D20070C39A /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -435,12 +420,28 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */ = {
+		B96286E01E656FAC00A5F4C5 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				71719F9E1E33DC2100824A3D /* Base */,
+				B96286E11E656FAC00A5F4C5 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		B96286E21E656FAC00A5F4C5 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B96286E31E656FAC00A5F4C5 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		B96286E41E656FAC00A5F4C5 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B96286E51E656FAC00A5F4C5 /* en */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

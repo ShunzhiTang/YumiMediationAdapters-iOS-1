@@ -1,4 +1,4 @@
-use_frameworks!
+#use_frameworks!
 
 target 'YumiMediationAdapters_Example' do
   pod 'YumiMediationAdapters', :path => '../'
