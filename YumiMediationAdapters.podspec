@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.homepage         = 'https://github.com/yumimobi/YumiMediationAdapters-iOS'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'zplay sdk team' => 'ad-client@zplay.cn' }
-  s.source           = { :git => 'https://github.com/yumimobi/YumiMediationAdapters-iOS.git', :tag => s.version.to_s }
+  s.source           = { :git => 'git@github.com:yumimobi/YumiMediationAdapters-iOS.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '7.0'
 
