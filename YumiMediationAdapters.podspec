@@ -18,6 +18,8 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'git@github.com:yumimobi/YumiMediationAdapters-iOS.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '7.0'
+  
+  s.frameworks = 'UIKit'
 
   s.dependency 'YumiMediationSDK', '~> 0.8.9'
 
