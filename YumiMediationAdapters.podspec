@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.description      = 'This is the Yumi Mediation Adapters. Please proceed to http://developers.yumimobi.com/IosSdk/index for more information.'
 
   s.homepage         = 'https://github.com/yumimobi/YumiMediationAdapters-iOS'
-  s.license          = { :type => 'MIT', :file => 'LICENSE' }
+  s.license          = 'Custom'
   s.author           = { 'zplay sdk team' => 'ad-client@zplay.cn' }
   s.source           = { :git => 'git@github.com:yumimobi/YumiMediationAdapters-iOS.git', :tag => s.version.to_s }
 
