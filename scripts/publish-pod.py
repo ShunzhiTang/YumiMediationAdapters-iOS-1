@@ -3,6 +3,8 @@ import sys
 import subprocess
 import tarfile
 
+import oss2
+
 
 TAG = os.environ.get('TRAVIS_TAG')
 
@@ -71,7 +73,10 @@ def compress(podspec_name, version):
 
 
 def upload_to_oss(local_filename, remote_filename):
-    pass
+    auth = oss2.Auth(os.environ['OSS_KEY_ID'], os.environ['OSS_KEY_SECRET'])
+    endpoint = 'http://oss-cn-beijing.aliyuncs.com'
+    bucket = oss2.Bucket(auth, endpoint, 'ad-sdk')
+    bucket.put_object_from_file(remote_filename, local_filename)
 
 
 def generate_podspec_for_publishing(podspec_name, adapter, source, yumi_mediation_sdk_version):
