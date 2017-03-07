@@ -14,7 +14,7 @@ def main(argv):
         # Adapter('AppLovin', '"YumiAppLovinSDK", "3.4.3"', '3.4.3.0'),
         # Adapter('Baidu', '"YumiBaiduSDK", "4.5.0"', '4.5.0.0'),
         # Adapter('Chartboost', '"ChartboostSDK", "6.6.1"', '6.6.1.0'),
-        # Adapter('Facebook', '"FBAudienceNetwork", "4.17.0"', '4.17.0.0'),
+        # Adapter('Facebook', '"FBAudienceNetwork", "4.17.0"', '4.17.0.1', extra="s.resource = 'Resources/YumiMediationFacebook.bundle'"),
         # Adapter('GDT', '"YumiGDTSDK", "4.5.5"', '4.5.5.0'),
         # Adapter('InMobi', '"InMobiSDK", "6.0.0"', '6.0.0.0'),
         Adapter('Mopub', '"YumiMopubSDK", "4.11.1"', '4.11.1.0'),
@@ -35,10 +35,11 @@ def main(argv):
 
 
 class Adapter:
-    def __init__(self, name, third_party_sdk_dependency, version):
+    def __init__(self, name, third_party_sdk_dependency, version, extra=''):
         self.name = name
         self.third_party_sdk_dependency = third_party_sdk_dependency
         self.version = version
+        self.extra = extra
 
 
 def generate_podspec_for_packaging(podspec_name, name, yumi_mediation_sdk_version):
@@ -84,7 +85,8 @@ def generate_podspec_for_publishing(podspec_name, adapter, source, yumi_mediatio
             'version': adapter.version,
             'source': source,
             'yumi_mediation_sdk_version': yumi_mediation_sdk_version,
-            'third_party_sdk_dependency': adapter.third_party_sdk_dependency
+            'third_party_sdk_dependency': adapter.third_party_sdk_dependency,
+            'extra': adapter.extra,
         }
         podspec_data = template.read() % values
         with open(podspec_filename_from_podspec_name(podspec_name), 'w') as podspec:
