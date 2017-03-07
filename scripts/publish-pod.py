@@ -95,7 +95,10 @@ def generate_podspec_for_publishing(podspec_name, adapter, source, yumi_mediatio
 
 
 def publish_pod(podspec_name):
-    pass
+    cmd = 'pod trunk push %s --allow-warnings' % podspec_filename_from_podspec_name(podspec_name)
+    code = subprocess.call(cmd, shell=True)
+    if code is not 0:
+        raise Exception('pod trunk failed')
 
 
 def podspec_filename_from_podspec_name(podspec_name):
