@@ -10,7 +10,7 @@ def main(argv):
     yumi_mediation_sdk_version = '~> 0.8.9'
     adapters = [
         # Adapter('AdColony', '"AdColony", "2.6.3"', '2.6.3.0'),
-        Adapter('AdMob', '"Google-Mobile-Ads-SDK", "7.18.0"', '7.18.0.1'),
+        # Adapter('AdMob', '"Google-Mobile-Ads-SDK", "7.18.0"', '7.18.0.1'),
         Adapter('AppLovin', '"YumiAppLovinSDK", "3.4.3"', '3.4.3.1'),
         Adapter('Baidu', '"YumiBaiduSDK", "4.5.0"', '4.5.0.1'),
         Adapter('Chartboost', '"ChartboostSDK", "6.6.1"', '6.6.1.1'),
