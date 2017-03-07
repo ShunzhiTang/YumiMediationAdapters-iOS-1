@@ -6,8 +6,6 @@ import tarfile
 import oss2
 
 
-TAG = os.environ.get('TRAVIS_TAG')
-
 def main(argv):
     yumi_mediation_sdk_version = '~> 0.8.9'
     adapters = [
@@ -47,7 +45,6 @@ def generate_podspec_for_packaging(podspec_name, name, yumi_mediation_sdk_versio
     with open('podspec-template-for-packaging', 'r') as template:
         values = {
             'podspec_name': podspec_name,
-            'tag': TAG,
             'name': name,
             'yumi_mediation_sdk_version': yumi_mediation_sdk_version
         }
@@ -66,7 +63,7 @@ def package(podspec_name, name):
 
 def compress(podspec_name, version):
     compressed_filename = '%s-%s.tar.bz2' % (podspec_name, version)
-    framework = '{0}-{1}/ios/{0}.embeddedframework/{0}.framework'.format(podspec_name, TAG)
+    framework = '{0}-0.0.1/ios/{0}.embeddedframework/{0}.framework'.format(podspec_name)
     with tarfile.open(compressed_filename, 'w:bz2') as tar:
         tar.add(framework, arcname='{0}/{0}.framework'.format(podspec_name))
     return compressed_filename
@@ -106,8 +103,8 @@ def podspec_filename_from_podspec_name(podspec_name):
 
 
 if __name__ == "__main__":
-    if not TAG:
-        print('this is not a tag, exit here...')
+    if os.environ['TRAVIS_PULL_REQUEST'] != 'false':
+        print('not build in a pull request')
         sys.exit(0)
 
     main(sys.argv)
