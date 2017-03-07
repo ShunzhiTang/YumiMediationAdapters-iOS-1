@@ -63,9 +63,9 @@ def package(podspec_name, name):
 
 def compress(podspec_name, version):
     compressed_filename = '%s-%s.tar.bz2' % (podspec_name, version)
-    framework = '{0}-0.0.1/ios/{0}.embeddedframework/{0}.framework'.format(podspec_name)
+    framework = '{0}-0.0.1/ios/{0}.embeddedframework'.format(podspec_name)
     with tarfile.open(compressed_filename, 'w:bz2') as tar:
-        tar.add(framework, arcname='{0}/{0}.framework'.format(podspec_name))
+        tar.add(framework, arcname=podspec_name)
     return compressed_filename
 
 
