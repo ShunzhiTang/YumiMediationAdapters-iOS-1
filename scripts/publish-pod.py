@@ -80,7 +80,18 @@ def upload_to_oss(local_filename, remote_filename):
 
 
 def generate_podspec_for_publishing(podspec_name, adapter, source, yumi_mediation_sdk_version):
-    pass
+    with open('podspec-template-for-publishing', 'r') as template:
+        values = {
+            'podspec_name': podspec_name,
+            'name': adapter.name,
+            'version': adapter.version,
+            'source': source,
+            'yumi_mediation_sdk_version': yumi_mediation_sdk_version,
+            'third_party_sdk_dependency': adapter.third_party_sdk_dependency
+        }
+        podspec_data = template.read() % values
+        with open(podspec_filename_from_podspec_name(podspec_name), 'w') as podspec:
+            podspec.write(podspec_data)
 
 
 def publish_pod(podspec_name):
