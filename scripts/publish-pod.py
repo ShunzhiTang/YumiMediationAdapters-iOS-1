@@ -12,11 +12,11 @@ def main(argv):
     yumi_mediation_sdk_version = '~> 0.8.9'
     adapters = [
         # Adapter('AdColony', '"AdColony", "2.6.3"', '2.6.3.0'),
-        Adapter('AdMob', '"Google-Mobile-Ads-SDK", "7.18.0"', '7.8.1.0'),
-        Adapter('AppLovin', '"YumiAppLovinSDK", "3.4.3"', '3.4.3.0'),
-        Adapter('Baidu', '"YumiBaiduSDK", "4.5.0"', '4.5.0.0'),
-        Adapter('Chartboost', '"ChartboostSDK", "6.6.1"', '6.6.1.0'),
-        Adapter('Facebook', '"FBAudienceNetwork", "4.17.0"', '4.17.0.0'),
+        # Adapter('AdMob', '"Google-Mobile-Ads-SDK", "7.18.0"', '7.18.0.0'),
+        # Adapter('AppLovin', '"YumiAppLovinSDK", "3.4.3"', '3.4.3.0'),
+        # Adapter('Baidu', '"YumiBaiduSDK", "4.5.0"', '4.5.0.0'),
+        # Adapter('Chartboost', '"ChartboostSDK", "6.6.1"', '6.6.1.0'),
+        # Adapter('Facebook', '"FBAudienceNetwork", "4.17.0"', '4.17.0.0'),
         Adapter('GDT', '"YumiGDTSDK", "4.5.5"', '4.5.5.0'),
         Adapter('InMobi', '"InMobiSDK", "6.0.0"', '6.0.0.0'),
         Adapter('Mopub', '"YumiMopubSDK", "4.11.1"', '4.11.1.0'),
