@@ -40,7 +40,16 @@ class Adapter:
 
 
 def generate_podspec_for_packaging(podspec_name, name, yumi_mediation_sdk_version):
-    pass
+    with open('podspec-template-for-packaging', 'r') as template:
+        values = {
+            'podspec_name': podspec_name,
+            'tag': TAG,
+            'name': name,
+            'yumi_mediation_sdk_version': yumi_mediation_sdk_version
+        }
+        podspec_data = template.read() % values
+        with open(podspec_filename_from_podspec_name(podspec_name), 'w') as podspec:
+            podspec.write(podspec_data)
 
 
 def package(podspec_name, name):
@@ -61,6 +70,10 @@ def generate_podspec_for_publishing(podspec_name, adapter, source, yumi_mediatio
 
 def publish_pod(podspec_name):
     pass
+
+
+def podspec_filename_from_podspec_name(podspec_name):
+    return '%s.podspec' % podspec_name
 
 
 if __name__ == "__main__":
