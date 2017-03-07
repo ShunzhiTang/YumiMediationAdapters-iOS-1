@@ -31,7 +31,7 @@ def main(argv):
         compressed_filename = compress(podspec_name, adapter.version)
         remote_filename = 'iOS/YumiMediationAdapters/%s' % compressed_filename
         upload_to_oss(compressed_filename, remote_filename)
-        source = "{ :http => 'http://adsdk.yumimobi.com/%s' }" % remote_filename
+        source = "{ :http => 'http://ad-sdk.oss-cn-beijing.aliyuncs.com/%s' }" % remote_filename
         generate_podspec_for_publishing(podspec_name, adapter, source, yumi_mediation_sdk_version)
         publish_pod(podspec_name)
 
