@@ -5,6 +5,7 @@ before_install:
   - gem install cocoapods
   - gem install cocoapods-packager
   - pip install oss2
+  - pod repo update
 
 script:
   - python ./scripts/publish-pod.py
