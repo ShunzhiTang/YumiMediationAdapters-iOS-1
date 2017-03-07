@@ -1,5 +1,6 @@
 import os
 import sys
+import subprocess
 
 
 TAG = os.environ.get('TRAVIS_TAG')
@@ -53,7 +54,11 @@ def generate_podspec_for_packaging(podspec_name, name, yumi_mediation_sdk_versio
 
 
 def package(podspec_name, name):
-    pass
+    podspec_filename = podspec_filename_from_podspec_name(podspec_name)
+    cmd = 'pod package %s --force --embedded --no-mangle --exclude-deps --subspecs=%s' % (podspec_filename, name)
+    code = subprocess.call(cmd, shell=True)
+    if code is not 0:
+        raise Exception('pod package failed')
 
 
 def compress(podspec_name, version):
