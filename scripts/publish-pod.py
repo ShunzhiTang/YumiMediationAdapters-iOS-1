@@ -1,6 +1,7 @@
 import os
 import sys
 import subprocess
+import tarfile
 
 
 TAG = os.environ.get('TRAVIS_TAG')
@@ -62,7 +63,11 @@ def package(podspec_name, name):
 
 
 def compress(podspec_name, version):
-    pass
+    compressed_filename = '%s-%s.tar.bz2' % (podspec_name, version)
+    framework = '{0}-{1}/ios/{0}.embeddedframework/{0}.framework'.format(podspec_name, TAG)
+    with tarfile.open(compressed_filename, 'w:bz2') as tar:
+        tar.add(framework, arcname='{0}/{0}.framework'.format(podspec_name))
+    return compressed_filename
 
 
 def upload_to_oss(local_filename, remote_filename):
