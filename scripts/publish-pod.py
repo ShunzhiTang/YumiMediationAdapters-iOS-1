@@ -1,3 +1,4 @@
+import ConfigParser
 import os
 import sys
 import subprocess
@@ -7,21 +8,17 @@ import oss2
 
 
 def main(argv):
+    adapters = []
+    config = ConfigParser.ConfigParser()
+    config.read('adapters.ini')
+    for adapter_name in config.sections():
+        third_party_sdk_dependency = config.get(adapter_name, 'third_party_sdk_dependency')
+        version = config.get(adapter_name, 'version')
+        extra = config.get(adapter_name, 'extra') if config.has_option(adapter_name, 'extra') else ''
+        adapter = Adapter(adapter_name, third_party_sdk_dependency, version, extra=extra)
+        adapters.append(adapter)
+
     yumi_mediation_sdk_version = '~> 0.8.9'
-    adapters = [
-        # Adapter('AdColony', '"AdColony", "2.6.3"', '2.6.3.0'),
-        # Adapter('AdMob', '"Google-Mobile-Ads-SDK", "7.18.0"', '7.18.0.1'),
-        Adapter('AppLovin', '"YumiAppLovinSDK", "3.4.3"', '3.4.3.1'),
-        Adapter('Baidu', '"YumiBaiduSDK", "4.5.0"', '4.5.0.1'),
-        Adapter('Chartboost', '"ChartboostSDK", "6.6.1"', '6.6.1.1'),
-        Adapter('Facebook', '"FBAudienceNetwork", "4.17.0"', '4.17.0.1', extra="s.resource = 'Resources/YumiMediationFacebook.bundle'"),
-        Adapter('GDT', '"YumiGDTSDK", "4.5.5"', '4.5.5.1'),
-        Adapter('InMobi', '"InMobiSDK", "6.0.0"', '6.0.0.1'),
-        Adapter('Mopub', '"YumiMopubSDK", "4.11.1"', '4.11.1.1'),
-        Adapter('StartApp', '"YumiStartAppSDK", "3.4.1"', '3.4.1.1'),
-        Adapter('Unity', '"YumiUnitySDK", "2.0.0"', '2.0.0.0'),
-        # Adapter('Vungle', '"VungleSDK-iOS", "4.0.8"', '4.0.8.0')
-    ]
     for adapter in adapters:
         podspec_name = 'YumiMediation%s' % adapter.name
         generate_podspec_for_packaging(podspec_name, adapter.name, yumi_mediation_sdk_version)
