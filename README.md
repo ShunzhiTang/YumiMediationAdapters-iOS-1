@@ -14,11 +14,22 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Installation
 
-YumiMediationAdapters is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+YumiMediationAdapters are available through [CocoaPods](http://cocoapods.org). To install
+it, simply add the following lines to your Podfile:
 
 ```ruby
-pod "YumiMediationAdapters"
+pod "YumiMediationAdColony"
+pod "YumiMediationAdMob"
+pod "YumiMediationAppLovin"
+pod "YumiMediationBaidu"
+pod "YumiMediationChartboost"
+pod "YumiMediationFacebook"
+pod "YumiMediationGDT"
+pod "YumiMediationInMobi"
+pod "YumiMediationMopub"
+pod "YumiMediationStartApp"
+pod "YumiMediationUnity"
+pod "YumiMediationVungle"
 ```
 
 ## Author
