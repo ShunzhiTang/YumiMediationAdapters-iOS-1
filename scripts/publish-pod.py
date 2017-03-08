@@ -102,8 +102,8 @@ def podspec_filename_from_podspec_name(podspec_name):
 
 
 if __name__ == "__main__":
-    if os.environ['TRAVIS_PULL_REQUEST'] != 'false':
-        print('not build in a pull request')
+    if os.environ['TRAVIS_PULL_REQUEST'] != 'false' or os.environ['TRAVIS_BRANCH'] != 'production':
+        print('we only publish pod in non-pull-request production branch')
         sys.exit(0)
 
     main(sys.argv)
