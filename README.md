@@ -1,6 +1,7 @@
 # YumiMediationAdapters
 
-[![Build Status](https://travis-ci.org/yumimobi/YumiMediationAdapters-iOS.svg?branch=master)](https://travis-ci.org/yumimobi/YumiMediationAdapters-iOS)
+[![Build Status](https://travis-ci.com/yumimobi/YumiMediationAdapters-iOS.svg?token=zqqszx67cUwq3jc4kCzH&branch=master)](https://travis-ci.com/yumimobi/YumiMediationAdapters-iOS)
+
 [![Version](https://img.shields.io/cocoapods/v/YumiMediationAdapters.svg?style=flat)](http://cocoapods.org/pods/YumiMediationAdapters)
 [![License](https://img.shields.io/cocoapods/l/YumiMediationAdapters.svg?style=flat)](http://cocoapods.org/pods/YumiMediationAdapters)
 [![Platform](https://img.shields.io/cocoapods/p/YumiMediationAdapters.svg?style=flat)](http://cocoapods.org/pods/YumiMediationAdapters)
