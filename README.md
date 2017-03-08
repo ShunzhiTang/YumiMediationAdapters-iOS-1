@@ -6,11 +6,9 @@
 [![License](https://img.shields.io/cocoapods/l/YumiMediationAdapters.svg?style=flat)](http://cocoapods.org/pods/YumiMediationAdapters)
 [![Platform](https://img.shields.io/cocoapods/p/YumiMediationAdapters.svg?style=flat)](http://cocoapods.org/pods/YumiMediationAdapters)
 
-## Example
+## Development
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
-## Requirements
+Before git commit, remember to fix code format by `sh format.sh fix`
 
 ## Installation
 

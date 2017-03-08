@@ -8,6 +8,7 @@ before_install:
   - pod repo update
 
 script:
+  - sh format.sh
   - python ./scripts/publish-pod.py
 
 notifications:
