@@ -5,52 +5,54 @@ PODS:
   - Google-Mobile-Ads-SDK (7.18.0)
   - InMobiSDK (6.0.0)
   - Specta (1.0.6)
+  - YumiAdsSDK (0.2.5)
   - YumiAppLovinSDK (3.4.3)
   - YumiBaiduSDK (4.5.0)
   - YumiGDTSDK (4.5.5)
-  - YumiMediationAdapters (0.4.5):
-    - YumiMediationAdapters/AdMob (= 0.4.5)
-    - YumiMediationAdapters/AppLovin (= 0.4.5)
-    - YumiMediationAdapters/Baidu (= 0.4.5)
-    - YumiMediationAdapters/Chartboost (= 0.4.5)
-    - YumiMediationAdapters/Facebook (= 0.4.5)
-    - YumiMediationAdapters/GDT (= 0.4.5)
-    - YumiMediationAdapters/InMobi (= 0.4.5)
-    - YumiMediationAdapters/Mopub (= 0.4.5)
-    - YumiMediationAdapters/StartApp (= 0.4.5)
-    - YumiMediationAdapters/Unity (= 0.4.5)
-    - YumiMediationSDK (~> 0.7.3)
-  - YumiMediationAdapters/AdMob (0.4.5):
+  - YumiMediationAdapters (0.5.5):
+    - YumiMediationAdapters/AdMob (= 0.5.5)
+    - YumiMediationAdapters/AppLovin (= 0.5.5)
+    - YumiMediationAdapters/Baidu (= 0.5.5)
+    - YumiMediationAdapters/Chartboost (= 0.5.5)
+    - YumiMediationAdapters/Facebook (= 0.5.5)
+    - YumiMediationAdapters/GDT (= 0.5.5)
+    - YumiMediationAdapters/InMobi (= 0.5.5)
+    - YumiMediationAdapters/Mopub (= 0.5.5)
+    - YumiMediationAdapters/StartApp (= 0.5.5)
+    - YumiMediationAdapters/Unity (= 0.5.5)
+    - YumiMediationSDK (~> 0.8.9)
+  - YumiMediationAdapters/AdMob (0.5.5):
     - Google-Mobile-Ads-SDK (= 7.18.0)
-    - YumiMediationSDK (~> 0.7.3)
-  - YumiMediationAdapters/AppLovin (0.4.5):
+    - YumiMediationSDK (~> 0.8.9)
+  - YumiMediationAdapters/AppLovin (0.5.5):
     - YumiAppLovinSDK (= 3.4.3)
-    - YumiMediationSDK (~> 0.7.3)
-  - YumiMediationAdapters/Baidu (0.4.5):
+    - YumiMediationSDK (~> 0.8.9)
+  - YumiMediationAdapters/Baidu (0.5.5):
     - YumiBaiduSDK (= 4.5.0)
-    - YumiMediationSDK (~> 0.7.3)
-  - YumiMediationAdapters/Chartboost (0.4.5):
+    - YumiMediationSDK (~> 0.8.9)
+  - YumiMediationAdapters/Chartboost (0.5.5):
     - ChartboostSDK (= 6.6.1)
-    - YumiMediationSDK (~> 0.7.3)
-  - YumiMediationAdapters/Facebook (0.4.5):
+    - YumiMediationSDK (~> 0.8.9)
+  - YumiMediationAdapters/Facebook (0.5.5):
     - FBAudienceNetwork (= 4.17.0)
-    - YumiMediationSDK (~> 0.7.3)
-  - YumiMediationAdapters/GDT (0.4.5):
+    - YumiMediationSDK (~> 0.8.9)
+  - YumiMediationAdapters/GDT (0.5.5):
     - YumiGDTSDK (= 4.5.5)
-    - YumiMediationSDK (~> 0.7.3)
-  - YumiMediationAdapters/InMobi (0.4.5):
+    - YumiMediationSDK (~> 0.8.9)
+  - YumiMediationAdapters/InMobi (0.5.5):
     - InMobiSDK (= 6.0.0)
-    - YumiMediationSDK (~> 0.7.3)
-  - YumiMediationAdapters/Mopub (0.4.5):
-    - YumiMediationSDK (~> 0.7.3)
+    - YumiMediationSDK (~> 0.8.9)
+  - YumiMediationAdapters/Mopub (0.5.5):
+    - YumiMediationSDK (~> 0.8.9)
     - YumiMopubSDK (= 4.11.1)
-  - YumiMediationAdapters/StartApp (0.4.5):
-    - YumiMediationSDK (~> 0.7.3)
+  - YumiMediationAdapters/StartApp (0.5.5):
+    - YumiMediationSDK (~> 0.8.9)
     - YumiStartAppSDK (= 3.4.1)
-  - YumiMediationAdapters/Unity (0.4.5):
-    - YumiMediationSDK (~> 0.7.3)
+  - YumiMediationAdapters/Unity (0.5.5):
+    - YumiMediationSDK (~> 0.8.9)
     - YumiUnitySDK (= 2.0.0)
-  - YumiMediationSDK (0.7.3)
+  - YumiMediationSDK (0.8.9):
+    - YumiAdsSDK (= 0.2.5)
   - YumiMopubSDK (4.11.1)
   - YumiStartAppSDK (3.4.1)
   - YumiUnitySDK (2.0.0)
@@ -71,15 +73,16 @@ SPEC CHECKSUMS:
   Google-Mobile-Ads-SDK: 658065b4cb5a299bea254c4d24bf7786b6d3e75d
   InMobiSDK: a026c7afa89750649e84d4b2b965b44b8a755ac2
   Specta: f506f3a8361de16bc0dcf3b17b75e269072ba465
-  YumiAppLovinSDK: 1e1e4294983bceb024b7ba4f5e70df5f95c2c9d2
-  YumiBaiduSDK: 2f13f6367c3185594dea2ce9e8ab9276422758c6
-  YumiGDTSDK: 558214f3ae5a56f91477d2f7af9968f51bdf6ce7
-  YumiMediationAdapters: 8f8a2ecad1e08c3228a934ee36cb13b7d82c3322
-  YumiMediationSDK: ec786f884ed0ab1f587ae0df79b7c42c44cadb5b
-  YumiMopubSDK: 6275757206e787692564977aa8b6769139b0e4d3
-  YumiStartAppSDK: 452083919d73195db682fe549b0ae8b6a0e0c886
-  YumiUnitySDK: 2f552b7cb306e5c977741a96c466e7fdf19a3d60
+  YumiAdsSDK: 4de412b70416f36246846b7119778cecbe153ae6
+  YumiAppLovinSDK: d789a05ec85e98c8ea82c394620934b6ef3212a0
+  YumiBaiduSDK: 51de172cf6ccf1bb59648d9866f801f2f47fecc4
+  YumiGDTSDK: 51ad47c7c28096bf330fc05664af83e8693fe063
+  YumiMediationAdapters: 30a43d099aba8fb0b545699eae091c36d4dbc59a
+  YumiMediationSDK: f88fc72969459452ccdd207c86e715761b5516cd
+  YumiMopubSDK: 34a6f42d1947c126262efe48252d3fe2ad18b459
+  YumiStartAppSDK: 706066574f63e7aab0d9c01162d11a10a85c0760
+  YumiUnitySDK: 6b764125ee4dac347c3324b9345a85a73b20dd15
 
-PODFILE CHECKSUM: f548065b24e32b896fc80771f66833ce159bef4b
+PODFILE CHECKSUM: 8657346519ec47bba6db6701018223f6bf7f2340
 
 COCOAPODS: 1.2.0
