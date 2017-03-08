@@ -23,7 +23,7 @@ pod "YumiMediationAdapters"
 
 ## Author
 
-on99, nanohugh@gmail.com
+zplay sdk team, ad-client@zplay.cn 
 
 ## License
 
