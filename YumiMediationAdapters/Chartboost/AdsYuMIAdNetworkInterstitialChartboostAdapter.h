@@ -6,12 +6,11 @@
 //  Copyright (c) 2015年 AdsYuMI. All rights reserved.
 //
 
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import <Chartboost/Chartboost.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
-@interface AdsYuMIAdNetworkInterstitialChartboostAdapter : AdsYuMIAdNetworkAdapter <ChartboostDelegate>
-{
-    NSTimer * timer;
+@interface AdsYuMIAdNetworkInterstitialChartboostAdapter : AdsYuMIAdNetworkAdapter <ChartboostDelegate> {
+    NSTimer *timer;
     BOOL isReading;
 }
 @end

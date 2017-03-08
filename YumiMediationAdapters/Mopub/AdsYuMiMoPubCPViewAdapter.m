@@ -10,79 +10,76 @@
 
 @implementation AdsYuMiMoPubCPViewAdapter
 
-+ (NSString*)networkType{
-  return AdsYuMIAdNetworkAdMopub;
++ (NSString *)networkType {
+    return AdsYuMIAdNetworkAdMopub;
 }
 
 + (void)load {
-  [[AdsYuMIInterstitialSDKAdNetworkRegistry sharedRegistry] registerClass:self];
+    [[AdsYuMIInterstitialSDKAdNetworkRegistry sharedRegistry] registerClass:self];
 }
 
+- (void)getAd {
 
--(void)getAd{
-  
-  isReading = NO;
-  isClick = NO;
-  
-  [self adapterDidStartInterstitialRequestAd];
-  
-  /*
-  id _timeInterval = self.provider.outTime;
-  if ([_timeInterval isKindOfClass:[NSNumber class]]) {
-    timer = [NSTimer scheduledTimerWithTimeInterval:[_timeInterval doubleValue]
-                                             target:self
-                                           selector:@selector(timeOutTimer)
-                                           userInfo:nil
-                                            repeats:NO];
-  }else {
-    timer = [NSTimer scheduledTimerWithTimeInterval:15
-                                             target:self
-                                           selector:@selector(timeOutTimer)
-                                           userInfo:nil
-                                            repeats:NO];
-  }
-   */
-  
-  MPCPView= [MPInterstitialAdController interstitialAdControllerForAdUnitId:self.provider.key1];
-  MPCPView.delegate = self;
-  [MPCPView loadAd];
-  
+    isReading = NO;
+    isClick = NO;
+
+    [self adapterDidStartInterstitialRequestAd];
+
+    /*
+    id _timeInterval = self.provider.outTime;
+    if ([_timeInterval isKindOfClass:[NSNumber class]]) {
+      timer = [NSTimer scheduledTimerWithTimeInterval:[_timeInterval doubleValue]
+                                               target:self
+                                             selector:@selector(timeOutTimer)
+                                             userInfo:nil
+                                              repeats:NO];
+    }else {
+      timer = [NSTimer scheduledTimerWithTimeInterval:15
+                                               target:self
+                                             selector:@selector(timeOutTimer)
+                                             userInfo:nil
+                                              repeats:NO];
+    }
+     */
+
+    MPCPView = [MPInterstitialAdController interstitialAdControllerForAdUnitId:self.provider.key1];
+    MPCPView.delegate = self;
+    [MPCPView loadAd];
 }
-
 
 /**
  *  停止展示广告
  */
--(void)stopAd{
-  [self stopTimer];
+- (void)stopAd {
+    [self stopTimer];
 }
 
 - (void)stopTimer {
-  if (timer) {
-    [timer invalidate];
-    timer = nil;
-  }
+    if (timer) {
+        [timer invalidate];
+        timer = nil;
+    }
 }
-
 
 /**
  *  平台超时
  */
--(void)timeOutTimer{
-  if (isReading) {
-    return;
-  }
-  isReading=YES;
-  [self stopTimer];
-  [self adapter:self didInterstitialFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestTimeOut description:@"Mopub time out"]];
+- (void)timeOutTimer {
+    if (isReading) {
+        return;
+    }
+    isReading = YES;
+    [self stopTimer];
+    [self adapter:self
+        didInterstitialFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestTimeOut description:@"Mopub time out"]];
 }
 
--(void)preasentInterstitial{
-  if (MPCPView.ready)
-    [MPCPView showFromViewController:[self viewControllerForWillPresentInterstitialModalView]];
-  else {
-    // The interstitial wasn't ready, so continue as usual.
-  }
+- (void)preasentInterstitial {
+    if (MPCPView.ready)
+        [MPCPView showFromViewController:[self viewControllerForWillPresentInterstitialModalView]];
+    else {
+        // The interstitial wasn't ready, so continue as usual.
+    }
 }
 
 #pragma mark - Mopub interstital  Delegate
@@ -93,13 +90,13 @@
  *
  * @param interstitial The interstitial ad object sending the message.
  */
-- (void)interstitialDidLoadAd:(MPInterstitialAdController *)interstitial{
-  if (isReading) {
-    return;
-  }
-  isReading=YES;
-  [self stopTimer];
-  [self adapterDidInterstitialReceiveAd:self];
+- (void)interstitialDidLoadAd:(MPInterstitialAdController *)interstitial {
+    if (isReading) {
+        return;
+    }
+    isReading = YES;
+    [self stopTimer];
+    [self adapterDidInterstitialReceiveAd:self];
 }
 
 /**
@@ -107,15 +104,15 @@
  *
  * @param interstitial The interstitial ad object sending the message.
  */
-- (void)interstitialDidFailToLoadAd:(MPInterstitialAdController *)interstitial{
-  
-  if (isReading) {
-    return;
-  }
-  isReading=YES;
-  [self stopTimer];
-  [self adapter:self didInterstitialFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"Mopub no ad"]];
-  
+- (void)interstitialDidFailToLoadAd:(MPInterstitialAdController *)interstitial {
+
+    if (isReading) {
+        return;
+    }
+    isReading = YES;
+    [self stopTimer];
+    [self adapter:self
+        didInterstitialFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"Mopub no ad"]];
 }
 
 /** @name Detecting When an Interstitial Ad is Presented */
@@ -128,8 +125,7 @@
  *
  * @param interstitial The interstitial ad object sending the message.
  */
-- (void)interstitialWillAppear:(MPInterstitialAdController *)interstitial{
-  
+- (void)interstitialWillAppear:(MPInterstitialAdController *)interstitial {
 }
 
 /**
@@ -137,8 +133,7 @@
  *
  * @param interstitial The interstitial ad object sending the message.
  */
-- (void)interstitialDidAppear:(MPInterstitialAdController *)interstitial{
-  
+- (void)interstitialDidAppear:(MPInterstitialAdController *)interstitial {
 }
 
 /** @name Detecting When an Interstitial Ad is Dismissed */
@@ -148,8 +143,7 @@
  *
  * @param interstitial The interstitial ad object sending the message.
  */
-- (void)interstitialWillDisappear:(MPInterstitialAdController *)interstitial{
-  
+- (void)interstitialWillDisappear:(MPInterstitialAdController *)interstitial {
 }
 
 /**
@@ -161,8 +155,8 @@
  *
  * @param interstitial The interstitial ad object sending the message.
  */
-- (void)interstitialDidDisappear:(MPInterstitialAdController *)interstitial{
-  [self adapterInterstitialDidDismissScreen:self];
+- (void)interstitialDidDisappear:(MPInterstitialAdController *)interstitial {
+    [self adapterInterstitialDidDismissScreen:self];
 }
 
 /** @name Detecting When an Interstitial Ad Expires */
@@ -181,8 +175,7 @@
  *
  * @param interstitial The interstitial ad object sending the message.
  */
-- (void)interstitialDidExpire:(MPInterstitialAdController *)interstitial{
-  
+- (void)interstitialDidExpire:(MPInterstitialAdController *)interstitial {
 }
 
 /**
@@ -194,19 +187,19 @@
  *
  * @param interstitial The interstitial ad object sending the message.
  */
-- (void)interstitialDidReceiveTapEvent:(MPInterstitialAdController *)interstitial{
-  if (isClick) {
-    return;
-  }
-  isClick = YES;
-  [self adapterDidInterstitialClick:self ClickArea:CGRectZero];
+- (void)interstitialDidReceiveTapEvent:(MPInterstitialAdController *)interstitial {
+    if (isClick) {
+        return;
+    }
+    isClick = YES;
+    [self adapterDidInterstitialClick:self ClickArea:CGRectZero];
 }
 
 - (void)dealloc {
-  if (MPCPView) {
-    MPCPView.delegate=nil;
-    MPCPView=nil;
-  }
+    if (MPCPView) {
+        MPCPView.delegate = nil;
+        MPCPView = nil;
+    }
 }
 
 @end

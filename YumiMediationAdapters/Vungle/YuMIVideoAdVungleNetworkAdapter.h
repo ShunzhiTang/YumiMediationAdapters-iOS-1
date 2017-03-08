@@ -9,5 +9,5 @@
 #import "YuMIVideoAdNetworkAdapter.h"
 #import <VungleSDK/VungleSDK.h>
 
-@interface YuMIVideoAdVungleNetworkAdapter : YuMIVideoAdNetworkAdapter <VungleSDKDelegate> 
+@interface YuMIVideoAdVungleNetworkAdapter : YuMIVideoAdNetworkAdapter <VungleSDKDelegate>
 @end

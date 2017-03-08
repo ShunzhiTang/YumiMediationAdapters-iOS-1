@@ -14,16 +14,14 @@
 //#import <YuMIDebugCenter/YuMIDebugCenter.h>
 //#import "AdsYuMIDeviceInfo.h"
 
-#define YUMIBANNER_ID       @"3f521f0914fdf691bd23bf85a8fd3c3a"
+#define YUMIBANNER_ID @"3f521f0914fdf691bd23bf85a8fd3c3a"
 #define YUMIINTERSTITIAL_ID @"3f521f0914fdf691bd23bf85a8fd3c3a"
-#define YUMI_CHANNELID      @""
-#define YUMI_VERSIONID      @""
+#define YUMI_CHANNELID @""
+#define YUMI_VERSIONID @""
 
-@interface YumiMediationViewController ()<AdsYuMIDelegate,YuMIInterstitialDelegate>
-{
-    AdsYuMIView * adView;
-    YuMIInterstitial * inter;
-
+@interface YumiMediationViewController () <AdsYuMIDelegate, YuMIInterstitialDelegate> {
+    AdsYuMIView *adView;
+    YuMIInterstitial *inter;
 }
 
 @end
@@ -32,10 +30,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
 }
-
-
 
 #pragma mark - YUMIBanner delegate
 /**
@@ -48,30 +43,29 @@
 /**
  * 广告开始请求回调
  */
-- (void)adsYuMIDidStartAd:(AdsYuMIView *)adView{
-    NSLog(@"%s",__FUNCTION__);
+- (void)adsYuMIDidStartAd:(AdsYuMIView *)adView {
+    NSLog(@"%s", __FUNCTION__);
 }
 /**
  * You can get notified when the user receive the ad
  广告接收成功回调
  */
-- (void)adsYuMIDidReceiveAd:(AdsYuMIView *)adView{
-    NSLog(@"%s",__FUNCTION__);
+- (void)adsYuMIDidReceiveAd:(AdsYuMIView *)adView {
+    NSLog(@"%s", __FUNCTION__);
 }
 /**
  * You can get notified when the user failed receive the ad
  广告接收失败回调
  */
-- (void)adsYuMIDidFailToReceiveAd:(AdsYuMIView *)adView didFailWithError:(NSError *)error{
-    NSLog(@"%s",__FUNCTION__);
+- (void)adsYuMIDidFailToReceiveAd:(AdsYuMIView *)adView didFailWithError:(NSError *)error {
+    NSLog(@"%s", __FUNCTION__);
 }
 /**
  * 点击广告回调
  */
-- (void)adsYuMIClickAd:(AdsYuMIView *)adView{
-    NSLog(@"%s",__FUNCTION__);
+- (void)adsYuMIClickAd:(AdsYuMIView *)adView {
+    NSLog(@"%s", __FUNCTION__);
 }
-
 
 #pragma mark -
 #pragma mark - 插屏代理方法
@@ -88,7 +82,7 @@
  *  @param ad           返回一个插屏的实例
  */
 - (void)YuMIInterstitialDidReceiveAd:(YuMIInterstitial *)ad {
-    NSLog(@"%s",__FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
 }
 /**
  *  Description         插屏加载失败
@@ -97,8 +91,7 @@
  *  @param error        返回错误信息
  */
 - (void)YuMIInterstitial:(YuMIInterstitial *)ad didFailToReceiveAdWithError:(NSError *)error {
-    NSLog(@"%s",__FUNCTION__);
-    
+    NSLog(@"%s", __FUNCTION__);
 }
 /**
  *  Description         插屏已经消失
@@ -106,35 +99,30 @@
  *  @param ad           返回一个插屏的实例
  */
 - (void)YuMIInterstitialDidDismissScreen:(YuMIInterstitial *)ad {
-    NSLog(@"%s",__FUNCTION__);
-    
+    NSLog(@"%s", __FUNCTION__);
 }
 /**
  *  Description         插屏点击
  *
  */
-- (void)adapterDidInterstitialClick{
-    
-    NSLog(@"%s",__FUNCTION__);
+- (void)adapterDidInterstitialClick {
+
+    NSLog(@"%s", __FUNCTION__);
 }
 
 #pragma mark - YUMIVideo delegate
-- (UIViewController *)viewControllerVideoModalView{
+- (UIViewController *)viewControllerVideoModalView {
     return self;
 }
 
-- (void)startRequestVideoAd{
-    
+- (void)startRequestVideoAd {
 }
 
 - (void)didCompleteVideo {
-    
 }
 
--(void)rewardsVideo {
-    
+- (void)rewardsVideo {
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

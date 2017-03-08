@@ -14,7 +14,6 @@
 
 @implementation YumiFaceboolAdapterBannerVC
 
-
 /*
 #pragma mark - Navigation
 

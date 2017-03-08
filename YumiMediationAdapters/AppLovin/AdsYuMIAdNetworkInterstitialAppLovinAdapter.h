@@ -12,9 +12,8 @@
 //问题2：插屏和视频分不开
 //问题3：将该平台的视频加到聚合视频中
 
-@interface AdsYuMIAdNetworkInterstitialAppLovinAdapter : AdsYuMIAdNetworkAdapter
-{
-  NSTimer * timer;
-  BOOL isReading;
+@interface AdsYuMIAdNetworkInterstitialAppLovinAdapter : AdsYuMIAdNetworkAdapter {
+    NSTimer *timer;
+    BOOL isReading;
 }
 @end

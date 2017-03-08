@@ -6,15 +6,14 @@
 //  Copyright (c) 2015年 AdsYuMI. All rights reserved.
 //
 
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import <BaiduMobAdSDK/BaiduMobAdInterstitial.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
-@interface AdsYuMIAdNetworkInterstitialBaiduAdapter : AdsYuMIAdNetworkAdapter <BaiduMobAdInterstitialDelegate>
-{
+@interface AdsYuMIAdNetworkInterstitialBaiduAdapter : AdsYuMIAdNetworkAdapter <BaiduMobAdInterstitialDelegate> {
     NSTimer *timer;
     BOOL isReading;
-  AdsYuMIAdNetworkInterstitialBaiduAdapter * selfBaiduAdapter;
+    AdsYuMIAdNetworkInterstitialBaiduAdapter *selfBaiduAdapter;
 }
-@property(nonatomic,retain)BaiduMobAdInterstitial *baiduInterstitial;
+@property (nonatomic, retain) BaiduMobAdInterstitial *baiduInterstitial;
 
 @end

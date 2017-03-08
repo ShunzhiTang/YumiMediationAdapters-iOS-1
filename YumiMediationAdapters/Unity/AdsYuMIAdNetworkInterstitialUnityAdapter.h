@@ -6,12 +6,11 @@
 //  Copyright © 2017年 AdsYuMI. All rights reserved.
 //
 
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import <UnityAds/UnityAds.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
-@interface AdsYuMIAdNetworkInterstitialUnityAdapter : AdsYuMIAdNetworkAdapter<UnityAdsDelegate>
-{
-  NSTimer * timer;
-  BOOL isReading;
+@interface AdsYuMIAdNetworkInterstitialUnityAdapter : AdsYuMIAdNetworkAdapter <UnityAdsDelegate> {
+    NSTimer *timer;
+    BOOL isReading;
 }
 @end

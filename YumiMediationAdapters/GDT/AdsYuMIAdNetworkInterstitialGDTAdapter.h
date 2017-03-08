@@ -6,14 +6,13 @@
 //  Copyright (c) 2015年 AdsYuMI. All rights reserved.
 //
 
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import "GDTMobInterstitial.h"
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
-@interface AdsYuMIAdNetworkInterstitialGDTAdapter : AdsYuMIAdNetworkAdapter <GDTMobInterstitialDelegate>
-{
-  GDTMobInterstitial *_interstitialObj;
-  NSTimer * timer;
-  BOOL  isReading;
+@interface AdsYuMIAdNetworkInterstitialGDTAdapter : AdsYuMIAdNetworkAdapter <GDTMobInterstitialDelegate> {
+    GDTMobInterstitial *_interstitialObj;
+    NSTimer *timer;
+    BOOL isReading;
 }
 
 @end

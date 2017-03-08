@@ -6,10 +6,10 @@
 //  Copyright (c) 2015年 AdsYuMI. All rights reserved.
 //
 
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import <GoogleMobileAds/GoogleMobileAds.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
-@interface AdsYuMIAdNetworkAdGoogleAdapter : AdsYuMIAdNetworkAdapter<GADBannerViewDelegate> {
+@interface AdsYuMIAdNetworkAdGoogleAdapter : AdsYuMIAdNetworkAdapter <GADBannerViewDelegate> {
     BOOL isStop;
     NSTimer *timer;
     GADBannerView *_bannerView;

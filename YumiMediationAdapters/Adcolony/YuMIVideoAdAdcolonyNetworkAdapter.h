@@ -9,6 +9,6 @@
 #import "YuMIVideoAdNetworkAdapter.h"
 #import <AdColony/AdColony.h>
 
-@interface YuMIVideoAdAdcolonyNetworkAdapter : YuMIVideoAdNetworkAdapter <AdColonyDelegate,AdColonyAdDelegate>
+@interface YuMIVideoAdAdcolonyNetworkAdapter : YuMIVideoAdNetworkAdapter <AdColonyDelegate, AdColonyAdDelegate>
 
 @end

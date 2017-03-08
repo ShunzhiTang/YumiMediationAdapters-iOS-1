@@ -6,15 +6,14 @@
 //  Copyright (c) 2015年 AdsYuMI. All rights reserved.
 //
 
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import <InMobiSDK/InMobiSDK.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
-@interface AdsYuMIAdNetworkInMobiAdapter : AdsYuMIAdNetworkAdapter <IMBannerDelegate>
-{
-  BOOL isStop;
-  NSTimer *timer;
-  BOOL   isReading;
-  IMBanner *_adview;
+@interface AdsYuMIAdNetworkInMobiAdapter : AdsYuMIAdNetworkAdapter <IMBannerDelegate> {
+    BOOL isStop;
+    NSTimer *timer;
+    BOOL isReading;
+    IMBanner *_adview;
 }
 
 @end

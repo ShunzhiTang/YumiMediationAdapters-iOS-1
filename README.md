@@ -1,29 +1,50 @@
 # YumiMediationAdapters
 
-[![Build Status](https://travis-ci.org/yumimobi/YumiMediationAdapters-iOS.svg?branch=master)](https://travis-ci.org/yumimobi/YumiMediationAdapters-iOS)
-[![Version](https://img.shields.io/cocoapods/v/YumiMediationAdapters.svg?style=flat)](http://cocoapods.org/pods/YumiMediationAdapters)
-[![License](https://img.shields.io/cocoapods/l/YumiMediationAdapters.svg?style=flat)](http://cocoapods.org/pods/YumiMediationAdapters)
-[![Platform](https://img.shields.io/cocoapods/p/YumiMediationAdapters.svg?style=flat)](http://cocoapods.org/pods/YumiMediationAdapters)
+[![Build Status](https://travis-ci.com/yumimobi/YumiMediationAdapters-iOS.svg?token=zqqszx67cUwq3jc4kCzH&branch=master)](https://travis-ci.com/yumimobi/YumiMediationAdapters-iOS)
 
-## Example
+## Adapters
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+| Name                    | Version                                  |
+| ----------------------- | ---------------------------------------- |
+| YumiMediationAdColony   | [![Version](https://img.shields.io/cocoapods/v/YumiMediationAdColony.svg?style=flat)](http://cocoapods.org/pods/YumiMediationAdColony) |
+| YumiMediationAdMob      | [![Version](https://img.shields.io/cocoapods/v/YumiMediationAdMob.svg?style=flat)](http://cocoapods.org/pods/YumiMediationAdMob) |
+| YumiMediationAppLovin   | [![Version](https://img.shields.io/cocoapods/v/YumiMediationAppLovin.svg?style=flat)](http://cocoapods.org/pods/YumiMediationAppLovin) |
+| YumiMediationBaidu      | [![Version](https://img.shields.io/cocoapods/v/YumiMediationBaidu.svg?style=flat)](http://cocoapods.org/pods/YumiMediationBaidu) |
+| YumiMediationChartboost | [![Version](https://img.shields.io/cocoapods/v/YumiMediationChartboost.svg?style=flat)](http://cocoapods.org/pods/YumiMediationChartboost) |
+| YumiMediationFacebook   | [![Version](https://img.shields.io/cocoapods/v/YumiMediationFacebook.svg?style=flat)](http://cocoapods.org/pods/YumiMediationFacebook) |
+| YumiMediationGDT        | [![Version](https://img.shields.io/cocoapods/v/YumiMediationGDT.svg?style=flat)](http://cocoapods.org/pods/YumiMediationGDT) |
+| YumiMediationInMobi     | [![Version](https://img.shields.io/cocoapods/v/YumiMediationInMobi.svg?style=flat)](http://cocoapods.org/pods/YumiMediationInMobi) |
+| YumiMediationMopub      | [![Version](https://img.shields.io/cocoapods/v/YumiMediationMopub.svg?style=flat)](http://cocoapods.org/pods/YumiMediationMopub) |
+| YumiMediationStartApp   | [![Version](https://img.shields.io/cocoapods/v/YumiMediationStartApp.svg?style=flat)](http://cocoapods.org/pods/YumiMediationStartApp) |
+| YumiMediationUnity      | [![Version](https://img.shields.io/cocoapods/v/YumiMediationUnity.svg?style=flat)](http://cocoapods.org/pods/YumiMediationUnity) |
+| YumiMediationVungle     | [![Version](https://img.shields.io/cocoapods/v/YumiMediationVungle.svg?style=flat)](http://cocoapods.org/pods/YumiMediationVungle) |
 
-## Requirements
+
+
+## Development
+
+Before git commit, remember to fix code format by `sh format.sh fix`
 
 ## Installation
 
-YumiMediationAdapters is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+YumiMediationAdapters are available through [CocoaPods](http://cocoapods.org). To install
+it, simply add the following lines to your Podfile:
 
 ```ruby
-pod "YumiMediationAdapters"
+pod "YumiMediationAdColony"
+pod "YumiMediationAdMob"
+pod "YumiMediationAppLovin"
+pod "YumiMediationBaidu"
+pod "YumiMediationChartboost"
+pod "YumiMediationFacebook"
+pod "YumiMediationGDT"
+pod "YumiMediationInMobi"
+pod "YumiMediationMopub"
+pod "YumiMediationStartApp"
+pod "YumiMediationUnity"
+pod "YumiMediationVungle"
 ```
 
 ## Author
 
-on99, nanohugh@gmail.com
-
-## License
-
-YumiMediationAdapters is available under the MIT license. See the LICENSE file for more info.
+zplay sdk team, ad-client@zplay.cn 
