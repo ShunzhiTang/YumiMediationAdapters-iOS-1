@@ -24,7 +24,3 @@ pod "YumiMediationAdapters"
 ## Author
 
 zplay sdk team, ad-client@zplay.cn 
-
-## License
-
-YumiMediationAdapters is available under the MIT license. See the LICENSE file for more info.
