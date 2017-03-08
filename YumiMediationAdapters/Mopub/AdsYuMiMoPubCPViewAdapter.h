@@ -6,17 +6,16 @@
 //  Copyright © 2016年 AdsYuMI. All rights reserved.
 //
 
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import "MPInterstitialAdController.h"
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
-@interface AdsYuMiMoPubCPViewAdapter : AdsYuMIAdNetworkAdapter<MPInterstitialAdControllerDelegate>{
-  NSTimer * timer;
-  
-  BOOL isReading;
-  BOOL isClick;
-  
-  MPInterstitialAdController *MPCPView;
+@interface AdsYuMiMoPubCPViewAdapter : AdsYuMIAdNetworkAdapter <MPInterstitialAdControllerDelegate> {
+    NSTimer *timer;
+
+    BOOL isReading;
+    BOOL isClick;
+
+    MPInterstitialAdController *MPCPView;
 }
-
 
 @end

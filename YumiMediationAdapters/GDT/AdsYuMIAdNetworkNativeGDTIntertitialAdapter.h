@@ -6,13 +6,12 @@
 //  Copyright © 2016年 AdsYuMI. All rights reserved.
 //
 
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import "GDTNativeAd.h"
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
-@interface AdsYuMIAdNetworkNativeGDTIntertitialAdapter : AdsYuMIAdNetworkAdapter
-{
-  NSTimer * timer;
-  BOOL  isReading;
+@interface AdsYuMIAdNetworkNativeGDTIntertitialAdapter : AdsYuMIAdNetworkAdapter {
+    NSTimer *timer;
+    BOOL isReading;
 }
 
 @end

@@ -6,13 +6,11 @@
 //  Copyright (c) 2015年 AdsYuMI. All rights reserved.
 //
 
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import "GDTMobBannerView.h"
-@interface AdsYuMIAdNetworkGDTAdapter : AdsYuMIAdNetworkAdapter<GDTMobBannerViewDelegate>
-{
-    NSTimer * timer;
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
+@interface AdsYuMIAdNetworkGDTAdapter : AdsYuMIAdNetworkAdapter <GDTMobBannerViewDelegate> {
+    NSTimer *timer;
     BOOL isReading;
-  
 }
-@property(strong,nonatomic)GDTMobBannerView* gdtAdView;
+@property (strong, nonatomic) GDTMobBannerView *gdtAdView;
 @end

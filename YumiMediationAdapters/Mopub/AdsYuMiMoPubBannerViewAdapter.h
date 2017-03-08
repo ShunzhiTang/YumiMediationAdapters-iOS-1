@@ -6,14 +6,14 @@
 //  Copyright © 2016年 AdsYuMI. All rights reserved.
 //
 
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import "MPAdView.h"
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
-@interface AdsYuMiMoPubBannerViewAdapter : AdsYuMIAdNetworkAdapter<MPAdViewDelegate>{
-  NSTimer * timer;
-  BOOL isReading;
-  BOOL isStop;
-  MPAdView *MPView;
+@interface AdsYuMiMoPubBannerViewAdapter : AdsYuMIAdNetworkAdapter <MPAdViewDelegate> {
+    NSTimer *timer;
+    BOOL isReading;
+    BOOL isStop;
+    MPAdView *MPView;
 }
 
 @end

@@ -8,10 +8,8 @@
 
 #import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
-@interface AdsYuMIAdNetworkNativeInMobiBannerAdapter : AdsYuMIAdNetworkAdapter
-{
-  NSTimer * timer;
-  BOOL isReading;
-  
+@interface AdsYuMIAdNetworkNativeInMobiBannerAdapter : AdsYuMIAdNetworkAdapter {
+    NSTimer *timer;
+    BOOL isReading;
 }
 @end

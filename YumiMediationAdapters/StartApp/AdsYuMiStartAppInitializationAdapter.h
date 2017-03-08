@@ -6,14 +6,14 @@
 //  Copyright © 2016年 AdsYuMI. All rights reserved.
 //
 
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import <StartApp/StartApp.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
-@interface AdsYuMiStartAppInitializationAdapter : AdsYuMIAdNetworkAdapter<STADelegateProtocol>{
-  STAStartAppAd* startAppAd;
-  NSTimer * timer;
-  BOOL isReading;
-  BOOL isClick;
+@interface AdsYuMiStartAppInitializationAdapter : AdsYuMIAdNetworkAdapter <STADelegateProtocol> {
+    STAStartAppAd *startAppAd;
+    NSTimer *timer;
+    BOOL isReading;
+    BOOL isClick;
 }
 
 @end

@@ -6,8 +6,8 @@
 //
 //
 
-#import <UIKit/UIKit.h>
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
+#import <UIKit/UIKit.h>
 
 @interface YumiFacebookAdapterInterstitialVc : UIViewController
 
@@ -21,6 +21,5 @@
 @property (weak, nonatomic) IBOutlet FBAdChoicesView *adChoicesView;
 
 @property (strong, nonatomic) IBOutlet UIView *adUIView;
-
 
 @end

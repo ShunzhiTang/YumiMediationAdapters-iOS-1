@@ -6,15 +6,14 @@
 //  Copyright (c) 2015年 AdsYuMI. All rights reserved.
 //
 
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import <FBAudienceNetwork/FBInterstitialAd.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
-@interface AdsYuMIAdNetworkInterstitialFacebookAdapter : AdsYuMIAdNetworkAdapter <FBInterstitialAdDelegate>
-{
-  NSTimer * timer;
-  BOOL isReading;
+@interface AdsYuMIAdNetworkInterstitialFacebookAdapter : AdsYuMIAdNetworkAdapter <FBInterstitialAdDelegate> {
+    NSTimer *timer;
+    BOOL isReading;
 }
 
-@property(nonatomic,retain)FBInterstitialAd *interstitial;
+@property (nonatomic, retain) FBInterstitialAd *interstitial;
 
 @end

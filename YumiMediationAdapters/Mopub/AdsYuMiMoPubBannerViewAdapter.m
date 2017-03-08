@@ -10,88 +10,90 @@
 
 @implementation AdsYuMiMoPubBannerViewAdapter
 
-+ (NSString*)networkType{
-  return AdsYuMIAdNetworkAdMopub;
++ (NSString *)networkType {
+    return AdsYuMIAdNetworkAdMopub;
 }
 
 + (void)load {
-  [[AdsYuMIBannerSDKAdNetworkRegistry sharedRegistry] registerClass:self];
+    [[AdsYuMIBannerSDKAdNetworkRegistry sharedRegistry] registerClass:self];
 }
 
--(void)getAd{
-  
-  isStop = NO;
-  isReading=NO;
-  
-  [self adDidStartRequestAd];
-  
-//  id _timeInterval = self.provider.outTime;
-//  if ([_timeInterval isKindOfClass:[NSNumber class]]) {
-//    timer = [NSTimer scheduledTimerWithTimeInterval:[_timeInterval doubleValue] target:self selector:@selector(timeOutTimer) userInfo:nil repeats:NO];
-//  }
-//  else{
-//    timer = [NSTimer scheduledTimerWithTimeInterval:8 target:self selector:@selector(timeOutTimer) userInfo:nil repeats:NO];
-//  }
-//  
-  
-  CGSize adSize = CGSizeZero;
-  
-  switch (self.adType) {
-    case AdViewYMTypeNormalBanner:
-      adSize = MOPUB_BANNER_SIZE;
-      break;
-    case AdViewYMTypeLargeBanner:
-      adSize = MOPUB_LEADERBOARD_SIZE;
-      break;
-    default:
-      break;
-  }
-  
-  //self.provider.key1 = @"55e382ae536a42068fd69420f70ff712";
-  
-  if (([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)) {
-    MPView = [[MPAdView alloc]initWithAdUnitId:self.provider.key2 size:adSize];
-    MPView.frame = CGRectMake(0,0,MOPUB_LEADERBOARD_SIZE.width, MOPUB_LEADERBOARD_SIZE.height);
-  }else {
-    MPView = [[MPAdView alloc]initWithAdUnitId:self.provider.key1 size:adSize];
-    MPView.frame = CGRectMake(0,0,MOPUB_BANNER_SIZE.width, MOPUB_BANNER_SIZE.height);
-  }
-  MPView.delegate = self;
-  [MPView loadAd];
-  self.adNetworkView = MPView;
+- (void)getAd {
+
+    isStop = NO;
+    isReading = NO;
+
+    [self adDidStartRequestAd];
+
+    //  id _timeInterval = self.provider.outTime;
+    //  if ([_timeInterval isKindOfClass:[NSNumber class]]) {
+    //    timer = [NSTimer scheduledTimerWithTimeInterval:[_timeInterval doubleValue] target:self
+    //    selector:@selector(timeOutTimer) userInfo:nil repeats:NO];
+    //  }
+    //  else{
+    //    timer = [NSTimer scheduledTimerWithTimeInterval:8 target:self selector:@selector(timeOutTimer) userInfo:nil
+    //    repeats:NO];
+    //  }
+    //
+
+    CGSize adSize = CGSizeZero;
+
+    switch (self.adType) {
+        case AdViewYMTypeNormalBanner:
+            adSize = MOPUB_BANNER_SIZE;
+            break;
+        case AdViewYMTypeLargeBanner:
+            adSize = MOPUB_LEADERBOARD_SIZE;
+            break;
+        default:
+            break;
+    }
+
+    // self.provider.key1 = @"55e382ae536a42068fd69420f70ff712";
+
+    if (([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)) {
+        MPView = [[MPAdView alloc] initWithAdUnitId:self.provider.key2 size:adSize];
+        MPView.frame = CGRectMake(0, 0, MOPUB_LEADERBOARD_SIZE.width, MOPUB_LEADERBOARD_SIZE.height);
+    } else {
+        MPView = [[MPAdView alloc] initWithAdUnitId:self.provider.key1 size:adSize];
+        MPView.frame = CGRectMake(0, 0, MOPUB_BANNER_SIZE.width, MOPUB_BANNER_SIZE.height);
+    }
+    MPView.delegate = self;
+    [MPView loadAd];
+    self.adNetworkView = MPView;
 }
 
--(void)stopAd{
-  isStop = YES;
-  [self stopTimer];
+- (void)stopAd {
+    isStop = YES;
+    [self stopTimer];
 }
 
--(void)timeOutTimer{
-  
-  if (isStop || isReading) {
-    return;
-  }
-  isReading =YES;
-  
-  [self stopTimer];
-  if (self.adNetworkView && [self.adNetworkView isKindOfClass:[MPView class]]) {
-    MPView.delegate = nil;
-  }
-  [self adapter:self didFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestTimeOut description:@"Mopub time out"]];
+- (void)timeOutTimer {
+
+    if (isStop || isReading) {
+        return;
+    }
+    isReading = YES;
+
+    [self stopTimer];
+    if (self.adNetworkView && [self.adNetworkView isKindOfClass:[MPView class]]) {
+        MPView.delegate = nil;
+    }
+    [self adapter:self didFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestTimeOut description:@"Mopub time out"]];
 }
 
 - (void)stopTimer {
-  if (timer) {
-    [timer invalidate];
-    timer = nil;
-  }
+    if (timer) {
+        [timer invalidate];
+        timer = nil;
+    }
 }
 
 #pragma mark - <MPAdViewDelegate>
 
 - (UIViewController *)viewControllerForPresentingModalView {
-  
-  return [self viewControllerForPresentModalView];
+
+    return [self viewControllerForPresentModalView];
 }
 
 /**
@@ -102,14 +104,13 @@
  *
  * @param view The ad view sending the message.
  */
-- (void)adViewDidLoadAd:(MPAdView *)view{
-  if (isStop || isReading) {
-    return;
-  }
-  isReading=YES;
-  [self stopTimer];
-  [self adapter:self didReceiveAdView:self.adNetworkView];
-  
+- (void)adViewDidLoadAd:(MPAdView *)view {
+    if (isStop || isReading) {
+        return;
+    }
+    isReading = YES;
+    [self stopTimer];
+    [self adapter:self didReceiveAdView:self.adNetworkView];
 }
 
 /**
@@ -119,14 +120,14 @@
  *
  * @param view The ad view sending the message.
  */
-- (void)adViewDidFailToLoadAd:(MPAdView *)view{
-  
-  if (isStop || isReading) {
-    return;
-  }
-  isReading=YES;
-  [self stopTimer];
-  [self adapter:self didFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"Mopub no ad"]];
+- (void)adViewDidFailToLoadAd:(MPAdView *)view {
+
+    if (isStop || isReading) {
+        return;
+    }
+    isReading = YES;
+    [self stopTimer];
+    [self adapter:self didFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"Mopub no ad"]];
 }
 
 /** @name Detecting When a User Interacts With the Ad View */
@@ -140,9 +141,9 @@
  * @param view The ad view sending the message.
  * @see `didDismissModalViewForAd:`
  */
-- (void)willPresentModalViewForAd:(MPAdView *)view{
-  [self pauseAdapter:self];
-  [self adapter:self didClickAdView:self.adNetworkView WithRect:CGRectZero];
+- (void)willPresentModalViewForAd:(MPAdView *)view {
+    [self pauseAdapter:self];
+    [self adapter:self didClickAdView:self.adNetworkView WithRect:CGRectZero];
 }
 
 /**
@@ -154,8 +155,8 @@
  * @param view The ad view sending the message.
  * @see `willPresentModalViewForAd:`
  */
-- (void)didDismissModalViewForAd:(MPAdView *)view{
-  [self continueAdapter:self];
+- (void)didDismissModalViewForAd:(MPAdView *)view {
+    [self continueAdapter:self];
 }
 
 /**
@@ -166,14 +167,13 @@
  *
  * @param view The ad view sending the message.
  */
-- (void)willLeaveApplicationFromAd:(MPAdView *)view{
-  
+- (void)willLeaveApplicationFromAd:(MPAdView *)view {
 }
 
 - (void)dealloc {
-  if (MPView) {
-    MPView.delegate = nil;
-    MPView = nil;
-  }
+    if (MPView) {
+        MPView.delegate = nil;
+        MPView = nil;
+    }
 }
 @end

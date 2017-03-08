@@ -6,14 +6,13 @@
 //  Copyright (c) 2015年 AdsYuMI. All rights reserved.
 //
 
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 #import <InMobiSDK/InMobiSDK.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
-@interface AdsYuMIAdNetworkInterstitialInMobiAdapter : AdsYuMIAdNetworkAdapter <IMInterstitialDelegate>
-{
-  NSTimer * timer;
-  BOOL isReading;
+@interface AdsYuMIAdNetworkInterstitialInMobiAdapter : AdsYuMIAdNetworkAdapter <IMInterstitialDelegate> {
+    NSTimer *timer;
+    BOOL isReading;
 }
-@property(nonatomic,strong)IMInterstitial *interstitialAd;
+@property (nonatomic, strong) IMInterstitial *interstitialAd;
 
 @end
