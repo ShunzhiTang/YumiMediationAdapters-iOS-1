@@ -25,6 +25,9 @@ Pod::Spec.new do |s|
 
   s.subspec 'AdMob' do |sp|
     sp.source_files = 'YumiMediationAdapters/AdMob/*.{h,m}'
+    sp.resource_bundles = {
+      'YumiMediationAdMob' => ['YumiMediationAdapters/AdMob/**/*.{xib,png}']
+    }
     sp.dependency 'Google-Mobile-Ads-SDK', '7.18.0'
   end
 
