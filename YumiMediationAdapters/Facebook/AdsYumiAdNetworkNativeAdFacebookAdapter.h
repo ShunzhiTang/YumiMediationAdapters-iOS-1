@@ -6,22 +6,22 @@
 //
 //
 
-#import "YumiFaceboolAdapterBannerVC.h"
-#import <FBAudienceNetwork/FBAudienceNetwork.h>
 #import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
+#import <FBAudienceNetwork/FBAudienceNetwork.h>
+#import "YumiFaceboolAdapterBannerVC.h"
 
-@interface AdsYumiAdNetworkNativeAdFacebookAdapter : AdsYuMIAdNetworkAdapter <FBNativeAdDelegate> {
+@interface AdsYumiAdNetworkNativeAdFacebookAdapter : AdsYuMIAdNetworkAdapter<FBNativeAdDelegate>
+{
     BOOL isStop;
-    NSTimer *timer;
+    NSTimer * timer;
     BOOL isReading;
 }
-@property (strong, nonatomic) YumiFaceboolAdapterBannerVC *bannerVC;
+@property (strong,nonatomic) YumiFaceboolAdapterBannerVC *bannerVC;
 @property (strong, nonatomic) FBNativeAd *nativeAd;
-@property (strong, nonatomic) UIView *AdUIView;
-@property (strong, nonatomic) UIImageView *adIconImageView;
-@property (strong, nonatomic) UILabel *adTitleLable;
-@property (strong, nonatomic) UILabel *adSocialContext;
-@property (strong, nonatomic) UIButton *adCallToActionButton;
-@property (weak, nonatomic) FBAdChoicesView *adChoicesView;
-@property (strong, nonatomic) UIView *backgroundView;
+@property (strong,nonatomic) UIView *AdUIView;
+@property (strong,nonatomic) UIImageView *adIconImageView;
+@property (strong,nonatomic) UILabel *adTitleLable;
+@property (strong,nonatomic) UILabel *adSocialContext;
+@property (strong,nonatomic) UIButton *adCallToActionButton;
+@property (strong, nonatomic)  FBAdChoicesView *adChoicesView;
 @end

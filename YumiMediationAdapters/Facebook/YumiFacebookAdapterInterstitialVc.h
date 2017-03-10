@@ -6,8 +6,8 @@
 //
 //
 
-#import <FBAudienceNetwork/FBAudienceNetwork.h>
 #import <UIKit/UIKit.h>
+#import <FBAudienceNetwork/FBAudienceNetwork.h>
 
 @interface YumiFacebookAdapterInterstitialVc : UIViewController
 
@@ -22,4 +22,5 @@
 
 @property (strong, nonatomic) IBOutlet UIView *adUIView;
 
+@property (strong, nonatomic) IBOutlet UIButton *closeButton;
 @end
