@@ -10,11 +10,10 @@
 
 #import <GoogleMobileAds/GoogleMobileAds.h>
 
-@interface AdsYuMIAdNetworkInterstitialGoogleAdapter : AdsYuMIAdNetworkAdapter <GADInterstitialDelegate>
-{
-    NSTimer * timer;
+@interface AdsYuMIAdNetworkInterstitialGoogleAdapter : AdsYuMIAdNetworkAdapter <GADInterstitialDelegate> {
+    NSTimer *timer;
     BOOL isReading;
 }
-@property(nonatomic,retain)GADInterstitial *interstitial;
+@property (nonatomic, retain) GADInterstitial *interstitial;
 
 @end
