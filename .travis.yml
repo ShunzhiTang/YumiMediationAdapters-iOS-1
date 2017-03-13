@@ -4,23 +4,13 @@ language: objective-c
 before_install:
   - gem install cocoapods
   - gem install cocoapods-packager
-
-before_script:
+  - pip install oss2
   - brew install clang-format
+  - pod repo update
 
 script:
   - sh format.sh
-
-before_deploy:
-  - pip install oss2
-  - pod repo update
-
-deploy:
-  provider: script
-  script: python ./scripts/publish-pod.py
-  skip_cleanup: true
-  on:
-    branch: production
+  - python ./scripts/publish-pod.py
 
 notifications:
   slack:
