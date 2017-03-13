@@ -126,9 +126,11 @@
 
 //获取模板路径
 - (NSString *)resourceNamedFromCustomBundle:(NSString *)name {
-    NSBundle *bundle =
-        [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"YMAutoNomousRes" ofType:@"bundle"]];
-    NSString *strPath = [bundle pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"html"];
+    NSBundle *mainBundle = [NSBundle bundleForClass:[self class]];
+    NSURL *bundleURL = [mainBundle URLForResource:@"YumiMediationSDK" withExtension:@"bundle"];
+    NSBundle *YumiMediationSDK = [NSBundle bundleWithURL:bundleURL];
+    
+    NSString *strPath = [YumiMediationSDK pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"html"];
     return strPath;
 }
 
