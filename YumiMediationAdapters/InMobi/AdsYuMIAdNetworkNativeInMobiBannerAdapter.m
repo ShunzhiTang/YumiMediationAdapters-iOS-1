@@ -122,7 +122,7 @@
     NSBundle *mainBundle = [NSBundle bundleForClass:[self class]];
     NSURL *bundleURL = [mainBundle URLForResource:@"YumiMediationSDK" withExtension:@"bundle"];
     NSBundle *YumiMediationSDK = [NSBundle bundleWithURL:bundleURL];
-    
+
     NSString *strPath = [YumiMediationSDK pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"html"];
     return strPath;
 }
