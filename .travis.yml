@@ -16,6 +16,7 @@ before_deploy:
 deploy:
   provider: script
   script: python ./scripts/publish-pod.py
+  skip_cleanup: true
   on:
     branch: production
 
