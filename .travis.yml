@@ -1,6 +1,10 @@
 osx_image: xcode8
 language: objective-c
 
+before_install:
+  - gem install cocoapods
+  - gem install cocoapods-packager
+
 before_script:
   - brew install clang-format
 
@@ -8,8 +12,6 @@ script:
   - sh format.sh
 
 before_deploy:
-  - gem install cocoapods
-  - gem install cocoapods-packager
   - pip install oss2
   - pod repo update
 
