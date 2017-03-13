@@ -18,7 +18,7 @@ def main(argv):
         adapter = Adapter(adapter_name, third_party_sdk_dependency, version, extra=extra)
         adapters.append(adapter)
 
-    yumi_mediation_sdk_version = '~> 0.8.9'
+    yumi_mediation_sdk_version = '~> 0.8.11'
     for adapter in adapters:
         podspec_name = 'YumiMediation%s' % adapter.name
         generate_podspec_for_packaging(podspec_name, adapter.name, yumi_mediation_sdk_version)

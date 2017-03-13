@@ -64,7 +64,7 @@
 }
 
 - (void)preasentInterstitial {
-    if ([UnityAds isReady]) {
+    if ([UnityAds isReady:self.provider.key2]) {
         [UnityAds show:[self viewControllerForWillPresentInterstitialModalView] placementId:self.provider.key2];
     }
 }
