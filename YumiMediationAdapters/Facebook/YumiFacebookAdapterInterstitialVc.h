@@ -22,4 +22,5 @@
 
 @property (strong, nonatomic) IBOutlet UIView *adUIView;
 
+@property (strong, nonatomic) IBOutlet UIButton *closeButton;
 @end

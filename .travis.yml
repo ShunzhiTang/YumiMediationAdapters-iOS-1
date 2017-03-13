@@ -1,15 +1,23 @@
 osx_image: xcode8
 language: objective-c
 
-before_install:
+before_script:
+  - brew install clang-format
+
+script:
+  - sh format.sh
+
+before_deploy:
   - gem install cocoapods
   - gem install cocoapods-packager
   - pip install oss2
   - pod repo update
 
-script:
-  - sh format.sh
-  - python ./scripts/publish-pod.py
+deploy:
+  provider: script
+  script: python ./scripts/publish-pod.py
+  on:
+    branch: production
 
 notifications:
   slack:

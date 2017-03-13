@@ -6,8 +6,9 @@
 //  Copyright (c) 2015年 AdsYuMI. All rights reserved.
 //
 
-#import <GoogleMobileAds/GoogleMobileAds.h>
 #import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
+
+#import <GoogleMobileAds/GoogleMobileAds.h>
 
 @interface AdsYuMIAdNetworkInterstitialGoogleAdapter : AdsYuMIAdNetworkAdapter <GADInterstitialDelegate> {
     NSTimer *timer;

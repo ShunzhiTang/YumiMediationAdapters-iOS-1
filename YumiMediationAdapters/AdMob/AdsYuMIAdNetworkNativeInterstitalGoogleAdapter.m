@@ -86,11 +86,6 @@
         didInterstitialFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestTimeOut description:@"Admob native time out"]];
 }
 
-//是否自动发送统计
-- (BOOL)isAutoStatistical {
-    return NO;
-}
-
 #pragma mark GADAdLoaderDelegate implementation
 - (void)adLoader:(GADAdLoader *)adLoader didFailToReceiveAdWithError:(GADRequestError *)error {
     if (isReading) {
@@ -110,13 +105,18 @@
     isReading = YES;
     [self stopTimer];
 
+    NSBundle *mainBundle = [NSBundle bundleForClass:[self class]];
+    NSURL *bundleURL = [mainBundle URLForResource:@"YumiMediationAdMob" withExtension:@"bundle"];
+    NSBundle *YumiMediationAdMob = [NSBundle bundleWithURL:bundleURL];
+
     if ([UIDevice currentDevice].orientation == UIDeviceOrientationPortrait ||
         [UIDevice currentDevice].orientation == UIDeviceOrientationPortraitUpsideDown) {
+
         appInstallAdView =
-            [[NSBundle mainBundle] loadNibNamed:@"AdmobNativeInstallAdView" owner:nil options:nil].firstObject;
+            [YumiMediationAdMob loadNibNamed:@"AdmobNativeInstallAdView" owner:nil options:nil].firstObject;
     } else {
         appInstallAdView =
-            [[NSBundle mainBundle] loadNibNamed:@"AdmobNativeInstallAdView_Lan" owner:nil options:nil].firstObject;
+            [YumiMediationAdMob loadNibNamed:@"AdmobNativeInstallAdView_Lan" owner:nil options:nil].firstObject;
     }
 
     appInstallAdView.frame = [UIScreen mainScreen].bounds;

@@ -25,6 +25,9 @@ Pod::Spec.new do |s|
 
   s.subspec 'AdMob' do |sp|
     sp.source_files = 'YumiMediationAdapters/AdMob/*.{h,m}'
+    sp.resource_bundles = {
+      'YumiMediationAdMob' => ['YumiMediationAdapters/AdMob/**/*.{xib,png}']
+    }
     sp.dependency 'Google-Mobile-Ads-SDK', '7.18.0'
   end
 
@@ -81,7 +84,7 @@ Pod::Spec.new do |s|
   s.subspec 'Facebook' do |sp|
     sp.source_files = 'YumiMediationAdapters/Facebook/*.{h,m}'
     sp.resource_bundles = {
-      'YumiMediationFacebook' => ['YumiMediationAdapters/Facebook/*.{nib,png}']
+      'YumiMediationFacebook' => ['YumiMediationAdapters/Facebook/*.{xib,png}']
     }
     sp.dependency 'FBAudienceNetwork', '4.17.0'
   end

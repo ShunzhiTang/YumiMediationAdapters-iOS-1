@@ -15,7 +15,7 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="320"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Admob.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="aYZ-aR-b0A">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Admob.png" translatesAutoresizingMaskIntoConstraints="NO" id="aYZ-aR-b0A">
                     <rect key="frame" x="-1" y="0.0" width="482" height="320"/>
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lgS-Jd-N6i">
@@ -109,7 +109,7 @@
         </view>
     </objects>
     <resources>
-        <image name="Admob.jpg" width="768" height="576"/>
+        <image name="Admob.png" width="768" height="576"/>
         <image name="admob_close.png" width="72" height="72"/>
     </resources>
 </document>

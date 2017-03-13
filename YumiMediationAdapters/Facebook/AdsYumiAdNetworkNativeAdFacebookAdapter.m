@@ -12,16 +12,6 @@
 #define AutoSizeScaleX ScreenWidth / 375.f
 #define AutoSizeScaleY ScreenHeight / 667.f
 
-CG_INLINE CGRect CGRectMake1(CGFloat x, CGFloat y, CGFloat width, CGFloat height) {
-
-    CGRect rect;
-    rect.origin.x = x * AutoSizeScaleX;
-    rect.origin.y = y * AutoSizeScaleY;
-    rect.size.width = width * AutoSizeScaleX;
-    rect.size.height = height * AutoSizeScaleY;
-    return rect;
-}
-
 #import "AdsYumiAdNetworkNativeAdFacebookAdapter.h"
 
 @implementation AdsYumiAdNetworkNativeAdFacebookAdapter {
@@ -34,10 +24,13 @@ CG_INLINE CGRect CGRectMake1(CGFloat x, CGFloat y, CGFloat width, CGFloat height
 }
 
 + (NSString *)networkType {
-    return AdsYuMIAdNetworkAdFacebook;
+    return AdsYuMIAdNetworkAdFacebookNative;
 }
 
 + (void)load {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        return;
+    }
     [[AdsYuMIBannerSDKAdNetworkRegistry sharedRegistry] registerClass:self];
 }
 
@@ -68,32 +61,22 @@ CG_INLINE CGRect CGRectMake1(CGFloat x, CGFloat y, CGFloat width, CGFloat height
     nativeAd.mediaCachePolicy = FBNativeAdsCachePolicyAll;
     [nativeAd loadAd];
 
-    self.bannerVC.frame = CGRectMake(0, 0, width, height);
+    self.bannerVC.frame = CGRectMake(0, 0, width, 50);
     self.adNetworkView = self.bannerVC;
 }
 
 - (void)autoLayoutWidthAndHeight {
-    float h;
     float w = [UIScreen mainScreen].bounds.size.width;
-
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        float proportion = 90.0f / 728.0f;
-        h = w * proportion;
-    } else {
-        float proportion = 50.0f / 320.0f;
-        h = w * proportion;
-    }
-
     width = w;
-    height = h;
 }
 
 - (void)getNibResourceFromCustomBundle {
     NSBundle *mainBundle = [NSBundle bundleForClass:[self class]];
-    NSString *path = [mainBundle pathForResource:@"YumiFacebookAdapter" ofType:@"bundle"];
-    NSBundle *bundle = [NSBundle bundleWithPath:path];
+    NSURL *bundleURL = [mainBundle URLForResource:@"YumiMediationFacebook" withExtension:@"bundle"];
+    NSBundle *YumiMediationFacebook = [NSBundle bundleWithURL:bundleURL];
+
     YumiFaceboolAdapterBannerVC *vc =
-        [bundle loadNibNamed:@"YumiFacebookBannerNativeAdapter" owner:nil options:nil].firstObject;
+        [YumiMediationFacebook loadNibNamed:@"YumiFacebookBannerNativeAdapter" owner:nil options:nil].firstObject;
     if (vc == nil) {
         NSLog(@"facebook 加载素材失败");
     }
@@ -215,6 +198,13 @@ CG_INLINE CGRect CGRectMake1(CGFloat x, CGFloat y, CGFloat width, CGFloat height
 }
 
 - (void)dealloc {
+    self.bannerVC = nil;
+    self.AdUIView = nil;
+    self.adIconImageView = nil;
+    self.adTitleLable = nil;
+    self.adSocialContext = nil;
+    self.adCallToActionButton = nil;
+    self.adChoicesView = nil;
 }
 
 @end

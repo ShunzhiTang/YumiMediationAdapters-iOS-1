@@ -22,6 +22,5 @@
 @property (strong, nonatomic) UILabel *adTitleLable;
 @property (strong, nonatomic) UILabel *adSocialContext;
 @property (strong, nonatomic) UIButton *adCallToActionButton;
-@property (weak, nonatomic) FBAdChoicesView *adChoicesView;
-@property (strong, nonatomic) UIView *backgroundView;
+@property (strong, nonatomic) FBAdChoicesView *adChoicesView;
 @end

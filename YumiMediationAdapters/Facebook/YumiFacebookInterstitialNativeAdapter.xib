@@ -4,8 +4,10 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,6 +22,9 @@
                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="YumiFacebookBack.png" translatesAutoresizingMaskIntoConstraints="NO" id="7ab-C2-bvZ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="khb-69-nfp">
                         <rect key="frame" x="29.5" y="186" width="316" height="295"/>
                         <subviews>
@@ -114,14 +119,29 @@
                             <constraint firstItem="rUp-nQ-uiB" firstAttribute="trailing" secondItem="B3g-VI-otC" secondAttribute="trailing" id="zP6-Z3-C3D"/>
                         </constraints>
                     </view>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DSj-4l-fn7">
+                        <rect key="frame" x="334" y="25" width="25" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="BdT-BV-WVt"/>
+                            <constraint firstAttribute="width" constant="25" id="BpR-bU-cgU"/>
+                        </constraints>
+                        <state key="normal" image="YumiFacebook_close.png"/>
+                    </button>
                 </subviews>
                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 <constraints>
                     <constraint firstItem="khb-69-nfp" firstAttribute="centerY" secondItem="aJT-Bf-6qf" secondAttribute="centerY" id="A7Z-xw-DD7"/>
+                    <constraint firstItem="7ab-C2-bvZ" firstAttribute="centerX" secondItem="aJT-Bf-6qf" secondAttribute="centerX" id="I6T-gi-pqu"/>
+                    <constraint firstItem="7ab-C2-bvZ" firstAttribute="height" secondItem="aJT-Bf-6qf" secondAttribute="height" id="VOV-4N-WyE"/>
+                    <constraint firstItem="DSj-4l-fn7" firstAttribute="top" secondItem="OjJ-ft-zKi" secondAttribute="bottom" constant="25" id="ZsJ-zR-KPF"/>
+                    <constraint firstItem="7ab-C2-bvZ" firstAttribute="width" secondItem="aJT-Bf-6qf" secondAttribute="width" id="c4H-70-zcS"/>
+                    <constraint firstItem="7ab-C2-bvZ" firstAttribute="centerY" secondItem="aJT-Bf-6qf" secondAttribute="centerY" id="eTc-OK-hJQ"/>
                     <constraint firstItem="khb-69-nfp" firstAttribute="centerX" secondItem="aJT-Bf-6qf" secondAttribute="centerX" id="eeE-JQ-LS1"/>
                     <constraint firstItem="khb-69-nfp" firstAttribute="width" secondItem="khb-69-nfp" secondAttribute="height" multiplier="316:295" priority="999" id="euk-7Y-u2y"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="DSj-4l-fn7" secondAttribute="trailing" id="sle-8M-DAl"/>
                 </constraints>
             </view>
+            <nil key="simulatedStatusBarMetrics"/>
             <connections>
                 <outlet property="adBodyLabel" destination="Ocf-4Q-5Tp" id="yll-qq-gu5"/>
                 <outlet property="adCallToActionButton" destination="B3g-VI-otC" id="lF7-Dr-w3z"/>
@@ -131,9 +151,14 @@
                 <outlet property="adSocialContextLabel" destination="rUp-nQ-uiB" id="G4a-ZZ-pHZ"/>
                 <outlet property="adTitleLabel" destination="MRx-u0-Cho" id="2u4-4E-qkD"/>
                 <outlet property="adUIView" destination="khb-69-nfp" id="5BC-OJ-iqs"/>
+                <outlet property="closeButton" destination="DSj-4l-fn7" id="aSy-8x-8TR"/>
                 <outlet property="sponsoredLabel" destination="CQS-ZD-0m3" id="L7O-S9-nCL"/>
             </connections>
-            <point key="canvasLocation" x="673" y="510"/>
+            <point key="canvasLocation" x="672.5" y="509.5"/>
         </viewController>
     </objects>
+    <resources>
+        <image name="YumiFacebookBack.png" width="288" height="384"/>
+        <image name="YumiFacebook_close.png" width="50" height="50"/>
+    </resources>
 </document>
