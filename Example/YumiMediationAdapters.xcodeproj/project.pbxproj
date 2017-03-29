@@ -242,6 +242,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = JiaDingYi;
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = VG25A6M88T;
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
@@ -525,6 +528,7 @@
 			baseConfigurationReference = BDD7AFEC91DACD04ABD78A7A /* Pods-YumiMediationAdapters_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = VG25A6M88T;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YumiMediationAdapters/YumiMediationAdapters-Prefix.pch";
 				INFOPLIST_FILE = "YumiMediationAdapters/YumiMediationAdapters-Info.plist";
@@ -540,6 +544,7 @@
 			baseConfigurationReference = 8572F566AF3D82DC5036394B /* Pods-YumiMediationAdapters_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = VG25A6M88T;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YumiMediationAdapters/YumiMediationAdapters-Prefix.pch";
 				INFOPLIST_FILE = "YumiMediationAdapters/YumiMediationAdapters-Info.plist";
