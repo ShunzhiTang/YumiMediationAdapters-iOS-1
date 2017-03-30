@@ -31,7 +31,7 @@ def main(argv):
     for adapter in adapters:
         podspec_name = 'YumiMediation%s' % adapter.name
         if os.environ['FRAMEWORK'] == 'YumiMediationSDK_Zplay' :
-            podspec_name = 'YumiVideoAdsMediation%s_Zplay' % adapter.name
+            podspec_name = 'YumiMediation%s_Zplay' % adapter.name
             print "========== podspec_name:%s ==========" %podspec_name
         generate_podspec_for_packaging(podspec_name, adapter.name, yumi_mediation_sdk_version, YumiMediationSDK)
         package(podspec_name, adapter.name)
