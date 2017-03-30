@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 AdsYuMI. All rights reserved.
 //
 
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK_Zplay/AdsYuMIAdNetworkAdapter.h>
 
 #import <GoogleMobileAds/GoogleMobileAds.h>
 

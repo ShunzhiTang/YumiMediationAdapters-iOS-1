@@ -7,7 +7,7 @@
 //
 
 #import "GDTMobBannerView.h"
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK_Zplay/AdsYuMIAdNetworkAdapter.h>
 @interface AdsYuMIAdNetworkGDTAdapter : AdsYuMIAdNetworkAdapter <GDTMobBannerViewDelegate> {
     NSTimer *timer;
     BOOL isReading;

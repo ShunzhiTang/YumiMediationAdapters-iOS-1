@@ -7,7 +7,7 @@
 //
 
 #import "AdsYuMIAdNetworkNativeGDTIntertitialAdapter.h"
-#import <YumiMediationSDK/AdsYuMiInterstitialNativeViewController.h>
+#import <YumiMediationSDK_Zplay/AdsYuMiInterstitialNativeViewController.h>
 
 @interface AdsYuMIAdNetworkNativeGDTIntertitialAdapter () <GDTNativeAdDelegate,
                                                            AdsYuMiInterstitialNativeViewControllerDelegate> {
