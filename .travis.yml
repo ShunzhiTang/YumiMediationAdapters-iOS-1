@@ -5,6 +5,7 @@ before_install:
   - gem install cocoapods
   - gem install cocoapods-packager
   - pip install oss2
+  - pip install retrying
   - brew install clang-format
   - pod repo update
 
