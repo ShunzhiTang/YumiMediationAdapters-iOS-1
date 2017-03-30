@@ -5,6 +5,7 @@ import subprocess
 import tarfile
 
 import oss2
+from retrying import retry
 
 
 def main(argv):
@@ -79,6 +80,7 @@ def compress(podspec_name, version):
     return compressed_filename
 
 
+@retry(stop_max_attempt_number=5)
 def upload_to_oss(local_filename, remote_filename):
     auth = oss2.Auth(os.environ['OSS_KEY_ID'], os.environ['OSS_KEY_SECRET'])
     endpoint = 'http://oss-cn-beijing.aliyuncs.com'
@@ -103,6 +105,7 @@ def generate_podspec_for_publishing(podspec_name, adapter, source, yumi_mediatio
             podspec.write(podspec_data)
 
 
+@retry(stop_max_attempt_number=5)
 def publish_pod(podspec_name):
     cmd = 'pod trunk push %s --allow-warnings' % podspec_filename_from_podspec_name(podspec_name)
     code = subprocess.call(cmd, shell=True)
