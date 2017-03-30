@@ -18,16 +18,27 @@ def main(argv):
         adapter = Adapter(adapter_name, third_party_sdk_dependency, version, extra=extra)
         adapters.append(adapter)
 
-    yumi_mediation_sdk_version = '~> 0.8.11'
+    yumi_mediation_sdk_version = '~> 0.8.22'
+
+    if os.environ['FRAMEWORK'] == 'YumiMediationSDK':
+        YumiMediationSDK = 'YumiMediationSDK'
+        print "==========select public sdk=========";
+    elif os.environ['FRAMEWORK'] == 'YumiMediationSDK_Zplay' :
+        YumiMediationSDK = 'YumiMediationSDK_Zplay'
+        print "==========select Zplay sdk==========";
+
     for adapter in adapters:
         podspec_name = 'YumiMediation%s' % adapter.name
-        generate_podspec_for_packaging(podspec_name, adapter.name, yumi_mediation_sdk_version)
+        if os.environ['FRAMEWORK'] == 'YumiMediationSDK_Zplay' :
+            podspec_name = 'YumiVideoAdsMediation%s_Zplay' % adapter.name
+            print "========== podspec_name:%s ==========" %podspec_name
+        generate_podspec_for_packaging(podspec_name, adapter.name, yumi_mediation_sdk_version, YumiMediationSDK)
         package(podspec_name, adapter.name)
         compressed_filename = compress(podspec_name, adapter.version)
         remote_filename = 'iOS/YumiMediationAdapters/%s' % compressed_filename
         upload_to_oss(compressed_filename, remote_filename)
         source = "{ :http => 'http://ad-sdk.oss-cn-beijing.aliyuncs.com/%s' }" % remote_filename
-        generate_podspec_for_publishing(podspec_name, adapter, source, yumi_mediation_sdk_version)
+        generate_podspec_for_publishing(podspec_name, adapter, source, yumi_mediation_sdk_version, YumiMediationSDK)
         publish_pod(podspec_name)
 
 
@@ -39,12 +50,13 @@ class Adapter:
         self.extra = extra
 
 
-def generate_podspec_for_packaging(podspec_name, name, yumi_mediation_sdk_version):
+def generate_podspec_for_packaging(podspec_name, name, yumi_mediation_sdk_version,YumiMediationSDK):
     with open('podspec-template-for-packaging', 'r') as template:
         values = {
             'podspec_name': podspec_name,
             'name': name,
-            'yumi_mediation_sdk_version': yumi_mediation_sdk_version
+            'yumi_mediation_sdk_version': yumi_mediation_sdk_version,
+            'YumiMediationSDK': YumiMediationSDK
         }
         podspec_data = template.read() % values
         with open(podspec_filename_from_podspec_name(podspec_name), 'w') as podspec:
@@ -74,7 +86,7 @@ def upload_to_oss(local_filename, remote_filename):
     bucket.put_object_from_file(remote_filename, local_filename)
 
 
-def generate_podspec_for_publishing(podspec_name, adapter, source, yumi_mediation_sdk_version):
+def generate_podspec_for_publishing(podspec_name, adapter, source, yumi_mediation_sdk_version,YumiMediationSDK):
     with open('podspec-template-for-publishing', 'r') as template:
         values = {
             'podspec_name': podspec_name,
@@ -84,6 +96,7 @@ def generate_podspec_for_publishing(podspec_name, adapter, source, yumi_mediatio
             'yumi_mediation_sdk_version': yumi_mediation_sdk_version,
             'third_party_sdk_dependency': adapter.third_party_sdk_dependency,
             'extra': adapter.extra,
+            'YumiMediationSDK': YumiMediationSDK
         }
         podspec_data = template.read() % values
         with open(podspec_filename_from_podspec_name(podspec_name), 'w') as podspec:

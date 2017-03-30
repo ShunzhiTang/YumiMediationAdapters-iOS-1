@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target    = '7.0'
   s.ios.vendored_framework   = "#{s.name}.framework"
-  s.dependency 'YumiMediationSDK', '%(yumi_mediation_sdk_version)s'
+  s.dependency '%(YumiMediationSDK)s', '%(yumi_mediation_sdk_version)s'
   s.dependency %(third_party_sdk_dependency)s
   %(extra)s
 end
