@@ -19,7 +19,7 @@ def main(argv):
         adapter = Adapter(adapter_name, third_party_sdk_dependency, version, extra=extra)
         adapters.append(adapter)
 
-    yumi_mediation_sdk_version = '~> 0.8.22'
+    yumi_mediation_sdk_version = '>= 1.6.41'
 
     if os.environ['FRAMEWORK'] == 'YumiMediationSDK':
         YumiMediationSDK = 'YumiMediationSDK'
