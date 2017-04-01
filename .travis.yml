@@ -11,7 +11,7 @@ before_install:
 
 script:
   - sh format.sh
-  - python ./scripts/publish-pod.py
+  - travis_wait 20 python ./scripts/publish-pod.py
 
 env:
   matrix:
