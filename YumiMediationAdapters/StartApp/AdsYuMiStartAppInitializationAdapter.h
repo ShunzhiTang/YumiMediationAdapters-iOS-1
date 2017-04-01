@@ -7,7 +7,7 @@
 //
 
 #import <StartApp/StartApp.h>
-#import <YumiMediationSDK_Zplay/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
 @interface AdsYuMiStartAppInitializationAdapter : AdsYuMIAdNetworkAdapter <STADelegateProtocol> {
     STAStartAppAd *startAppAd;

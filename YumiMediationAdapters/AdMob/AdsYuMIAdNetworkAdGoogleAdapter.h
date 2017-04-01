@@ -7,7 +7,7 @@
 //
 
 #import <GoogleMobileAds/GoogleMobileAds.h>
-#import <YumiMediationSDK_Zplay/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
 @interface AdsYuMIAdNetworkAdGoogleAdapter : AdsYuMIAdNetworkAdapter <GADBannerViewDelegate> {
     BOOL isStop;
