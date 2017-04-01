@@ -7,7 +7,7 @@
 //
 
 #import <FBAudienceNetwork/FBAdView.h>
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK_Zplay/AdsYuMIAdNetworkAdapter.h>
 
 @interface AdsYuMIAdNetworkFacebookAdapter : AdsYuMIAdNetworkAdapter <FBAdViewDelegate> {
     BOOL isStop;

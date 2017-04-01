@@ -7,7 +7,7 @@
 //
 
 #import "GDTNativeAd.h"
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK_Zplay/AdsYuMIAdNetworkAdapter.h>
 
 @interface AdsYuMIAdNetworkNativeGDTIntertitialAdapter : AdsYuMIAdNetworkAdapter {
     NSTimer *timer;
