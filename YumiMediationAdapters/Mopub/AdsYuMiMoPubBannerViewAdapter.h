@@ -7,7 +7,7 @@
 //
 
 #import "MPAdView.h"
-#import <YumiMediationSDK_Zplay/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
 @interface AdsYuMiMoPubBannerViewAdapter : AdsYuMIAdNetworkAdapter <MPAdViewDelegate> {
     NSTimer *timer;

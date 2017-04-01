@@ -8,7 +8,7 @@
 
 #import "YumiFacebookAdapterInterstitialVc.h"
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
-#import <YumiMediationSDK_Zplay/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
 @interface AdsYumiAdNetworkNativeInterFacebookAdapter
     : AdsYuMIAdNetworkAdapter <FBNativeAdDelegate, FBMediaViewDelegate> {
