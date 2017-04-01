@@ -7,7 +7,7 @@
 //
 
 #import <FBAudienceNetwork/FBInterstitialAd.h>
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK_Zplay/AdsYuMIAdNetworkAdapter.h>
 
 @interface AdsYuMIAdNetworkInterstitialFacebookAdapter : AdsYuMIAdNetworkAdapter <FBInterstitialAdDelegate> {
     NSTimer *timer;

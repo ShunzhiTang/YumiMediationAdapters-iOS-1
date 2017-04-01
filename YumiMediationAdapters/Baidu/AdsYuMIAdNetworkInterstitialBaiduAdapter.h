@@ -7,7 +7,7 @@
 //
 
 #import <BaiduMobAdSDK/BaiduMobAdInterstitial.h>
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK_Zplay/AdsYuMIAdNetworkAdapter.h>
 
 @interface AdsYuMIAdNetworkInterstitialBaiduAdapter : AdsYuMIAdNetworkAdapter <BaiduMobAdInterstitialDelegate> {
     NSTimer *timer;

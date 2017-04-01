@@ -7,7 +7,7 @@
 //
 
 #import <StartApp/StartApp.h>
-#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK_Zplay/AdsYuMIAdNetworkAdapter.h>
 
 @interface AdsYuMiStartAppBannerAdapter : AdsYuMIAdNetworkAdapter <STABannerDelegateProtocol> {
     NSTimer *timer;
