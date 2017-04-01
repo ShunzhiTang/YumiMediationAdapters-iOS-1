@@ -7,7 +7,7 @@
 //
 
 #import <InMobiSDK/InMobiSDK.h>
-#import <YumiMediationSDK_Zplay/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
 @interface AdsYuMIAdNetworkInterstitialInMobiAdapter : AdsYuMIAdNetworkAdapter <IMInterstitialDelegate> {
     NSTimer *timer;

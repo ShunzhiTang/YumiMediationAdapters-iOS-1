@@ -7,7 +7,7 @@
 //
 
 #import "MPInterstitialAdController.h"
-#import <YumiMediationSDK_Zplay/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
 @interface AdsYuMiMoPubCPViewAdapter : AdsYuMIAdNetworkAdapter <MPInterstitialAdControllerDelegate> {
     NSTimer *timer;

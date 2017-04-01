@@ -7,7 +7,7 @@
 //
 
 #import <Chartboost/Chartboost.h>
-#import <YumiMediationSDK_Zplay/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
 @interface AdsYuMIAdNetworkInterstitialChartboostAdapter : AdsYuMIAdNetworkAdapter <ChartboostDelegate> {
     NSTimer *timer;
