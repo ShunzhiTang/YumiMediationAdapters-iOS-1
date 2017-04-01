@@ -6,7 +6,7 @@
 //  Copyright © 2015年 AdsYuMI. All rights reserved.
 //
 
-#import <YumiMediationSDK_Zplay/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
 //问题1：key不能通过后台设置，只能在plist里面设置
 //问题2：插屏和视频分不开
