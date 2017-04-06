@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   
   s.frameworks = 'UIKit'
 
-  s.dependency 'YumiMediationSDK_Zplay', '~> 1.6.41'
+  s.dependency 'YumiMediationSDK_Zplay', '>= 1.6.41'
 
   s.subspec 'AdMob' do |sp|
     sp.source_files = 'YumiMediationAdapters/AdMob/*.{h,m}'
