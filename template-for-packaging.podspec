@@ -12,13 +12,13 @@ Pod::Spec.new do |s|
   
   s.frameworks = 'UIKit'
 
-  s.dependency '%(YumiMediationSDK)s', '%(yumi_mediation_sdk_version)s'
+  s.dependency 'YumiMediationSDK', '%(yumi_mediation_sdk_version)s'
 
   s.subspec 'AdMob' do |sp|
     sp.source_files = 'YumiMediationAdapters/AdMob/*.{h,m}'
     sp.resource_bundles = {
       'YumiMediationAdMob' => ['YumiMediationAdapters/AdMob/**/*.{xib,png}']
-      }
+    }
     sp.dependency 'Google-Mobile-Ads-SDK', '7.18.0'
   end
 
@@ -79,5 +79,4 @@ Pod::Spec.new do |s|
     }
     sp.dependency 'FBAudienceNetwork', '4.17.0'
   end
-
 end
