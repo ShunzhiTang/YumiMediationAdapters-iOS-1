@@ -1,19 +1,18 @@
 Pod::Spec.new do |s|
-  s.name             = 'YumiMediationAdapters_Zplay'
-  s.version          = '0.5.5'
-  s.summary          = 'Yumi Mediation Adapters.'
-  s.description      = 'This is the Yumi Mediation Adapters. Please proceed to http://developers.yumimobi.com/IosSdk/index for more information.'
-
-  s.homepage         = 'https://github.com/yumimobi/YumiMediationAdapters-iOS'
+  s.name             = '%(podspec_name)s'
+  s.version          = '0.0.1'
+  s.summary          = '%(name)s adapter used for mediation with the Yumimobi Ads SDK'
+  s.description      = 'This is the Yumi Mediation %(name)s Adapter. Please proceed to http://developers.yumimobi.com/IosSdk/index for more information.'
+  s.homepage         = 'http://developers.yumimobi.com/IosSdk/index'
   s.license          = 'Custom'
   s.author           = { 'zplay sdk team' => 'ad-client@zplay.cn' }
-  s.source           = { :git => 'git@github.com:yumimobi/YumiMediationAdapters-iOS.git', :tag => s.version.to_s }
+  s.source           = { :git => 'git@github.com:yumimobi/YumiMediationAdapters-iOS.git' }
 
   s.ios.deployment_target = '7.0'
   
   s.frameworks = 'UIKit'
 
-  s.dependency 'YumiMediationSDK_Zplay', '>= 1.6.41'
+  s.dependency 'YumiMediationSDK', '%(yumi_mediation_sdk_version)s'
 
   s.subspec 'AdMob' do |sp|
     sp.source_files = 'YumiMediationAdapters/AdMob/*.{h,m}'
@@ -80,5 +79,4 @@ Pod::Spec.new do |s|
     }
     sp.dependency 'FBAudienceNetwork', '4.17.0'
   end
-
 end

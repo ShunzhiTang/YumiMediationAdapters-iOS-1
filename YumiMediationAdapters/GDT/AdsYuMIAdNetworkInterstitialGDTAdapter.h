@@ -7,7 +7,7 @@
 //
 
 #import "GDTMobInterstitial.h"
-#import <YumiMediationSDK_Zplay/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
 @interface AdsYuMIAdNetworkInterstitialGDTAdapter : AdsYuMIAdNetworkAdapter <GDTMobInterstitialDelegate> {
     GDTMobInterstitial *_interstitialObj;

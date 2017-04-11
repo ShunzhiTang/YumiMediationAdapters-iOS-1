@@ -5,7 +5,7 @@ PODS:
   - Google-Mobile-Ads-SDK (7.18.0)
   - InMobiSDK (6.0.0)
   - Specta (1.0.6)
-  - YumiAdsSDK (0.2.11)
+  - YumiAdsSDK (2.0.41)
   - YumiAppLovinSDK (3.4.3)
   - YumiBaiduSDK (4.5.0)
   - YumiGDTSDK (4.5.5)
@@ -20,39 +20,39 @@ PODS:
     - YumiMediationAdapters/Mopub (= 0.5.5)
     - YumiMediationAdapters/StartApp (= 0.5.5)
     - YumiMediationAdapters/Unity (= 0.5.5)
-    - YumiMediationSDK (~> 0.8.11)
+    - YumiMediationSDK (= 1.6.41)
   - YumiMediationAdapters/AdMob (0.5.5):
     - Google-Mobile-Ads-SDK (= 7.18.0)
-    - YumiMediationSDK (~> 0.8.11)
+    - YumiMediationSDK (= 1.6.41)
   - YumiMediationAdapters/AppLovin (0.5.5):
     - YumiAppLovinSDK (= 3.4.3)
-    - YumiMediationSDK (~> 0.8.11)
+    - YumiMediationSDK (= 1.6.41)
   - YumiMediationAdapters/Baidu (0.5.5):
     - YumiBaiduSDK (= 4.5.0)
-    - YumiMediationSDK (~> 0.8.11)
+    - YumiMediationSDK (= 1.6.41)
   - YumiMediationAdapters/Chartboost (0.5.5):
     - ChartboostSDK (= 6.6.1)
-    - YumiMediationSDK (~> 0.8.11)
+    - YumiMediationSDK (= 1.6.41)
   - YumiMediationAdapters/Facebook (0.5.5):
     - FBAudienceNetwork (= 4.17.0)
-    - YumiMediationSDK (~> 0.8.11)
+    - YumiMediationSDK (= 1.6.41)
   - YumiMediationAdapters/GDT (0.5.5):
     - YumiGDTSDK (= 4.5.5)
-    - YumiMediationSDK (~> 0.8.11)
+    - YumiMediationSDK (= 1.6.41)
   - YumiMediationAdapters/InMobi (0.5.5):
     - InMobiSDK (= 6.0.0)
-    - YumiMediationSDK (~> 0.8.11)
+    - YumiMediationSDK (= 1.6.41)
   - YumiMediationAdapters/Mopub (0.5.5):
-    - YumiMediationSDK (~> 0.8.11)
+    - YumiMediationSDK (= 1.6.41)
     - YumiMopubSDK (= 4.11.1)
   - YumiMediationAdapters/StartApp (0.5.5):
-    - YumiMediationSDK (~> 0.8.11)
+    - YumiMediationSDK (= 1.6.41)
     - YumiStartAppSDK (= 3.4.1)
   - YumiMediationAdapters/Unity (0.5.5):
-    - YumiMediationSDK (~> 0.8.11)
+    - YumiMediationSDK (= 1.6.41)
     - YumiUnitySDK (= 2.0.0)
-  - YumiMediationSDK (0.8.17):
-    - YumiAdsSDK (= 0.2.11)
+  - YumiMediationSDK (1.6.41):
+    - YumiAdsSDK (= 2.0.41)
   - YumiMopubSDK (4.11.1)
   - YumiStartAppSDK (3.4.1)
   - YumiUnitySDK (2.0.0)
@@ -73,12 +73,12 @@ SPEC CHECKSUMS:
   Google-Mobile-Ads-SDK: 658065b4cb5a299bea254c4d24bf7786b6d3e75d
   InMobiSDK: a026c7afa89750649e84d4b2b965b44b8a755ac2
   Specta: f506f3a8361de16bc0dcf3b17b75e269072ba465
-  YumiAdsSDK: cd50217879ba99ecb503355e640c56d55c330a01
+  YumiAdsSDK: 607b20918ec41aa6aa318588877a53d57f0c4691
   YumiAppLovinSDK: d789a05ec85e98c8ea82c394620934b6ef3212a0
   YumiBaiduSDK: 51de172cf6ccf1bb59648d9866f801f2f47fecc4
   YumiGDTSDK: 51ad47c7c28096bf330fc05664af83e8693fe063
-  YumiMediationAdapters: 6c3f3801d77ddb07c7ddb4ff6121a44e2262989c
-  YumiMediationSDK: b084f80a2bd0d2dd1fca4f953500c01dff2f39a7
+  YumiMediationAdapters: e48ccbd4ec7c80809242f2e4b7979d4a6c0c471e
+  YumiMediationSDK: 6e98f5467ddeb3b60726081be6308e6de8675708
   YumiMopubSDK: 34a6f42d1947c126262efe48252d3fe2ad18b459
   YumiStartAppSDK: 706066574f63e7aab0d9c01162d11a10a85c0760
   YumiUnitySDK: 6b764125ee4dac347c3324b9345a85a73b20dd15

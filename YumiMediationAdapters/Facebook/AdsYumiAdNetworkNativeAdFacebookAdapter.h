@@ -8,7 +8,7 @@
 
 #import "YumiFaceboolAdapterBannerVC.h"
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
-#import <YumiMediationSDK_Zplay/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
 @interface AdsYumiAdNetworkNativeAdFacebookAdapter : AdsYuMIAdNetworkAdapter <FBNativeAdDelegate> {
     BOOL isStop;

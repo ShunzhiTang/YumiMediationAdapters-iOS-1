@@ -6,7 +6,7 @@
 //  Copyright © 2016年 AdsYuMI. All rights reserved.
 //
 
-#import <YumiMediationSDK_Zplay/AdsYuMIAdNetworkAdapter.h>
+#import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
 @interface AdsYuMIAdNetworkNativeInMobiBannerAdapter : AdsYuMIAdNetworkAdapter {
     NSTimer *timer;
