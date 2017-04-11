@@ -67,7 +67,7 @@ def package(podspec_name, name):
 
 
 def compress(podspec_name, version):
-    compressed_filename = '%s-%s.tar.bz2' % (podspec_name, version)
+    compressed_filename = '%s-%s_%s.tar.bz2' % (podspec_name, version, os.environ['TRAVIS_BUILD_NUMBER'])
     framework = '{0}-0.0.1/ios/{0}.embeddedframework'.format(podspec_name)
     with tarfile.open(compressed_filename, 'w:bz2') as tar:
         tar.add(framework, arcname=podspec_name)
