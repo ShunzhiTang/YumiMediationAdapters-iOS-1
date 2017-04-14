@@ -47,7 +47,7 @@ def retry_if_pod_not_accessible(exception):
 
 
 def generate_podspec_for_packaging(podspec_name, name, yumi_mediation_sdk_version):
-    with open('template-for-packaging.podspec', 'r') as template:
+    with open('podspec-template-for-packaging', 'r') as template:
         values = {
             'podspec_name': podspec_name,
             'name': name,
@@ -83,7 +83,7 @@ def upload_to_oss(local_filename, remote_filename):
 
 
 def generate_podspec_for_publishing(podspec_name, adapter, source, yumi_mediation_sdk_version):
-    with open('template-for-publishing.podspec', 'r') as template:
+    with open('podspec-template-for-publishing', 'r') as template:
         values = {
             'podspec_name': podspec_name,
             'name': adapter.name,
