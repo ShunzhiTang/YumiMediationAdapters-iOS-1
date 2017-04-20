@@ -8,12 +8,16 @@
 
 #import "AdsYuMIAdNetworkNativeInMobiBannerAdapter.h"
 #import <InMobiSDK/InMobiSDK.h>
+#import <YumiMediationSDK/YumiTemplateTool.h>
 
 @interface AdsYuMIAdNetworkNativeInMobiBannerAdapter () <IMNativeDelegate, UIWebViewDelegate> {
     NSDictionary *imobeDict;
     IMNative *imnative;
     UIWebView *_webView;
 }
+
+@property (nonatomic, strong) YumiTemplateTool *templateTool;
+@property (nonatomic, copy) NSString *templateHtml;
 
 @end
 
@@ -30,6 +34,18 @@
 
 - (void)getAd {
     [self adDidStartRequestAd];
+    
+    self.templateTool = [[YumiTemplateTool alloc]init];
+    NSString *fileName = [NSString stringWithFormat:@"banner%@",self.provider.providerId];
+    if ([self.templateTool isExistWith:self.provider.bannerTemplateTime ProviderID:fileName]) {
+        self.templateHtml = [self.templateTool getTemplateHtml];
+        if (self.templateHtml == nil) {
+            [self.templateTool getYumiTemplateWithScreenMode:self.provider.bannerMode Id:self.provider.bannerTmeplateID Time:self.provider.bannerTemplateTime Providerid:fileName];
+        }
+    }else{
+        [self.templateTool getYumiTemplateWithScreenMode:self.provider.bannerMode Id:self.provider.bannerTmeplateID Time:self.provider.bannerTemplateTime Providerid:fileName];
+    }
+
     isReading = NO;
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         [self adapter:self didFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"Inmobi no ad"]];
@@ -109,6 +125,11 @@
     str = [NSString stringWithFormat:str, @"100%", @"100%", @"100%", @"100%", [imobeDict objectForKey:@"landingURL"],
                                      [[imobeDict objectForKey:@"screenshots"] objectForKey:@"url"]];
 
+    if (self.templateHtml) {
+        str = self.templateHtml;
+        str = [self.templateTool replaceHtmlCharactersWith:str Zflag_iconUrl: [imobeDict objectForKey:@"screenshots"] Zflag_title:@"标题" Zflag_desc:@"描述" Zflag_imageUrl:@"大图" Zflag_aTagUrl: [imobeDict objectForKey:@"landingURL"]];
+    }
+    
     if ([self isNull:str]) {
         [self adapter:self didFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"GDT no ad"]];
         return;

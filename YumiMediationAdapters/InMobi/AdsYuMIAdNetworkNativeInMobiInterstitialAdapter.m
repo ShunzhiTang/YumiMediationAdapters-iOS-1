@@ -9,6 +9,7 @@
 #import "AdsYuMIAdNetworkNativeInMobiInterstitialAdapter.h"
 #import <InMobiSDK/InMobiSDK.h>
 #import <YumiMediationSDK/AdsYuMiInterstitialNativeViewController.h>
+#import <YumiMediationSDK/YumiTemplateTool.h>
 
 @interface AdsYuMIAdNetworkNativeInMobiInterstitialAdapter () <AdsYuMiInterstitialNativeViewControllerDelegate,
                                                                IMNativeDelegate> {
@@ -18,7 +19,8 @@
     NSDictionary *imobeDict;
     BOOL loadSuccessed;
 }
-
+@property (nonatomic, strong) YumiTemplateTool *templateTool;
+@property (nonatomic, copy) NSString *templateHtml;
 @end
 
 @implementation AdsYuMIAdNetworkNativeInMobiInterstitialAdapter
@@ -37,6 +39,18 @@
     [self adapterDidStartInterstitialRequestAd];
     isReading = NO;
     loadSuccessed = NO;
+    
+    self.templateTool = [[YumiTemplateTool alloc]init];
+    NSString *fileName = [NSString stringWithFormat:@"inter%@",self.provider.providerId];
+    if ([self.templateTool isExistWith:self.provider.bannerTemplateTime ProviderID:fileName]) {
+        self.templateHtml = [self.templateTool getTemplateHtml];
+        if (self.templateHtml == nil) {
+            [self.templateTool getYumiTemplateWithScreenMode:self.provider.bannerMode Id:self.provider.bannerTmeplateID Time:self.provider.bannerTemplateTime Providerid:fileName];
+        }
+    }else{
+        [self.templateTool getYumiTemplateWithScreenMode:self.provider.bannerMode Id:self.provider.bannerTmeplateID Time:self.provider.bannerTemplateTime Providerid:fileName];
+    }
+    
     id _timeInterval = self.provider.outTime;
     if ([_timeInterval isKindOfClass:[NSNumber class]]) {
         timer = [NSTimer scheduledTimerWithTimeInterval:[_timeInterval doubleValue]
@@ -113,6 +127,12 @@
     NSString *interstitialStr = [[NSString alloc] initWithData:interstitialData encoding:NSUTF8StringEncoding];
     interstitialStr = [NSString stringWithFormat:interstitialStr, @"100%", @"100%", @"100%", @"100%",
                                                  [imobeDict objectForKey:@"landingURL"], url];
+    
+    if (self.templateHtml) {
+        interstitialStr = self.templateHtml;
+        interstitialStr = [self.templateTool replaceHtmlCharactersWith:interstitialStr Zflag_iconUrl:@"" Zflag_title:@"" Zflag_desc:@"" Zflag_imageUrl:url Zflag_aTagUrl:[imobeDict objectForKey:@"landingURL"]];
+    }
+
     if ([self isNull:interstitialStr]) {
         [self adapter:self
             didInterstitialFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"Inmobi no ad"]];
@@ -252,7 +272,6 @@
 #endif
 
     if (_gdtInterstitialWebView) {
-
         _gdtInterstitialWebView.delegate = nil;
         _gdtInterstitialWebView = nil;
     }
