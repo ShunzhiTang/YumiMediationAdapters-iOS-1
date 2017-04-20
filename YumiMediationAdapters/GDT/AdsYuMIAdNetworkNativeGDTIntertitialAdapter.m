@@ -41,7 +41,7 @@
 
 - (void)getRemoteTemplate{
     self.templateTool = [[YumiTemplateTool alloc]init];
-    NSString *fileName = [NSString stringWithFormat:@"banner%@",self.provider.providerId];
+    NSString *fileName = [NSString stringWithFormat:@"inter%@",self.provider.providerId];
     NSInteger currentTime;
     NSInteger currentMode;
     if ([self.templateTool getOrientation] == 0) {
