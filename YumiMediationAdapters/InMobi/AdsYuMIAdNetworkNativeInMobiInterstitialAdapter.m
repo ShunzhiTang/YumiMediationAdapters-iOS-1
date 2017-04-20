@@ -20,7 +20,8 @@
     BOOL loadSuccessed;
 }
 @property (nonatomic, strong) YumiTemplateTool *templateTool;
-@property (nonatomic, copy) NSString *templateHtml;
+@property (nonatomic, strong) NSDictionary *templateDic;
+@property (nonatomic, assign) NSInteger currentID;
 @end
 
 @implementation AdsYuMIAdNetworkNativeInMobiInterstitialAdapter
@@ -35,21 +36,42 @@
     }
 }
 
+- (void)getRemoteTemplate{
+    self.templateTool = [[YumiTemplateTool alloc]init];
+    NSString *fileName = [NSString stringWithFormat:@"banner%@",self.provider.providerId];
+    NSInteger currentTime;
+    NSInteger currentMode;
+    if ([self.templateTool getOrientation] == 0) {
+        self.currentID = self.provider.porTemplateID;
+        currentTime = self.provider.porTemplateTime;
+        currentMode = self.provider.porMode;
+    }
+    if ([self.templateTool getOrientation] == 1) {
+        self.currentID = self.provider.lanTemplateID;
+        currentTime = self.provider.lanTemplateTime;
+        currentMode = self.provider.lanMode;
+    }
+    if (self.provider.uniTemplateID) {
+        self.currentID = self.provider.uniTemplateID;
+        currentTime = self.provider.uniTemplateTime;
+        currentMode = self.provider.uniMode;
+    }
+    if ([self.templateTool isExistWith:currentTime TemplateID:self.currentID ProviderID:fileName]) {
+        self.templateDic = [self.templateTool getTemplateHtmlWith:self.currentID];
+        if (self.templateDic == nil) {
+            [self.templateTool getYumiTemplateWith:self.provider.uniTemplateID Id2:self.provider.lanTemplateID Id3:self.provider.porTemplateID Providerid:fileName];
+        }
+    }else{
+        [self.templateTool getYumiTemplateWith:self.provider.uniTemplateID Id2:self.provider.lanTemplateID Id3:self.provider.porTemplateID Providerid:fileName];
+    }
+}
+
 - (void)getAd {
     [self adapterDidStartInterstitialRequestAd];
     isReading = NO;
     loadSuccessed = NO;
     
-    self.templateTool = [[YumiTemplateTool alloc]init];
-    NSString *fileName = [NSString stringWithFormat:@"inter%@",self.provider.providerId];
-    if ([self.templateTool isExistWith:self.provider.bannerTemplateTime ProviderID:fileName]) {
-        self.templateHtml = [self.templateTool getTemplateHtml];
-        if (self.templateHtml == nil) {
-            [self.templateTool getYumiTemplateWithScreenMode:self.provider.bannerMode Id:self.provider.bannerTmeplateID Time:self.provider.bannerTemplateTime Providerid:fileName];
-        }
-    }else{
-        [self.templateTool getYumiTemplateWithScreenMode:self.provider.bannerMode Id:self.provider.bannerTmeplateID Time:self.provider.bannerTemplateTime Providerid:fileName];
-    }
+    [self getRemoteTemplate];
     
     id _timeInterval = self.provider.outTime;
     if ([_timeInterval isKindOfClass:[NSNumber class]]) {
@@ -128,8 +150,13 @@
     interstitialStr = [NSString stringWithFormat:interstitialStr, @"100%", @"100%", @"100%", @"100%",
                                                  [imobeDict objectForKey:@"landingURL"], url];
     
-    if (self.templateHtml) {
-        interstitialStr = self.templateHtml;
+    if (self.templateDic) {
+        NSString *templateID = self.templateDic[@"templateID"];
+        NSString *currentID = [NSString stringWithFormat:@"%@",[NSNumber numberWithInteger:self.currentID]];
+        if (![templateID isEqualToString:currentID]) {
+            return;
+        }
+        interstitialStr = self.templateDic[@"html"];
         interstitialStr = [self.templateTool replaceHtmlCharactersWith:interstitialStr Zflag_iconUrl:@"" Zflag_title:@"" Zflag_desc:@"" Zflag_imageUrl:url Zflag_aTagUrl:[imobeDict objectForKey:@"landingURL"]];
     }
 
