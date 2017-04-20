@@ -8,6 +8,7 @@
 
 #import "AdsYuMIAdNetworkNativeGDTIntertitialAdapter.h"
 #import <YumiMediationSDK/AdsYuMiInterstitialNativeViewController.h>
+#import <YumiMediationSDK/YumiTemplateTool.h>
 
 @interface AdsYuMIAdNetworkNativeGDTIntertitialAdapter () <GDTNativeAdDelegate,
                                                            AdsYuMiInterstitialNativeViewControllerDelegate> {
@@ -21,7 +22,8 @@
     BOOL loadSuccessed;
     BOOL canShow;
 }
-
+@property (nonatomic, strong) YumiTemplateTool *templateTool;
+@property (nonatomic, copy) NSString *templateHtml;
 @end
 
 @implementation AdsYuMIAdNetworkNativeGDTIntertitialAdapter
@@ -43,6 +45,17 @@
     isReading = NO;
 
     [self adapterDidStartInterstitialRequestAd];
+
+    self.templateTool = [[YumiTemplateTool alloc]init];
+    NSString *fileName = [NSString stringWithFormat:@"inter%@",self.provider.providerId];
+    if ([self.templateTool isExistWith:self.provider.bannerTemplateTime ProviderID:fileName]) {
+        self.templateHtml = [self.templateTool getTemplateHtml];
+        if (self.templateHtml == nil) {
+            [self.templateTool getYumiTemplateWithScreenMode:self.provider.bannerMode Id:self.provider.bannerTmeplateID Time:self.provider.bannerTemplateTime Providerid:fileName];
+        }
+    }else{
+        [self.templateTool getYumiTemplateWithScreenMode:self.provider.bannerMode Id:self.provider.bannerTmeplateID Time:self.provider.bannerTemplateTime Providerid:fileName];
+    }
 
     id _timeInterval = self.provider.outTime;
     if ([_timeInterval isKindOfClass:[NSNumber class]]) {
@@ -137,6 +150,11 @@
                                                      iconImg, title, star, bigImg, @"100%", desc, @"about:blank"];
     }
 
+    if (self.templateHtml) {
+        interstitialStr = self.templateHtml;
+        interstitialStr = [self.templateTool replaceHtmlCharactersWith:interstitialStr Zflag_iconUrl:iconImg Zflag_title:title Zflag_desc:desc Zflag_imageUrl:bigImg Zflag_aTagUrl:@"跳转"];
+    }
+    
     if ([self isNull:interstitialStr]) {
         [self adapter:self
             didInterstitialFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"GDT no ad"]];

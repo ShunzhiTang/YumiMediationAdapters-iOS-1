@@ -7,14 +7,17 @@
 //
 
 #import "AdsYuMIAdNetworkNativeGDTBannerAdapter.h"
+#import <YumiMediationSDK/YumiTemplateTool.h>
 
 @interface AdsYuMIAdNetworkNativeGDTBannerAdapter () <UIWebViewDelegate> {
 
-    GDTNativeAd *_nativeAd;      //原生干告实例
+    GDTNativeAd *_nativeAd;      //原生广告实例
     NSArray *_data;              //原生干告数据数组
     GDTNativeAdData *_currentAd; //当前展示的原生干告数据对象
     UIWebView *_webView;
 }
+@property (nonatomic, strong) YumiTemplateTool *templateTool;
+@property (nonatomic, copy) NSString *templateHtml;
 @end
 
 @implementation AdsYuMIAdNetworkNativeGDTBannerAdapter
@@ -32,6 +35,16 @@
     isReading = NO;
     [self adDidStartRequestAd];
 
+    self.templateTool = [[YumiTemplateTool alloc]init];
+    NSString *fileName = [NSString stringWithFormat:@"banner%@",self.provider.providerId];
+    if ([self.templateTool isExistWith:self.provider.bannerTemplateTime ProviderID:fileName]) {
+        self.templateHtml = [self.templateTool getTemplateHtml];
+        if (self.templateHtml == nil) {
+            [self.templateTool getYumiTemplateWithScreenMode:self.provider.bannerMode Id:self.provider.bannerTmeplateID Time:self.provider.bannerTemplateTime Providerid:fileName];
+        }
+    }else{
+        [self.templateTool getYumiTemplateWithScreenMode:self.provider.bannerMode Id:self.provider.bannerTmeplateID Time:self.provider.bannerTemplateTime Providerid:fileName];
+    }
     id _timeInterval = self.provider.outTime;
     if ([_timeInterval isKindOfClass:[NSNumber class]]) {
         timer = [NSTimer scheduledTimerWithTimeInterval:[_timeInterval doubleValue]
@@ -128,6 +141,10 @@
                                      [_currentAd.properties objectForKey:GDTNativeAdDataKeyIconUrl],
                                      [_currentAd.properties objectForKey:GDTNativeAdDataKeyTitle],
                                      [_currentAd.properties objectForKey:GDTNativeAdDataKeyDesc], @"%"];
+    if (self.templateHtml) {
+        str = self.templateHtml;
+        str = [self.templateTool replaceHtmlCharactersWith:str Zflag_iconUrl: [_currentAd.properties objectForKey:GDTNativeAdDataKeyIconUrl] Zflag_title:[_currentAd.properties objectForKey:GDTNativeAdDataKeyTitle] Zflag_desc:[_currentAd.properties objectForKey:GDTNativeAdDataKeyDesc] Zflag_imageUrl:@"大图" Zflag_aTagUrl:@"跳转"];
+    }
 
     if ([self isNull:str]) {
         [self adapter:self didFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"GDT no ad"]];
