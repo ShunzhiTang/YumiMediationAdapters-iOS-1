@@ -39,9 +39,9 @@
     }
 }
 
-- (void)getRemoteTemplate{
-    self.templateTool = [[YumiTemplateTool alloc]init];
-    NSString *fileName = [NSString stringWithFormat:@"inter%@",self.provider.providerId];
+- (void)getRemoteTemplate {
+    self.templateTool = [[YumiTemplateTool alloc] init];
+    NSString *fileName = [NSString stringWithFormat:@"inter%@", self.provider.providerId];
     NSInteger currentTime;
     NSInteger currentMode;
     if ([self.templateTool getOrientation] == 0) {
@@ -62,10 +62,16 @@
     if ([self.templateTool isExistWith:currentTime TemplateID:self.currentID ProviderID:fileName]) {
         self.templateDic = [self.templateTool getTemplateHtmlWith:self.currentID];
         if (self.templateDic == nil) {
-            [self.templateTool getYumiTemplateWith:self.provider.uniTemplateID Id2:self.provider.lanTemplateID Id3:self.provider.porTemplateID Providerid:fileName];
+            [self.templateTool getYumiTemplateWith:self.provider.uniTemplateID
+                                               Id2:self.provider.lanTemplateID
+                                               Id3:self.provider.porTemplateID
+                                        Providerid:fileName];
         }
-    }else{
-        [self.templateTool getYumiTemplateWith:self.provider.uniTemplateID Id2:self.provider.lanTemplateID Id3:self.provider.porTemplateID Providerid:fileName];
+    } else {
+        [self.templateTool getYumiTemplateWith:self.provider.uniTemplateID
+                                           Id2:self.provider.lanTemplateID
+                                           Id3:self.provider.porTemplateID
+                                    Providerid:fileName];
     }
 }
 
@@ -78,7 +84,7 @@
     [self adapterDidStartInterstitialRequestAd];
 
     [self getRemoteTemplate];
-    
+
     id _timeInterval = self.provider.outTime;
     if ([_timeInterval isKindOfClass:[NSNumber class]]) {
         timer = [NSTimer scheduledTimerWithTimeInterval:[_timeInterval doubleValue]
@@ -174,14 +180,19 @@
 
     if (self.templateDic) {
         NSString *templateID = self.templateDic[@"templateID"];
-        NSString *currentID = [NSString stringWithFormat:@"%@",[NSNumber numberWithInteger:self.currentID]];
+        NSString *currentID = [NSString stringWithFormat:@"%@", [NSNumber numberWithInteger:self.currentID]];
         if (![templateID isEqualToString:currentID]) {
             return;
         }
         interstitialStr = self.templateDic[@"html"];
-        interstitialStr = [self.templateTool replaceHtmlCharactersWith:interstitialStr Zflag_iconUrl:iconImg Zflag_title:title Zflag_desc:desc Zflag_imageUrl:bigImg Zflag_aTagUrl:@"跳转"];
+        interstitialStr = [self.templateTool replaceHtmlCharactersWith:interstitialStr
+                                                         Zflag_iconUrl:iconImg
+                                                           Zflag_title:title
+                                                            Zflag_desc:desc
+                                                        Zflag_imageUrl:bigImg
+                                                         Zflag_aTagUrl:@"跳转"];
     }
-    
+
     if ([self isNull:interstitialStr]) {
         [self adapter:self
             didInterstitialFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"GDT no ad"]];
