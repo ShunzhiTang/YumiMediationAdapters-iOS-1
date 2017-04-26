@@ -154,7 +154,11 @@
     } else {
         appInstallAdView.priceView.hidden = YES;
     }
-
+#if __has_feature(objc_arc)
+#else
+    [appInstallAdView retain];
+#endif
+    
     [self adapterDidInterstitialReceiveAd:self];
 }
 
@@ -198,8 +202,12 @@
 
 - (void)dealloc {
     [self stopTimer];
-    appInstallAdView = nil;
-    _adLoader = nil;
+    if (appInstallAdView) {
+        appInstallAdView = nil;
+    }
+    if (_adLoader) {
+        _adLoader = nil;
+    }
 }
 
 @end
