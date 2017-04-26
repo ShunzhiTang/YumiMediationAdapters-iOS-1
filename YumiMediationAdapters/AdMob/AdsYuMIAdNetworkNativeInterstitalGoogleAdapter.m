@@ -158,7 +158,7 @@
 #else
     [appInstallAdView retain];
 #endif
-    
+
     [self adapterDidInterstitialReceiveAd:self];
 }
 
