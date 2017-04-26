@@ -30,6 +30,7 @@ Pod::Spec.new do |s|
     }
     sp.dependency 'YumiAdmobSDK', '7.18.0'
   end
+
 =begin 
   s.subspec 'InMobi' do |sp|
     sp.source_files = 'YumiMediationAdapters/InMobi/*.{h,m}'
