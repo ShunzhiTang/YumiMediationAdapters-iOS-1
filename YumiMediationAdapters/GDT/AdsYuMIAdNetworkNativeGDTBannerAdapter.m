@@ -31,9 +31,9 @@
     [[AdsYuMIBannerSDKAdNetworkRegistry sharedRegistry] registerClass:self];
 }
 
-- (void)getRemoteTemplate{
-    self.templateTool = [[YumiTemplateTool alloc]init];
-    NSString *fileName = [NSString stringWithFormat:@"banner%@",self.provider.providerId];
+- (void)getRemoteTemplate {
+    self.templateTool = [[YumiTemplateTool alloc] init];
+    NSString *fileName = [NSString stringWithFormat:@"banner%@", self.provider.providerId];
     NSInteger currentTime;
     NSInteger currentMode;
     if ([self.templateTool getOrientation] == 0) {
@@ -54,10 +54,16 @@
     if ([self.templateTool isExistWith:currentTime TemplateID:self.currentID ProviderID:fileName]) {
         self.templateDic = [self.templateTool getTemplateHtmlWith:self.currentID];
         if (self.templateDic == nil) {
-            [self.templateTool getYumiTemplateWith:self.provider.uniTemplateID Id2:self.provider.lanTemplateID Id3:self.provider.porTemplateID Providerid:fileName];
+            [self.templateTool getYumiTemplateWith:self.provider.uniTemplateID
+                                               Id2:self.provider.lanTemplateID
+                                               Id3:self.provider.porTemplateID
+                                        Providerid:fileName];
         }
-    }else{
-        [self.templateTool getYumiTemplateWith:self.provider.uniTemplateID Id2:self.provider.lanTemplateID Id3:self.provider.porTemplateID Providerid:fileName];
+    } else {
+        [self.templateTool getYumiTemplateWith:self.provider.uniTemplateID
+                                           Id2:self.provider.lanTemplateID
+                                           Id3:self.provider.porTemplateID
+                                    Providerid:fileName];
     }
 }
 
@@ -67,7 +73,7 @@
     [self adDidStartRequestAd];
 
     [self getRemoteTemplate];
-    
+
     id _timeInterval = self.provider.outTime;
     if ([_timeInterval isKindOfClass:[NSNumber class]]) {
         timer = [NSTimer scheduledTimerWithTimeInterval:[_timeInterval doubleValue]
@@ -164,15 +170,21 @@
                                      [_currentAd.properties objectForKey:GDTNativeAdDataKeyIconUrl],
                                      [_currentAd.properties objectForKey:GDTNativeAdDataKeyTitle],
                                      [_currentAd.properties objectForKey:GDTNativeAdDataKeyDesc], @"%"];
-    
+
     if (self.templateDic) {
         NSString *templateID = self.templateDic[@"templateID"];
-        NSString *currentID = [NSString stringWithFormat:@"%@",[NSNumber numberWithInteger:self.currentID]];
+        NSString *currentID = [NSString stringWithFormat:@"%@", [NSNumber numberWithInteger:self.currentID]];
         if (![templateID isEqualToString:currentID]) {
             return;
         }
         str = self.templateDic[@"html"];
-        str = [self.templateTool replaceHtmlCharactersWith:str Zflag_iconUrl: [_currentAd.properties objectForKey:GDTNativeAdDataKeyIconUrl] Zflag_title:[_currentAd.properties objectForKey:GDTNativeAdDataKeyTitle] Zflag_desc:[_currentAd.properties objectForKey:GDTNativeAdDataKeyDesc] Zflag_imageUrl:@"大图" Zflag_aTagUrl:@"跳转"];
+        str =
+            [self.templateTool replaceHtmlCharactersWith:str
+                                           Zflag_iconUrl:[_currentAd.properties objectForKey:GDTNativeAdDataKeyIconUrl]
+                                             Zflag_title:[_currentAd.properties objectForKey:GDTNativeAdDataKeyTitle]
+                                              Zflag_desc:[_currentAd.properties objectForKey:GDTNativeAdDataKeyDesc]
+                                          Zflag_imageUrl:@"大图"
+                                           Zflag_aTagUrl:@"跳转"];
     }
 
     if ([self isNull:str]) {

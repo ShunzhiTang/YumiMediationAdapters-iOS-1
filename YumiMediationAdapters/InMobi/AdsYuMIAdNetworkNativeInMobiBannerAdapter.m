@@ -32,9 +32,9 @@
     }
 }
 
-- (void)getRemoteTemplate{
-    self.templateTool = [[YumiTemplateTool alloc]init];
-    NSString *fileName = [NSString stringWithFormat:@"banner%@",self.provider.providerId];
+- (void)getRemoteTemplate {
+    self.templateTool = [[YumiTemplateTool alloc] init];
+    NSString *fileName = [NSString stringWithFormat:@"banner%@", self.provider.providerId];
     NSInteger currentTime;
     NSInteger currentMode;
     if ([self.templateTool getOrientation] == 0) {
@@ -55,18 +55,24 @@
     if ([self.templateTool isExistWith:currentTime TemplateID:self.currentID ProviderID:fileName]) {
         self.templateDic = [self.templateTool getTemplateHtmlWith:self.currentID];
         if (self.templateDic == nil) {
-            [self.templateTool getYumiTemplateWith:self.provider.uniTemplateID Id2:self.provider.lanTemplateID Id3:self.provider.porTemplateID Providerid:fileName];
+            [self.templateTool getYumiTemplateWith:self.provider.uniTemplateID
+                                               Id2:self.provider.lanTemplateID
+                                               Id3:self.provider.porTemplateID
+                                        Providerid:fileName];
         }
-    }else{
-        [self.templateTool getYumiTemplateWith:self.provider.uniTemplateID Id2:self.provider.lanTemplateID Id3:self.provider.porTemplateID Providerid:fileName];
+    } else {
+        [self.templateTool getYumiTemplateWith:self.provider.uniTemplateID
+                                           Id2:self.provider.lanTemplateID
+                                           Id3:self.provider.porTemplateID
+                                    Providerid:fileName];
     }
 }
 
 - (void)getAd {
     [self adDidStartRequestAd];
-    
+
     [self getRemoteTemplate];
-    
+
     isReading = NO;
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         [self adapter:self didFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"Inmobi no ad"]];
@@ -148,14 +154,19 @@
 
     if (self.templateDic) {
         NSString *templateID = self.templateDic[@"templateID"];
-        NSString *currentID = [NSString stringWithFormat:@"%@",[NSNumber numberWithInteger:self.currentID]];
+        NSString *currentID = [NSString stringWithFormat:@"%@", [NSNumber numberWithInteger:self.currentID]];
         if (![templateID isEqualToString:currentID]) {
             return;
         }
         str = self.templateDic[@"html"];
-        str = [self.templateTool replaceHtmlCharactersWith:str Zflag_iconUrl: [imobeDict objectForKey:@"screenshots"] Zflag_title:@"标题" Zflag_desc:@"描述" Zflag_imageUrl:@"大图" Zflag_aTagUrl: [imobeDict objectForKey:@"landingURL"]];
+        str = [self.templateTool replaceHtmlCharactersWith:str
+                                             Zflag_iconUrl:[imobeDict objectForKey:@"screenshots"]
+                                               Zflag_title:@"标题"
+                                                Zflag_desc:@"描述"
+                                            Zflag_imageUrl:@"大图"
+                                             Zflag_aTagUrl:[imobeDict objectForKey:@"landingURL"]];
     }
-    
+
     if ([self isNull:str]) {
         [self adapter:self didFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"GDT no ad"]];
         return;
