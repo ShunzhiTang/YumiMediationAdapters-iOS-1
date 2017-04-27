@@ -9,6 +9,7 @@
 #import "AdsYuMIAdNetworkNativeInMobiInterstitialAdapter.h"
 #import <InMobiSDK/InMobiSDK.h>
 #import <YumiMediationSDK/AdsYuMiInterstitialNativeViewController.h>
+#import <YumiMediationSDK/YumiTemplateTool.h>
 
 @interface AdsYuMIAdNetworkNativeInMobiInterstitialAdapter () <AdsYuMiInterstitialNativeViewControllerDelegate,
                                                                IMNativeDelegate> {
@@ -18,7 +19,9 @@
     NSDictionary *imobeDict;
     BOOL loadSuccessed;
 }
-
+@property (nonatomic, strong) YumiTemplateTool *templateTool;
+@property (nonatomic, strong) NSDictionary *templateDic;
+@property (nonatomic, assign) NSInteger currentID;
 @end
 
 @implementation AdsYuMIAdNetworkNativeInMobiInterstitialAdapter
@@ -33,10 +36,48 @@
     }
 }
 
+- (void)getRemoteTemplate {
+    self.templateTool = [[YumiTemplateTool alloc] init];
+    NSString *fileName = [NSString stringWithFormat:@"inter%@", self.provider.providerId];
+    NSInteger currentTime;
+    NSInteger currentMode;
+    if ([self.templateTool getOrientation] == 0) {
+        self.currentID = self.provider.porTemplateID;
+        currentTime = self.provider.porTemplateTime;
+        currentMode = self.provider.porMode;
+    }
+    if ([self.templateTool getOrientation] == 1) {
+        self.currentID = self.provider.lanTemplateID;
+        currentTime = self.provider.lanTemplateTime;
+        currentMode = self.provider.lanMode;
+    }
+    if (self.provider.uniTemplateID) {
+        self.currentID = self.provider.uniTemplateID;
+        currentTime = self.provider.uniTemplateTime;
+        currentMode = self.provider.uniMode;
+    }
+    if ([self.templateTool isExistWith:currentTime TemplateID:self.currentID ProviderID:fileName]) {
+        self.templateDic = [self.templateTool getTemplateHtmlWith:self.currentID];
+        if (self.templateDic == nil) {
+            [self.templateTool getYumiTemplateWith:self.provider.uniTemplateID
+                                               Id2:self.provider.lanTemplateID
+                                               Id3:self.provider.porTemplateID
+                                        Providerid:fileName];
+        }
+    } else {
+        [self.templateTool getYumiTemplateWith:self.provider.uniTemplateID
+                                           Id2:self.provider.lanTemplateID
+                                           Id3:self.provider.porTemplateID
+                                    Providerid:fileName];
+    }
+}
+
 - (void)getAd {
     [self adapterDidStartInterstitialRequestAd];
     isReading = NO;
     loadSuccessed = NO;
+
+    [self getRemoteTemplate];
 
     id _timeInterval = self.provider.outTime;
     if ([_timeInterval isKindOfClass:[NSNumber class]]) {
@@ -114,6 +155,21 @@
     NSString *interstitialStr = [[NSString alloc] initWithData:interstitialData encoding:NSUTF8StringEncoding];
     interstitialStr = [NSString stringWithFormat:interstitialStr, @"100%", @"100%", @"100%", @"100%",
                                                  [imobeDict objectForKey:@"landingURL"], url];
+
+    if (self.templateDic) {
+        NSString *templateID = self.templateDic[@"templateID"];
+        NSString *currentID = [NSString stringWithFormat:@"%@", [NSNumber numberWithInteger:self.currentID]];
+        if (![templateID isEqualToString:currentID]) {
+            return;
+        }
+        interstitialStr = self.templateDic[@"html"];
+        interstitialStr = [self.templateTool replaceHtmlCharactersWith:interstitialStr
+                                                         Zflag_iconUrl:@""
+                                                           Zflag_title:@""
+                                                            Zflag_desc:@""
+                                                        Zflag_imageUrl:url
+                                                         Zflag_aTagUrl:[imobeDict objectForKey:@"landingURL"]];
+    }
 
     if ([self isNull:interstitialStr]) {
         [self adapter:self
@@ -220,14 +276,14 @@
         return;
     }
     loadSuccessed = YES;
-    [_adsYuMIInMobiSelf adapterDidInterstitialReceiveAd:self];
+    [_adsYuMIInMobiSelf adapterDidInterstitialReceiveAd:self InterTemplateID:self.currentID];
 }
 // TODO:广告点击事件
 - (void)adInterstitialViewClick {
     // inmobi点击
     [imnative reportAdClick:imobeDict];
     [self adViewClick];
-    [_adsYuMIInMobiSelf adapterDidInterstitialClick:self ClickArea:CGRectZero];
+    [_adsYuMIInMobiSelf adapterDidInterstitialClick:self ClickArea:CGRectZero InterTemplateID:self.currentID];
 }
 
 // TODO:点击关闭按钮关闭广告
@@ -254,7 +310,6 @@
 #endif
 
     if (_gdtInterstitialWebView) {
-
         _gdtInterstitialWebView.delegate = nil;
         _gdtInterstitialWebView = nil;
     }
