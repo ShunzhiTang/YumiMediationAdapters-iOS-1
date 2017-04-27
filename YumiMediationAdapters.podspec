@@ -21,8 +21,8 @@ Pod::Spec.new do |s|
   
   s.frameworks = 'UIKit'
 
-  s.dependency 'YumiMediationSDK', '~> 1.7.0'
-=begin
+  s.dependency 'YumiMediationSDK', '~> 1.8.0'
+
   s.subspec 'AdMob' do |sp|
     sp.source_files = 'YumiMediationAdapters/AdMob/*.{h,m}'
     sp.resource_bundles = {
@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
     }
     sp.dependency 'YumiAdmobSDK', '7.18.0'
   end
-=end
+  
   s.subspec 'InMobi' do |sp|
     sp.source_files = 'YumiMediationAdapters/InMobi/*.{h,m}'
     sp.dependency 'YumiInmobiSDK', '6.0.0'
