@@ -23,175 +23,147 @@ platform :ios do
 
   desc "Publish pod"
   lane :release do
-    next unless ENV["TRAVIS_PULL_REQUEST"] == "false" and ENV["TRAVIS_BRANCH"] == "production"
+    version = ENV["TRAVIS_TAG"]
+    
+    framework_prefix = "YumiMediation"
 
-    fastlane_require "yaml"
+    next if version.nil? or version.empty?
+
+    podspec_name = "YumiMediationAdapters"
+    podspec_path = "#{podspec_name}.podspec"
+    version_bump_podspec(path: podspec_path, version_number: version)
+
     fastlane_require "aliyun/oss"
     fastlane_require "retries"
+    fastlane_require 'fileutils'
 
-    podspec = read_podspec(path: "YumiMediationAdapters.podspec")
-    bucket = Aliyun::OSS::Client.new(
-      :endpoint => "http://oss-cn-beijing.aliyuncs.com",
-      :access_key_id => ENV["OSS_KEY_ID"],
-      :access_key_secret => ENV["OSS_KEY_SECRET"]
-    ).get_bucket("ad-sdk")
-
-    adapters = YAML.load_file("../adapters.yml")
-
-    subspecs = podspec["subspecs"]
-    subspecs = {} if subspecs.nil?
-    subspecs.each do |subspec|
-      publish_subspec(
-        bucket: bucket,
-        podspec: podspec,
-        subspec: subspec,
-        adapters: adapters)
-    end
-  end
-
-  lane :publish_subspec do |options|
-    bucket = options[:bucket]
-    podspec = options[:podspec]
-    subspec = options[:subspec]
-    adapters = options[:adapters]
-
-    adapter = subspec["name"]
-    config = adapters[adapter]
-    next if config.nil?
-
-    version = config["version"]
-    name = "YumiMediation#{adapter}"
-    podspec_filename = "#{name}.podspec"
-    source = "#{name}-#{version}_#{ENV['TRAVIS_BUILD_NUMBER']}.tar.bz2"
-
-    generate_podspec_for_packaging(
-      podspec_filename: podspec_filename,
-      name: name,
-      version: version,
-      subspec: subspec,
-      podspec: podspec
-    )
-
-    package(
-      podspec_filename: podspec_filename,
-      source: source
-    )
-
-    upload_to_oss(
-      name: name,
-      version: version,
-      source: source,
-      bucket: bucket
-    )
-
-    update_podspec_for_publishing(
-      podspec_filename: podspec_filename,
-      name: name,
-      version: version
-    )
-
-    with_retries(max_tries: 10) do
-      pod_push(path: "#{name}-#{version}/#{podspec_filename}", allow_warnings: true)
-    end
-  end
-
-  desc "generate podspec for packaging"
-  lane :generate_podspec_for_packaging do |options|
-    podspec_filename = options[:podspec_filename]
-    name = options[:name]
-    version = options[:version]
-    subspec = options[:subspec]
-    podspec = options[:podspec]
-
-    File.open("../#{podspec_filename}", "w") do |file|
-      file.puts("Pod::Spec.new do |s|")
-
-      values_to_replace = {
-        "name" => name,
-        "version" => version
-      }
-      podspec.each do |key, val|
-        if key == "dependencies" then
-          val.each do |d, vs|
-            file.puts("  s.dependency '#{d}', '#{vs[0]}'")
-          end
-          next
-        end
-
-        v = values_to_replace[key]
-        val = v unless v.nil?
-        file.puts("  s.#{key} = '#{val}'") if val.is_a? String
-        file.puts("  s.#{key} = #{val}") if val.is_a? Hash
-      end
-
-      subspec.each do |key, val|
-        next if key == "name"
-
-        if key == "dependencies" then
-          val.each do |d, vs|
-            file.puts("  s.dependency '#{d}', '#{vs[0]}'")
-          end
-          next
-        end
-
-        file.puts("  s.#{key} = '#{val}'") if val.is_a? String
-        file.puts("  s.#{key} = #{val}") if val.is_a? Hash
-      end
-
-      file.puts("end")
-    end
-  end
-
-  desc "pod package adapter"
-  lane :package do |options|
-    podspec_filename = options[:podspec_filename]
-    source = options[:source]
+    podspec = read_podspec(path: podspec_path)
 
     Dir.chdir("..") do
-      address = "{ :http => 'http://adsdk.yumimobi.com/iOS/YumiMediationAdapters/#{source}' }"
-      sh "pod package #{podspec_filename} \"#{address}\" --force --embedded --no-mangle --exclude-deps"
-    end
-  end
+      FileUtils.mkdir_p "#{version}"
+      subspecs = podspec["subspecs"]
+      subspecs = {} if subspecs.nil?
+      subspecs.each do |subspec|
+        name = subspec["name"]
+        subspec_framework = "#{framework_prefix}#{name}"
+        subspec_path = "#{subspec_framework}.podspec"
 
-  desc "upload archive to aliyun oss"
-  lane :upload_to_oss do |options|
-    name = options[:name]
-    version = options[:version]
-    source = options[:source]
-    bucket = options[:bucket]
+        # generate podspec for packaging
+        File.open("#{subspec_path}", "w") do |file|
+          file.puts("Pod::Spec.new do |s|")
 
-    Dir.chdir("../#{name}-#{version}/ios") do
-      sh "mv #{name}.embeddedframework #{name}"
-      sh "tar cjf #{source} #{name}"
+          values_to_replace = {
+            "name" => subspec_framework
+          }
+          podspec.each do |key, val|
+            if key == "dependencies" then
+              val.each do |d, vs|
+                file.puts("  s.dependency '#{d}', '#{vs[0]}'")
+              end
+              next
+            end
+
+            v = values_to_replace[key]
+            val = v unless v.nil?
+            file.puts("  s.#{key} = '#{val}'") if val.is_a? String
+            file.puts("  s.#{key} = #{val}") if val.is_a? Hash
+          end
+
+          subspec.each do |key, val|
+            next if key == "name"
+
+            if key == "dependencies" then
+              val.each do |d, vs|
+                file.puts("  s.dependency '#{d}', '#{vs[0]}'")
+              end
+              next
+            end
+
+            file.puts("  s.#{key} = '#{val}'") if val.is_a? String
+            file.puts("  s.#{key} = #{val}") if val.is_a? Hash
+          end
+
+          file.puts("end")
+        end
+
+        # package
+        sh "pod package #{subspec_path} --force --embedded --no-mangle --exclude-deps"
+
+        # move framework
+        FileUtils.mv("#{subspec_framework}-#{version}/ios/#{subspec_framework}.embeddedframework", "#{version}/#{subspec_framework}")
+      end
+
+      # generate podspec for pubilshing
+      source = "#{version}_#{ENV['TRAVIS_BUILD_NUMBER']}.tar.bz2"
+      File.open("#{podspec_path}", "w") do |file|
+        file.puts("Pod::Spec.new do |s|")
+
+        values_to_replace = {
+          "source" => { :http => "http://adsdk.yumimobi.com/iOS/YumiMediationAdapters/#{source}" }
+        }
+
+        podspec.each do |key, val|
+          if key == "dependencies" then
+            val.each do |d, vs|
+              file.puts("  s.dependency '#{d}', '#{vs[0]}'")
+            end
+            next
+          end
+
+          v = values_to_replace[key]
+          val = v unless v.nil?
+          file.puts("  s.#{key} = '#{val}'") if val.is_a? String
+          file.puts("  s.#{key} = #{val}") if val.is_a? Hash
+        end
+
+        subspecs.each do |subspec|
+          name = subspec["name"]
+          subspec_framework = "#{framework_prefix}#{name}"
+          file.puts "  s.subspec '#{name}' do |sp|"
+          file.puts "    sp.ios.vendored_framework = '#{subspec_framework}/#{subspec_framework}.framework'"
+
+          subspec.each do |key, val|
+            next if ["name", "source_files"].include? key
+
+            if key == "resource_bundles" then
+              file.puts "    sp.resource = '#{subspec_framework}/Resources/#{subspec_framework}.bundle'" 
+              next
+            end
+
+            if key == "dependencies" then
+              val.each do |d, vs|
+                file.puts("    sp.dependency '#{d}', '#{vs[0]}'")
+              end
+              next
+            end
+
+            file.puts("  s.#{key} = '#{val}'") if val.is_a? String
+            file.puts("  s.#{key} = #{val}") if val.is_a? Hash
+          end
+
+          file.puts "  end"
+        end
+
+        file.puts("end")
+      end
+
+      # compress and upload to oss
+      sh "tar cjf #{source} #{version}"
       with_retries(max_tries: 10) do
-        path = "iOS/YumiMediationAdapters/#{source}"
-        bucket.put_object(path, :file => source)
+        Aliyun::OSS::Client.new(
+          :endpoint => "http://oss-cn-beijing.aliyuncs.com",
+          :access_key_id => ENV["OSS_KEY_ID"],
+          :access_key_secret => ENV["OSS_KEY_SECRET"]
+        ).
+        get_bucket("ad-sdk").
+        put_object("iOS/#{podspec_name}/#{source}", :file => source)
       end
     end
-  end
 
-  desc "update podspec for publishing to cocoapods trunk"
-  lane :update_podspec_for_publishing do |options|
-    podspec_filename = options[:podspec_filename]
-    name = options[:name]
-    version = options[:version]
-
-    podspec_for_packaging = read_podspec(path: podspec_filename)
-    
-    Dir.chdir("../#{name}-#{version}") do
-      podspec_content = File.read(podspec_filename)
-      podspec_content = podspec_content.sub(/s.ios.vendored_framework.+$/, "s.ios.vendored_framework = '#{name}.framework'")
-      podspec_content = podspec_content.lines.to_a[0..-2].join # delete last line
-      # add dependencies
-      dependencies = podspec_for_packaging["dependencies"]
-      dependencies = {} if dependencies.nil?
-      dependencies.each do |d, vs|
-        podspec_content += "  s.dependency '#{d}', '#{vs[0]}'\n"
-      end
-      podspec_content += "  s.resource = 'Resources/#{name}.bundle'\n" if podspec_for_packaging.include? "resource_bundles"
-      podspec_content += "end"
-      File.open(podspec_filename, "w") { |file| file.puts podspec_content }
-    end
+    # # pod trunk push
+    # with_retries(max_tries: 10) do
+    #   pod_push(path: podspec_path, allow_warnings: true)
+    # end
   end
 
   after_all do |lane|
