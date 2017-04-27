@@ -276,14 +276,14 @@
         return;
     }
     loadSuccessed = YES;
-    [_adsYuMIInMobiSelf adapterDidInterstitialReceiveAd:self];
+    [_adsYuMIInMobiSelf adapterDidInterstitialReceiveAd:self InterTemplateID:self.currentID];
 }
 // TODO:广告点击事件
 - (void)adInterstitialViewClick {
     // inmobi点击
     [imnative reportAdClick:imobeDict];
     [self adViewClick];
-    [_adsYuMIInMobiSelf adapterDidInterstitialClick:self ClickArea:CGRectZero];
+    [_adsYuMIInMobiSelf adapterDidInterstitialClick:self ClickArea:CGRectZero InterTemplateID:self.currentID];
 }
 
 // TODO:点击关闭按钮关闭广告

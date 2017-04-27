@@ -294,12 +294,12 @@
     }
     canShow = YES;
     loadSuccessed = YES;
-    [_adsYuMIGDTSelf adapterDidInterstitialReceiveAd:self];
+    [_adsYuMIGDTSelf adapterDidInterstitialReceiveAd:self InterTemplateID:self.currentID];
 }
 // TODO:广告点击事件
 - (void)adInterstitialViewClick {
     [_nativeAd clickAd:_currentAd]; /*点击发生,调用点击接口*/
-    [_adsYuMIGDTSelf adapterDidInterstitialClick:self ClickArea:CGRectZero];
+    [_adsYuMIGDTSelf adapterDidInterstitialClick:self ClickArea:CGRectZero InterTemplateID:self.currentID];
 }
 
 - (void)nativeClick {

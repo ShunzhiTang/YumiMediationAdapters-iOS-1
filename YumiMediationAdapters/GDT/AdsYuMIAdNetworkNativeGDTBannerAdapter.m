@@ -243,7 +243,7 @@
     // TODO: 判断点击类型
     if (navigationType == UIWebViewNavigationTypeLinkClicked) {
         [_nativeAd clickAd:_currentAd]; /*点击发生,调用点击接口*/
-        [self adapter:self didClickAdView:_webView WithRect:CGRectZero];
+        [self adapter:self didClickAdView:_webView WithRect:CGRectZero TemplateID:self.currentID];
         return NO;
     }
     return YES;
@@ -254,7 +254,7 @@
  */
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     [_nativeAd attachAd:_currentAd toView:webView];
-    [self adapter:self didReceiveAdView:_webView];
+    [self adapter:self didReceiveAdView:_webView TemplateID:self.currentID];
 }
 
 /**
