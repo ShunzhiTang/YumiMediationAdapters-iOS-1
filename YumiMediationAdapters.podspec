@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
   
   s.frameworks = 'UIKit'
 
-  s.dependency 'YumiMediationSDK', '>= 1.6.41'
+  s.dependency 'YumiMediationSDK', '~> 1.7.0'
 
   s.subspec 'AdMob' do |sp|
     sp.source_files = 'YumiMediationAdapters/AdMob/*.{h,m}'
@@ -31,7 +31,6 @@ Pod::Spec.new do |s|
     sp.dependency 'YumiAdmobSDK', '7.18.0'
   end
 
-=begin 
   s.subspec 'InMobi' do |sp|
     sp.source_files = 'YumiMediationAdapters/InMobi/*.{h,m}'
     sp.dependency 'YumiInmobiSDK', '6.0.0'
@@ -79,5 +78,5 @@ Pod::Spec.new do |s|
     }
     sp.dependency 'YumiFacebookSDK', '4.17.0'
   end
-=end
+
 end
