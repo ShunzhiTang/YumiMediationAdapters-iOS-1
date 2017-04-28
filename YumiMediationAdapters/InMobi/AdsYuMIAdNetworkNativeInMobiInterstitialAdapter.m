@@ -77,7 +77,7 @@
     isReading = NO;
     loadSuccessed = NO;
 
-//    [self getRemoteTemplate];
+    //    [self getRemoteTemplate];
 
     id _timeInterval = self.provider.outTime;
     if ([_timeInterval isKindOfClass:[NSNumber class]]) {
@@ -156,20 +156,20 @@
     interstitialStr = [NSString stringWithFormat:interstitialStr, @"100%", @"100%", @"100%", @"100%",
                                                  [imobeDict objectForKey:@"landingURL"], url];
 
-//    if (self.templateDic) {
-//        NSString *templateID = self.templateDic[@"templateID"];
-//        NSString *currentID = [NSString stringWithFormat:@"%@", [NSNumber numberWithInteger:self.currentID]];
-//        if (![templateID isEqualToString:currentID]) {
-//            return;
-//        }
-//        interstitialStr = self.templateDic[@"html"];
-//        interstitialStr = [self.templateTool replaceHtmlCharactersWith:interstitialStr
-//                                                         Zflag_iconUrl:@""
-//                                                           Zflag_title:@""
-//                                                            Zflag_desc:@""
-//                                                        Zflag_imageUrl:url
-//                                                         Zflag_aTagUrl:[imobeDict objectForKey:@"landingURL"]];
-//    }
+    //    if (self.templateDic) {
+    //        NSString *templateID = self.templateDic[@"templateID"];
+    //        NSString *currentID = [NSString stringWithFormat:@"%@", [NSNumber numberWithInteger:self.currentID]];
+    //        if (![templateID isEqualToString:currentID]) {
+    //            return;
+    //        }
+    //        interstitialStr = self.templateDic[@"html"];
+    //        interstitialStr = [self.templateTool replaceHtmlCharactersWith:interstitialStr
+    //                                                         Zflag_iconUrl:@""
+    //                                                           Zflag_title:@""
+    //                                                            Zflag_desc:@""
+    //                                                        Zflag_imageUrl:url
+    //                                                         Zflag_aTagUrl:[imobeDict objectForKey:@"landingURL"]];
+    //    }
 
     if ([self isNull:interstitialStr]) {
         [self adapter:self

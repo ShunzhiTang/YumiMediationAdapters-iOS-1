@@ -71,7 +71,7 @@
 - (void)getAd {
     [self adDidStartRequestAd];
 
-//    [self getRemoteTemplate];
+    //    [self getRemoteTemplate];
 
     isReading = NO;
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
@@ -152,20 +152,20 @@
     str = [NSString stringWithFormat:str, @"100%", @"100%", @"100%", @"100%", [imobeDict objectForKey:@"landingURL"],
                                      [[imobeDict objectForKey:@"screenshots"] objectForKey:@"url"]];
 
-//    if (self.templateDic) {
-//        NSString *templateID = self.templateDic[@"templateID"];
-//        NSString *currentID = [NSString stringWithFormat:@"%@", [NSNumber numberWithInteger:self.currentID]];
-//        if (![templateID isEqualToString:currentID]) {
-//            return;
-//        }
-//        str = self.templateDic[@"html"];
-//        str = [self.templateTool replaceHtmlCharactersWith:str
-//                                             Zflag_iconUrl:[imobeDict objectForKey:@"screenshots"]
-//                                               Zflag_title:@"标题"
-//                                                Zflag_desc:@"描述"
-//                                            Zflag_imageUrl:@"大图"
-//                                             Zflag_aTagUrl:[imobeDict objectForKey:@"landingURL"]];
-//    }
+    //    if (self.templateDic) {
+    //        NSString *templateID = self.templateDic[@"templateID"];
+    //        NSString *currentID = [NSString stringWithFormat:@"%@", [NSNumber numberWithInteger:self.currentID]];
+    //        if (![templateID isEqualToString:currentID]) {
+    //            return;
+    //        }
+    //        str = self.templateDic[@"html"];
+    //        str = [self.templateTool replaceHtmlCharactersWith:str
+    //                                             Zflag_iconUrl:[imobeDict objectForKey:@"screenshots"]
+    //                                               Zflag_title:@"标题"
+    //                                                Zflag_desc:@"描述"
+    //                                            Zflag_imageUrl:@"大图"
+    //                                             Zflag_aTagUrl:[imobeDict objectForKey:@"landingURL"]];
+    //    }
 
     if ([self isNull:str]) {
         [self adapter:self didFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"GDT no ad"]];
