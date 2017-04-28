@@ -7,7 +7,7 @@
 //
 
 #import "AdsYuMIAdNetworkNativeGDTBannerAdapter.h"
-#import <YumiMediationSDK/YumiTemplateTool.h>
+//#import <YumiMediationSDK/YumiTemplateTool.h>
 
 @interface AdsYuMIAdNetworkNativeGDTBannerAdapter () <UIWebViewDelegate> {
 
@@ -16,7 +16,7 @@
     GDTNativeAdData *_currentAd; //当前展示的原生干告数据对象
     UIWebView *_webView;
 }
-@property (nonatomic, strong) YumiTemplateTool *templateTool;
+//@property (nonatomic, strong) YumiTemplateTool *templateTool;
 @property (nonatomic, strong) NSDictionary *templateDic;
 @property (nonatomic, assign) NSInteger currentID;
 @end

@@ -8,7 +8,7 @@
 
 #import "AdsYuMIAdNetworkNativeGDTIntertitialAdapter.h"
 #import <YumiMediationSDK/AdsYuMiInterstitialNativeViewController.h>
-#import <YumiMediationSDK/YumiTemplateTool.h>
+//#import <YumiMediationSDK/YumiTemplateTool.h>
 
 @interface AdsYuMIAdNetworkNativeGDTIntertitialAdapter () <GDTNativeAdDelegate,
                                                            AdsYuMiInterstitialNativeViewControllerDelegate> {
@@ -22,7 +22,7 @@
     BOOL loadSuccessed;
     BOOL canShow;
 }
-@property (nonatomic, strong) YumiTemplateTool *templateTool;
+//@property (nonatomic, strong) YumiTemplateTool *templateTool;
 @property (nonatomic, strong) NSDictionary *templateDic;
 @property (nonatomic, assign) NSInteger currentID;
 @end

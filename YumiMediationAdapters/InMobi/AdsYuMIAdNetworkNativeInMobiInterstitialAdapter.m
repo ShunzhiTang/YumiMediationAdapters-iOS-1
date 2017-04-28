@@ -9,7 +9,7 @@
 #import "AdsYuMIAdNetworkNativeInMobiInterstitialAdapter.h"
 #import <InMobiSDK/InMobiSDK.h>
 #import <YumiMediationSDK/AdsYuMiInterstitialNativeViewController.h>
-#import <YumiMediationSDK/YumiTemplateTool.h>
+//#import <YumiMediationSDK/YumiTemplateTool.h>
 
 @interface AdsYuMIAdNetworkNativeInMobiInterstitialAdapter () <AdsYuMiInterstitialNativeViewControllerDelegate,
                                                                IMNativeDelegate> {
@@ -19,7 +19,7 @@
     NSDictionary *imobeDict;
     BOOL loadSuccessed;
 }
-@property (nonatomic, strong) YumiTemplateTool *templateTool;
+//@property (nonatomic, strong) YumiTemplateTool *templateTool;
 @property (nonatomic, strong) NSDictionary *templateDic;
 @property (nonatomic, assign) NSInteger currentID;
 @end

@@ -8,7 +8,7 @@
 
 #import "AdsYuMIAdNetworkNativeInMobiBannerAdapter.h"
 #import <InMobiSDK/InMobiSDK.h>
-#import <YumiMediationSDK/YumiTemplateTool.h>
+//#import <YumiMediationSDK/YumiTemplateTool.h>
 
 @interface AdsYuMIAdNetworkNativeInMobiBannerAdapter () <IMNativeDelegate, UIWebViewDelegate> {
     NSDictionary *imobeDict;
@@ -16,7 +16,7 @@
     UIWebView *_webView;
 }
 
-@property (nonatomic, strong) YumiTemplateTool *templateTool;
+//@property (nonatomic, strong) YumiTemplateTool *templateTool;
 @property (nonatomic, strong) NSDictionary *templateDic;
 @property (nonatomic, assign) NSInteger currentID;
 @end
