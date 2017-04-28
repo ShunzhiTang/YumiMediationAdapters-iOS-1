@@ -186,7 +186,7 @@
     // TODO: 判断点击类型
     if (navigationType == UIWebViewNavigationTypeLinkClicked) {
         [imnative reportAdClick:imobeDict];
-        [self adapter:self didClickAdView:_webView WithRect:CGRectZero ];
+        [self adapter:self didClickAdView:_webView WithRect:CGRectZero];
         [self adViewClick:request.URL];
         return NO;
     }
@@ -205,7 +205,7 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
 
     [IMNative bindNative:imnative toView:webView];
-    [self adapter:self didReceiveAdView:_webView ];
+    [self adapter:self didReceiveAdView:_webView];
 }
 
 - (void)dealloc {

@@ -133,7 +133,6 @@
                                      [_currentAd.properties objectForKey:GDTNativeAdDataKeyTitle],
                                      [_currentAd.properties objectForKey:GDTNativeAdDataKeyDesc], @"%"];
 
-    
     if ([self isNull:str]) {
         [self adapter:self didFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"GDT no ad"]];
         return;
@@ -190,7 +189,7 @@
     // TODO: 判断点击类型
     if (navigationType == UIWebViewNavigationTypeLinkClicked) {
         [_nativeAd clickAd:_currentAd]; /*点击发生,调用点击接口*/
-        [self adapter:self didClickAdView:_webView WithRect:CGRectZero ];
+        [self adapter:self didClickAdView:_webView WithRect:CGRectZero];
         return NO;
     }
     return YES;
@@ -201,7 +200,7 @@
  */
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     [_nativeAd attachAd:_currentAd toView:webView];
-    [self adapter:self didReceiveAdView:_webView ];
+    [self adapter:self didReceiveAdView:_webView];
 }
 
 /**

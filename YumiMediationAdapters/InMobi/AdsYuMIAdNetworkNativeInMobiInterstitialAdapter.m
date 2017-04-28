@@ -118,7 +118,6 @@
     interstitialStr = [NSString stringWithFormat:interstitialStr, @"100%", @"100%", @"100%", @"100%",
                                                  [imobeDict objectForKey:@"landingURL"], url];
 
-
     if ([self isNull:interstitialStr]) {
         [self adapter:self
             didInterstitialFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"Inmobi no ad"]];
@@ -231,7 +230,7 @@
     // inmobi点击
     [imnative reportAdClick:imobeDict];
     [self adViewClick];
-    [_adsYuMIInMobiSelf adapterDidInterstitialClick:self ClickArea:CGRectZero ];
+    [_adsYuMIInMobiSelf adapterDidInterstitialClick:self ClickArea:CGRectZero];
 }
 
 // TODO:点击关闭按钮关闭广告

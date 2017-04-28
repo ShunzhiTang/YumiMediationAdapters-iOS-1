@@ -140,7 +140,7 @@
                                                      iconImg, title, star, bigImg, @"100%", desc, @"about:blank"];
     }
 
-     if ([self isNull:interstitialStr]) {
+    if ([self isNull:interstitialStr]) {
         [self adapter:self
             didInterstitialFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"GDT no ad"]];
         return;
@@ -246,7 +246,7 @@
 // TODO:广告点击事件
 - (void)adInterstitialViewClick {
     [_nativeAd clickAd:_currentAd]; /*点击发生,调用点击接口*/
-    [_adsYuMIGDTSelf adapterDidInterstitialClick:self ClickArea:CGRectZero ];
+    [_adsYuMIGDTSelf adapterDidInterstitialClick:self ClickArea:CGRectZero];
 }
 
 - (void)nativeClick {
