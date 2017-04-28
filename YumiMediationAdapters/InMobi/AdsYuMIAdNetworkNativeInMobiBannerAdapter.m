@@ -32,46 +32,8 @@
     }
 }
 
-- (void)getRemoteTemplate {
-    self.templateTool = [[YumiTemplateTool alloc] init];
-    NSString *fileName = [NSString stringWithFormat:@"banner%@", self.provider.providerId];
-    NSInteger currentTime;
-    NSInteger currentMode;
-    if ([self.templateTool getOrientation] == 0) {
-        self.currentID = self.provider.porTemplateID;
-        currentTime = self.provider.porTemplateTime;
-        currentMode = self.provider.porMode;
-    }
-    if ([self.templateTool getOrientation] == 1) {
-        self.currentID = self.provider.lanTemplateID;
-        currentTime = self.provider.lanTemplateTime;
-        currentMode = self.provider.lanMode;
-    }
-    if (self.provider.uniTemplateID) {
-        self.currentID = self.provider.uniTemplateID;
-        currentTime = self.provider.uniTemplateTime;
-        currentMode = self.provider.uniMode;
-    }
-    if ([self.templateTool isExistWith:currentTime TemplateID:self.currentID ProviderID:fileName]) {
-        self.templateDic = [self.templateTool getTemplateHtmlWith:self.currentID];
-        if (self.templateDic == nil) {
-            [self.templateTool getYumiTemplateWith:self.provider.uniTemplateID
-                                               Id2:self.provider.lanTemplateID
-                                               Id3:self.provider.porTemplateID
-                                        Providerid:fileName];
-        }
-    } else {
-        [self.templateTool getYumiTemplateWith:self.provider.uniTemplateID
-                                           Id2:self.provider.lanTemplateID
-                                           Id3:self.provider.porTemplateID
-                                    Providerid:fileName];
-    }
-}
-
 - (void)getAd {
     [self adDidStartRequestAd];
-
-    //    [self getRemoteTemplate];
 
     isReading = NO;
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
@@ -152,21 +114,6 @@
     str = [NSString stringWithFormat:str, @"100%", @"100%", @"100%", @"100%", [imobeDict objectForKey:@"landingURL"],
                                      [[imobeDict objectForKey:@"screenshots"] objectForKey:@"url"]];
 
-    //    if (self.templateDic) {
-    //        NSString *templateID = self.templateDic[@"templateID"];
-    //        NSString *currentID = [NSString stringWithFormat:@"%@", [NSNumber numberWithInteger:self.currentID]];
-    //        if (![templateID isEqualToString:currentID]) {
-    //            return;
-    //        }
-    //        str = self.templateDic[@"html"];
-    //        str = [self.templateTool replaceHtmlCharactersWith:str
-    //                                             Zflag_iconUrl:[imobeDict objectForKey:@"screenshots"]
-    //                                               Zflag_title:@"标题"
-    //                                                Zflag_desc:@"描述"
-    //                                            Zflag_imageUrl:@"大图"
-    //                                             Zflag_aTagUrl:[imobeDict objectForKey:@"landingURL"]];
-    //    }
-
     if ([self isNull:str]) {
         [self adapter:self didFailAd:[AdsYuMIError errorWithCode:AdYuMIRequestNotAd description:@"GDT no ad"]];
         return;
@@ -239,7 +186,7 @@
     // TODO: 判断点击类型
     if (navigationType == UIWebViewNavigationTypeLinkClicked) {
         [imnative reportAdClick:imobeDict];
-        [self adapter:self didClickAdView:_webView WithRect:CGRectZero TemplateID:self.currentID];
+        [self adapter:self didClickAdView:_webView WithRect:CGRectZero ];
         [self adViewClick:request.URL];
         return NO;
     }
@@ -258,7 +205,7 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
 
     [IMNative bindNative:imnative toView:webView];
-    [self adapter:self didReceiveAdView:_webView TemplateID:self.currentID];
+    [self adapter:self didReceiveAdView:_webView ];
 }
 
 - (void)dealloc {
