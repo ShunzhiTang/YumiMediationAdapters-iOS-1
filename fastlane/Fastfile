@@ -161,10 +161,10 @@ platform :ios do
       end
     end
 
-    # # pod trunk push
-    # with_retries(max_tries: 10) do
-    #   pod_push(path: podspec_path, allow_warnings: true)
-    # end
+     # pod trunk push
+     with_retries(max_tries: 10) do
+       pod_push(path: podspec_path, allow_warnings: true)
+     end
   end
 
   after_all do |lane|
