@@ -87,8 +87,9 @@ platform :ios do
         end
 
         # package
-        sh "pod package #{subspec_path} --force --embedded --no-mangle --exclude-deps"
-
+        with_retries(max_tries: 10) do
+          sh "pod package #{subspec_path} --force --embedded --no-mangle --exclude-deps"
+        end
         # move framework
         FileUtils.mv("#{subspec_framework}-#{version}/ios/#{subspec_framework}.embeddedframework", "#{version}/#{subspec_framework}")
       end
