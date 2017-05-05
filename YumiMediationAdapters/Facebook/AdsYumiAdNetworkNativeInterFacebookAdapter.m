@@ -111,10 +111,10 @@
     [interstitial.closeButton addTarget:self
                                  action:@selector(closeFacebookIntestitial)
                        forControlEvents:UIControlEventTouchUpInside];
-    #if __has_feature(objc_arc)
-    #else
-        [interstitial retain];
-    #endif
+#if __has_feature(objc_arc)
+#else
+    [interstitial retain];
+#endif
     return interstitial;
 }
 
