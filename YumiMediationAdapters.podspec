@@ -53,7 +53,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Mopub' do |sp|
     sp.source_files = 'YumiMediationAdapters/Mopub/*.{h,m}'
-    sp.dependency 'YumiMopubSDK', '4.11.1'
+    sp.dependency 'YumiMopubSDK', '4.12.0'
   end
 
   s.subspec 'StartApp' do |sp|

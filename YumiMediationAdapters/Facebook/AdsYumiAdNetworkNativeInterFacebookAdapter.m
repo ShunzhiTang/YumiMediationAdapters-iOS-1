@@ -111,6 +111,10 @@
     [interstitial.closeButton addTarget:self
                                  action:@selector(closeFacebookIntestitial)
                        forControlEvents:UIControlEventTouchUpInside];
+#if __has_feature(objc_arc)
+#else
+    [interstitial retain];
+#endif
     return interstitial;
 }
 
@@ -313,7 +317,7 @@
 
 - (void)dealloc {
     self.intestitialView = nil;
-    self.AdUIView = nil;
+    self.adUIView = nil;
     self.adIconImageView = nil;
     self.adTitleLabel = nil;
     self.adSocialContextLabel = nil;

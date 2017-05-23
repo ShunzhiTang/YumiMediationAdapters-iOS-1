@@ -4,6 +4,10 @@ language: objective-c
 rvm:
   - 2.2
 
+git:
+  submodules:
+    - dotfiles
+
 cache:
   - cocoapods
   - bundler
@@ -17,7 +21,7 @@ install:
   - pod repo update
 
 script:
-  - sh format.sh
+  - sh dotfiles/clang-check.sh 
   - fastlane release
 
 env:
