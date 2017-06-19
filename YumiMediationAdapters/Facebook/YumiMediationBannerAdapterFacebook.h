@@ -11,4 +11,3 @@
 @interface YumiMediationBannerAdapterFacebook : NSObject
 
 @end
-

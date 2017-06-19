@@ -27,6 +27,7 @@ xcode-select --install
 <td width="33%"><code>sudo gem install fastlane -NV</code></td>
 </tr>
 </table>
+
 # Available Actions
 ## iOS
 ### ios release
@@ -34,31 +35,6 @@ xcode-select --install
 fastlane ios release
 ```
 Publish pod
-### ios publish_subspec
-```
-fastlane ios publish_subspec
-```
-
-### ios generate_podspec_for_packaging
-```
-fastlane ios generate_podspec_for_packaging
-```
-generate podspec for packaging
-### ios package
-```
-fastlane ios package
-```
-pod package adapter
-### ios upload_to_oss
-```
-fastlane ios upload_to_oss
-```
-upload archive to aliyun oss
-### ios update_podspec_for_publishing
-```
-fastlane ios update_podspec_for_publishing
-```
-update podspec for publishing to cocoapods trunk
 
 ----
 

@@ -11,5 +11,3 @@
 @interface YumiMediationBannerAdapterBaidu : NSObject
 
 @end
-
-

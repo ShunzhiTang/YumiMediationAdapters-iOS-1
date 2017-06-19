@@ -10,7 +10,7 @@
 #import "YumiMediationAdapterRegistry.h"
 #import <GoogleMobileAds/GoogleMobileAds.h>
 
-@interface YumiMediationBannerAdapterAdMob () <GADBannerViewDelegate,YumiMediationBannerAdapter>
+@interface YumiMediationBannerAdapterAdMob () <GADBannerViewDelegate, YumiMediationBannerAdapter>
 
 @property (nonatomic, weak) id<YumiMediationBannerAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationBannerProvider *provider;
@@ -29,10 +29,10 @@
 - (id<YumiMediationBannerAdapter>)initWithProvider:(YumiMediationBannerProvider *)provider
                                           delegate:(id<YumiMediationBannerAdapterDelegate>)delegate {
     self = [super init];
-    
+
     self.provider = provider;
     self.delegate = delegate;
-    
+
     return self;
 }
 
@@ -47,7 +47,6 @@
         [self.bannerView loadRequest:request];
     });
 }
-
 
 #pragma mark - GADBannerViewDelegate
 - (void)adViewDidReceiveAd:(GADBannerView *)bannerView {
