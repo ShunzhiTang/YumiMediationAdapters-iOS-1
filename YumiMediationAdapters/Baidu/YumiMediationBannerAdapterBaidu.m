@@ -7,26 +7,11 @@
 //
 
 #import "YumiMediationBannerAdapterBaidu.h"
-#import "YumiMediationAdapterConstructorRegistry.h"
+#import "YumiMediationAdapterRegistry.h"
 #import <BaiduMobAdSDK/BaiduMobAdSetting.h>
 #import <BaiduMobAdSDK/BaiduMobAdView.h>
 
-@implementation YumiMediationBannerAdapterBaiduConstructor
-
-+ (void)load {
-    [[YumiMediationAdapterConstructorRegistry registry] registerBannerAdapterConstructor:[self new]
-                                                                           forProviderID:@"10022"
-                                                                             requestType:YumiMediationSDKAdRequest];
-}
-
-- (id<YumiMediationBannerAdapter>)createAdapterWithProvider:(YumiMediationBannerProvider *)provider
-                                                   delegate:(id<YumiMediationBannerAdapterDelegate>)delegate {
-    return [[YumiMediationBannerAdapterBaidu alloc] initWithYumiMediationAdProvider:provider delegate:delegate];
-}
-
-@end
-
-@interface YumiMediationBannerAdapterBaidu () <BaiduMobAdViewDelegate>
+@interface YumiMediationBannerAdapterBaidu () <BaiduMobAdViewDelegate,YumiMediationBannerAdapter>
 
 @property (nonatomic, weak) id<YumiMediationBannerAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationBannerProvider *provider;
@@ -36,10 +21,16 @@
 
 @implementation YumiMediationBannerAdapterBaidu
 
-- (instancetype)initWithYumiMediationAdProvider:(YumiMediationBannerProvider *)provider
-                                       delegate:(id<YumiMediationBannerAdapterDelegate>)delegate {
-    self = [super init];
++ (void)load {
+        [[YumiMediationAdapterRegistry registry] registerBannerAdapter:self
+                                                         forProviderID:@"10022"
+                                                           requestType:YumiMediationSDKAdRequest];
+}
 
+- (id<YumiMediationBannerAdapter>)initWithProvider:(YumiMediationBannerProvider *)provider
+                                          delegate:(id<YumiMediationBannerAdapterDelegate>)delegate {
+    self = [super init];
+    
     self.provider = provider;
     self.delegate = delegate;
      [BaiduMobAdSetting sharedInstance].supportHttps = YES;

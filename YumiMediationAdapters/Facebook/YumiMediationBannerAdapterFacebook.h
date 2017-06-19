@@ -6,21 +6,9 @@
 //
 //
 
-#import "YumiMediationBannerAdapter.h"
-#import "YumiMediationBannerProvider.h"
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
-@interface YumiMediationBannerAdapterFacebookConstructor : NSObject <YumiMediationBannerAdapterConstructor>
+@interface YumiMediationBannerAdapterFacebook : NSObject
 
 @end
 
-@interface YumiMediationBannerAdapterFacebook : NSObject <YumiMediationBannerAdapter>
-
-- (instancetype)initWithYumiMediationAdProvider:(YumiMediationBannerProvider *)provider
-                                       delegate:(id<YumiMediationBannerAdapterDelegate>)delegate;
-
-@end
-
-NS_ASSUME_NONNULL_END
