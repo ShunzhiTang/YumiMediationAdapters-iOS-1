@@ -47,9 +47,11 @@
         
         if (!_bannerView) {
             self.bannerView = [[FBAdView alloc] initWithPlacementID:self.provider.data.key1 adSize:adSize rootViewController:[self.delegate rootViewControllerForPresentingBannerView]];
+            // Set a delegate to get notified on changes or when the user interact with the ad.
             self.bannerView.delegate  = self;
             self.bannerView.frame= adframe;
         }
+        
         [self.bannerView loadAd];
         
         });
@@ -57,16 +59,18 @@
 
 
 #pragma mark -  FBAdViewDelegate
-
-
-#pragma mark - Getters
-- (FBAdView *)bannerView {
-    if (!_bannerView) {
-        
-        
-    }
-
-    return _bannerView;
+- (void)adViewDidClick:(FBAdView *)adView{
+    [self.delegate adapter:self didClick:adView];
 }
+
+- (void)adViewDidLoad:(FBAdView *)adView{
+    
+    [self.delegate adapter:self didReceiveAd:adView];
+}
+
+- (void)adView:(FBAdView *)adView didFailWithError:(NSError *)error{
+    [self.delegate adapter:self didFailToReceiveAd:[error localizedDescription]];
+}
+
 
 @end
