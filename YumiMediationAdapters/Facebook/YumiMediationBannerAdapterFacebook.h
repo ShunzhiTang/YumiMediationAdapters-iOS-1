@@ -1,5 +1,5 @@
 //
-//  YumiMediationBannerAdapterBaidu.h
+//  YumiMediationBannerAdapterFacebook.h
 //  Pods
 //
 //  Created by shunzhiTang 19/6/2017.
@@ -12,11 +12,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface YumiMediationBannerAdapterBaiduConstructor : NSObject <YumiMediationBannerAdapterConstructor>
+@interface YumiMediationBannerAdapterFacebookConstructor : NSObject <YumiMediationBannerAdapterConstructor>
 
 @end
 
-@interface YumiMediationBannerAdapterBaidu : NSObject <YumiMediationBannerAdapter>
+@interface YumiMediationBannerAdapterFacebook : NSObject <YumiMediationBannerAdapter>
 
 - (instancetype)initWithYumiMediationAdProvider:(YumiMediationBannerProvider *)provider
                                        delegate:(id<YumiMediationBannerAdapterDelegate>)delegate;

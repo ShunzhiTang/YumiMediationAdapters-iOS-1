@@ -1,5 +1,5 @@
 //
-//  YumiMediationBannerAdapterAdMob.m
+//  YumiMediationBannerAdapterBaidu.m
 //  Pods
 //
 //  Created by d shunzhiTang 19/6/2017.
