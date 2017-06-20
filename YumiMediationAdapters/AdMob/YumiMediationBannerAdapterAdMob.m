@@ -40,14 +40,18 @@
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     GADAdSize adSize = isiPad ? kGADAdSizeLeaderboard : kGADAdSizeBanner;
     adSize = isPortrait ? kGADAdSizeSmartBannerPortrait : adSize;
-    _bannerView = [[GADBannerView alloc] init];
-    _bannerView.adUnitID = self.provider.data.key1;
-    _bannerView.delegate = self;
-    _bannerView.rootViewController = [self.delegate rootViewControllerForPresentingBannerView];
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        strongSelf.bannerView = [[GADBannerView alloc] initWithAdSize:adSize];
+        strongSelf.bannerView.adUnitID = strongSelf.provider.data.key1;
+        strongSelf.bannerView.delegate = strongSelf;
+        strongSelf.bannerView.rootViewController = [strongSelf.delegate rootViewControllerForPresentingBannerView];
         GADRequest *request = [GADRequest request];
-        self.bannerView.adSize = adSize;
-        [self.bannerView loadRequest:request];
+        [strongSelf.bannerView loadRequest:request];
     });
 }
 

@@ -42,11 +42,15 @@
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     CGRect adFrame = isiPad ? CGRectMake(0, 0, 728, 90) : CGRectMake(0, 0, 320, 50);
     long long placementId = [self.provider.data.key2 longLongValue];
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        strongSelf.bannerView = [[IMBanner alloc] initWithFrame:adFrame placementId:placementId delegate:strongSelf];
 
-        self.bannerView = [[IMBanner alloc] initWithFrame:adFrame placementId:placementId delegate:self];
-
-        [self.bannerView load];
+        [strongSelf.bannerView load];
     });
 }
 

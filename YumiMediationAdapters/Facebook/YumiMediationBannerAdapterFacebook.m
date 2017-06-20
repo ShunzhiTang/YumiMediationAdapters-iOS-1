@@ -42,15 +42,20 @@
     CGSize viewSize = [[UIScreen mainScreen] bounds].size;
     CGRect adframe = CGRectMake(0, 0, viewSize.width, adSize.size.height);
 
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         //@"YOUR_PLACEMENT_ID"
-        self.bannerView =
-            [[FBAdView alloc] initWithPlacementID:self.provider.data.key1
+        strongSelf.bannerView =
+            [[FBAdView alloc] initWithPlacementID:strongSelf.provider.data.key1
                                            adSize:adSize
-                               rootViewController:[self.delegate rootViewControllerForPresentingBannerView]];
-        self.bannerView.delegate = self;
-        self.bannerView.frame = adframe;
-        [self.bannerView loadAd];
+                               rootViewController:[strongSelf.delegate rootViewControllerForPresentingBannerView]];
+        strongSelf.bannerView.delegate = strongSelf;
+        strongSelf.bannerView.frame = adframe;
+        [strongSelf.bannerView loadAd];
 
     });
 }
