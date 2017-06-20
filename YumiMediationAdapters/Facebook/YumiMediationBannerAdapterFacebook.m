@@ -39,22 +39,20 @@
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
 
     FBAdSize adSize = isiPad ? kFBAdSizeHeight90Banner : kFBAdSizeHeight50Banner;
-
-    CGRect adframe = CGRectMake(0, 0, adSize.size.width, adSize.size.height);
+     CGSize viewSize = [[UIScreen mainScreen] bounds].size;
+    CGRect adframe = CGRectMake(0, 0, viewSize.width, adSize.size.height);
 
     dispatch_async(dispatch_get_main_queue(), ^{
-
+        //@"YOUR_PLACEMENT_ID"
         if (!_bannerView) {
             self.bannerView =
                 [[FBAdView alloc] initWithPlacementID:self.provider.data.key1
                                                adSize:adSize
                                    rootViewController:[self.delegate rootViewControllerForPresentingBannerView]];
-            // Set a delegate to get notified on changes or when the user interact with the ad.
             self.bannerView.delegate = self;
             self.bannerView.frame = adframe;
         }
-
-        [self.bannerView loadAd];
+          [self.bannerView loadAd];
 
     });
 }
