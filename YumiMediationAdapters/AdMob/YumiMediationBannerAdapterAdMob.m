@@ -40,7 +40,10 @@
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     GADAdSize adSize = isiPad ? kGADAdSizeLeaderboard : kGADAdSizeBanner;
     adSize = isPortrait ? kGADAdSizeSmartBannerPortrait : adSize;
-
+    _bannerView = [[GADBannerView alloc] init];
+    _bannerView.adUnitID = self.provider.data.key1;
+    _bannerView.delegate = self;
+    _bannerView.rootViewController = [self.delegate rootViewControllerForPresentingBannerView];
     dispatch_async(dispatch_get_main_queue(), ^{
         GADRequest *request = [GADRequest request];
         self.bannerView.adSize = adSize;
@@ -61,17 +64,5 @@
     [self.delegate adapter:self didClick:bannerView];
 }
 
-#pragma mark - Getters
-- (GADBannerView *)bannerView {
-    if (!_bannerView) {
-        // TODO: set size, ad unit id ... according to provider property
-        _bannerView = [[GADBannerView alloc] init];
-        _bannerView.adUnitID = self.provider.data.key1;
-        _bannerView.delegate = self;
-        _bannerView.rootViewController = [self.delegate rootViewControllerForPresentingBannerView];
-    }
-
-    return _bannerView;
-}
 
 @end
