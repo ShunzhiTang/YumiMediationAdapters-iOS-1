@@ -34,26 +34,23 @@
     self.delegate = delegate;
     [IMSdk initWithAccountID:provider.data.key1];
     [IMSdk setLogLevel:kIMSDKLogLevelNone];
-    
+
     return self;
 }
 
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
-    
+
     CGRect adFrame = isiPad ? CGRectMake(0, 0, 728, 90) : CGRectMake(0, 0, 320, 50);
     long long placementId = [self.provider.data.key2 longLongValue];
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!_bannerView) {
-            
-        self.bannerView = [[IMBanner alloc] initWithFrame:adFrame
-                                              placementId:placementId
-                                                 delegate:self];
+
+            self.bannerView = [[IMBanner alloc] initWithFrame:adFrame placementId:placementId delegate:self];
         }
-        
+
         [self.bannerView load];
     });
-    
 }
 
 #pragma mark - IMBannerDelegate
@@ -86,6 +83,5 @@
 
 - (void)banner:(IMBanner *)banner rewardActionCompletedWithRewards:(NSDictionary *)rewards {
 }
-
 
 @end

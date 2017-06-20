@@ -39,7 +39,7 @@
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
 
     FBAdSize adSize = isiPad ? kFBAdSizeHeight90Banner : kFBAdSizeHeight50Banner;
-     CGSize viewSize = [[UIScreen mainScreen] bounds].size;
+    CGSize viewSize = [[UIScreen mainScreen] bounds].size;
     CGRect adframe = CGRectMake(0, 0, viewSize.width, adSize.size.height);
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -52,7 +52,7 @@
             self.bannerView.delegate = self;
             self.bannerView.frame = adframe;
         }
-          [self.bannerView loadAd];
+        [self.bannerView loadAd];
 
     });
 }

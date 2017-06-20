@@ -17,7 +17,7 @@
 }
 
 + (void)load {
-//    [[AdsYuMIBannerSDKAdNetworkRegistry sharedRegistry] registerClass:self];
+    //    [[AdsYuMIBannerSDKAdNetworkRegistry sharedRegistry] registerClass:self];
 }
 
 - (void)getAd {
