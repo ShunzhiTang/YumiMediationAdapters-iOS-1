@@ -64,5 +64,4 @@
     [self.delegate adapter:self didClick:bannerView];
 }
 
-
 @end

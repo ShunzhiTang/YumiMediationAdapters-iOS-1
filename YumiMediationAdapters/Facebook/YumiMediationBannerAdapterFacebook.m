@@ -45,9 +45,9 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         //@"YOUR_PLACEMENT_ID"
         self.bannerView =
-                [[FBAdView alloc] initWithPlacementID:self.provider.data.key1
-                                               adSize:adSize
-                                   rootViewController:[self.delegate rootViewControllerForPresentingBannerView]];
+            [[FBAdView alloc] initWithPlacementID:self.provider.data.key1
+                                           adSize:adSize
+                               rootViewController:[self.delegate rootViewControllerForPresentingBannerView]];
         self.bannerView.delegate = self;
         self.bannerView.frame = adframe;
         [self.bannerView loadAd];
