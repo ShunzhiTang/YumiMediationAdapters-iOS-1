@@ -6,13 +6,13 @@
 
 | Name        | Version | Type    | Key1      | Key2        | Key3 | SmartAdSize |
 | ----------- | ------- | ------- | --------- | ----------- | :--: | ----------- |
-| AdMob       | 7.18.0  | B-I-V-N | adUnitID  |             |      | ✔️          |
+| AdMob       | 7.20.0  | B | adUnitID  |             |      | ✔️          |
 | Applovin    |         |         |           |             |      |             |
-| Baidu       |         |         |           |             |      |             |
+| Baidu       |     4.5.0    |  B       |           |             |      |           ✔️  |
 | Chart boost |         |         |           |             |      |             |
-| Facebook    |         |         |           |             |      |             |
+| Facebook    |    4.23.0    |  B       |           |             |      |          ✔️   |
 | GDT         |         |         |           |             |      |             |
-| Inmobi      | 6.0.0   | B-I-V-N | accountID | placementID |      | ❌           |
+| Inmobi      | 6.2.1   | B | accountID | placementID |      | ❌           |
 | StartApp    |         |         |           |             |      |             |
 | Unity       |         |         |           |             |      |             |
 | Mopub       |         |         |           |             |      |             |

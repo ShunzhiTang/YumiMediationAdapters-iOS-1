@@ -28,12 +28,12 @@ Pod::Spec.new do |s|
     sp.resource_bundles = {
       'YumiMediationAdMob' => ['YumiMediationAdapters/AdMob/**/*.{xib,png}']
     }
-    sp.dependency 'YumiAdmobSDK', '7.18.0'
+    sp.dependency 'YumiAdmobSDK', '7.20.0'
   end
   
   s.subspec 'InMobi' do |sp|
     sp.source_files = 'YumiMediationAdapters/InMobi/*.{h,m}'
-    sp.dependency 'YumiInmobiSDK', '6.0.0'
+    sp.dependency 'YumiInmobiSDK', '6.2.1'
   end
 
   s.subspec 'Chartboost' do |sp|
@@ -76,7 +76,7 @@ Pod::Spec.new do |s|
     sp.resource_bundles = {
       'YumiMediationFacebook' => ['YumiMediationAdapters/Facebook/*.{xib,png}']
     }
-    sp.dependency 'YumiFacebookSDK', '4.17.0'
+    sp.dependency 'YumiFacebookSDK', '4.23.0'
   end
 
 end

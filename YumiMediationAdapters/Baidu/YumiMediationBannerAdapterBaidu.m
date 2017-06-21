@@ -16,7 +16,6 @@
 @property (nonatomic, weak) id<YumiMediationBannerAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationBannerProvider *provider;
 @property (nonatomic) BaiduMobAdView *bannerView;
-
 @end
 
 @implementation YumiMediationBannerAdapterBaidu
@@ -42,9 +41,18 @@
 
     CGSize adSize = isiPad ? kBaiduAdViewBanner728x90 : kBaiduAdViewBanner320x48;
     CGRect adFrame = CGRectMake(0, 0, adSize.width, adSize.height);
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.bannerView.frame = adFrame;
-        [self.bannerView start];
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        strongSelf.bannerView = [[BaiduMobAdView alloc] init];
+        strongSelf.bannerView.AdType = BaiduMobAdViewTypeBanner;
+        strongSelf.bannerView.delegate = strongSelf;
+        strongSelf.bannerView.AdUnitTag = strongSelf.provider.data.key2;
+        strongSelf.bannerView.frame = adFrame;
+        [strongSelf.bannerView start];
     });
 }
 
@@ -79,18 +87,6 @@
 }
 
 - (void)didDismissLandingPage {
-}
-
-#pragma mark - Getters
-- (BaiduMobAdView *)bannerView {
-    if (!_bannerView) {
-        _bannerView = [[BaiduMobAdView alloc] init];
-        _bannerView.AdType = BaiduMobAdViewTypeBanner;
-        _bannerView.delegate = self;
-        _bannerView.AdUnitTag = self.provider.data.key2;
-    }
-
-    return _bannerView;
 }
 
 @end
