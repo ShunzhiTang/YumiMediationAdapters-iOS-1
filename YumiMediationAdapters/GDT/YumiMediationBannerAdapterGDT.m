@@ -6,8 +6,8 @@
 //
 //
 #import "YumiMediationBannerAdapterGDT.h"
-#import "YumiMediationAdapterRegistry.h"
 #import "GDTMobBannerView.h"
+#import "YumiMediationAdapterRegistry.h"
 
 @interface YumiMediationBannerAdapterGDT () <GDTMobBannerViewDelegate, YumiMediationBannerAdapter>
 
@@ -37,17 +37,20 @@
 
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
-    
-    CGSize adSize = isiPad ? GDTMOB_AD_SUGGEST_SIZE_728x90:GDTMOB_AD_SUGGEST_SIZE_320x50;
+
+    CGSize adSize = isiPad ? GDTMOB_AD_SUGGEST_SIZE_728x90 : GDTMOB_AD_SUGGEST_SIZE_320x50;
     CGRect adframe = CGRectMake(0, 0, adSize.width, adSize.height);
-    __weak typeof(self)  weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        __strong  typeof(weakSelf) strongSelf = weakSelf;
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf) {
-            return ;
+            return;
         }
-        strongSelf.bannerView = [[GDTMobBannerView alloc] initWithFrame:adframe appkey:strongSelf.provider.data.key1 placementId:strongSelf.provider.data.key2];
-        [strongSelf.bannerView setCurrentViewController:[strongSelf.delegate rootViewControllerForPresentingBannerView]];
+        strongSelf.bannerView = [[GDTMobBannerView alloc] initWithFrame:adframe
+                                                                 appkey:strongSelf.provider.data.key1
+                                                            placementId:strongSelf.provider.data.key2];
+        [strongSelf.bannerView
+            setCurrentViewController:[strongSelf.delegate rootViewControllerForPresentingBannerView]];
         strongSelf.bannerView.interval = 0;
         strongSelf.bannerView.isAnimationOn = NO;
         strongSelf.bannerView.showCloseBtn = NO;
@@ -63,12 +66,11 @@
 }
 
 - (void)bannerViewFailToReceived:(NSError *)error {
-    [self.delegate adapter:self didFailToReceiveAd:[error  localizedDescription]];
+    [self.delegate adapter:self didFailToReceiveAd:[error localizedDescription]];
 }
 
 - (void)bannerViewClicked {
     [self.delegate adapter:self didClick:self.bannerView on:CGPointZero];
 }
-
 
 @end
