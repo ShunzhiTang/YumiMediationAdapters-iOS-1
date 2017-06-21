@@ -54,7 +54,7 @@
         strongSelf.bannerView.isAnimationOn = NO;
         strongSelf.bannerView.showCloseBtn = NO;
         strongSelf.bannerView.delegate = self;
-        
+
         [strongSelf.bannerView loadAdAndShow];
     });
 }

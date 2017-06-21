@@ -52,7 +52,7 @@
         strongSelf.bannerView.delegate = strongSelf;
         strongSelf.bannerView.AdUnitTag = strongSelf.provider.data.key2;
         strongSelf.bannerView.frame = adFrame;
-        
+
         [strongSelf.bannerView start];
     });
 }
