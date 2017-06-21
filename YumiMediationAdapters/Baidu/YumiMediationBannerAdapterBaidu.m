@@ -16,7 +16,6 @@
 @property (nonatomic, weak) id<YumiMediationBannerAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationBannerProvider *provider;
 @property (nonatomic) BaiduMobAdView *bannerView;
-
 @end
 
 @implementation YumiMediationBannerAdapterBaidu
@@ -52,7 +51,6 @@
         strongSelf.bannerView.AdType = BaiduMobAdViewTypeBanner;
         strongSelf.bannerView.delegate = strongSelf;
         strongSelf.bannerView.AdUnitTag = strongSelf.provider.data.key2;
-
         strongSelf.bannerView.frame = adFrame;
         [strongSelf.bannerView start];
     });

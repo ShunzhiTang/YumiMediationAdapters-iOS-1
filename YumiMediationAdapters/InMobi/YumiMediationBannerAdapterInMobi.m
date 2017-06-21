@@ -49,7 +49,6 @@
             return;
         }
         strongSelf.bannerView = [[IMBanner alloc] initWithFrame:adFrame placementId:placementId delegate:strongSelf];
-
         [strongSelf.bannerView load];
     });
 }

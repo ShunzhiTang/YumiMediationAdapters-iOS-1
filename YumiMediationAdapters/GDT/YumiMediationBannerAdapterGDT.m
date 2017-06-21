@@ -70,7 +70,7 @@
 }
 
 - (void)bannerViewClicked {
-    [self.delegate adapter:self didClick:self.bannerView on:CGPointZero];
+    [self.delegate adapter:self didClick:self.bannerView];
 }
 
 @end

@@ -37,11 +37,9 @@
 
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
-
     FBAdSize adSize = isiPad ? kFBAdSizeHeight90Banner : kFBAdSizeHeight50Banner;
     CGSize viewSize = [[UIScreen mainScreen] bounds].size;
     CGRect adframe = CGRectMake(0, 0, viewSize.width, adSize.size.height);
-
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -66,7 +64,6 @@
 }
 
 - (void)adViewDidLoad:(FBAdView *)adView {
-
     [self.delegate adapter:self didReceiveAd:adView];
 }
 
