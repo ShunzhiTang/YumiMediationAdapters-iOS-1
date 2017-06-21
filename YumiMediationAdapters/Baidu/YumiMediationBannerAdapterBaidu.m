@@ -16,6 +16,7 @@
 @property (nonatomic, weak) id<YumiMediationBannerAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationBannerProvider *provider;
 @property (nonatomic) BaiduMobAdView *bannerView;
+
 @end
 
 @implementation YumiMediationBannerAdapterBaidu
@@ -38,7 +39,6 @@
 
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
-
     CGSize adSize = isiPad ? kBaiduAdViewBanner728x90 : kBaiduAdViewBanner320x48;
     CGRect adFrame = CGRectMake(0, 0, adSize.width, adSize.height);
     __weak typeof(self) weakSelf = self;
@@ -52,6 +52,7 @@
         strongSelf.bannerView.delegate = strongSelf;
         strongSelf.bannerView.AdUnitTag = strongSelf.provider.data.key2;
         strongSelf.bannerView.frame = adFrame;
+        
         [strongSelf.bannerView start];
     });
 }

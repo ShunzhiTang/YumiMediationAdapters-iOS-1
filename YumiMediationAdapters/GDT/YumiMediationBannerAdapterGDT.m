@@ -37,7 +37,6 @@
 
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
-
     CGSize adSize = isiPad ? GDTMOB_AD_SUGGEST_SIZE_728x90 : GDTMOB_AD_SUGGEST_SIZE_320x50;
     CGRect adframe = CGRectMake(0, 0, adSize.width, adSize.height);
     __weak typeof(self) weakSelf = self;
@@ -55,6 +54,7 @@
         strongSelf.bannerView.isAnimationOn = NO;
         strongSelf.bannerView.showCloseBtn = NO;
         strongSelf.bannerView.delegate = self;
+        
         [strongSelf.bannerView loadAdAndShow];
     });
 }
