@@ -58,7 +58,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'StartApp' do |sp|
     sp.source_files = 'YumiMediationAdapters/StartApp/*.{h,m}'
-    sp.dependency 'YumiStartAppSDK', '3.4.1'
+    sp.dependency 'YumiStartAppSDK', '3.4.2'
   end
 
   s.subspec 'Unity' do |sp|
