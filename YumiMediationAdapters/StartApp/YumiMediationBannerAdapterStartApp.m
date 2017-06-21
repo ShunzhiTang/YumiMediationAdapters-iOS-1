@@ -40,8 +40,7 @@
 
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
-    STABannerSize staAdSize = isiPad ? STA_PortraitAdSize_768x90 : STA_PortraitAdSize_320x50;
-    staAdSize = STA_AutoAdSize;
+    STABannerSize staAdSize = STA_AutoAdSize;
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
