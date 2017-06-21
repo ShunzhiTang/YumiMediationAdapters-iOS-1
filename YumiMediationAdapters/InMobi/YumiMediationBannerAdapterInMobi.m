@@ -32,6 +32,7 @@
 
     self.provider = provider;
     self.delegate = delegate;
+
     [IMSdk initWithAccountID:provider.data.key1];
     [IMSdk setLogLevel:kIMSDKLogLevelNone];
 
@@ -49,6 +50,7 @@
             return;
         }
         strongSelf.bannerView = [[IMBanner alloc] initWithFrame:adFrame placementId:placementId delegate:strongSelf];
+
         [strongSelf.bannerView load];
     });
 }

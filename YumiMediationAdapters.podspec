@@ -48,7 +48,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'GDT' do |sp|
     sp.source_files = 'YumiMediationAdapters/GDT/*.{h,m}'
-    sp.dependency 'YumiGDTSDK', '4.5.5'
+    sp.dependency 'YumiGDTSDK', '4.5.7'
   end
 
   s.subspec 'Mopub' do |sp|
@@ -58,7 +58,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'StartApp' do |sp|
     sp.source_files = 'YumiMediationAdapters/StartApp/*.{h,m}'
-    sp.dependency 'YumiStartAppSDK', '3.4.1'
+    sp.dependency 'YumiStartAppSDK', '3.4.2'
   end
 
   s.subspec 'Unity' do |sp|

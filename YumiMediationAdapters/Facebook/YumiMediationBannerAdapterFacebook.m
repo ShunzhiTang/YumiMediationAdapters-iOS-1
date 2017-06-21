@@ -53,8 +53,8 @@
                                rootViewController:[strongSelf.delegate rootViewControllerForPresentingBannerView]];
         strongSelf.bannerView.delegate = strongSelf;
         strongSelf.bannerView.frame = adframe;
-        [strongSelf.bannerView loadAd];
 
+        [strongSelf.bannerView loadAd];
     });
 }
 

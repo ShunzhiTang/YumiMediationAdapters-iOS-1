@@ -50,6 +50,7 @@
         strongSelf.bannerView.adUnitID = strongSelf.provider.data.key1;
         strongSelf.bannerView.delegate = strongSelf;
         strongSelf.bannerView.rootViewController = [strongSelf.delegate rootViewControllerForPresentingBannerView];
+
         GADRequest *request = [GADRequest request];
         [strongSelf.bannerView loadRequest:request];
     });
