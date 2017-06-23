@@ -62,6 +62,10 @@
 
 - (void)unityAdsDidFinish:(NSString *)placementId withFinishState:(UnityAdsFinishState)state {
     [self.delegate adapter:self didCloseVideoAd:nil];
+    
+    if (state == kUnityAdsFinishStateCompleted) {
+        [self.delegate adapter:self videoAd:nil didReward:nil];
+    }
 }
 
 @end
