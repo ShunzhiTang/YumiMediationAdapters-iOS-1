@@ -7,8 +7,11 @@
 //
 
 #import "YumiMediationVideoAdapterInMobi.h"
+#import <InMobiSDK/InMobiSDK.h>
 
-@interface YumiMediationVideoAdapterInMobi ()
+@interface YumiMediationVideoAdapterInMobi () <IMInterstitialDelegate>
+
+@property (nonatomic) IMInterstitial *video;
 
 @end
 
@@ -36,22 +39,49 @@
     self.delegate = delegate;
     self.provider = provider;
 
-    // TODO: setup code
+    [IMSdk initWithAccountID:self.provider.data.key1];
+    self.video = [[IMInterstitial alloc] initWithPlacementId:[self.provider.data.key2 longLongValue] delegate:self];
 }
 
 - (void)requestAd {
-    // TODO: request ad
+    [self.video load];
 }
 
 - (BOOL)isReady {
-    // TODO: check if ready
-    return YES;
+    return self.video.isReady;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    // TODO: present video ad
+    [self.video showFromViewController:rootViewController];
 }
 
-// TODO: implement third party sdk delegate and delegate to mediation sdk
+#pragma mark - IMInterstitialDelegate
+
+- (void)interstitialDidReceiveAd:(IMInterstitial *)interstitial {
+    [self.delegate adapter:self didReceiveVideoAd:interstitial];
+}
+
+- (void)interstitial:(IMInterstitial *)interstitial didFailToLoadWithError:(IMRequestStatus *)error {
+    [self.delegate adapter:self videoAd:interstitial didFailToLoad:[error localizedDescription]];
+}
+
+- (void)interstitialDidPresent:(IMInterstitial *)interstitial {
+    [self.delegate adapter:self didOpenVideoAd:interstitial];
+}
+
+- (void)interstitial:(IMInterstitial *)interstitial didFailToPresentWithError:(IMRequestStatus *)error {
+    [self.delegate adapter:self didCloseVideoAd:interstitial];
+}
+
+- (void)interstitialDidDismiss:(IMInterstitial *)interstitial {
+    [self.delegate adapter:self didCloseVideoAd:interstitial];
+
+    // NOTE: in case didRewardUserWithReward not executed
+    [self.delegate adapter:self videoAd:interstitial didReward:nil];
+}
+
+- (void)interstitial:(IMInterstitial *)interstitial rewardActionCompletedWithRewards:(NSDictionary *)rewards {
+    // NOTE: reward user in didDismiss delegate
+}
 
 @end
