@@ -7,8 +7,9 @@
 //
 
 #import "YumiMediationVideoAdapterAdColony.h"
+#import <AdColony/AdColony.h>
 
-@interface YumiMediationVideoAdapterAdColony ()
+@interface YumiMediationVideoAdapterAdColony () <AdColonyDelegate, AdColonyAdDelegate>
 
 @end
 
@@ -36,22 +37,46 @@
     self.delegate = delegate;
     self.provider = provider;
 
-    // TODO: setup code
+    [AdColony configureWithAppID:self.provider.data.key1 zoneIDs:@[ self.provider.data.key2 ] delegate:self logging:NO];
 }
 
 - (void)requestAd {
-    // TODO: request ad
+    // NOTE: AdColony do not provide any method for requesting ad, it handles the request internally
 }
 
 - (BOOL)isReady {
-    // TODO: check if ready
-    return YES;
+    return [AdColony isVirtualCurrencyRewardAvailableForZone:self.provider.data.key2];
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    // TODO: present video ad
+    [AdColony playVideoAdForZone:self.provider.data.key2 withDelegate:self withV4VCPrePopup:NO andV4VCPostPopup:NO];
 }
 
-// TODO: implement third party sdk delegate and delegate to mediation sdk
+#pragma mark - AdColonyDelegate
+- (void)onAdColonyAdAvailabilityChange:(BOOL)available inZone:(NSString *)zoneID {
+    if (available && [self isZoneIDMatched:zoneID]) {
+        [self.delegate adapter:self didReceiveVideoAd:nil];
+    }
+}
+
+#pragma mark - AdColonyAdDelegate
+- (void)onAdColonyAdStartedInZone:(NSString *)zoneID {
+    if ([self isZoneIDMatched:zoneID]) {
+        [self.delegate adapter:self didStartPlayingVideoAd:nil];
+    }
+}
+
+- (void)onAdColonyAdAttemptFinished:(BOOL)shown inZone:(NSString *)zoneID {
+    [self.delegate adapter:self didCloseVideoAd:nil];
+
+    if (shown && [self isZoneIDMatched:zoneID]) {
+        [self.delegate adapter:self videoAd:nil didReward:nil];
+    }
+}
+
+#pragma mark - Helper method
+- (BOOL)isZoneIDMatched:(NSString *)zoneID {
+    return [zoneID isEqualToString:self.provider.data.key2];
+}
 
 @end
