@@ -36,6 +36,11 @@ Pod::Spec.new do |s|
     sp.dependency 'YumiInmobiSDK', '6.2.1'
   end
 
+  s.subspec 'Vungle' do |sp|
+    sp.source_files = 'YumiMediationAdapters/Vungle/*.{h,m}'
+    sp.dependency 'YumiVungleSDK', '4.0.8'
+  end
+
   s.subspec 'Chartboost' do |sp|
     sp.source_files = 'YumiMediationAdapters/Chartboost/*.{h,m}'
     sp.dependency 'YumiChartboostSDK', '6.6.1'
