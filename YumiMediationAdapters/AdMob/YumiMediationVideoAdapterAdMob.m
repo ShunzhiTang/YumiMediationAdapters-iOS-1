@@ -7,8 +7,9 @@
 //
 
 #import "YumiMediationVideoAdapterAdMob.h"
+#import <GoogleMobileAds/GoogleMobileAds.h>
 
-@interface YumiMediationVideoAdapterAdMob ()
+@interface YumiMediationVideoAdapterAdMob () <GADRewardBasedVideoAdDelegate>
 
 @end
 
@@ -36,22 +37,47 @@
     self.delegate = delegate;
     self.provider = provider;
 
-    // TODO: setup code
+    [GADRewardBasedVideoAd sharedInstance].delegate = self;
 }
 
 - (void)requestAd {
-    // TODO: request ad
+    [[GADRewardBasedVideoAd sharedInstance] loadRequest:[GADRequest request] withAdUnitID:self.provider.data.key1];
 }
 
 - (BOOL)isReady {
-    // TODO: check if ready
-    return YES;
+    return [GADRewardBasedVideoAd sharedInstance].isReady;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    // TODO: present video ad
+    [[GADRewardBasedVideoAd sharedInstance] presentFromRootViewController:rootViewController];
 }
 
-// TODO: implement third party sdk delegate and delegate to mediation sdk
+#pragma mark - GADRewardBasedVideoAdDelegate
+- (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd didRewardUserWithReward:(GADAdReward *)reward {
+    // NOTE: reward user in didClose delegate
+}
+
+- (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd didFailToLoadWithError:(NSError *)error {
+    [self.delegate adapter:self videoAd:rewardBasedVideoAd didFailToLoad:[error localizedDescription]];
+}
+
+- (void)rewardBasedVideoAdDidReceiveAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+    [self.delegate adapter:self didReceiveVideoAd:rewardBasedVideoAd];
+}
+
+- (void)rewardBasedVideoAdDidOpen:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+    [self.delegate adapter:self didOpenVideoAd:rewardBasedVideoAd];
+}
+
+- (void)rewardBasedVideoAdDidStartPlaying:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+    [self.delegate adapter:self didStartPlayingVideoAd:rewardBasedVideoAd];
+}
+
+- (void)rewardBasedVideoAdDidClose:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+    [self.delegate adapter:self didCloseVideoAd:rewardBasedVideoAd];
+
+    // NOTE: in case didRewardUserWithReward not executed
+    [self.delegate adapter:self videoAd:rewardBasedVideoAd didReward:nil];
+}
 
 @end
