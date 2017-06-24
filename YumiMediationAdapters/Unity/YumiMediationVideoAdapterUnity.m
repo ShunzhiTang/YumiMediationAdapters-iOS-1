@@ -7,8 +7,9 @@
 //
 
 #import "YumiMediationVideoAdapterUnity.h"
+#import <UnityAds/UnityAds.h>
 
-@interface YumiMediationVideoAdapterUnity ()
+@interface YumiMediationVideoAdapterUnity () <UnityAdsDelegate>
 
 @end
 
@@ -36,22 +37,40 @@
     self.delegate = delegate;
     self.provider = provider;
 
-    // TODO: setup code
+    [UnityAds initialize:provider.data.key1 delegate:self testMode:NO];
 }
 
 - (void)requestAd {
-    // TODO: request ad
+    // NOTE: Unity do not provide any method for requesting ad, it handles the request internally
 }
 
 - (BOOL)isReady {
-    // TODO: check if ready
-    return YES;
+    return [UnityAds isReady:self.provider.data.key2];
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    // TODO: present video ad
+    [UnityAds show:rootViewController placementId:self.provider.data.key2];
 }
 
-// TODO: implement third party sdk delegate and delegate to mediation sdk
+#pragma mark - UnityAdsDelegate
+- (void)unityAdsReady:(NSString *)placementId {
+    [self.delegate adapter:self didReceiveVideoAd:nil];
+}
+
+- (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message {
+    [self.delegate adapter:self videoAd:nil didFailToLoad:message];
+}
+
+- (void)unityAdsDidStart:(NSString *)placementId {
+    [self.delegate adapter:self didStartPlayingVideoAd:nil];
+}
+
+- (void)unityAdsDidFinish:(NSString *)placementId withFinishState:(UnityAdsFinishState)state {
+    [self.delegate adapter:self didCloseVideoAd:nil];
+
+    if (state == kUnityAdsFinishStateCompleted) {
+        [self.delegate adapter:self videoAd:nil didReward:nil];
+    }
+}
 
 @end
