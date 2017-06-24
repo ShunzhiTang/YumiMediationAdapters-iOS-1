@@ -1,22 +1,22 @@
 //
-//  YumiMediationVideoAdapterUnity.m
+//  YumiMediationVideoAdapterAdColony.m
 //  Pods
 //
 //  Created by d on 24/6/2017.
 //
 //
 
-#import "YumiMediationVideoAdapterUnity.h"
+#import "YumiMediationVideoAdapterAdColony.h"
 
-@interface YumiMediationVideoAdapterUnity ()
+@interface YumiMediationVideoAdapterAdColony ()
 
 @end
 
-@implementation YumiMediationVideoAdapterUnity
+@implementation YumiMediationVideoAdapterAdColony
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerVideoAdapter:[self sharedInstance]
-                                                      forProvider:@"10019"
+                                                      forProvider:@"10001"
                                                       requestType:YumiMediationSDKAdRequest];
 }
 

@@ -1,22 +1,22 @@
 //
-//  YumiMediationVideoAdapterUnity.m
+//  YumiMediationVideoAdapterIronSource.m
 //  Pods
 //
 //  Created by d on 24/6/2017.
 //
 //
 
-#import "YumiMediationVideoAdapterUnity.h"
+#import "YumiMediationVideoAdapterIronSource.h"
 
-@interface YumiMediationVideoAdapterUnity ()
+@interface YumiMediationVideoAdapterIronSource ()
 
 @end
 
-@implementation YumiMediationVideoAdapterUnity
+@implementation YumiMediationVideoAdapterIronSource
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerVideoAdapter:[self sharedInstance]
-                                                      forProvider:@"10019"
+                                                      forProvider:@"10047"
                                                       requestType:YumiMediationSDKAdRequest];
 }
 
