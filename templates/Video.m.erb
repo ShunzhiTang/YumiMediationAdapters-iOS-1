@@ -1,0 +1,57 @@
+//
+//  <%=class_name%>.m
+//  Pods
+//
+//  Created by generator on <%=now%>.
+//
+//
+
+#import "<%=class_name%>.h"
+
+@interface <%=class_name%> ()
+
+@end
+
+@implementation <%=class_name%>
+
++ (void)load {
+    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:[self sharedInstance]
+                                                      forProvider:@"FILL_IN_PROVIDER_ID"
+                                                      requestType:<%=request_type%>];
+}
+
++ (id<YumiMediationVideoAdapter>)sharedInstance {
+    static id<YumiMediationVideoAdapter> sharedInstance;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[self alloc] init];
+    });
+
+    return sharedInstance;
+}
+
+#pragma mark - YumiMediationVideoAdapter
+- (void)setupWithProvider:(YumiMediationVideoProvider *)provider
+                 delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+    self.delegate = delegate;
+    self.provider = provider;
+
+	// TODO: setup code
+}
+
+- (void)requestAd {
+	// TODO: request ad
+}
+
+- (BOOL)isReady {
+	// TODO: check if ready
+	return YES;
+}
+
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
+	// TODO: present video ad
+}
+
+// TODO: implement third party sdk delegate and delegate to mediation sdk
+
+@end
