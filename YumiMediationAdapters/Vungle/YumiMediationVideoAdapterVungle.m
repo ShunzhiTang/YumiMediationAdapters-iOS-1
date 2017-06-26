@@ -7,8 +7,9 @@
 //
 
 #import "YumiMediationVideoAdapterVungle.h"
+#import <VungleSDK/VungleSDK.h>
 
-@interface YumiMediationVideoAdapterVungle ()
+@interface YumiMediationVideoAdapterVungle () <VungleSDKDelegate>
 
 @end
 
@@ -36,22 +37,51 @@
     self.delegate = delegate;
     self.provider = provider;
 
-    // TODO: setup code
+    VungleSDK *sdk = [VungleSDK sharedSDK];
+    sdk.delegate = self;
+    [sdk setLoggingEnabled:NO];
+    [sdk startWithAppId:self.provider.data.key1];
 }
 
 - (void)requestAd {
-    // TODO: request ad
+    // NOTE: Vungle do not provide any method for requesting ad, it handles the request internally
 }
 
 - (BOOL)isReady {
-    // TODO: check if ready
-    return YES;
+    return [VungleSDK sharedSDK].isAdPlayable;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    // TODO: present video ad
+    NSError *error;
+    [[VungleSDK sharedSDK] playAd:rootViewController error:&error];
+
+    if (error) {
+        [self.delegate adapter:self videoAd:nil didFailToLoad:[error localizedDescription]];
+    }
 }
 
-// TODO: implement third party sdk delegate and delegate to mediation sdk
+#pragma mark - VungleSDKDelegate
+- (void)vungleSDKwillShowAd {
+    [self.delegate adapter:self didStartPlayingVideoAd:nil];
+}
+
+- (void)vungleSDKwillCloseAdWithViewInfo:(NSDictionary *)viewInfo
+                 willPresentProductSheet:(BOOL)willPresentProductSheet {
+    if (!willPresentProductSheet) {
+        [self.delegate adapter:self didCloseVideoAd:nil];
+        [self.delegate adapter:self videoAd:nil didReward:nil];
+    }
+}
+
+- (void)vungleSDKwillCloseProductSheet:(id)productSheet {
+    [self.delegate adapter:self didCloseVideoAd:nil];
+    [self.delegate adapter:self videoAd:nil didReward:nil];
+}
+
+- (void)vungleSDKAdPlayableChanged:(BOOL)isAdPlayable {
+    if (isAdPlayable) {
+        [self.delegate adapter:self didReceiveVideoAd:nil];
+    }
+}
 
 @end
