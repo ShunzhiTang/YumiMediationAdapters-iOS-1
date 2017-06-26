@@ -7,8 +7,11 @@
 //
 
 #import "YumiMediationVideoAdapterAppLovin.h"
+#import "ALIncentivizedInterstitialAd.h"
 
-@interface YumiMediationVideoAdapterAppLovin ()
+@interface YumiMediationVideoAdapterAppLovin () <ALAdDisplayDelegate, ALAdVideoPlaybackDelegate, ALAdLoadDelegate>
+
+@property (nonatomic) ALIncentivizedInterstitialAd *video;
 
 @end
 
@@ -36,22 +39,56 @@
     self.delegate = delegate;
     self.provider = provider;
 
-    // TODO: setup code
+    ALSdk *sdk = [ALSdk sharedWithKey:provider.data.key1];
+    self.video = [[ALIncentivizedInterstitialAd alloc] initWithSdk:sdk];
+    self.video.adDisplayDelegate = self;
+    self.video.adVideoPlaybackDelegate = self;
 }
 
 - (void)requestAd {
-    // TODO: request ad
+    [self.video preloadAndNotify:self];
 }
 
 - (BOOL)isReady {
-    // TODO: check if ready
-    return YES;
+    return self.video.isReadyForDisplay;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    // TODO: present video ad
+    [self.video show];
 }
 
-// TODO: implement third party sdk delegate and delegate to mediation sdk
+#pragma mark - ALAdDisplayDelegate
+- (void)ad:(ALAd *)ad wasDisplayedIn:(UIView *)view {
+    [self.delegate adapter:self didOpenVideoAd:ad];
+}
+
+- (void)ad:(ALAd *)ad wasHiddenIn:(UIView *)view {
+    [self.delegate adapter:self didCloseVideoAd:ad];
+}
+
+- (void)ad:(ALAd *)ad wasClickedIn:(UIView *)view {
+}
+
+#pragma mark - ALAdVideoPlaybackDelegate
+- (void)videoPlaybackBeganInAd:(ALAd *)ad {
+    [self.delegate adapter:self didStartPlayingVideoAd:ad];
+}
+
+- (void)videoPlaybackEndedInAd:(ALAd *)ad
+             atPlaybackPercent:(NSNumber *)percentPlayed
+                  fullyWatched:(BOOL)wasFullyWatched {
+    // FIXME: only reward user if video is fully watched?
+    [self.delegate adapter:self videoAd:ad didReward:nil];
+}
+
+#pragma mark - ALAdLoadDelegate
+- (void)adService:(ALAdService *)adService didLoadAd:(ALAd *)ad {
+    [self.delegate adapter:self didReceiveVideoAd:ad];
+}
+
+- (void)adService:(ALAdService *)adService didFailToLoadAdWithError:(int)code {
+    NSString *error = [NSString stringWithFormat:@"fail to load applovin video with code %d", code];
+    [self.delegate adapter:self videoAd:nil didFailToLoad:error];
+}
 
 @end
