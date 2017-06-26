@@ -79,4 +79,8 @@ Pod::Spec.new do |s|
     sp.dependency 'YumiFacebookSDK', '4.23.0'
   end
 
+  s.subspec 'AdColony' do |sp|
+    sp.source_files = 'YumiMediationAdapters/AdColony/*.{h,m}'
+    sp.dependency 'YumiAdcolonySDK', '2.6.3'
+  end
 end
