@@ -27,3 +27,16 @@
 | I         | Interstitial |
 | V         | Video        |
 | N         | Native       |
+
+
+
+### Develop
+
+```sh
+# generate adapter template
+$ fastlane generate name:Chartboost adtype:Video request_type:SDK
+$ fastlane generate name:GDT adtype:Banner request_type:API
+
+# go back to YumiMediationSDK-iOS workspace and start integrating
+```
+
