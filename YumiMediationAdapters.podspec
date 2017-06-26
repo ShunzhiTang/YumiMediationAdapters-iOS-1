@@ -88,4 +88,9 @@ Pod::Spec.new do |s|
     sp.source_files = 'YumiMediationAdapters/AdColony/*.{h,m}'
     sp.dependency 'YumiAdcolonySDK', '2.6.3'
   end
+
+  s.subspec 'IronSource' do |sp|
+    sp.source_files = 'YumiMediationAdapters/IronSource/*.{h,m}'
+    sp.dependency 'IronSourceSDK', '6.6.1.1' # IronSource is using bintray which has cdn to host its source
+  end
 end
