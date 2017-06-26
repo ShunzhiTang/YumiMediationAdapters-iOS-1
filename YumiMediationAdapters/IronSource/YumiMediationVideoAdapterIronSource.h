@@ -2,7 +2,7 @@
 //  YumiMediationVideoAdapterIronSource.h
 //  Pods
 //
-//  Created by d on 24/6/2017.
+//  Created by generator on 26/06/2017.
 //
 //
 

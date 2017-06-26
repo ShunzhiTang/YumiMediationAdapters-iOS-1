@@ -2,13 +2,14 @@
 //  YumiMediationVideoAdapterIronSource.m
 //  Pods
 //
-//  Created by d on 24/6/2017.
+//  Created by generator on 26/06/2017.
 //
 //
 
 #import "YumiMediationVideoAdapterIronSource.h"
+#import "IronSource/IronSource.h"
 
-@interface YumiMediationVideoAdapterIronSource ()
+@interface YumiMediationVideoAdapterIronSource () <ISRewardedVideoDelegate>
 
 @end
 
@@ -36,22 +37,54 @@
     self.delegate = delegate;
     self.provider = provider;
 
-    // TODO: setup code
+    [IronSource setRewardedVideoDelegate:self];
+    [IronSource initWithAppKey:provider.data.key1];
 }
 
 - (void)requestAd {
-    // TODO: request ad
+    // NOTE: Unity do not provide any method for requesting ad, it handles the request internally
 }
 
 - (BOOL)isReady {
-    // TODO: check if ready
-    return YES;
+    return [IronSource hasRewardedVideo];
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    // TODO: present video ad
+    [IronSource showRewardedVideoWithViewController:rootViewController];
 }
 
-// TODO: implement third party sdk delegate and delegate to mediation sdk
+#pragma mark - ISRewardedVideoDelegate
+
+- (void)rewardedVideoHasChangedAvailability:(BOOL)available {
+    if (available) {
+        [self.delegate adapter:self didReceiveVideoAd:nil];
+    }
+}
+
+- (void)didReceiveRewardForPlacement:(ISPlacementInfo *)placementInfo {
+    // NOTE: reward user in didClose delegate
+}
+
+- (void)rewardedVideoDidFailToShowWithError:(NSError *)error {
+    [self.delegate adapter:self videoAd:nil didFailToLoad:[error localizedDescription]];
+}
+
+- (void)rewardedVideoDidOpen {
+    [self.delegate adapter:self didOpenVideoAd:nil];
+}
+
+- (void)rewardedVideoDidClose {
+    [self.delegate adapter:self didCloseVideoAd:nil];
+
+    // NOTE: in case didReceiveRewardForPlacement not executed
+    [self.delegate adapter:self videoAd:nil didReward:nil];
+}
+
+- (void)rewardedVideoDidStart {
+    [self.delegate adapter:self didStartPlayingVideoAd:nil];
+}
+
+- (void)rewardedVideoDidEnd {
+}
 
 @end
