@@ -30,6 +30,11 @@ xcode-select --install
 
 # Available Actions
 ## iOS
+### ios generate
+```
+fastlane ios generate
+```
+Generate adapter
 ### ios release
 ```
 fastlane ios release
