@@ -40,17 +40,13 @@ platform :ios do
     fastlane_require 'ostruct'
     fastlane_require 'fileutils'
     Dir.chdir("..") do
-      class_name = "YumiMediation#{adtype}Adapter#{name}"
-
       # generate adapter skeleton 
-      values = {
-        :class_name => class_name,
-        :request_type => "YumiMediation#{request_type}AdRequest",
-        :now => Time.now.strftime("%d/%m/%Y")
-      }
+      class_name = "YumiMediation#{adtype}Adapter#{name}"
+      request_type = "YumiMediation#{request_type}AdRequest"
+      now = Time.now.strftime("%d/%m/%Y")
 
-      h = ERB.new(File.read("./templates/#{adtype}.h.erb")).result(OpenStruct.new(values).instance_eval { binding })
-      m = ERB.new(File.read("./templates/#{adtype}.m.erb")).result(OpenStruct.new(values).instance_eval { binding })
+      h = ERB.new(File.read("./templates/#{adtype}.h.erb")).result(OpenStruct.new().instance_eval { binding })
+      m = ERB.new(File.read("./templates/#{adtype}.m.erb")).result(OpenStruct.new().instance_eval { binding })
 
       # write to file
       Dir.chdir("YumiMediationAdapters") do
