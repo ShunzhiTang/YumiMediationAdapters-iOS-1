@@ -16,6 +16,7 @@
 
 @property (nonatomic) YumiMediationNativeFacebookBannerView *bannerView;
 @property (nonatomic) FBNativeAd *nativeAd;
+@property (nonatomic) FBNativeAd *currentNativeAd;
 @property (nonatomic) FBAdChoicesView *adChoicesView;
 
 @property (nonatomic, weak) id<YumiMediationBannerAdapterDelegate> delegate;
@@ -61,13 +62,20 @@
     CGRect adframe = CGRectMake(0, 0, viewSize.width, adSize.size.height);
 
     self.bannerView = [self bannerViewFromCustomBundle];
-    self.bannerView.frame = adframe;
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        strongSelf.bannerView.frame = adframe;
 
-    FBNativeAd *nativeAd = [[FBNativeAd alloc] initWithPlacementID:self.provider.data.key1];
-    nativeAd.delegate = self;
-    nativeAd.mediaCachePolicy = FBNativeAdsCachePolicyAll;
+        strongSelf.nativeAd = [[FBNativeAd alloc] initWithPlacementID:strongSelf.provider.data.key1];
+        strongSelf.nativeAd.delegate = strongSelf;
+        strongSelf.nativeAd.mediaCachePolicy = FBNativeAdsCachePolicyAll;
 
-    [nativeAd loadAd];
+        [strongSelf.nativeAd loadAd];
+    });
 }
 
 #pragma mark - FBNativeAdDelegate
@@ -76,17 +84,17 @@
         return;
     }
 
-    if (self.nativeAd) {
+    if (self.currentNativeAd) {
         // disconnect a FBNativeAd with the UIView you used to display the native ads.
-        [self.nativeAd unregisterView];
+        [self.currentNativeAd unregisterView];
     }
 
-    self.nativeAd = nativeAd;
+    self.currentNativeAd = nativeAd;
     // associate a FBNativeAd with the UIView you will use to display the native ads.
-    [nativeAd registerViewForInteraction:self.bannerView.adUIView
-                      withViewController:[self.delegate rootViewControllerForPresentingBannerView]];
+    [self.currentNativeAd registerViewForInteraction:self.bannerView.adUIView
+                                  withViewController:[self.delegate rootViewControllerForPresentingBannerView]];
     __weak typeof(self) weakSelf = self;
-    [self.nativeAd.icon loadImageAsyncWithBlock:^(UIImage *image) {
+    [self.currentNativeAd.icon loadImageAsyncWithBlock:^(UIImage *image) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf) {
             return;
@@ -95,12 +103,12 @@
     }];
 
     // Render native ads data  onto bannerView
-    self.bannerView.adTitleLabel.text = self.nativeAd.title;
-    self.bannerView.adSocialContextLabel.text = self.nativeAd.socialContext;
-    [self.bannerView.adCallToActionButton setTitle:self.nativeAd.callToAction forState:UIControlStateNormal];
+    self.bannerView.adTitleLabel.text = self.currentNativeAd.title;
+    self.bannerView.adSocialContextLabel.text = self.currentNativeAd.socialContext;
+    [self.bannerView.adCallToActionButton setTitle:self.currentNativeAd.callToAction forState:UIControlStateNormal];
     // adChoicesView
-    self.adChoicesView = [[FBAdChoicesView alloc] initWithNativeAd:self.nativeAd];
-    self.adChoicesView.nativeAd = nativeAd;
+    self.adChoicesView = [[FBAdChoicesView alloc] initWithNativeAd:self.currentNativeAd];
+    self.adChoicesView.nativeAd = self.currentNativeAd;
     self.adChoicesView.corner = UIRectCornerTopRight;
     self.adChoicesView.hidden = NO;
     [self.bannerView.adUIView addSubview:self.adChoicesView];
