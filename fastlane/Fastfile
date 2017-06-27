@@ -62,6 +62,8 @@ platform :ios do
         end
       end
     end
+
+    sh "fastlane format"
   end
 
   desc "Fix code format in dev or check code format in CI"
