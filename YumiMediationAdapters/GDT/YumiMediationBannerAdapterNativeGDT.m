@@ -8,6 +8,7 @@
 
 #import "YumiMediationBannerAdapterNativeGDT.h"
 #import "GDTNativeAd.h"
+#import <YumiCommon/YumiTool.h>
 #import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
@@ -55,11 +56,9 @@
 }
 
 - (NSString *)resourceNamedFromCustomBundle:(NSString *)name {
-    NSBundle *mainBundle = [NSBundle bundleForClass:[self class]];
-    NSURL *bundleURL = [mainBundle URLForResource:@"YumiMediationSDK" withExtension:@"bundle"];
-    NSBundle *YumiMediationSDK = [NSBundle bundleWithURL:bundleURL];
-
+    NSBundle *YumiMediationSDK = [[YumiTool sharedTool] resourcesBundleWithBundleName:@"YumiMediationSDK"];
     NSString *strPath = [YumiMediationSDK pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"html"];
+
     return strPath;
 }
 
