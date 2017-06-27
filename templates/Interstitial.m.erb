@@ -1,0 +1,51 @@
+//
+//  <%=class_name%>.m
+//  Pods
+//
+//  Created by generator on <%=now%>.
+//
+//
+
+#import "<%=class_name%>.h"
+
+@interface <%=class_name%> ()
+
+@end
+
+@implementation <%=class_name%>
+
++ (void)load {
+    [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
+                                                           forProviderID:@"FILL_IN_PROVIDER_ID"
+                                                             requestType:<%=request_type%>];
+}
+
+#pragma mark - YumiMediationInterstitialAdapter
+- (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
+                                                delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
+    self = [super init];
+
+    self.provider = provider;
+    self.delegate = delegate;
+
+    // TODO: setup code
+
+    return self;
+}
+
+- (void)requestAd {
+	// TODO: request ad
+}
+
+- (BOOL)isReady {
+	// TODO: check if ready
+	return YES;
+}
+
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
+	// TODO: present interstitial ad
+}
+
+// TODO: implement third party sdk delegate and delegate to mediation sdk
+
+@end

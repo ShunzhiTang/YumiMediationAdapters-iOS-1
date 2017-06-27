@@ -1,0 +1,17 @@
+//
+//  <%=class_name%>.h
+//  Pods
+//
+//  Created by generator on <%=now%>.
+//
+//
+
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
+#import <Foundation/Foundation.h>
+
+@interface <%=class_name%> : NSObject <YumiMediationInterstitialAdapter>
+
+@property (nonatomic, weak) id<YumiMediationInterstitialAdapterDelegate> delegate;
+@property (nonatomic) YumiMediationInterstitialProvider *provider;
+
+@end
