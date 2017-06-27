@@ -13,7 +13,7 @@
 #import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
 
 @interface YumiMediationBannerAdapterNativeInMobi () <YumiMediationBannerAdapter, IMNativeDelegate,
-YumiAdsCustomViewDelegate>
+                                                      YumiAdsCustomViewDelegate>
 
 @property (nonatomic, weak) id<YumiMediationBannerAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationBannerProvider *provider;
@@ -35,21 +35,21 @@ YumiAdsCustomViewDelegate>
 #pragma mark :private method
 - (void)requestBannerViewAdTemplate {
     NSString *fileName = [NSString stringWithFormat:@"banner%@", self.provider.data.providerID];
-    
+
     self.templateManager =
-    [[YumiBannerViewTemplateManager alloc] initWithGeneralTemplate:self.provider.data.generalTemplate
-                                                 landscapeTemplate:self.provider.data.landscapeTemplate
-                                                  verticalTemplate:self.provider.data.verticalTemplate
-                                                  saveTemplateName:fileName];
-    
+        [[YumiBannerViewTemplateManager alloc] initWithGeneralTemplate:self.provider.data.generalTemplate
+                                                     landscapeTemplate:self.provider.data.landscapeTemplate
+                                                      verticalTemplate:self.provider.data.verticalTemplate
+                                                      saveTemplateName:fileName];
+
     __weak typeof(self) weakSelf = self;
     [self.templateManager fetchMediationTemplateSuccess:^(YumiMediationTemplateModel *_Nullable templateModel) {
         weakSelf.templateModel = templateModel;
     }
-                                                failure:^(NSError *_Nonnull error) {
-                                                    [[YumiLogger stdLogger] log:kLogLevelError message:[error localizedDescription]];
-                                                }];
-    
+        failure:^(NSError *_Nonnull error) {
+            [[YumiLogger stdLogger] log:kLogLevelError message:[error localizedDescription]];
+        }];
+
     self.currentID = [self.templateManager getCurrentNativeTemplate].templateID;
 }
 
@@ -57,7 +57,7 @@ YumiAdsCustomViewDelegate>
     NSBundle *mainBundle = [NSBundle bundleForClass:[self class]];
     NSURL *bundleURL = [mainBundle URLForResource:@"YumiMediationSDK" withExtension:@"bundle"];
     NSBundle *YumiMediationSDK = [NSBundle bundleWithURL:bundleURL];
-    
+
     NSString *strPath = [YumiMediationSDK pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"html"];
     return strPath;
 }
@@ -66,10 +66,10 @@ YumiAdsCustomViewDelegate>
 - (id<YumiMediationBannerAdapter>)initWithProvider:(YumiMediationBannerProvider *)provider
                                           delegate:(id<YumiMediationBannerAdapterDelegate>)delegate {
     self = [super init];
-    
+
     self.provider = provider;
     self.delegate = delegate;
-    
+
     // Initialize InMobi SDK with your account ID
     [IMSdk initWithAccountID:provider.data.key1];
     // Set log level to Debug
@@ -79,7 +79,7 @@ YumiAdsCustomViewDelegate>
 
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     [self requestBannerViewAdTemplate];
-    
+
     CGSize adSize = isiPad ? CGSizeMake(728, 90) : CGSizeMake(320, 50);
     CGRect adframe = CGRectMake(0, 0, adSize.width, adSize.height);
     __weak typeof(self) weakSelf = self;
@@ -111,32 +111,37 @@ YumiAdsCustomViewDelegate>
     if (!jsonDict) {
         return;
     }
-    
+
     NSDictionary *iconDict = jsonDict[@"icon"];
     NSDictionary *screenshotsDict = jsonDict[@"screenshots"];
-    
+
     if (!iconDict || !screenshotsDict) {
         [self.delegate adapter:self didFailToReceiveAd:@"GDT no ad"];
         return;
     }
-    
+
     NSString *path = [self resourceNamedFromCustomBundle:@"native-banner"];
     NSData *data = [NSData dataWithContentsOfFile:path];
     NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     str = [NSString stringWithFormat:str, @"100%", @"100%", @"50%", @"100%", @"100%", @"100%", @"100%",
-           jsonDict[@"landingURL"], iconDict[@"url"], jsonDict[@"title"],
-           jsonDict[@"description"], @"%"];
+                                     jsonDict[@"landingURL"], iconDict[@"url"], jsonDict[@"title"],
+                                     jsonDict[@"description"], @"%"];
     if (self.templateModel) {
-        NSString *templateID = [NSString stringWithFormat:@"%d",self.templateModel.templateID];
+        NSString *templateID = [NSString stringWithFormat:@"%d", self.templateModel.templateID];
         NSString *currentID = [NSString stringWithFormat:@"%@", [NSNumber numberWithInteger:self.currentID]];
-        if (![templateID isEqualToString:currentID] ||  !self.templateModel.htmlString) {
+        if (![templateID isEqualToString:currentID] || !self.templateModel.htmlString) {
             [self.webView loadHTMLString:str];
             return;
         }
         str = self.templateModel.htmlString;
-        str = [self.templateManager replaceHtmlCharactersWithString:str iconURL:iconDict[@"url"] title:jsonDict[@"title"] description:jsonDict[@"description"] imageURL:screenshotsDict[@"url"] hyperlinkURL:jsonDict[@"landingURL"]];
+        str = [self.templateManager replaceHtmlCharactersWithString:str
+                                                            iconURL:iconDict[@"url"]
+                                                              title:jsonDict[@"title"]
+                                                        description:jsonDict[@"description"]
+                                                           imageURL:screenshotsDict[@"url"]
+                                                       hyperlinkURL:jsonDict[@"landingURL"]];
     }
-    
+
     [self.webView loadHTMLString:str];
 }
 - (void)native:(IMNative *)native didFailToLoadWithError:(IMRequestStatus *)error {
