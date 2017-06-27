@@ -35,6 +35,11 @@ xcode-select --install
 fastlane ios generate
 ```
 Generate adapter
+### ios format
+```
+fastlane ios format
+```
+Fix code format in dev or check code format in CI
 ### ios release
 ```
 fastlane ios release

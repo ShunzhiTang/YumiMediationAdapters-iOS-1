@@ -64,6 +64,23 @@ platform :ios do
     end
   end
 
+  desc "Fix code format in dev or check code format in CI"
+  lane :format do
+    Dir.chdir("..") do
+      sh 'cp ./dotfiles/.clang-format .'
+
+      if ENV["CI"] then
+        cmd = 'find ./ -path .//Example/Pods -prune -o -name "*.[hm]" -exec clang-format -style=file -output-replacements-xml "{}" \; | grep "<replacement " >/dev/null'
+        system(cmd)
+        raise "code did not match clang-format" unless $?.exitstatus == 1
+        next
+      end
+
+      cmd = 'find ./ -path .//Example/Pods -prune -o -name "*.[hm]" -exec clang-format -i -style=file "{}" \;'
+      sh cmd
+    end
+  end
+
   desc "Publish pod"
   lane :release do
     version = ENV["TRAVIS_TAG"]
