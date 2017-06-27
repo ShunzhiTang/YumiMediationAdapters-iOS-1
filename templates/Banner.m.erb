@@ -20,15 +20,14 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerBannerAdapter:self
-                                                      forProviderID:@"FILL_IN_PROVIDER_ID"
-                                                      requestType:<%=request_type%>];
-
+                                             forProviderID:@"FILL_IN_PROVIDER_ID"
+                                             requestType:<%= request_type %>];
 }
 
 #pragma mark - YumiMediationBannerAdapter
--(id<YumiMediationBannerAdapter>)initWithProvider:(YumiMediationBannerProvider *)provider
+- (id<YumiMediationBannerAdapter>)initWithProvider:(YumiMediationBannerProvider *)provider
                                           delegate:(id<YumiMediationBannerAdapterDelegate>)delegate {
-     self = [super init];
+    self = [super init];
 
     self.delegate = delegate;
     self.provider = provider;
