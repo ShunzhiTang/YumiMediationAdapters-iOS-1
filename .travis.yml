@@ -6,7 +6,7 @@ rvm:
 
 git:
   submodules:
-    - dotfiles
+    - true
 
 cache:
   - cocoapods
@@ -21,7 +21,7 @@ install:
   - pod repo update
 
 script:
-  - sh dotfiles/clang-check.sh 
+  - fastlane format
   - fastlane release
 
 env:
