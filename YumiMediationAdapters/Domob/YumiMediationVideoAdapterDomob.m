@@ -10,7 +10,7 @@
 #import "IndependentVideoManager.h"
 
 @interface YumiMediationVideoAdapterDomob () <IndependentVideoManagerDelegate>
-    
+
 @property (nonatomic) IndependentVideoManager *videoManager;
 @property (nonatomic, assign) BOOL available;
 
@@ -39,7 +39,7 @@
                  delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
     self.delegate = delegate;
     self.provider = provider;
-    
+
     self.videoManager = [[IndependentVideoManager alloc] initWithPublisherID:self.provider.data.key1 andUserID:nil];
     self.videoManager.delegate = self;
     self.videoManager.openLogger = NO;
@@ -50,7 +50,7 @@
 }
 
 - (BOOL)isReady {
-	return self.available;
+    return self.available;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
@@ -72,9 +72,9 @@
 
 - (void)ivManagerDidClosed:(IndependentVideoManager *)manager {
     self.available = NO;
-    
+
     [self.delegate adapter:self didCloseVideoAd:manager];
-    
+
     [self.delegate adapter:self videoAd:manager didReward:nil];
 }
 
