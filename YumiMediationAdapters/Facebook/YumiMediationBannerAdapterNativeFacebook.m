@@ -9,6 +9,7 @@
 #import "YumiMediationBannerAdapterNativeFacebook.h"
 #import "YumiMediationNativeFacebookBannerView.h"
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
+#import <YumiCommon/YumiTool.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
 @interface YumiMediationBannerAdapterNativeFacebook () <YumiMediationBannerAdapter, FBNativeAdDelegate>
@@ -32,10 +33,8 @@
 
 #pragma mark : private method
 - (YumiMediationNativeFacebookBannerView *)bannerViewFromCustomBundle {
-    NSBundle *mainBundle = [NSBundle bundleForClass:[self class]];
-    NSURL *bundleURL = [mainBundle URLForResource:@"YumiMediationFacebook" withExtension:@"bundle"];
-    NSBundle *YumiMediationFacebook = [NSBundle bundleWithURL:bundleURL];
-
+    YumiTool *tool = [YumiTool sharedTool];
+    NSBundle *YumiMediationFacebook = [tool resourcesBundleWithBundleName:@"YumiMediationFacebook"];
     YumiMediationNativeFacebookBannerView *bannerView =
         [YumiMediationFacebook loadNibNamed:@"YumiFacebookBannerNativeAdapter" owner:nil options:nil].firstObject;
     if (bannerView == nil) {
@@ -76,7 +75,7 @@
     if (!self.bannerView) {
         return;
     }
-    
+
     if (self.nativeAd) {
         // disconnect a FBNativeAd with the UIView you used to display the native ads.
         [self.nativeAd unregisterView];
