@@ -9,7 +9,7 @@
 #import "YumiMediationInterstitialAdapterAdMob.h"
 #import <GoogleMobileAds/GoogleMobileAds.h>
 
-@interface YumiMediationInterstitialAdapterAdMob () 
+@interface YumiMediationInterstitialAdapterAdMob ()
 
 @property (nonatomic) GADInterstitial *interstitial;
 
@@ -29,7 +29,7 @@
 
     self.provider = provider;
     self.delegate = delegate;
-    
+
     if (!self.interstitial) {
         self.interstitial = [[GADInterstitial alloc] initWithAdUnitID:self.provider.data.key1];
         self.interstitial.delegate = self;
