@@ -9,7 +9,10 @@
 #import "YumiMediationVideoAdapterAdColony.h"
 #import <AdColony/AdColony.h>
 
-@interface YumiMediationVideoAdapterAdColony () <AdColonyDelegate, AdColonyAdDelegate>
+@interface YumiMediationVideoAdapterAdColony ()
+
+@property (assign) BOOL isReady;
+@property (nonatomic) AdColonyInterstitial *video;
 
 @end
 
@@ -37,46 +40,42 @@
     self.delegate = delegate;
     self.provider = provider;
 
-    [AdColony configureWithAppID:self.provider.data.key1 zoneIDs:@[ self.provider.data.key2 ] delegate:self logging:NO];
+    [AdColony configureWithAppID:provider.data.key1 zoneIDs:@[ provider.data.key2 ] options:nil completion:^(NSArray<AdColonyZone *> * _Nonnull zones) {
+        [[zones firstObject] setReward:^(BOOL success, NSString * _Nonnull name, int amount) {
+            // NOTE: not reward here but in ad close block
+        }];
+    }];
 }
 
 - (void)requestAd {
-    // NOTE: AdColony do not provide any method for requesting ad, it handles the request internally
-}
-
-- (BOOL)isReady {
-    return [AdColony isVirtualCurrencyRewardAvailableForZone:self.provider.data.key2];
+    __weak typeof(self) weakSelf = self;
+    [AdColony requestInterstitialInZone:self.provider.data.key2 options:nil success:^(AdColonyInterstitial * _Nonnull ad) {
+        weakSelf.isReady = YES;
+        weakSelf.video = ad;
+        
+        [weakSelf.delegate adapter:weakSelf didReceiveVideoAd:weakSelf.video];
+        
+        [ad setOpen:^{
+            [weakSelf.delegate adapter:weakSelf didOpenVideoAd:weakSelf.video];
+            
+            [weakSelf.delegate adapter:weakSelf didStartPlayingVideoAd:weakSelf.video];
+        }];
+        [ad setClose:^{
+            weakSelf.isReady = NO;
+            
+            [weakSelf.delegate adapter:weakSelf didCloseVideoAd:weakSelf.video];
+            
+            [weakSelf.delegate adapter:weakSelf videoAd:weakSelf.video didReward:nil];
+        }];
+    } failure:^(AdColonyAdRequestError * _Nonnull error) {
+        weakSelf.isReady = NO;
+        
+        [weakSelf.delegate adapter:weakSelf videoAd:nil didFailToLoad:[error localizedDescription]];
+    }];
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [AdColony playVideoAdForZone:self.provider.data.key2 withDelegate:self withV4VCPrePopup:NO andV4VCPostPopup:NO];
-}
-
-#pragma mark - AdColonyDelegate
-- (void)onAdColonyAdAvailabilityChange:(BOOL)available inZone:(NSString *)zoneID {
-    if (available && [self isZoneIDMatched:zoneID]) {
-        [self.delegate adapter:self didReceiveVideoAd:nil];
-    }
-}
-
-#pragma mark - AdColonyAdDelegate
-- (void)onAdColonyAdStartedInZone:(NSString *)zoneID {
-    if ([self isZoneIDMatched:zoneID]) {
-        [self.delegate adapter:self didStartPlayingVideoAd:nil];
-    }
-}
-
-- (void)onAdColonyAdAttemptFinished:(BOOL)shown inZone:(NSString *)zoneID {
-    [self.delegate adapter:self didCloseVideoAd:nil];
-
-    if (shown && [self isZoneIDMatched:zoneID]) {
-        [self.delegate adapter:self videoAd:nil didReward:nil];
-    }
-}
-
-#pragma mark - Helper method
-- (BOOL)isZoneIDMatched:(NSString *)zoneID {
-    return [zoneID isEqualToString:self.provider.data.key2];
+    [self.video showWithPresentingViewController:rootViewController];
 }
 
 @end
