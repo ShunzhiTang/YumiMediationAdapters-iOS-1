@@ -75,7 +75,7 @@
     NSURL *bundleURL = [mainBundle URLForResource:@"YumiMediationFacebook" withExtension:@"bundle"];
     NSBundle *YumiMediationFacebook = [NSBundle bundleWithURL:bundleURL];
 
-    YumiFaceboolAdapterBannerVC *vc =
+    YumiMediationNativeFacebookBannerView *vc =
         [YumiMediationFacebook loadNibNamed:@"YumiFacebookBannerNativeAdapter" owner:nil options:nil].firstObject;
     if (vc == nil) {
         NSLog(@"facebook 加载素材失败");
