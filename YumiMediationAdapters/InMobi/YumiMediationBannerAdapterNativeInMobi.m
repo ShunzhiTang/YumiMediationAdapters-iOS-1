@@ -10,6 +10,7 @@
 #import "YumiAdsCustomView.h"
 #import "YumiMediationAdapterRegistry.h"
 #import <InMobiSDK/InMobiSDK.h>
+#import <YumiCommon/YumiTool.h>
 #import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
 
 @interface YumiMediationBannerAdapterNativeInMobi () <YumiMediationBannerAdapter, IMNativeDelegate,
@@ -54,11 +55,9 @@
 }
 
 - (NSString *)resourceNamedFromCustomBundle:(NSString *)name {
-    NSBundle *mainBundle = [NSBundle bundleForClass:[self class]];
-    NSURL *bundleURL = [mainBundle URLForResource:@"YumiMediationSDK" withExtension:@"bundle"];
-    NSBundle *YumiMediationSDK = [NSBundle bundleWithURL:bundleURL];
-
+    NSBundle *YumiMediationSDK = [[YumiTool sharedTool] resourcesBundleWithBundleName:@"YumiMediationSDK"];
     NSString *strPath = [YumiMediationSDK pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"html"];
+
     return strPath;
 }
 
@@ -81,7 +80,7 @@
     [self requestBannerViewAdTemplate];
 
     CGSize adSize = isiPad ? CGSizeMake(728, 90) : CGSizeMake(320, 50);
-    CGRect adframe = CGRectMake(0, 0, adSize.width, adSize.height);
+    CGRect adFrame = CGRectMake(0, 0, adSize.width, adSize.height);
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -89,13 +88,15 @@
             return;
         }
         // YumiAdsCustomView init
-        strongSelf.webView = [[YumiAdsCustomView alloc] initYumiAdsCustomViewWith:adframe
+        strongSelf.webView = [[YumiAdsCustomView alloc] initYumiAdsCustomViewWith:adFrame
                                                                         clickType:YumiAdsCustomViewClickTypeOpenSystem
                                                                             isAPI:YES
                                                                          delegate:strongSelf];
         // nativeAD init
-        self.nativeAd = [[IMNative alloc] initWithPlacementId:[self.provider.data.key2 longLongValue] delegate:self];
-        [self.nativeAd load];
+        strongSelf.nativeAd =
+            [[IMNative alloc] initWithPlacementId:[strongSelf.provider.data.key2 longLongValue] delegate:strongSelf];
+
+        [strongSelf.nativeAd load];
     });
 }
 
