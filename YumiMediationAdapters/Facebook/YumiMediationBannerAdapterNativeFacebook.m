@@ -7,11 +7,11 @@
 //
 
 #import "YumiMediationBannerAdapterNativeFacebook.h"
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
-#import <FBAudienceNetwork/FBAudienceNetwork.h>
 #import "YumiMediationNativeFacebookBannerView.h"
+#import <FBAudienceNetwork/FBAudienceNetwork.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
-@interface YumiMediationBannerAdapterNativeFacebook ()<YumiMediationBannerAdapter,FBNativeAdDelegate>
+@interface YumiMediationBannerAdapterNativeFacebook () <YumiMediationBannerAdapter, FBNativeAdDelegate>
 
 @property (nonatomic) YumiMediationNativeFacebookBannerView *bannerView;
 @property (nonatomic) FBNativeAd *nativeAd;
@@ -30,19 +30,19 @@
                                                        requestType:YumiMediationSDKAdRequest];
 }
 
-#pragma mark: private method
+#pragma mark : private method
 - (YumiMediationNativeFacebookBannerView *)bannerViewFromCustomBundle {
     NSBundle *mainBundle = [NSBundle bundleForClass:[self class]];
     NSURL *bundleURL = [mainBundle URLForResource:@"YumiMediationFacebook" withExtension:@"bundle"];
     NSBundle *YumiMediationFacebook = [NSBundle bundleWithURL:bundleURL];
-    
+
     YumiMediationNativeFacebookBannerView *bannerView =
-    [YumiMediationFacebook loadNibNamed:@"YumiFacebookBannerNativeAdapter" owner:nil options:nil].firstObject;
+        [YumiMediationFacebook loadNibNamed:@"YumiFacebookBannerNativeAdapter" owner:nil options:nil].firstObject;
     if (bannerView == nil) {
         NSLog(@"facebook Failed to load material");
     }
-    
-    return  bannerView;
+
+    return bannerView;
 }
 
 #pragma mark - YumiMediationBannerAdapter
@@ -52,7 +52,7 @@
 
     self.delegate = delegate;
     self.provider = provider;
-    
+
     return self;
 }
 
@@ -60,41 +60,41 @@
     FBAdSize adSize = isiPad ? kFBAdSizeHeight90Banner : kFBAdSizeHeight50Banner;
     CGSize viewSize = [[UIScreen mainScreen] bounds].size;
     CGRect adframe = CGRectMake(0, 0, viewSize.width, adSize.size.height);
-    
+
     self.bannerView = [self bannerViewFromCustomBundle];
     self.bannerView.frame = adframe;
-    
-    FBNativeAd  *nativeAd = [[FBNativeAd alloc] initWithPlacementID:self.provider.data.key1];
+
+    FBNativeAd *nativeAd = [[FBNativeAd alloc] initWithPlacementID:self.provider.data.key1];
     nativeAd.delegate = self;
     nativeAd.mediaCachePolicy = FBNativeAdsCachePolicyAll;
-    
+
     [nativeAd loadAd];
 }
 
 #pragma mark - FBNativeAdDelegate
-- (void)nativeAdDidLoad:(FBNativeAd *)nativeAd{
+- (void)nativeAdDidLoad:(FBNativeAd *)nativeAd {
     if (!self.bannerView) {
         return;
     }
     
     if (self.nativeAd) {
-        //disconnect a FBNativeAd with the UIView you used to display the native ads.
+        // disconnect a FBNativeAd with the UIView you used to display the native ads.
         [self.nativeAd unregisterView];
     }
-    
+
     self.nativeAd = nativeAd;
-    //associate a FBNativeAd with the UIView you will use to display the native ads.
+    // associate a FBNativeAd with the UIView you will use to display the native ads.
     [nativeAd registerViewForInteraction:self.bannerView.adUIView
                       withViewController:[self.delegate rootViewControllerForPresentingBannerView]];
-    __weak typeof(self) weakSelf  = self;
+    __weak typeof(self) weakSelf = self;
     [self.nativeAd.icon loadImageAsyncWithBlock:^(UIImage *image) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf) {
-            return ;
+            return;
         }
         strongSelf.bannerView.adIconImageView.image = image;
     }];
-    
+
     // Render native ads data  onto bannerView
     self.bannerView.adTitleLabel.text = self.nativeAd.title;
     self.bannerView.adSocialContextLabel.text = self.nativeAd.socialContext;
@@ -106,15 +106,15 @@
     self.adChoicesView.hidden = NO;
     [self.bannerView.adUIView addSubview:self.adChoicesView];
     [self.adChoicesView updateFrameFromSuperview];
-    
+
     [self.delegate adapter:self didReceiveAd:self.bannerView];
 }
 
-- (void)nativeAd:(FBNativeAd *)nativeAd didFailWithError:(NSError *)error{
+- (void)nativeAd:(FBNativeAd *)nativeAd didFailWithError:(NSError *)error {
     [self.delegate adapter:self didFailToReceiveAd:[error localizedDescription]];
 }
 
-- (void)nativeAdDidClick:(FBNativeAd *)nativeAd{
+- (void)nativeAdDidClick:(FBNativeAd *)nativeAd {
     [self.delegate adapter:self didClick:self.bannerView];
 }
 
