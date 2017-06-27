@@ -7,7 +7,7 @@
 //
 
 #import "YumiMediationVideoAdapterAppLovin.h"
-#import "ALIncentivizedInterstitialAd.h"
+#import <AppLovinSDK/ALIncentivizedInterstitialAd.h>
 
 @interface YumiMediationVideoAdapterAppLovin () <ALAdDisplayDelegate, ALAdVideoPlaybackDelegate, ALAdLoadDelegate>
 
