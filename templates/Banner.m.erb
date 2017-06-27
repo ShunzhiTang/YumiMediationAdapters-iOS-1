@@ -1,0 +1,47 @@
+//
+//  <%=class_name%>.m
+//  Pods
+//
+//  Created by generator on <%=now%>.
+//
+//
+
+#import "<%=class_name%>.h"
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
+
+@interface <%=class_name%> ()<YumiMediationBannerAdapter>
+
+@property (nonatomic, weak) id<YumiMediationBannerAdapterDelegate> delegate;
+@property (nonatomic) YumiMediationBannerProvider *provider;
+
+@end
+
+@implementation <%=class_name%>
+
++ (void)load {
+    [[YumiMediationAdapterRegistry registry] registerBannerAdapter:self
+                                                      forProviderID:@"FILL_IN_PROVIDER_ID"
+                                                      requestType:<%=request_type%>];
+
+}
+
+#pragma mark - YumiMediationBannerAdapter
+-(id<YumiMediationBannerAdapter>)initWithProvider:(YumiMediationBannerProvider *)provider
+                                          delegate:(id<YumiMediationBannerAdapterDelegate>)delegate {
+     self = [super init];
+
+    self.delegate = delegate;
+    self.provider = provider;
+
+ 	// TODO: setup code
+ 	
+	return self;
+}
+
+- (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
+	// TODO: request ad
+}
+
+// TODO: implement third party sdk delegate and delegate to mediation sdk
+
+@end
