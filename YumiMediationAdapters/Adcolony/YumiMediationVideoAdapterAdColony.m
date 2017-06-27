@@ -40,38 +40,44 @@
     self.delegate = delegate;
     self.provider = provider;
 
-    [AdColony configureWithAppID:provider.data.key1 zoneIDs:@[ provider.data.key2 ] options:nil completion:^(NSArray<AdColonyZone *> * _Nonnull zones) {
-        [[zones firstObject] setReward:^(BOOL success, NSString * _Nonnull name, int amount) {
-            // NOTE: not reward here but in ad close block
-        }];
-    }];
+    [AdColony configureWithAppID:provider.data.key1
+                         zoneIDs:@[ provider.data.key2 ]
+                         options:nil
+                      completion:^(NSArray<AdColonyZone *> *_Nonnull zones) {
+                          [[zones firstObject] setReward:^(BOOL success, NSString *_Nonnull name, int amount){
+                              // NOTE: not reward here but in ad close block
+                          }];
+                      }];
 }
 
 - (void)requestAd {
     __weak typeof(self) weakSelf = self;
-    [AdColony requestInterstitialInZone:self.provider.data.key2 options:nil success:^(AdColonyInterstitial * _Nonnull ad) {
-        weakSelf.isReady = YES;
-        weakSelf.video = ad;
-        
-        [weakSelf.delegate adapter:weakSelf didReceiveVideoAd:weakSelf.video];
-        
-        [ad setOpen:^{
-            [weakSelf.delegate adapter:weakSelf didOpenVideoAd:weakSelf.video];
-            
-            [weakSelf.delegate adapter:weakSelf didStartPlayingVideoAd:weakSelf.video];
-        }];
-        [ad setClose:^{
+    [AdColony requestInterstitialInZone:self.provider.data.key2
+        options:nil
+        success:^(AdColonyInterstitial *_Nonnull ad) {
+            weakSelf.isReady = YES;
+            weakSelf.video = ad;
+
+            [weakSelf.delegate adapter:weakSelf didReceiveVideoAd:weakSelf.video];
+
+            [ad setOpen:^{
+                [weakSelf.delegate adapter:weakSelf didOpenVideoAd:weakSelf.video];
+
+                [weakSelf.delegate adapter:weakSelf didStartPlayingVideoAd:weakSelf.video];
+            }];
+            [ad setClose:^{
+                weakSelf.isReady = NO;
+
+                [weakSelf.delegate adapter:weakSelf didCloseVideoAd:weakSelf.video];
+
+                [weakSelf.delegate adapter:weakSelf videoAd:weakSelf.video didReward:nil];
+            }];
+        }
+        failure:^(AdColonyAdRequestError *_Nonnull error) {
             weakSelf.isReady = NO;
-            
-            [weakSelf.delegate adapter:weakSelf didCloseVideoAd:weakSelf.video];
-            
-            [weakSelf.delegate adapter:weakSelf videoAd:weakSelf.video didReward:nil];
+
+            [weakSelf.delegate adapter:weakSelf videoAd:nil didFailToLoad:[error localizedDescription]];
         }];
-    } failure:^(AdColonyAdRequestError * _Nonnull error) {
-        weakSelf.isReady = NO;
-        
-        [weakSelf.delegate adapter:weakSelf videoAd:nil didFailToLoad:[error localizedDescription]];
-    }];
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
