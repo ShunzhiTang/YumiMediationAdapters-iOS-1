@@ -21,11 +21,10 @@ platform :ios do
 
   end
 
-  desc "Generate adapter"
+  desc "Generate sdk adapter"
   lane :generate do |options|
     adtype = options[:adtype]
     name = options[:name]
-    request_type = options[:request_type]
 
     # validation
     raise "name should be specified" if name.nil? || name.empty?
@@ -33,16 +32,12 @@ platform :ios do
     valid_adtypes = ["Banner", "Interstitial", "Video", "Native", "Splash"]
     raise "adtype #{adtype} is not one of #{valid_adtypes}" unless valid_adtypes.include?(adtype)
 
-    valid_request_types = ["SDK", "API"]
-    raise "request type #{request_type} is not one of #{valid_request_types}" unless valid_request_types.include?(request_type)
-
     fastlane_require 'erb'
     fastlane_require 'ostruct'
     fastlane_require 'fileutils'
     Dir.chdir("..") do
       # generate adapter skeleton 
       class_name = "YumiMediation#{adtype}Adapter#{name}"
-      request_type = "YumiMediation#{request_type}AdRequest"
       now = Time.now.strftime("%d/%m/%Y")
 
       h = ERB.new(File.read("./templates/#{adtype}.h.erb")).result(OpenStruct.new().instance_eval { binding })

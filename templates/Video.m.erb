@@ -16,8 +16,8 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerVideoAdapter:[self sharedInstance]
-                                                      forProvider:@"FILL_IN_PROVIDER_ID"
-                                                      requestType:<%=request_type%>];
+                                                      forProvider:kYumiMediationAdapterID<%=name%>
+                                                      requestType:YumiMediationSDKAdRequest];
 }
 
 + (id<YumiMediationVideoAdapter>)sharedInstance {

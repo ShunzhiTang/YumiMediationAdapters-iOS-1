@@ -20,8 +20,8 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerBannerAdapter:self
-                                             forProviderID:@"FILL_IN_PROVIDER_ID"
-                                             requestType:<%= request_type %>];
+                                             forProviderID:kYumiMediationAdapterID<%=name%>
+                                             requestType:YumiMediationSDKAdRequest];
 }
 
 #pragma mark - YumiMediationBannerAdapter
