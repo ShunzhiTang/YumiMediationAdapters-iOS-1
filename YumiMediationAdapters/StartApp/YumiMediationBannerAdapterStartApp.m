@@ -7,10 +7,10 @@
 //
 
 #import "YumiMediationBannerAdapterStartApp.h"
-#import "YumiMediationAdapterRegistry.h"
 #import <StartApp/STABannerSize.h>
 #import <StartApp/STABannerView.h>
 #import <StartApp/StartApp.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
 @interface YumiMediationBannerAdapterStartApp () <STABannerDelegateProtocol, YumiMediationBannerAdapter>
 
@@ -24,7 +24,7 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerBannerAdapter:self
-                                                     forProviderID:@"10016"
+                                                     forProviderID:kYumiMediationAdapterIDStartApp
                                                        requestType:YumiMediationSDKAdRequest];
 }
 

@@ -7,7 +7,7 @@
 //
 #import "YumiMediationBannerAdapterGDT.h"
 #import "GDTMobBannerView.h"
-#import "YumiMediationAdapterRegistry.h"
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
 @interface YumiMediationBannerAdapterGDT () <GDTMobBannerViewDelegate, YumiMediationBannerAdapter>
 
@@ -21,7 +21,7 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerBannerAdapter:self
-                                                     forProviderID:@"10026"
+                                                     forProviderID:kYumiMediationAdapterIDGDT
                                                        requestType:YumiMediationSDKAdRequest];
 }
 

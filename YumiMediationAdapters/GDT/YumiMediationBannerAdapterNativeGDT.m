@@ -30,7 +30,7 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerBannerAdapter:self
-                                                     forProviderID:@"10032"
+                                                     forProviderID:kYumiMediationAdapterIDGDTNative
                                                        requestType:YumiMediationSDKAdRequest];
 }
 

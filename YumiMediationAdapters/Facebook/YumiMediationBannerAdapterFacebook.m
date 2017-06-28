@@ -7,8 +7,8 @@
 //
 
 #import "YumiMediationBannerAdapterFacebook.h"
-#import "YumiMediationAdapterRegistry.h"
 #import <FBAudienceNetwork/FBAdView.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
 @interface YumiMediationBannerAdapterFacebook () <FBAdViewDelegate, YumiMediationBannerAdapter>
 
@@ -22,7 +22,7 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerBannerAdapter:self
-                                                     forProviderID:@"10007"
+                                                     forProviderID:kYumiMediationAdapterIDFacebook
                                                        requestType:YumiMediationSDKAdRequest];
 }
 

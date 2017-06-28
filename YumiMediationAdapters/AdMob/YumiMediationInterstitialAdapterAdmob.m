@@ -19,7 +19,7 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
-                                                           forProviderID:@"10002"
+                                                           forProviderID:kYumiMediationAdapterIDAdMob
                                                              requestType:YumiMediationSDKAdRequest];
 }
 

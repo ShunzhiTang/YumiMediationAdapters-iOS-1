@@ -7,8 +7,8 @@
 //
 
 #import "YumiMediationBannerAdapterAdMob.h"
-#import "YumiMediationAdapterRegistry.h"
 #import <GoogleMobileAds/GoogleMobileAds.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
 @interface YumiMediationBannerAdapterAdMob () <GADBannerViewDelegate, YumiMediationBannerAdapter>
 
@@ -22,7 +22,7 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerBannerAdapter:self
-                                                     forProviderID:@"10002"
+                                                     forProviderID:kYumiMediationAdapterIDAdMob
                                                        requestType:YumiMediationSDKAdRequest];
 }
 
