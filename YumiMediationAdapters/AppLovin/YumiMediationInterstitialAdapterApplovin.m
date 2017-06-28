@@ -9,7 +9,6 @@
 #import "YumiMediationInterstitialAdapterApplovin.h"
 #import <AppLovinSDK/ALInterstitialAd.h>
 
-
 @interface YumiMediationInterstitialAdapterApplovin () <ALAdLoadDelegate, ALAdDisplayDelegate>
 
 @property (nonatomic) ALInterstitialAd *interstitial;
@@ -34,9 +33,8 @@
     self.provider = provider;
     self.delegate = delegate;
 
-    
     self.sdk = [ALSdk sharedWithKey:self.provider.data.key1];
-    
+
     self.interstitial = [[ALInterstitialAd alloc] initWithSdk:self.sdk];
     self.interstitial.adLoadDelegate = self;
     self.interstitial.adDisplayDelegate = self;
@@ -53,7 +51,7 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [self.interstitial showOver: [UIApplication sharedApplication].keyWindow andRender: self.ad];
+    [self.interstitial showOver:[UIApplication sharedApplication].keyWindow andRender:self.ad];
 }
 
 #pragma mark - Ad Load Delegate
@@ -63,8 +61,10 @@
     [self.delegate adapter:self didReceiveInterstitialAd:ad];
 }
 
-- (void) adService:(nonnull ALAdService *)adService didFailToLoadAdWithError:(int)code {
-    [self.delegate adapter:self interstitialAd:nil didFailToReceive:[NSString stringWithFormat:@"applovin error code:%d",code]];
+- (void)adService:(nonnull ALAdService *)adService didFailToLoadAdWithError:(int)code {
+    [self.delegate adapter:self
+            interstitialAd:nil
+          didFailToReceive:[NSString stringWithFormat:@"applovin error code:%d", code]];
 }
 
 #pragma mark - Ad Display Delegate
