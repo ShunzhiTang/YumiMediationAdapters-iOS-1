@@ -89,7 +89,7 @@
         }
         // YumiAdsCustomView init
         strongSelf.webView = [[YumiAdsCustomView alloc] initYumiAdsCustomViewWith:adFrame
-                                                                        clickType:YumiAdsCustomViewClickTypeOpenSystem
+                                                                        clickType:YumiAdsClickTypeOpenSystem
                                                                             isAPI:YES
                                                                          delegate:strongSelf];
         // nativeAD init
@@ -116,8 +116,8 @@
     NSDictionary *iconDict = jsonDict[@"icon"];
     NSDictionary *screenshotsDict = jsonDict[@"screenshots"];
 
-    if (!iconDict || !screenshotsDict) {
-        [self.delegate adapter:self didFailToReceiveAd:@"GDT no ad"];
+    if (!iconDict) {
+        [self.delegate adapter:self didFailToReceiveAd:@"inMobi no ad"];
         return;
     }
 
@@ -175,6 +175,9 @@
 }
 - (void)didClickOnYumiAdsCustomViewWithPoint:(CGPoint)point {
     [self.delegate adapter:self didClick:self.webView on:point withTemplateID:(int)self.currentID];
+}
+- (UIViewController *)rootViewControllerForPresentYumiAdsCustomView{
+   return  [self.delegate rootViewControllerForPresentingBannerView];
 }
 
 @end
