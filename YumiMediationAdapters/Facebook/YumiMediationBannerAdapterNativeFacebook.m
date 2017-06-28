@@ -28,7 +28,7 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerBannerAdapter:self
-                                                     forProviderID:@"10049"
+                                                     forProviderID:kYumiMediationAdapterIDFacebookNative
                                                        requestType:YumiMediationSDKAdRequest];
 }
 
