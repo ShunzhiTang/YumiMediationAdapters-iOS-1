@@ -6,7 +6,7 @@
 //
 //
 
-#import "YumiFaceboolAdapterBannerVC.h"
+#import "YumiMediationNativeFacebookBannerView.h"
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
 #import <YumiMediationSDK/AdsYuMIAdNetworkAdapter.h>
 
@@ -15,7 +15,7 @@
     NSTimer *timer;
     BOOL isReading;
 }
-@property (strong, nonatomic) YumiFaceboolAdapterBannerVC *bannerVC;
+@property (strong, nonatomic) YumiMediationNativeFacebookBannerView *bannerVC;
 @property (strong, nonatomic) FBNativeAd *nativeAd;
 @property (strong, nonatomic) UIView *AdUIView;
 @property (strong, nonatomic) UIImageView *adIconImageView;

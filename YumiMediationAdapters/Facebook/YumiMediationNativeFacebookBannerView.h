@@ -1,5 +1,5 @@
 //
-//  YumiFaceboolAdapterBannerVC.h
+//  YumiMediationNativeFacebookBannerView.h
 //  Pods
 //
 //  Created by 甲丁乙_ on 2017/2/22.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface YumiFaceboolAdapterBannerVC : UIView
+@interface YumiMediationNativeFacebookBannerView : UIView
 
 @property (strong, nonatomic) IBOutlet UIImageView *adIconImageView;
 @property (strong, nonatomic) IBOutlet UILabel *adTitleLabel;

@@ -1,18 +1,18 @@
 //
-//  YumiFaceboolAdapterBannerVC.m
+//  YumiMediationNativeFacebookBannerView.m
 //  Pods
 //
 //  Created by 甲丁乙_ on 2017/2/22.
 //
 //
 
-#import "YumiFaceboolAdapterBannerVC.h"
+#import "YumiMediationNativeFacebookBannerView.h"
 
-@interface YumiFaceboolAdapterBannerVC ()
+@interface YumiMediationNativeFacebookBannerView ()
 
 @end
 
-@implementation YumiFaceboolAdapterBannerVC
+@implementation YumiMediationNativeFacebookBannerView
 
 /*
 #pragma mark - Navigation
