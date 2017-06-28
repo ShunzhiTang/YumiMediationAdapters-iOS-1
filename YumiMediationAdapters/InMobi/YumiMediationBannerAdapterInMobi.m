@@ -7,7 +7,7 @@
 //
 
 #import "YumiMediationBannerAdapterInMobi.h"
-#import "YumiMediationAdapterRegistry.h"
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <InMobiSDK/InMobiSDK.h>
 
 @interface YumiMediationBannerAdapterInMobi () <IMBannerDelegate, YumiMediationBannerAdapter>
@@ -22,7 +22,7 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerBannerAdapter:self
-                                                     forProviderID:@"10010"
+                                                     forProviderID:kYumiMediationAdapterIDInMobi
                                                        requestType:YumiMediationSDKAdRequest];
 }
 
