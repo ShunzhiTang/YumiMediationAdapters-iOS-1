@@ -8,7 +8,7 @@
 
 #import "YumiMediationBannerAdapterNativeInMobi.h"
 #import "YumiAdsCustomView.h"
-#import "YumiMediationAdapterRegistry.h"
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <InMobiSDK/InMobiSDK.h>
 #import <YumiCommon/YumiTool.h>
 #import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
@@ -30,7 +30,7 @@
 @implementation YumiMediationBannerAdapterNativeInMobi
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerBannerAdapter:self
-                                                     forProviderID:@"10033"
+                                                     forProviderID:kYumiMediationAdapterIDInMobiNative
                                                        requestType:YumiMediationSDKAdRequest];
 }
 #pragma mark :private method
