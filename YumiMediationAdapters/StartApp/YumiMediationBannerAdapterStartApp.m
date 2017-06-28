@@ -7,10 +7,10 @@
 //
 
 #import "YumiMediationBannerAdapterStartApp.h"
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <StartApp/STABannerSize.h>
 #import <StartApp/STABannerView.h>
 #import <StartApp/StartApp.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
 @interface YumiMediationBannerAdapterStartApp () <STABannerDelegateProtocol, YumiMediationBannerAdapter>
 

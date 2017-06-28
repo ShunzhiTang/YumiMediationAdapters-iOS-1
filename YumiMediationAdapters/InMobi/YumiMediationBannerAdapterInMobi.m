@@ -7,8 +7,8 @@
 //
 
 #import "YumiMediationBannerAdapterInMobi.h"
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <InMobiSDK/InMobiSDK.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
 @interface YumiMediationBannerAdapterInMobi () <IMBannerDelegate, YumiMediationBannerAdapter>
 

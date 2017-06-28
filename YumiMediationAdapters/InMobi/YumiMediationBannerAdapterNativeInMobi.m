@@ -8,10 +8,10 @@
 
 #import "YumiMediationBannerAdapterNativeInMobi.h"
 #import "YumiAdsCustomView.h"
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <InMobiSDK/InMobiSDK.h>
 #import <YumiCommon/YumiTool.h>
 #import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
 @interface YumiMediationBannerAdapterNativeInMobi () <YumiMediationBannerAdapter, IMNativeDelegate,
                                                       YumiAdsCustomViewDelegate>
@@ -176,8 +176,8 @@
 - (void)didClickOnYumiAdsCustomViewWithPoint:(CGPoint)point {
     [self.delegate adapter:self didClick:self.webView on:point withTemplateID:(int)self.currentID];
 }
-- (UIViewController *)rootViewControllerForPresentYumiAdsCustomView{
-   return  [self.delegate rootViewControllerForPresentingBannerView];
+- (UIViewController *)rootViewControllerForPresentYumiAdsCustomView {
+    return [self.delegate rootViewControllerForPresentingBannerView];
 }
 
 @end

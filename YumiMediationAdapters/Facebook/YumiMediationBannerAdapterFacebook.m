@@ -7,8 +7,8 @@
 //
 
 #import "YumiMediationBannerAdapterFacebook.h"
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <FBAudienceNetwork/FBAdView.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
 @interface YumiMediationBannerAdapterFacebook () <FBAdViewDelegate, YumiMediationBannerAdapter>
 
