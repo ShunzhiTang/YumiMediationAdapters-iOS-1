@@ -7,9 +7,9 @@
 //
 
 #import "YumiMediationBannerAdapterBaidu.h"
-#import "YumiMediationAdapterRegistry.h"
 #import <BaiduMobAdSDK/BaiduMobAdSetting.h>
 #import <BaiduMobAdSDK/BaiduMobAdView.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
 @interface YumiMediationBannerAdapterBaidu () <BaiduMobAdViewDelegate, YumiMediationBannerAdapter>
 
@@ -23,7 +23,7 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerBannerAdapter:self
-                                                     forProviderID:@"10022"
+                                                     forProviderID:kYumiMediationAdapterIDBaidu
                                                        requestType:YumiMediationSDKAdRequest];
 }
 
