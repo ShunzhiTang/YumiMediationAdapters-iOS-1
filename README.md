@@ -6,7 +6,7 @@
 
 | Name        | Version | Type    | Key1        | Key2         | Key3 | SmartAdSize |
 | ----------- | ------- | ------- | ----------- | ------------ | :--: | ----------- |
-| AdMob       | 7.20.0  | B+I+N   | adUnitID    |              |      | ❌           |
+| AdMob       | 7.20.0  | B+I+N   | adUnitID    |              |      | ✔️          |
 | Applovin    | 4.2.1   | V       | sdkKey      |              |      | ❌           |
 | Baidu       | 4.5.0   | B+I     | publisherId | AdUnitTag    |      | ❌           |
 | Chart boost | 6.6.3   | I       | appId       | appSignature |      | ❌           |
