@@ -33,7 +33,7 @@ xcode-select --install
 ```
 fastlane ios generate
 ```
-Generate adapter
+Generate sdk adapter
 ### ios format
 ```
 fastlane ios format
