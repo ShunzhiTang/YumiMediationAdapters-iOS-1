@@ -40,7 +40,9 @@
 }
 
 - (void)requestAd {
-    [self.interstitial load];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.interstitial load];
+    });
 }
 
 - (BOOL)isReady {
@@ -57,7 +59,7 @@
 }
 
 - (void)interstitialSuccessToLoadAd:(BaiduMobAdInterstitial *)interstitial {
-    [self.delegate adapter:self didClickInterstitialAd:interstitial];
+    [self.delegate adapter:self didReceiveInterstitialAd:interstitial];
 }
 
 - (void)interstitialFailToLoadAd:(BaiduMobAdInterstitial *)interstitial {
@@ -68,21 +70,12 @@
     [self.delegate adapter:self willPresentScreen:interstitial];
 }
 
-- (void)interstitialSuccessPresentScreen:(BaiduMobAdInterstitial *)interstitial {
-}
-- (void)interstitialFailPresentScreen:(BaiduMobAdInterstitial *)interstitial withError:(BaiduMobFailReason) reason {
-}
-
 - (void)interstitialDidAdClicked:(BaiduMobAdInterstitial *)interstitial {
     [self.delegate adapter:self didClickInterstitialAd:interstitial];
 }
 
 - (void)interstitialDidDismissScreen:(BaiduMobAdInterstitial *)interstitial {
-}
-
-- (void)interstitialDidDismissLandingPage:(BaiduMobAdInterstitial *)interstitial {
     [self.delegate adapter:self willDismissScreen:interstitial];
 }
-
 
 @end
