@@ -2,7 +2,7 @@
 //  YumiMediationInterstitialAdapterAdMob.h
 //  Pods
 //
-//  Created by 魏晓磊 on 17/6/21.
+//  Created by generator on 29/06/2017.
 //
 //
 

@@ -2,14 +2,14 @@
 //  YumiMediationInterstitialAdapterAdMob.m
 //  Pods
 //
-//  Created by 魏晓磊 on 17/6/21.
+//  Created by generator on 29/06/2017.
 //
 //
 
 #import "YumiMediationInterstitialAdapterAdMob.h"
 #import <GoogleMobileAds/GoogleMobileAds.h>
 
-@interface YumiMediationInterstitialAdapterAdMob ()
+@interface YumiMediationInterstitialAdapterAdMob () <GADInterstitialDelegate>
 
 @property (nonatomic) GADInterstitial *interstitial;
 
@@ -23,6 +23,7 @@
                                                              requestType:YumiMediationSDKAdRequest];
 }
 
+#pragma mark - YumiMediationInterstitialAdapter
 - (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
                                                 delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
     self = [super init];
@@ -30,10 +31,8 @@
     self.provider = provider;
     self.delegate = delegate;
 
-    if (!self.interstitial) {
-        self.interstitial = [[GADInterstitial alloc] initWithAdUnitID:self.provider.data.key1];
-        self.interstitial.delegate = self;
-    }
+    self.interstitial = [[GADInterstitial alloc] initWithAdUnitID:self.provider.data.key1];
+    self.interstitial.delegate = self;
 
     return self;
 }
