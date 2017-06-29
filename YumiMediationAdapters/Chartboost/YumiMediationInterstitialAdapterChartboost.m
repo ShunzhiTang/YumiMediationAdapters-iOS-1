@@ -47,23 +47,23 @@
 }
 
 #pragma mark - ChartboostDelegate
-- (void)didCacheInterstitial:(NSString *)location {
+- (void)didCacheInterstitial:(CBLocation)location {
     [self.delegate adapter:self didReceiveInterstitialAd:nil];
 }
 
-- (void)didFailToLoadInterstitial:(NSString *)location withError:(CBLoadError)error {
+- (void)didFailToLoadInterstitial:(CBLocation)location withError:(CBLoadError)error {
     [self.delegate adapter:self
             interstitialAd:nil
           didFailToReceive:[NSString stringWithFormat:@"Chartboost error code: %d", error]];
 }
 
-- (BOOL)shouldDisplayInterstitial:(NSString *)location {
+- (BOOL)shouldDisplayInterstitial:(CBLocation)location {
     [self.delegate adapter:self willPresentScreen:nil];
 
     return YES;
 }
 
-- (void)didDismissInterstitial:(NSString *)location {
+- (void)didDismissInterstitial:(CBLocation)location {
     [self.delegate adapter:self willDismissScreen:nil];
 }
 
