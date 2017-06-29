@@ -15,7 +15,6 @@
 
 @end
 
-
 @implementation YumiMediationInterstitialAdapterAdMob
 
 + (void)load {
@@ -24,18 +23,17 @@
                                                              requestType:YumiMediationSDKAdRequest];
 }
 
-
 #pragma mark - YumiMediationInterstitialAdapter
 - (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
                                                 delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
     self = [super init];
-    
+
     self.provider = provider;
     self.delegate = delegate;
-    
+
     self.interstitial = [[GADInterstitial alloc] initWithAdUnitID:self.provider.data.key1];
     self.interstitial.delegate = self;
-    
+
     return self;
 }
 
