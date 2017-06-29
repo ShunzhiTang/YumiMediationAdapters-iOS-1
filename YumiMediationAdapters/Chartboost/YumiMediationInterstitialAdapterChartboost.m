@@ -54,7 +54,7 @@
 - (void)didFailToLoadInterstitial:(CBLocation)location withError:(CBLoadError)error {
     [self.delegate adapter:self
             interstitialAd:nil
-          didFailToReceive:[NSString stringWithFormat:@"Chartboost error code: %d", error]];
+          didFailToReceive:[NSString stringWithFormat:@"Chartboost error code: %@", @(error)]];
 }
 
 - (BOOL)shouldDisplayInterstitial:(CBLocation)location {
