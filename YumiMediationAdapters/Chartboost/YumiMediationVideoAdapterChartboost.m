@@ -52,9 +52,7 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [Chartboost showRewardedVideo:CBLocationHomeScreen];
-    });
+    [Chartboost showRewardedVideo:CBLocationHomeScreen];
 }
 
 #pragma mark - ChartboostDelegate
