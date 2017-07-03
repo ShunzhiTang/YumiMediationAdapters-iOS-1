@@ -34,7 +34,8 @@
 ```sh
 # generate adapter template
 $ fastlane generate name:Chartboost adtype:Video
-$ fastlane generate name:GDT adtype:Banner
+# generate api adapter template
+$ fastlane generate name:Alimama
 
 # go back to YumiMediationSDK-iOS workspace and start integrating
 ```
