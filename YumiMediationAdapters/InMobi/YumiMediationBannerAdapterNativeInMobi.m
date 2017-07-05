@@ -170,11 +170,13 @@
 - (void)yumiAdsCustomView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
     [self.delegate adapter:self didFailToReceiveAd:[error localizedDescription]];
 }
-- (void)didClickOnYumiAdsCustomView:(UIWebView *)webView {
-    [self.delegate adapter:self didClick:self.webView on:CGPointZero withTemplateID:(int)self.currentID];
-}
+
 - (void)didClickOnYumiAdsCustomViewWithPoint:(CGPoint)point {
     [self.delegate adapter:self didClick:self.webView on:point withTemplateID:(int)self.currentID];
+}
+
+- (void)didClickOnYumiAdsCustomView:(UIWebView *)webView point:(CGPoint)point {
+    [self.delegate adapter:self didClick:self.webView on:CGPointZero withTemplateID:(int)self.currentID];
 }
 - (UIViewController *)rootViewControllerForPresentYumiAdsCustomView {
     return [self.delegate rootViewControllerForPresentingBannerView];
