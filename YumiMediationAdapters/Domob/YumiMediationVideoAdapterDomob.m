@@ -68,6 +68,8 @@
 
 - (void)ivManagerWillPresent:(IndependentVideoManager *)manager {
     [self.delegate adapter:self didOpenVideoAd:manager];
+
+    [self.delegate adapter:self didStartPlayingVideoAd:manager];
 }
 
 - (void)ivManagerDidClosed:(IndependentVideoManager *)manager {

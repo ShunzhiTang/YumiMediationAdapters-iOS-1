@@ -42,7 +42,7 @@
     return [Chartboost hasInterstitial:CBLocationHomeScreen];
 }
 
-- (void)presentFromRootViewController:(UIViewController *)rootViewController {
+- (void)present {
     [Chartboost showInterstitial:CBLocationHomeScreen];
 }
 

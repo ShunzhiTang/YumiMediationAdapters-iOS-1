@@ -46,8 +46,8 @@
     return [self.interstitial isReady];
 }
 
-- (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [self.interstitial presentFromRootViewController:rootViewController];
+- (void)present {
+    [self.interstitial presentFromRootViewController:[self.delegate rootViewControllerForPresentingModalView]];
 }
 
 #pragma mark - GDTMobInterstitialDelegate

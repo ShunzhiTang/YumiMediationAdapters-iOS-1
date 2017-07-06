@@ -62,6 +62,8 @@
 }
 
 - (void)unityAdsDidStart:(NSString *)placementId {
+    [self.delegate adapter:self didOpenVideoAd:nil];
+
     [self.delegate adapter:self didStartPlayingVideoAd:nil];
 }
 

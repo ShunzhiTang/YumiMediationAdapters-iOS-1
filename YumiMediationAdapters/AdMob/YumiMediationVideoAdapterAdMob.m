@@ -54,7 +54,7 @@
 
 #pragma mark - GADRewardBasedVideoAdDelegate
 - (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd didRewardUserWithReward:(GADAdReward *)reward {
-    // NOTE: reward user in didClose delegate
+    [self.delegate adapter:self videoAd:rewardBasedVideoAd didReward:nil];
 }
 
 - (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd didFailToLoadWithError:(NSError *)error {
@@ -75,9 +75,6 @@
 
 - (void)rewardBasedVideoAdDidClose:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
     [self.delegate adapter:self didCloseVideoAd:rewardBasedVideoAd];
-
-    // NOTE: in case didRewardUserWithReward not executed
-    [self.delegate adapter:self videoAd:rewardBasedVideoAd didReward:nil];
 }
 
 @end

@@ -54,7 +54,7 @@
         strongSelf.bannerView =
             [[STABannerView alloc] initWithSize:staAdSize
                                      autoOrigin:STAAdOrigin_Bottom
-                                       withView:[strongSelf.delegate rootViewControllerForPresentingBannerView].view
+                                       withView:[strongSelf.delegate rootViewControllerForPresentingModalView].view
                                    withDelegate:strongSelf];
     });
 }

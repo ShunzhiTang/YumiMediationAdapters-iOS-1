@@ -62,6 +62,8 @@
 
 #pragma mark - VungleSDKDelegate
 - (void)vungleSDKwillShowAd {
+    [self.delegate adapter:self didOpenVideoAd:nil];
+
     [self.delegate adapter:self didStartPlayingVideoAd:nil];
 }
 

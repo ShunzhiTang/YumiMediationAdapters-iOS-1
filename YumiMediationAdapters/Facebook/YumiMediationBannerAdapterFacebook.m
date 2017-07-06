@@ -50,7 +50,7 @@
         strongSelf.bannerView =
             [[FBAdView alloc] initWithPlacementID:strongSelf.provider.data.key1
                                            adSize:adSize
-                               rootViewController:[strongSelf.delegate rootViewControllerForPresentingBannerView]];
+                               rootViewController:[strongSelf.delegate rootViewControllerForPresentingModalView]];
         strongSelf.bannerView.delegate = strongSelf;
         strongSelf.bannerView.frame = adframe;
 
