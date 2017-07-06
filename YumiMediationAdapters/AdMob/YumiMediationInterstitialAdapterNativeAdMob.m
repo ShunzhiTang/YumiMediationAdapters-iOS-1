@@ -63,6 +63,7 @@
 
 - (void)requestAd {
 
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
 
         GADNativeAdViewAdOptions *option = [[GADNativeAdViewAdOptions alloc] init];
@@ -70,15 +71,16 @@
         NSMutableArray *adTypes = [[NSMutableArray alloc] init];
         [adTypes addObject:kGADAdLoaderAdTypeNativeAppInstall];
 
-        self.adLoader = [[GADAdLoader alloc] initWithAdUnitID:self.provider.data.key1
-                                           rootViewController:[self.delegate rootViewControllerForPresentingModalView]
-                                                      adTypes:adTypes
-                                                      options:@[ option ]];
+        weakSelf.adLoader =
+            [[GADAdLoader alloc] initWithAdUnitID:weakSelf.provider.data.key1
+                               rootViewController:[weakSelf.delegate rootViewControllerForPresentingModalView]
+                                          adTypes:adTypes
+                                          options:@[ option ]];
 
         GADRequest *request = [GADRequest request];
 
-        self.adLoader.delegate = self;
-        [self.adLoader loadRequest:request];
+        weakSelf.adLoader.delegate = weakSelf;
+        [weakSelf.adLoader loadRequest:request];
     });
 }
 
