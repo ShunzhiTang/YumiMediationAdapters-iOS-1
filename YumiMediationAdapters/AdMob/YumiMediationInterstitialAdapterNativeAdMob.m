@@ -56,7 +56,7 @@
     return self.isAdReady;
 }
 
-- (void)presentFromRootViewController:(UIViewController *)rootViewController {
+- (void)present{
     
 }
 
