@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
-@interface YumiMediationInterstitialAdapterNativeAdMob : NSObject
+@interface YumiMediationInterstitialAdapterNativeAdMob : NSObject <YumiMediationInterstitialAdapter>
+
+@property (nonatomic, weak) id<YumiMediationInterstitialAdapterDelegate> delegate;
+@property (nonatomic) YumiMediationInterstitialProvider *provider;
 
 @end
