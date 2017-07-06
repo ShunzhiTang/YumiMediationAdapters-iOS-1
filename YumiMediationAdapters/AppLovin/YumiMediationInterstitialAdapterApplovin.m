@@ -50,7 +50,7 @@
     return [ALInterstitialAd isReadyForDisplay];
 }
 
-- (void)presentFromRootViewController:(UIViewController *)rootViewController {
+- (void)present {
     [self.interstitial showOver:[UIApplication sharedApplication].keyWindow andRender:self.ad];
 }
 

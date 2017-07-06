@@ -42,8 +42,9 @@
 	return YES;
 }
 
-- (void)presentFromRootViewController:(UIViewController *)rootViewController {
-	// TODO: present interstitial ad
+- (void)present {
+  UIViewController *rootViewController = [self.delegate rootViewControllerForPresentingModalView];
+	// TODO: present interstitial ad with rootViewController
 }
 
 // TODO: implement third party sdk delegate and delegate to mediation sdk

@@ -47,7 +47,7 @@
     return [self.interstitial isReady];
 }
 
-- (void)presentFromRootViewController:(UIViewController *)rootViewController {
+- (void)present {
     [self.interstitial showAd];
 }
 

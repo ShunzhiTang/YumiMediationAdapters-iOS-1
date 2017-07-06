@@ -48,8 +48,8 @@
     return [self.interstitial isReady];
 }
 
-- (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [self.interstitial showFromViewController:rootViewController];
+- (void)present {
+    [self.interstitial showFromViewController:[self.delegate rootViewControllerForPresentingModalView]];
 }
 
 #pragma mark - IMInterstitialDelegate

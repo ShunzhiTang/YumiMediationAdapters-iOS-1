@@ -43,8 +43,8 @@
     return [UnityAds isReady:self.provider.data.key2];
 }
 
-- (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [UnityAds show:rootViewController placementId:self.provider.data.key2];
+- (void)present {
+    [UnityAds show:[self.delegate rootViewControllerForPresentingModalView] placementId:self.provider.data.key2];
 }
 
 #pragma mark - UnityAdsDelegate

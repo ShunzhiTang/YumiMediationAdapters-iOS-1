@@ -45,8 +45,8 @@
     return self.interstitial.adValid;
 }
 
-- (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [self.interstitial showAdFromRootViewController:rootViewController];
+- (void)present {
+    [self.interstitial showAdFromRootViewController:[self.delegate rootViewControllerForPresentingModalView]];
 }
 
 #pragma mark - FBInterstitialAdDelegate
