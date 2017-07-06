@@ -49,7 +49,7 @@
                                                                  appkey:strongSelf.provider.data.key1
                                                             placementId:strongSelf.provider.data.key2];
         [strongSelf.bannerView
-            setCurrentViewController:[strongSelf.delegate rootViewControllerForPresentingBannerView]];
+            setCurrentViewController:[strongSelf.delegate rootViewControllerForPresentingModalView]];
         strongSelf.bannerView.interval = 0;
         strongSelf.bannerView.isAnimationOn = NO;
         strongSelf.bannerView.showCloseBtn = NO;

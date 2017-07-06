@@ -92,7 +92,7 @@
     self.currentNativeAd = nativeAd;
     // associate a FBNativeAd with the UIView you will use to display the native ads.
     [self.currentNativeAd registerViewForInteraction:self.bannerView.adUIView
-                                  withViewController:[self.delegate rootViewControllerForPresentingBannerView]];
+                                  withViewController:[self.delegate rootViewControllerForPresentingModalView]];
     __weak typeof(self) weakSelf = self;
     [self.currentNativeAd.icon loadImageAsyncWithBlock:^(UIImage *image) {
         __strong typeof(weakSelf) strongSelf = weakSelf;

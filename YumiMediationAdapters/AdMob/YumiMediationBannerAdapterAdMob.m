@@ -49,7 +49,7 @@
         strongSelf.bannerView = [[GADBannerView alloc] initWithAdSize:adSize];
         strongSelf.bannerView.adUnitID = strongSelf.provider.data.key1;
         strongSelf.bannerView.delegate = strongSelf;
-        strongSelf.bannerView.rootViewController = [strongSelf.delegate rootViewControllerForPresentingBannerView];
+        strongSelf.bannerView.rootViewController = [strongSelf.delegate rootViewControllerForPresentingModalView];
 
         GADRequest *request = [GADRequest request];
         [strongSelf.bannerView loadRequest:request];

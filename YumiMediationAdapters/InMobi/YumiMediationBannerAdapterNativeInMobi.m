@@ -179,7 +179,7 @@
     [self.delegate adapter:self didClick:self.webView on:CGPointZero withTemplateID:(int)self.currentID];
 }
 - (UIViewController *)rootViewControllerForPresentYumiAdsCustomView {
-    return [self.delegate rootViewControllerForPresentingBannerView];
+    return [self.delegate rootViewControllerForPresentingModalView];
 }
 
 @end

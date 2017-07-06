@@ -92,7 +92,7 @@
         // nativeAD init
         strongSelf.nativeAd = [[GDTNativeAd alloc] initWithAppkey:strongSelf.provider.data.key1
                                                       placementId:strongSelf.provider.data.key2];
-        strongSelf.nativeAd.controller = strongSelf.delegate.rootViewControllerForPresentingBannerView;
+        strongSelf.nativeAd.controller = strongSelf.delegate.rootViewControllerForPresentingModalView;
         strongSelf.nativeAd.delegate = strongSelf;
 
         [strongSelf.nativeAd loadAd:1]; // The number of times a request has been requested “1”
