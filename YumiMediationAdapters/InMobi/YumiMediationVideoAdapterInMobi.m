@@ -56,7 +56,6 @@
 }
 
 #pragma mark - IMInterstitialDelegate
-
 - (void)interstitialDidReceiveAd:(IMInterstitial *)interstitial {
     [self.delegate adapter:self didReceiveVideoAd:interstitial];
 }
@@ -67,10 +66,12 @@
 
 - (void)interstitialDidPresent:(IMInterstitial *)interstitial {
     [self.delegate adapter:self didOpenVideoAd:interstitial];
+
+    [self.delegate adapter:self didStartPlayingVideoAd:interstitial];
 }
 
 - (void)interstitial:(IMInterstitial *)interstitial didFailToPresentWithError:(IMRequestStatus *)error {
-    [self.delegate adapter:self didCloseVideoAd:interstitial];
+    [self.provider.logger debug:@"InMobi video fail to present" extras:@{ @"error" : error }];
 }
 
 - (void)interstitialDidDismiss:(IMInterstitial *)interstitial {
