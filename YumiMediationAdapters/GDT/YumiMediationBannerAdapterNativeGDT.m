@@ -8,7 +8,7 @@
 
 #import "YumiMediationBannerAdapterNativeGDT.h"
 #import "GDTNativeAd.h"
-#import <YumiCommon/YumiTool.h>
+#import <YumiMediationSDK/YumiTool.h>
 #import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 

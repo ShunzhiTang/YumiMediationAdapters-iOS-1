@@ -9,7 +9,7 @@
 #import "YumiMediationBannerAdapterNativeFacebook.h"
 #import "YumiMediationNativeFacebookBannerView.h"
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
-#import <YumiCommon/YumiTool.h>
+#import <YumiMediationSDK/YumiTool.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
 @interface YumiMediationBannerAdapterNativeFacebook () <YumiMediationBannerAdapter, FBNativeAdDelegate>
