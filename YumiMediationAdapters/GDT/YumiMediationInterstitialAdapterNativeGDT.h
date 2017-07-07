@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
-@interface YumiMediationInterstitialAdapterNativeGDT : NSObject<YumiMediationInterstitialAdapter>
+@interface YumiMediationInterstitialAdapterNativeGDT : NSObject <YumiMediationInterstitialAdapter>
 
 @property (nonatomic, weak) id<YumiMediationInterstitialAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationInterstitialProvider *provider;
