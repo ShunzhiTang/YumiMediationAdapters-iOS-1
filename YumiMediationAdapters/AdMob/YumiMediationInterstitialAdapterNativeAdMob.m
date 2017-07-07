@@ -9,7 +9,7 @@
 #import "YumiMediationInterstitialAdapterNativeAdMob.h"
 #import <GoogleMobileAds/GADNativeAdViewAdOptions.h>
 #import <GoogleMobileAds/GoogleMobileAds.h>
-#import <YumiCommon/YumiTool.h>
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationInterstitialAdapterNativeAdMob () <GADNativeAppInstallAdLoaderDelegate, GADAdLoaderDelegate,
                                                            GADNativeAdDelegate>

@@ -8,9 +8,9 @@
 
 #import "YumiMediationBannerAdapterNativeGDT.h"
 #import "GDTNativeAd.h"
-#import <YumiMediationSDK/YumiTool.h>
 #import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationBannerAdapterNativeGDT () <YumiMediationBannerAdapter, GDTNativeAdDelegate, UIWebViewDelegate>
 
