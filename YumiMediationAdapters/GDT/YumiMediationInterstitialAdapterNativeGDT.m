@@ -7,6 +7,24 @@
 //
 
 #import "YumiMediationInterstitialAdapterNativeGDT.h"
+#import <YumiCommon/YumiTool.h>
+#import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
+#import "YumiAdsCustomViewController.h"
+#import "GDTNativeAd.h"
+#import <YumiCommon/YumiTool.h>
+
+@interface YumiMediationInterstitialAdapterNativeGDT ()<YumiAdsCustomViewControllerDelegate,GDTNativeAdDelegate>
+
+@property (nonatomic)GDTNativeAd *nativeAd;
+@property (nonatomic) GDTNativeAdData *currentAd;
+@property (nonatomic) NSArray *data;
+@property (nonatomic) YumiAdsCustomViewController  *interstitial;
+
+@property (nonatomic) YumiMediationTemplateModel *templateModel;
+@property (nonatomic, assign) NSInteger currentID;
+@property (nonatomic) YumiBannerViewTemplateManager *templateManager;
+
+@end
 
 @implementation YumiMediationInterstitialAdapterNativeGDT
 
