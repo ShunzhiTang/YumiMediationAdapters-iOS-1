@@ -9,8 +9,8 @@
 #import "YumiMediationInterstitialAdapterNativeGDT.h"
 #import "GDTNativeAd.h"
 #import "YumiAdsCustomViewController.h"
-#import <YumiCommon/YumiTool.h>
 #import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationInterstitialAdapterNativeGDT () <YumiAdsCustomViewControllerDelegate, GDTNativeAdDelegate>
 
