@@ -220,7 +220,11 @@ platform :ios do
 
      # pod trunk push
      with_retries(max_tries: 10) do
-       pod_push(path: podspec_path, allow_warnings: true)
+      if ENV["isTest"]
+        pod_push(path: "#{framework}-#{pod_version}/#{podspec}", allow_warnings: true, repo: "Specs",sources:["https://github.com/yumimobi/Specs.git"],verbose:true)
+      else
+        pod_push(path: podspec_path, allow_warnings: true)
+      end
      end
   end
 
