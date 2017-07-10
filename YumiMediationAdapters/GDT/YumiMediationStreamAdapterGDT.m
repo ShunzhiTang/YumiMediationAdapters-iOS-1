@@ -8,7 +8,7 @@
 
 #import "YumiMediationStreamAdapterGDT.h"
 #import "GDTNativeAd.h"
-#import "YUMIStreamModel.h"
+#import <YumiMediationSDK/YUMIStreamModel.h>
 
 @interface YumiMediationStreamAdapterGDT () <GDTNativeAdDelegate>
 
