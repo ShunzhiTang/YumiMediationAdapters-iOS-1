@@ -36,7 +36,7 @@
     self.isReading = NO;
 
     NSTimeInterval interval = [self.streamProvider.outTime doubleValue];
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:interval
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:interval?:8
                                                   target:self
                                                 selector:@selector(timeOutTimer)
                                                 userInfo:nil
@@ -80,7 +80,7 @@
 
     if (!nativeAdDataArray || ![nativeAdDataArray objectAtIndex:0]) {
         [self adapter:self
-            didFailedToReceiveStreamWithError:[NSError errorWithDomain:@"GDT stream no ad" code:8 userInfo:nil]];
+            didFailedToReceiveStreamWithError:[NSError errorWithDomain:@"GDT stream no ad" code:5 userInfo:nil]];
         return;
     }
 
@@ -115,7 +115,7 @@
     [self stopTimer];
 
     [self adapter:self
-        didFailedToReceiveStreamWithError:[NSError errorWithDomain:@"GDT stream no ad" code:8 userInfo:nil]];
+        didFailedToReceiveStreamWithError:[NSError errorWithDomain:@"GDT stream no ad" code:5 userInfo:nil]];
 }
 
 - (void)showStream:(YUMIStreamModel *)streamModel view:(UIView *)view {
