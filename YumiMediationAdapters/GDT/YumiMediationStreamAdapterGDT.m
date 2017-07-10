@@ -36,7 +36,7 @@
     self.isReading = NO;
 
     NSTimeInterval interval = [self.streamProvider.outTime doubleValue];
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:interval?:8
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:interval ?: 8
                                                   target:self
                                                 selector:@selector(timeOutTimer)
                                                 userInfo:nil
