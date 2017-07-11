@@ -90,7 +90,7 @@
         // YumiAdsCustomView init
         strongSelf.webView = [[YumiAdsCustomView alloc] initYumiAdsCustomViewWith:adFrame
                                                                         clickType:YumiAdsClickTypeOpenSystem
-                                                                            isAPI:YES
+                                                                         logoType:YumiAdsLogoCommon
                                                                          delegate:strongSelf];
         // nativeAD init
         strongSelf.nativeAd =
