@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YumiMediationAdapters'
-  s.version          = '1.0.0'
+  s.version          = '3.0.0'
   s.summary          = 'Yumi Mediation Adapters.'
   s.description      = 'This is the Yumi Mediation Adapters. Please proceed to http://developers.yumimobi.com/IosSdk/index for more information.'
   s.homepage         = 'http://developers.yumimobi.com/IosSdk/index'
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'git@github.com:yumimobi/YumiMediationAdapters-iOS.git' }
   s.ios.deployment_target = '7.0'
   
-  s.dependency 'YumiMediationSDK', '~> 3.0.0'
+  s.dependency 'YumiMediationSDK', '~> 3.0.0-beta'
   s.frameworks = 'Foundation', 'UIKit'
 
   subspecs = [
@@ -34,7 +34,7 @@ Pod::Spec.new do |s|
     { :name => "StartApp", :version => "3.4.2" },
     { :name => "Unity", :version => "2.1.0" },
     { :name => "Vungle", :version => "4.1.0" },
-    { :name => "AdNative",:version => "1.0.1"},
+    { :name => "AdNative",:version => "1.0.3"},
   ]
 
   subspecs.each do |spec|
