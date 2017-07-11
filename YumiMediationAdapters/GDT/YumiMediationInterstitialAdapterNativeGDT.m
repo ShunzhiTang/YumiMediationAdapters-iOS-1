@@ -8,7 +8,7 @@
 
 #import "YumiMediationInterstitialAdapterNativeGDT.h"
 #import "GDTNativeAd.h"
-#import "YumiAdsCustomViewController.h"
+#import <YumiMediationSDK/YumiAdsCustomViewController.h>
 #import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
 #import <YumiMediationSDK/YumiTool.h>
 
