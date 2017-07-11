@@ -39,7 +39,10 @@
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     GADAdSize adSize = isiPad ? kGADAdSizeLeaderboard : kGADAdSizeBanner;
-    adSize = isPortrait ? kGADAdSizeSmartBannerPortrait : adSize;
+
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:autoAdSize] boolValue]) {
+        adSize = isPortrait ? kGADAdSizeSmartBannerPortrait : kGADAdSizeSmartBannerLandscape;
+    }
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
