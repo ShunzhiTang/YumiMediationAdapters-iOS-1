@@ -7,8 +7,8 @@
 //
 
 #import "YumiMediationBannerAdapterNativeInMobi.h"
-#import "YumiAdsCustomView.h"
 #import <InMobiSDK/InMobiSDK.h>
+#import <YumiMediationSDK/YumiAdsCustomView.h>
 #import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiTool.h>

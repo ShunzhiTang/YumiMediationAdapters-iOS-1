@@ -145,7 +145,11 @@ platform :ios do
 
         # package
         with_retries(max_tries: 10) do
-          sh "pod package #{subspec_path} --force --embedded --no-mangle --exclude-deps"
+          if ENV["isTest"]
+            sh "pod package #{subspec_path} --force --embedded --no-mangle --exclude-deps --spec-sources=https://github.com/yumimobi/Specs.git,https://github.com/CocoaPods/Specs"
+          else
+            sh "pod package #{subspec_path} --force --embedded --no-mangle --exclude-deps"
+          end
         end
         # move framework
         FileUtils.mv("#{subspec_framework}-#{version}/ios/#{subspec_framework}.embeddedframework", "#{version}/#{subspec_framework}")
@@ -220,7 +224,11 @@ platform :ios do
 
      # pod trunk push
      with_retries(max_tries: 10) do
-       pod_push(path: podspec_path, allow_warnings: true)
+      if ENV["isTest"]
+        pod_push(path: podspec_path, allow_warnings: true, repo: "Specs",sources:["https://github.com/yumimobi/Specs.git",'https://github.com/CocoaPods/Specs'],verbose:true)
+      else
+        pod_push(path: podspec_path, allow_warnings: true)
+      end
      end
   end
 
