@@ -9,6 +9,7 @@
 #import "YumiMediationBannerAdapterAdMob.h"
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
+#import <YumiMediationSDK/YumiMediationConstants.h>
 
 @interface YumiMediationBannerAdapterAdMob () <GADBannerViewDelegate, YumiMediationBannerAdapter>
 
