@@ -41,7 +41,9 @@
 }
 
 - (void)requestAd {
-    [[GADRewardBasedVideoAd sharedInstance] loadRequest:[GADRequest request] withAdUnitID:self.provider.data.key1];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[GADRewardBasedVideoAd sharedInstance] loadRequest:[GADRequest request] withAdUnitID:self.provider.data.key1];
+    });
 }
 
 - (BOOL)isReady {
