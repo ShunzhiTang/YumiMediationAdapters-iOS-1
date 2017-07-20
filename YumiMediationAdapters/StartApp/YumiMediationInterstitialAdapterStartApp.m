@@ -40,7 +40,9 @@
 }
 
 - (void)requestAd {
-    [self.interstitial loadAdWithDelegate:self];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.interstitial loadAdWithDelegate:self];
+    });
 }
 
 - (BOOL)isReady {
