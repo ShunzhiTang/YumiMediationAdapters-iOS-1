@@ -47,7 +47,10 @@
                                  PlacementID:self.streamProvider.key2
                                       AdType:NativeNewsStream
                                     plcmtcnt:[numbers intValue]
-                                      UIView:[[[[UIApplication sharedApplication] keyWindow] rootViewController] view]];
+                                      UIView:[self viewControllerForPresentStream].view];
+}
+
+- (void)stopStream {
 }
 
 - (void)timeOutTimer {
