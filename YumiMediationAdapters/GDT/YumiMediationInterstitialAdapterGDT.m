@@ -39,7 +39,7 @@
 }
 
 - (void)requestAd {
-        [self.interstitial loadAd];
+    [self.interstitial loadAd];
 }
 
 - (BOOL)isReady {
