@@ -41,8 +41,7 @@
 }
 
 - (void)requestAd {
-        [[GADRewardBasedVideoAd sharedInstance] loadRequest:[GADRequest request]
-                                               withAdUnitID:self.provider.data.key1];
+    [[GADRewardBasedVideoAd sharedInstance] loadRequest:[GADRequest request] withAdUnitID:self.provider.data.key1];
 }
 
 - (BOOL)isReady {
