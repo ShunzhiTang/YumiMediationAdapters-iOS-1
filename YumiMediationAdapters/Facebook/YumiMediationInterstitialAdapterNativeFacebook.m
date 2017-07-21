@@ -12,9 +12,7 @@
 
 @interface YumiMediationInterstitialAdapterNativeFacebook () <FBNativeAdDelegate>
 
-@property (strong, nonatomic) FBNativeAd *nativeAd;
-@property (weak, nonatomic) FBAdChoicesView *adChoicesView;
-
+@property (nonatomic) FBNativeAd *nativeAd;
 @property (nonatomic) YumiFacebookAdapterInterstitialVc *interstitial;
 @property (nonatomic, assign) BOOL isAdReady;
 
