@@ -93,7 +93,7 @@
                                       clickType:YumiAdsClickTypeDownload
                                closeBtnPosition:weakSelf.provider.data.closeButton.position
                                   closeBtnFrame:closeBtnFrame
-                                       logoType:YumiAdsLogoCommon
+                                       logoType:YumiAdsLogoGDT
                                        delegate:weakSelf];
         weakSelf.interstitial.isNativeInterstitialGDT = YES;
 
