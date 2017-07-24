@@ -93,7 +93,7 @@
                                       clickType:YumiAdsClickTypeDownload
                                closeBtnPosition:weakSelf.provider.data.closeButton.position
                                   closeBtnFrame:closeBtnFrame
-                                          isAPI:YES
+                                       logoType:YumiAdsLogoCommon
                                        delegate:weakSelf];
         weakSelf.interstitial.isNativeInterstitialGDT = YES;
 
@@ -197,7 +197,10 @@
 #pragma mark : YumiAdsCustomViewControllerDelegate
 - (void)yumiAdsCustomViewControllerDidReceivedAd:(UIViewController *)viewController {
 
-    [self.delegate adapter:self didReceiveInterstitialAd:self.interstitial interstitialFrame:CGRectZero withTemplateID:(int)self.currentID];
+    [self.delegate adapter:self
+        didReceiveInterstitialAd:self.interstitial
+               interstitialFrame:CGRectZero
+                  withTemplateID:(int)self.currentID];
 }
 
 - (void)yumiAdsCustomViewController:(UIViewController *)viewController didFailToReceiveAdWithError:(NSError *)error {
