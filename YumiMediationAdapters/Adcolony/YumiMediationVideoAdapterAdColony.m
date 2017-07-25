@@ -11,7 +11,7 @@
 
 @interface YumiMediationVideoAdapterAdColony ()
 
-@property (assign) BOOL isReady;
+@property (assign) BOOL isAdReady;
 @property (nonatomic) AdColonyInterstitial *video;
 
 @end
@@ -55,7 +55,7 @@
     [AdColony requestInterstitialInZone:self.provider.data.key2
         options:nil
         success:^(AdColonyInterstitial *_Nonnull ad) {
-            weakSelf.isReady = YES;
+            weakSelf.isAdReady = YES;
             weakSelf.video = ad;
 
             [weakSelf.delegate adapter:weakSelf didReceiveVideoAd:weakSelf.video];
@@ -66,7 +66,7 @@
                 [weakSelf.delegate adapter:weakSelf didStartPlayingVideoAd:weakSelf.video];
             }];
             [ad setClose:^{
-                weakSelf.isReady = NO;
+                weakSelf.isAdReady = NO;
 
                 [weakSelf.delegate adapter:weakSelf didCloseVideoAd:weakSelf.video];
 
@@ -74,7 +74,7 @@
             }];
         }
         failure:^(AdColonyAdRequestError *_Nonnull error) {
-            weakSelf.isReady = NO;
+            weakSelf.isAdReady = NO;
 
             [weakSelf.delegate adapter:weakSelf videoAd:nil didFailToLoad:[error localizedDescription]];
         }];
@@ -82,6 +82,10 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     [self.video showWithPresentingViewController:rootViewController];
+}
+
+- (BOOL)isReady {
+    return self.isAdReady;
 }
 
 @end
