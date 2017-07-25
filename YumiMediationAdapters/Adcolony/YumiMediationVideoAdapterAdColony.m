@@ -59,7 +59,7 @@
             weakSelf.video = ad;
 
             [weakSelf.delegate adapter:weakSelf didReceiveVideoAd:weakSelf.video];
-            
+
             [ad setOpen:^{
                 [weakSelf.delegate adapter:weakSelf didOpenVideoAd:weakSelf.video];
 
@@ -84,7 +84,7 @@
     [self.video showWithPresentingViewController:rootViewController];
 }
 
-- (BOOL)isReady{
+- (BOOL)isReady {
     return self.isAdReady;
 }
 
