@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
-@interface YumiMediationVideoAdapterMobvista : NSObject
+@interface YumiMediationVideoAdapterMobvista : NSObject<YumiMediationVideoAdapter>
+
+@property (nonatomic, weak) id<YumiMediationVideoAdapterDelegate> delegate;
+@property (nonatomic) YumiMediationVideoProvider *provider;
 
 @end
