@@ -18,8 +18,9 @@
 | AdColony    | 3.1.1   | V       | appID       | zoneID       |      | ❌           |
 | Domob       | 3.6.0   | V       | publisherID |              |      | ❌           |
 | Ironsource  | 6.6.1.1 | V       | appKey      |              |      | ❌           |
-| Vungle      | 4.1.0   | V       | AppId       |              |      | ❌           |
-| playableAd  | 1.3.0   | V       | AppID       | AdUnitID     |      | ❌           |
+| Vungle      | 5.1.0   | V       | AppID       | PlacementID  |      | ❌           |
+| playableID  | 1.3.0   | V       | AppID       | AdUnitID     |      | ❌           |
+
 
 | ShortName | FullName     |
 | --------- | ------------ |
