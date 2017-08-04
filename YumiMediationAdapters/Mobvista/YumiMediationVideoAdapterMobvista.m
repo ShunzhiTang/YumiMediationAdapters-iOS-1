@@ -41,17 +41,18 @@
 
     self.provider = provider;
     self.delegate = delegate;
+    [[MVSDK sharedInstance] setAppID:@"22050" ApiKey:@"7c22942b749fe6a6e361b675e96b3ee9"];
     self.videoAd = [MVRewardAdManager sharedInstance];
 }
 
 - (void)requestAd {
 
-    [self.videoAd loadVideo:self.provider.data.key1 delegate:self];
+    [self.videoAd loadVideo:self.provider.data.key2 delegate:self];
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [self.videoAd showVideo:self.provider.data.key1
-               withRewardId:self.provider.data.key2
+    [self.videoAd showVideo:self.provider.data.key2
+               withRewardId:self.provider.data.key1
                      userId:self.provider.data.key3 ?: @""
                    delegate:self
              viewController:rootViewController];
@@ -79,12 +80,11 @@
 - (void)onVideoAdShowFailed:(nullable NSString *)unitId withError:(nonnull NSError *)error {
     [self.delegate adapter:self videoAd:self.videoAd didFailToLoad:[error localizedDescription]];
 }
-- (void)onVideoAdClicked:(nullable NSString *)unitId {
-    [self.delegate adapter:self didCloseVideoAd:self.videoAd];
-}
+
 - (void)onVideoAdDismissed:(NSString *)unitId
              withConverted:(BOOL)converted
             withRewardInfo:(MVRewardAdInfo *)rewardInfo {
+    [self.delegate adapter:self didCloseVideoAd:self.videoAd];
     if (rewardInfo) {
 
         [self.delegate adapter:self videoAd:self.videoAd didReward:rewardInfo];
