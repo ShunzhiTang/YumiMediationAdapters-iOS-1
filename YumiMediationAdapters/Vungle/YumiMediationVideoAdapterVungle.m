@@ -69,6 +69,8 @@
 - (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable placementID:(nullable NSString *)placementID{
     if (isAdPlayable) {
         [self.delegate adapter:self didReceiveVideoAd:nil];
+    }else if (![self isReady]){
+        [self.delegate adapter:self videoAd:nil didFailToLoad:@"vungle no ad"];
     }
 }
 
