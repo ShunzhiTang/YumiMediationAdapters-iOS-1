@@ -80,17 +80,17 @@
     [self.delegate adapter:self didStartPlayingVideoAd:nil];
 }
 
-- (void)vungleWillCloseAdWithViewInfo:(nonnull VungleViewInfo *)info placementID:(nonnull NSString *)placementID{
+- (void)vungleWillCloseAdWithViewInfo:(nonnull VungleViewInfo *)info placementID:(nonnull NSString *)placementID {
     [self.delegate adapter:self didCloseVideoAd:nil];
     if ([info.completedView boolValue]) {
         [self.delegate adapter:self videoAd:nil didReward:nil];
     }
 }
 
-- (void)vungleSDKDidInitialize{
+- (void)vungleSDKDidInitialize {
 }
 
-- (void)vungleSDKFailedToInitializeWithError:(NSError *)error{
+- (void)vungleSDKFailedToInitializeWithError:(NSError *)error {
 }
 
 @end
