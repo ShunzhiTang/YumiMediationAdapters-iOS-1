@@ -17,6 +17,7 @@ before_install:
   - brew install clang-format
 
 install:
+  - travis_wait 30 mvn install
   - bundle install
   - pod repo update
   - pod repo add Specs git@github.com:yumimobi/Specs.git
