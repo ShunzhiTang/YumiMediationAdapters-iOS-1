@@ -41,7 +41,17 @@
 
     self.provider = provider;
     self.delegate = delegate;
-    [[MVSDK sharedInstance] setAppID:@"22050" ApiKey:@"7c22942b749fe6a6e361b675e96b3ee9"];
+    NSString *key1 = @"";
+    NSString *key2 = @"";
+    if (provider.data.key1) {
+        NSArray *keys = [provider.data.key1 componentsSeparatedByString:@"_"];
+        if (keys.count == 2) {
+            key1 = keys.firstObject;
+            key2 = keys.lastObject;
+        }
+    }
+
+    [[MVSDK sharedInstance] setAppID:key1 ApiKey:key2];
     self.videoAd = [MVRewardAdManager sharedInstance];
 }
 
@@ -52,8 +62,8 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     [self.videoAd showVideo:self.provider.data.key2
-               withRewardId:self.provider.data.key1
-                     userId:self.provider.data.key3 ?: @""
+               withRewardId:self.provider.data.key3
+                     userId:@""
                    delegate:self
              viewController:rootViewController];
 }
