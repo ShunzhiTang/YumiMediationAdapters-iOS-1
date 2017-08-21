@@ -12,7 +12,6 @@
 
 @interface YumiMediationVideoAdapterMobvista () <MVRewardAdLoadDelegate, MVRewardAdShowDelegate>
 
-@property (assign) BOOL isAdReady;
 @property (nonatomic) MVRewardAdManager *videoAd;
 
 @end
@@ -41,10 +40,11 @@
 
     self.provider = provider;
     self.delegate = delegate;
+
     NSString *key1 = @"";
     NSString *key2 = @"";
-    if (provider.data.key1) {
-        NSArray *keys = [provider.data.key1 componentsSeparatedByString:@"_"];
+    if (self.provider.data.key1) {
+        NSArray *keys = [self.provider.data.key1 componentsSeparatedByString:@"_"];
         if (keys.count == 2) {
             key1 = keys.firstObject;
             key2 = keys.lastObject;
@@ -52,11 +52,11 @@
     }
 
     [[MVSDK sharedInstance] setAppID:key1 ApiKey:key2];
-    self.videoAd = [MVRewardAdManager sharedInstance];
 }
 
 - (void)requestAd {
 
+    self.videoAd = [MVRewardAdManager sharedInstance];
     [self.videoAd loadVideo:self.provider.data.key2 delegate:self];
 }
 
@@ -69,17 +69,18 @@
 }
 
 - (BOOL)isReady {
-    return self.isAdReady;
+
+    return [self.videoAd isVideoReadyToPlay:self.provider.data.key2];
 }
 
 #pragma mark : - MVRewardAdLoadDelegate
 
 - (void)onVideoAdLoadSuccess:(nullable NSString *)unitId {
-    self.isAdReady = YES;
+
     [self.delegate adapter:self didReceiveVideoAd:self.videoAd];
 }
 - (void)onVideoAdLoadFailed:(nullable NSString *)unitId error:(nonnull NSError *)error {
-    self.isAdReady = NO;
+
     [self.delegate adapter:self videoAd:self.videoAd didFailToLoad:[error localizedDescription]];
 }
 
