@@ -50,13 +50,13 @@
             key2 = keys.lastObject;
         }
     }
- 
+
     [[MVSDK sharedInstance] setAppID:key1 ApiKey:key2];
     self.videoAd = [MVRewardAdManager sharedInstance];
 }
 
 - (void)requestAd {
-    
+
     [self.videoAd loadVideo:self.provider.data.key2 delegate:self];
 }
 
