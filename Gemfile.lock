@@ -1,5 +1,5 @@
 GEM
-  remote: https://rubygems.org/
+  remote: https://gems.ruby-china.org/
   specs:
     CFPropertyList (2.3.5)
     activesupport (4.2.8)
@@ -199,4 +199,4 @@ DEPENDENCIES
   retries
 
 BUNDLED WITH
-   1.14.6
+   1.15.3
