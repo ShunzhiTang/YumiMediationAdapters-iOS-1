@@ -13,6 +13,7 @@
 @interface YumiMediationVideoAdapterMobvista () <MVRewardAdLoadDelegate, MVRewardAdShowDelegate>
 
 @property (nonatomic) MVRewardAdManager *videoAd;
+@property (nonatomic,assign)BOOL isAutoRequest;
 
 @end
 
@@ -53,11 +54,15 @@
 
     [[MVSDK sharedInstance] setAppID:key1 ApiKey:key2];
     self.videoAd = [MVRewardAdManager sharedInstance];
+    self.isAutoRequest = NO;
 }
 
 - (void)requestAd {
-
-    [self.videoAd loadVideo:self.provider.data.key2 delegate:self];
+    if (!self.isAutoRequest) {
+        self.isAutoRequest = YES;
+        [self.videoAd loadVideo:self.provider.data.key2 delegate:self];
+    }
+    
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
@@ -80,7 +85,8 @@
     [self.delegate adapter:self didReceiveVideoAd:self.videoAd];
 }
 - (void)onVideoAdLoadFailed:(nullable NSString *)unitId error:(nonnull NSError *)error {
-
+    
+    self.isAutoRequest = NO;
     [self.delegate adapter:self videoAd:self.videoAd didFailToLoad:[error localizedDescription]];
 }
 
@@ -95,11 +101,17 @@
 - (void)onVideoAdDismissed:(NSString *)unitId
              withConverted:(BOOL)converted
             withRewardInfo:(MVRewardAdInfo *)rewardInfo {
+    
+    self.isAutoRequest = NO;
+    [self requestAd ];
+    
     [self.delegate adapter:self didCloseVideoAd:self.videoAd];
+    
     if (rewardInfo) {
 
         [self.delegate adapter:self videoAd:self.videoAd didReward:rewardInfo];
     }
+    
 }
 
 @end
