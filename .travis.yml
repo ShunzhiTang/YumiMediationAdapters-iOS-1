@@ -23,8 +23,7 @@ install:
 
 script:
   - fastlane format
-  - fastlane release
-
+  - travis_wait 60 fastlane release
 env:
   matrix:
     - isTest=true
