@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.license          = 'Custom'
   s.author           = { 'zplay sdk team' => 'ad-client@zplay.cn' }
   s.source           = { :git => 'git@github.com:yumimobi/YumiMediationAdapters-iOS.git',:tag => s.version.to_s }
-  s.ios.deployment_target = '7.0'
+  s.ios.deployment_target = '8.0'
   
   s.dependency 'YumiMediationSDK', '~> 1.8.0'
   if ENV['CI'] then
