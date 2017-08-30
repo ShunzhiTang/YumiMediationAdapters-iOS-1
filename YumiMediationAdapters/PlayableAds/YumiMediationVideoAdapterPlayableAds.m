@@ -9,7 +9,9 @@
 #import "YumiMediationVideoAdapterPlayableAds.h"
 #import <PlayableAds/PlayableAds.h>
 
-@interface YumiMediationVideoAdapterPlayableAds ()<PlayableAdsDelegate>
+@interface YumiMediationVideoAdapterPlayableAds () <PlayableAdsDelegate>
+
+@property (nonatomic) PlayableAds *video;
 
 @end
 
@@ -34,25 +36,51 @@
 #pragma mark - YumiMediationVideoAdapter
 - (void)setupWithProvider:(YumiMediationVideoProvider *)provider
                  delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+
     self.delegate = delegate;
     self.provider = provider;
-
-    
 }
 
 - (void)requestAd {
-    // NOTE: Unity do not provide any method for requesting ad, it handles the request internally
+    self.video = [[PlayableAds alloc] initWithAdUnitID:self.provider.data.key1
+                                                 appID:self.provider.data.key2
+                                    rootViewController:[UIApplication sharedApplication].keyWindow.rootViewController];
+    self.video.delegate = self;
+    [self.video loadAd];
 }
 
 - (BOOL)isReady {
-    
+    return self.video.isReady;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    
+    [self.video present];
 }
 
 #pragma mark - PlayableAdsDelegate
 
+- (void)playableAdsDidRewardUser:(PlayableAds *)ads {
+    [self.delegate adapter:self videoAd:self.video didReward:nil];
+}
+
+- (void)playableAdsDidLoad:(PlayableAds *)ads {
+    [self.delegate adapter:self didReceiveVideoAd:self.video];
+}
+
+- (void)playableAdsDidFailToLoadWithError:(NSError *)error {
+    [self.delegate adapter:self videoAd:self.video didFailToLoad:[error localizedDescription]];
+}
+
+- (void)playableAdsDidStartPlaying:(PlayableAds *)ads {
+    [self.delegate adapter:self didStartPlayingVideoAd:self.video];
+}
+
+- (void)playableAdsDidPresentScreen:(PlayableAds *)ads {
+    [self.delegate adapter:self didOpenVideoAd:self.video];
+}
+
+- (void)playableAdsDidDismissScreen:(PlayableAds *)ads {
+    [self.delegate adapter:self didCloseVideoAd:self.video];
+}
 
 @end
