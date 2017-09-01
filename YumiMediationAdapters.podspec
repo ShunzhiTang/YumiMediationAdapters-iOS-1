@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   
   s.dependency 'YumiMediationSDK', '~> 1.8.0'
   if ENV['CI'] then
-    s.dependency 'YumiMediationSDK', '~> 3.0.0'
+    s.dependency 'YumiMediationSDK', '3.0.0'
   end
   s.frameworks = 'Foundation', 'UIKit'
 
