@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.license          = 'Custom'
   s.author           = { 'zplay sdk team' => 'ad-client@zplay.cn' }
   s.source           = { :git => 'git@github.com:yumimobi/YumiMediationAdapters-iOS.git',:tag => s.version.to_s }
-  s.ios.deployment_target = '7.0'
+  s.ios.deployment_target = '8.0'
   
   s.dependency 'YumiMediationSDK', '~> 1.8.0'
   if ENV['CI'] then
@@ -38,7 +38,7 @@ Pod::Spec.new do |s|
     { :name => "Unity", :version => "2.1.0" },
     { :name => "Vungle", :version => "4.1.0" },
     { :name => "AdNative",:version => "1.0.3"},
-    { :name => "PlayableAds",:version => "1.2.1"},
+    { :name => "PlayableAds",:version => "1.3.0"},
   ]
 
   subspecs.each do |spec|
