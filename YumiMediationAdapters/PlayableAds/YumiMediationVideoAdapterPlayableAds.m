@@ -60,7 +60,7 @@
 #pragma mark - PlayableAdsDelegate
 
 - (void)playableAdsDidRewardUser:(PlayableAds *)ads {
-    [self.delegate adapter:self videoAd:self.video didReward:nil];
+    // NOTE: reward user in didClose delegate
 }
 
 - (void)playableAdsDidLoad:(PlayableAds *)ads {
@@ -81,6 +81,8 @@
 
 - (void)playableAdsDidDismissScreen:(PlayableAds *)ads {
     [self.delegate adapter:self didCloseVideoAd:self.video];
+    // NOTE: in case didReceiveRewardForPlacement not executed
+    [self.delegate adapter:self videoAd:self.video didReward:nil];
 }
 
 @end
