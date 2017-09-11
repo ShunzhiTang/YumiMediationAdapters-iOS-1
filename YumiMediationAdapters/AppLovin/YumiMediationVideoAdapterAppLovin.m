@@ -64,6 +64,8 @@
 
 - (void)ad:(ALAd *)ad wasHiddenIn:(UIView *)view {
     [self.delegate adapter:self didCloseVideoAd:ad];
+    // NOTE: in case didReceiveRewardForPlacement not executed
+    [self.delegate adapter:self videoAd:ad didReward:nil];
 }
 
 - (void)ad:(ALAd *)ad wasClickedIn:(UIView *)view {
@@ -77,8 +79,7 @@
 - (void)videoPlaybackEndedInAd:(ALAd *)ad
              atPlaybackPercent:(NSNumber *)percentPlayed
                   fullyWatched:(BOOL)wasFullyWatched {
-    // FIXME: only reward user if video is fully watched?
-    [self.delegate adapter:self videoAd:ad didReward:nil];
+    // NOTE: reward user in didClose delegate
 }
 
 #pragma mark - ALAdLoadDelegate
