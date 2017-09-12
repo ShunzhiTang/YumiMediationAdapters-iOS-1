@@ -37,23 +37,28 @@
     self.delegate = delegate;
     self.provider = provider;
 
+    NSError *error;
+    NSString *appID = self.provider.data.key1;
+    NSArray *placementIDsArray = @[ self.provider.data.key2 ];
     VungleSDK *sdk = [VungleSDK sharedSDK];
     sdk.delegate = self;
     [sdk setLoggingEnabled:NO];
-    [sdk startWithAppId:self.provider.data.key1];
+    [sdk startWithAppId:appID placements:placementIDsArray error:&error];
 }
 
 - (void)requestAd {
-    // NOTE: Vungle do not provide any method for requesting ad, it handles the request internally
+    NSError *error;
+    VungleSDK *sdk = [VungleSDK sharedSDK];
+    [sdk loadPlacementWithID:self.provider.data.key2 error:&error];
 }
 
 - (BOOL)isReady {
-    return [VungleSDK sharedSDK].isAdPlayable;
+    return [[VungleSDK sharedSDK] isAdCachedForPlacementID:self.provider.data.key2];
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     NSError *error;
-    [[VungleSDK sharedSDK] playAd:rootViewController error:&error];
+    [[VungleSDK sharedSDK] playAd:rootViewController options:nil placementID:self.provider.data.key2 error:&error];
 
     if (error) {
         [self.delegate adapter:self videoAd:nil didFailToLoad:[error localizedDescription]];
@@ -61,29 +66,31 @@
 }
 
 #pragma mark - VungleSDKDelegate
-- (void)vungleSDKwillShowAd {
+- (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable placementID:(nullable NSString *)placementID {
+    if (isAdPlayable) {
+        [self.delegate adapter:self didReceiveVideoAd:nil];
+    } else if (![self isReady]) {
+        [self.delegate adapter:self videoAd:nil didFailToLoad:@"vungle no ad"];
+    }
+}
+
+- (void)vungleWillShowAdForPlacementID:(nullable NSString *)placementID {
     [self.delegate adapter:self didOpenVideoAd:nil];
 
     [self.delegate adapter:self didStartPlayingVideoAd:nil];
 }
 
-- (void)vungleSDKwillCloseAdWithViewInfo:(NSDictionary *)viewInfo
-                 willPresentProductSheet:(BOOL)willPresentProductSheet {
-    if (!willPresentProductSheet) {
+- (void)vungleWillCloseAdWithViewInfo:(nonnull VungleViewInfo *)info placementID:(nonnull NSString *)placementID {
+    if (info.completedView) {
         [self.delegate adapter:self didCloseVideoAd:nil];
         [self.delegate adapter:self videoAd:nil didReward:nil];
     }
 }
 
-- (void)vungleSDKwillCloseProductSheet:(id)productSheet {
-    [self.delegate adapter:self didCloseVideoAd:nil];
-    [self.delegate adapter:self videoAd:nil didReward:nil];
+- (void)vungleSDKDidInitialize {
 }
 
-- (void)vungleSDKAdPlayableChanged:(BOOL)isAdPlayable {
-    if (isAdPlayable) {
-        [self.delegate adapter:self didReceiveVideoAd:nil];
-    }
+- (void)vungleSDKFailedToInitializeWithError:(NSError *)error {
 }
 
 @end

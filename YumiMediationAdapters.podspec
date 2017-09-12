@@ -36,7 +36,7 @@ Pod::Spec.new do |s|
     { :name => "IronSource", :version => "6.6.1.1" },
     { :name => "StartApp", :version => "3.4.2" },
     { :name => "Unity", :version => "2.1.0" },
-    { :name => "Vungle", :version => "4.1.0" },
+    { :name => "Vungle", :version => "5.1.0" },
     { :name => "AdNative",:version => "1.0.3"},
     { :name => "PlayableAds",:version => "1.3.0"},
   ]
