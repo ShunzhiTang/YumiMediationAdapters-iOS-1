@@ -22,7 +22,6 @@ install:
   - pod repo add Specs git@github.com:yumimobi/Specs.git
 
 script:
-  - fastlane format
   - travis_wait 60 fastlane release
 env:
   matrix:
