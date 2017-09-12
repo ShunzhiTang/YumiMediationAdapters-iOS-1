@@ -36,10 +36,10 @@
                  delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
     self.delegate = delegate;
     self.provider = provider;
-    
+
     NSError *error;
     NSString *appID = self.provider.data.key1;
-    NSArray *placementIDsArray = @[self.provider.data.key2];
+    NSArray *placementIDsArray = @[ self.provider.data.key2 ];
     VungleSDK *sdk = [VungleSDK sharedSDK];
     sdk.delegate = self;
     [sdk setLoggingEnabled:NO];
@@ -53,7 +53,7 @@
 }
 
 - (BOOL)isReady {
-    return [[VungleSDK sharedSDK]isAdCachedForPlacementID:self.provider.data.key2];
+    return [[VungleSDK sharedSDK] isAdCachedForPlacementID:self.provider.data.key2];
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
@@ -66,33 +66,31 @@
 }
 
 #pragma mark - VungleSDKDelegate
-- (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable placementID:(nullable NSString *)placementID{
+- (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable placementID:(nullable NSString *)placementID {
     if (isAdPlayable) {
         [self.delegate adapter:self didReceiveVideoAd:nil];
-    }else if (![self isReady]){
+    } else if (![self isReady]) {
         [self.delegate adapter:self videoAd:nil didFailToLoad:@"vungle no ad"];
     }
 }
 
-- (void)vungleWillShowAdForPlacementID:(nullable NSString *)placementID{
+- (void)vungleWillShowAdForPlacementID:(nullable NSString *)placementID {
     [self.delegate adapter:self didOpenVideoAd:nil];
-    
+
     [self.delegate adapter:self didStartPlayingVideoAd:nil];
 }
 
-- (void)vungleWillCloseAdWithViewInfo:(nonnull VungleViewInfo *)info placementID:(nonnull NSString *)placementID{
+- (void)vungleWillCloseAdWithViewInfo:(nonnull VungleViewInfo *)info placementID:(nonnull NSString *)placementID {
     if (info.completedView) {
         [self.delegate adapter:self didCloseVideoAd:nil];
         [self.delegate adapter:self videoAd:nil didReward:nil];
     }
 }
 
-- (void)vungleSDKDidInitialize{
-    
+- (void)vungleSDKDidInitialize {
 }
 
-- (void)vungleSDKFailedToInitializeWithError:(NSError *)error{
-    
+- (void)vungleSDKFailedToInitializeWithError:(NSError *)error {
 }
 
 @end

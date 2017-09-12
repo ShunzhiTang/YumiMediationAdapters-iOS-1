@@ -71,7 +71,7 @@
 }
 
 - (void)interstitial:(IMInterstitial *)interstitial didFailToPresentWithError:(IMRequestStatus *)error {
-    [self.provider.logger debug:@"InMobi video fail to present" extras:@{ @"error" : error }];
+    [self.provider.logger debug:@"InMobi video fail to present" extras:@{@"error" : error}];
 }
 
 - (void)interstitialDidDismiss:(IMInterstitial *)interstitial {
