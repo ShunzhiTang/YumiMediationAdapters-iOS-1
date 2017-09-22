@@ -39,7 +39,7 @@
     self.delegate = delegate;
     
     self.video = [CentrixlinkAD sharedInstance];
-    [self.video setDebugEnable:YES];
+    [self.video setDebugEnable:NO];
     [self.video setPlayAdOrientation:UIInterfaceOrientationMaskAll];
     
 }
