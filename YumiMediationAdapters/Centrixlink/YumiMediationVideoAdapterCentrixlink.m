@@ -10,7 +10,7 @@
 
 @interface YumiMediationVideoAdapterCentrixlink () <CentrixLinkADDelegate>
 
-@property (nonatomic) CentrixlinkAD  *video;
+@property (nonatomic) CentrixlinkAD *video;
 
 @end
 
@@ -27,60 +27,57 @@
     dispatch_once(&onceToken, ^{
         sharedInstance = [[self alloc] init];
     });
-    
+
     return sharedInstance;
 }
 
 #pragma mark : YumiMediationVideoAdapter
 - (void)setupWithProvider:(YumiMediationVideoProvider *)provider
                  delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
-    
+
     self.provider = provider;
     self.delegate = delegate;
-    
+
     self.video = [CentrixlinkAD sharedInstance];
     [self.video setDebugEnable:NO];
     [self.video setPlayAdOrientation:UIInterfaceOrientationMaskAll];
-    
 }
 
 - (void)requestAd {
-    
+
     NSError *error;
-    
+
     [self.video startWithAppID:self.provider.data.key1 AppSecretKey:self.provider.data.key2 error:&error];
-    if(error){
-        [self.delegate adapter:self videoAd:self.video didFailToLoad: [error localizedDescription] ];
+    if (error) {
+        [self.delegate adapter:self videoAd:self.video didFailToLoad:[error localizedDescription]];
     }
-    
-     [self.video setDelegate:self];
-    
+
+    [self.video setDelegate:self];
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     NSError *error = nil;
-    [self.video playAD:rootViewController options:@{CentrixlinkPlayAdOptionKeyIECAutoClose:@(YES)} error:&error];
-    
-        if (error) {
-        
-            [self.delegate adapter:self videoAd:self.video didFailToLoad: [error localizedDescription] ];
-        }
+    [self.video playAD:rootViewController options:@{ CentrixlinkPlayAdOptionKeyIECAutoClose : @(YES) } error:&error];
+
+    if (error) {
+
+        [self.delegate adapter:self videoAd:self.video didFailToLoad:[error localizedDescription]];
+    }
 }
 
 - (BOOL)isReady {
-    
-    return   [[CentrixlinkAD sharedInstance] hasPreloadAD];
+
+    return [[CentrixlinkAD sharedInstance] hasPreloadAD];
 }
 
-#pragma mark --CentrixlinkDelegate
+#pragma mark--CentrixlinkDelegate
 
--(void)centrixLinkHasPreloadAD:(BOOL)hasPreload {
+- (void)centrixLinkHasPreloadAD:(BOOL)hasPreload {
     if (hasPreload) {
         [self.delegate adapter:self didReceiveVideoAd:self.video];
-    }else{
+    } else {
         [self.delegate adapter:self videoAd:self.video didFailToLoad:@"centrixLink not preload"];
     }
-    
 }
 
 - (void)centrixLinkVideoADWillShow:(NSDictionary *)ADInfo {
@@ -92,10 +89,10 @@
 }
 
 - (void)centrixLinkVideoADClose:(NSDictionary *)ADInfo {
-    
+
     BOOL isplayFinished = [ADInfo objectForKey:ADInfoKEYADPlayStatus];
     [self.delegate adapter:self didCloseVideoAd:self.video];
-    
+
     if (isplayFinished) {
         [self.delegate adapter:self videoAd:self.video didReward:nil];
     }
@@ -103,7 +100,7 @@
 
 - (void)centrixLinkVideoADShowFail:(NSError *)error {
 
-    [self.delegate adapter:self videoAd:self.video didFailToLoad: [error localizedDescription]];
+    [self.delegate adapter:self videoAd:self.video didFailToLoad:[error localizedDescription]];
 }
 
 @end
