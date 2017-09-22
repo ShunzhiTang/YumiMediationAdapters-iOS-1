@@ -57,37 +57,22 @@
 }
 
 #pragma mark - GDTNativeAdDelegate
-/**
- *  原生广告加载广告数据成功回调，返回为GDTNativeAdData对象的数组
- */
 -(void)nativeAdSuccessToLoad:(NSArray *)nativeAdDataArray{
     NSArray<YumiMediationNativeModel *> *mediationArray = [self transitToMediationModel:nativeAdDataArray];
     [self.delegate adapter:self didReceiveAd:mediationArray];
 }
 
-/**
- *  原生广告加载广告数据失败回调
- */
 -(void)nativeAdFailToLoad:(NSError *)error{
     [self.delegate adapter:self didFailToReceiveAd:error.localizedDescription];
 }
 
-/**
- *  原生广告点击之后将要展示内嵌浏览器或应用内AppStore回调
- */
 - (void)nativeAdWillPresentScreen{
 }
 
-/**
- *  原生广告点击之后应用进入后台时回调
- */
 - (void)nativeAdApplicationWillEnterBackground{
     [self.delegate adapter:self didClick:nil];
 }
 
-/**
- * 原生广告点击以后，内置AppStore或是内置浏览器被关闭时回调
- */
 - (void)nativeAdClosed{
 }
 
