@@ -64,11 +64,11 @@
 }
 
 - (void)ad:(ALAd *)ad wasHiddenIn:(UIView *)view {
-    [self.delegate adapter:self didCloseVideoAd:ad];
     if (self.isReward) {
         [self.delegate adapter:self videoAd:ad didReward:nil];
         self.isReward = NO;
     }
+    [self.delegate adapter:self didCloseVideoAd:ad];
 }
 
 - (void)ad:(ALAd *)ad wasClickedIn:(UIView *)view {
