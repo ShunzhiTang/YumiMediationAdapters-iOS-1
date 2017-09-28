@@ -12,6 +12,7 @@
 @interface YumiMediationVideoAdapterPlayableAds () <PlayableAdsDelegate>
 
 @property (nonatomic) PlayableAds *video;
+@property (nonatomic, assign) BOOL isReward;
 
 @end
 
@@ -60,7 +61,7 @@
 #pragma mark - PlayableAdsDelegate
 
 - (void)playableAdsDidRewardUser:(PlayableAds *)ads {
-    // NOTE: reward user in didClose delegate
+    self.isReward = YES;
 }
 
 - (void)playableAdsDidLoad:(PlayableAds *)ads {
@@ -80,9 +81,11 @@
 }
 
 - (void)playableAdsDidDismissScreen:(PlayableAds *)ads {
+    if (self.isReward) {
+        [self.delegate adapter:self videoAd:self.video didReward:nil];
+        self.isReward = NO;
+    }
     [self.delegate adapter:self didCloseVideoAd:self.video];
-    // NOTE: in case didReceiveRewardForPlacement not executed
-    [self.delegate adapter:self videoAd:self.video didReward:nil];
 }
 
 @end

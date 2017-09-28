@@ -12,6 +12,7 @@
 @interface YumiMediationVideoAdapterAppLovin () <ALAdDisplayDelegate, ALAdVideoPlaybackDelegate, ALAdLoadDelegate>
 
 @property (nonatomic) ALIncentivizedInterstitialAd *video;
+@property (nonatomic, assign) BOOL isReward;
 
 @end
 
@@ -63,9 +64,11 @@
 }
 
 - (void)ad:(ALAd *)ad wasHiddenIn:(UIView *)view {
+    if (self.isReward) {
+        [self.delegate adapter:self videoAd:ad didReward:nil];
+        self.isReward = NO;
+    }
     [self.delegate adapter:self didCloseVideoAd:ad];
-    // NOTE: in case didReceiveRewardForPlacement not executed
-    [self.delegate adapter:self videoAd:ad didReward:nil];
 }
 
 - (void)ad:(ALAd *)ad wasClickedIn:(UIView *)view {
@@ -79,7 +82,7 @@
 - (void)videoPlaybackEndedInAd:(ALAd *)ad
              atPlaybackPercent:(NSNumber *)percentPlayed
                   fullyWatched:(BOOL)wasFullyWatched {
-    // NOTE: reward user in didClose delegate
+    self.isReward = YES;
 }
 
 #pragma mark - ALAdLoadDelegate
