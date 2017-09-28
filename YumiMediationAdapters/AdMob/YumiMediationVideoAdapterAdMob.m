@@ -75,11 +75,11 @@
 }
 
 - (void)rewardBasedVideoAdDidClose:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
-    [self.delegate adapter:self didCloseVideoAd:rewardBasedVideoAd];
     if (self.isReward) {
         [self.delegate adapter:self videoAd:rewardBasedVideoAd didReward:nil];
         self.isReward = NO;
     }
+    [self.delegate adapter:self didCloseVideoAd:rewardBasedVideoAd];
 }
 
 @end

@@ -81,11 +81,11 @@
 }
 
 - (void)playableAdsDidDismissScreen:(PlayableAds *)ads {
-    [self.delegate adapter:self didCloseVideoAd:self.video];
     if (self.isReward) {
         [self.delegate adapter:self videoAd:self.video didReward:nil];
         self.isReward = NO;
     }
+    [self.delegate adapter:self didCloseVideoAd:self.video];
 }
 
 @end
