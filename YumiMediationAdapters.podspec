@@ -33,13 +33,13 @@ Pod::Spec.new do |s|
     { :name => "Facebook", :version => "4.23.0", :has_resource_bundle => true },
     { :name => "GDT", :version => "4.5.7" },
     { :name => "InMobi", :version => "6.2.1" },
-    { :name => "IronSource", :version => "6.6.1.1" },
+    { :name => "IronSource", :version => "6.6.8.1" },
     { :name => "StartApp", :version => "3.4.2" },
     { :name => "Unity", :version => "2.1.0" },
     { :name => "Vungle", :version => "5.1.0" },
-    { :name => "PlayableAds",:version => "1.3.0"},
     { :name => "Mobvista", :version => "2.5.0"},
     { :name => "Centrixlink", :version => "2.4.1"},
+    { :name => "PlayableAds",:version => "1.4.1"},
   ]
 
   subspecs.each do |spec|
