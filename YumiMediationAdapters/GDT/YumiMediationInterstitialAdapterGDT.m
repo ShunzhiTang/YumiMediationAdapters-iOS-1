@@ -30,10 +30,12 @@
 
     self.provider = provider;
     self.delegate = delegate;
-
-    self.interstitial =
-        [[GDTMobInterstitial alloc] initWithAppkey:self.provider.data.key1 placementId:self.provider.data.key2];
-    self.interstitial.delegate = self;
+    typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.interstitial = [[GDTMobInterstitial alloc] initWithAppkey:weakSelf.provider.data.key1
+                                                               placementId:weakSelf.provider.data.key2];
+        weakSelf.interstitial.delegate = weakSelf;
+    });
 
     return self;
 }
