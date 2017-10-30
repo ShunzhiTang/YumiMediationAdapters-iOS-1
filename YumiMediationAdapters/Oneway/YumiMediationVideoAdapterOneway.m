@@ -9,7 +9,7 @@
 #import "YumiMediationVideoAdapterOneway.h"
 #import <OneWaySDK.h>
 
-@interface YumiMediationVideoAdapterOneway ()<OneWaySDKDelegate>
+@interface YumiMediationVideoAdapterOneway () <OneWaySDKDelegate>
 
 @end
 
@@ -40,7 +40,7 @@
 }
 
 - (void)requestAd {
-     [OneWaySDK initialize:self.provider.data.key1 delegate:self];
+    [OneWaySDK initialize:self.provider.data.key1 delegate:self];
 }
 
 - (BOOL)isReady {
@@ -48,12 +48,12 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-     [OneWaySDK show: rootViewController];
+    [OneWaySDK show:rootViewController];
 }
 
 #pragma mark - OneWaySDKDelegate
 - (void)oneWaySDKReady:(NSString *)placementId {
-    [self.delegate  adapter:self didReceiveVideoAd:placementId];
+    [self.delegate adapter:self didReceiveVideoAd:placementId];
 }
 
 - (void)oneWaySDKDidError:(OneWaySDKError)error withMessage:(NSString *)message {
@@ -66,7 +66,7 @@
 }
 
 - (void)oneWaySDKDidFinish:(NSString *)placementId withFinishState:(OneWaySDKFinishState)state {
-    
+
     switch (state) {
         case kOneWaySDKFinishStateError:
             [self.delegate adapter:self videoAd:placementId didFailToLoad:@"the ad did not successfully display"];
@@ -81,7 +81,6 @@
         default:
             break;
     }
-    
 }
 
 @end
