@@ -40,6 +40,7 @@ Pod::Spec.new do |s|
     { :name => "Mobvista", :version => "2.5.0"},
     { :name => "Centrixlink", :version => "2.4.1"},
     { :name => "PlayableAds",:version => "1.4.1"},
+    { :name => "OneWay",:version => "1.3.0"},
   ]
 
   subspecs.each do |spec|
