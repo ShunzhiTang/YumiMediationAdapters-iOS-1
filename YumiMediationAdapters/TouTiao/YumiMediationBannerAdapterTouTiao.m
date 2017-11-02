@@ -60,7 +60,7 @@
         weakSelf.bannerView =
             [[WMBannerAdView alloc] initWithSlotID:weakSelf.provider.data.key2
                                               size:ttSize
-                                rootViewController:weakSelf.delegate.rootViewControllerForPresentingModalView];
+                                rootViewController:[weakSelf.delegate rootViewControllerForPresentingModalView]];
         weakSelf.bannerView.delegate = weakSelf;
         weakSelf.bannerView.frame = adFrame;
         weakSelf.bannerView.dislikeButton.hidden = YES;
