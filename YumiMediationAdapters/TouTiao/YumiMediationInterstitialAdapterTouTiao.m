@@ -7,8 +7,13 @@
 //
 
 #import "YumiMediationInterstitialAdapterTouTiao.h"
+#import <WMAdSDK/WMAdSDKManager.h>
+#import <WMAdSDK/WMInterstitialAd.h>
+#import <WMAdSDK/WMSize.h>
 
-@interface YumiMediationInterstitialAdapterTouTiao ()
+@interface YumiMediationInterstitialAdapterTouTiao () <WMInterstitialAdDelegate>
+
+@property (nonatomic) WMInterstitialAd *interstitial;
 
 @end
 
@@ -16,7 +21,7 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDTouTiao
+                                                           forProviderID:kYumiMediationAdapterIDYumiAds
                                                              requestType:YumiMediationSDKAdRequest];
 }
 
@@ -28,25 +33,53 @@
     self.provider = provider;
     self.delegate = delegate;
 
-    // TODO: setup code
+    [WMAdSDKManager setAppID:self.provider.data.key1];
 
     return self;
 }
 
 - (void)requestAd {
-    // TODO: request ad
+
+    WMSize *adSize = [WMSize sizeBy:WMProposalSize_Interstitial600_900];
+
+    self.interstitial = [[WMInterstitialAd alloc] initWithSlotID:self.provider.data.key2 size:adSize];
+    self.interstitial.delegate = self;
+
+    [self.interstitial loadAdData];
 }
 
 - (BOOL)isReady {
-    // TODO: check if ready
-    return YES;
+    return self.interstitial.isAdValid;
 }
 
 - (void)present {
-    UIViewController *rootViewController = [self.delegate rootViewControllerForPresentingModalView];
-    // TODO: present interstitial ad with rootViewController
+    [self.interstitial showAdFromRootViewController:[self.delegate rootViewControllerForPresentingModalView]];
 }
 
-// TODO: implement third party sdk delegate and delegate to mediation sdk
+#pragma mark : - WMInterstitialAdDelegate
+
+- (void)interstitialAdDidClick:(WMInterstitialAd *)interstitialAd {
+    [self.delegate adapter:self didClickInterstitialAd:interstitialAd];
+}
+
+- (void)interstitialAdDidClose:(WMInterstitialAd *)interstitialAd {
+    [self.delegate adapter:self willDismissScreen:interstitialAd];
+}
+
+- (void)interstitialAdWillClose:(WMInterstitialAd *)interstitialAd {
+    [self.delegate adapter:self willDismissScreen:interstitialAd];
+}
+
+- (void)interstitialAdDidLoad:(WMInterstitialAd *)interstitialAd {
+    [self.delegate adapter:self didReceiveInterstitialAd:interstitialAd];
+}
+
+- (void)interstitialAd:(WMInterstitialAd *)interstitialAd didFailWithError:(NSError *)error {
+    [self.delegate adapter:self interstitialAd:interstitialAd didFailToReceive:[error localizedDescription]];
+}
+
+- (void)interstitialAdWillVisible:(WMInterstitialAd *_Nullable)interstitialAd {
+    [self.delegate adapter:self willPresentScreen:interstitialAd];
+}
 
 @end
