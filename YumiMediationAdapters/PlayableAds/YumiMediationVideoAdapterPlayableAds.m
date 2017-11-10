@@ -43,9 +43,7 @@
 }
 
 - (void)requestAd {
-    self.video = [[PlayableAds alloc] initWithAdUnitID:self.provider.data.key2
-                                                 appID:self.provider.data.key1
-                                    rootViewController:[UIApplication sharedApplication].keyWindow.rootViewController];
+    self.video = [[PlayableAds alloc] initWithAdUnitID:self.provider.data.key2 appID:self.provider.data.key1];
     self.video.delegate = self;
     [self.video loadAd];
 }
