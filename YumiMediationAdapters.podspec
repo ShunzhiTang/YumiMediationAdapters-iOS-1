@@ -38,7 +38,7 @@ Pod::Spec.new do |s|
     { :name => "Unity", :version => "2.1.0" },
     { :name => "Vungle", :version => "5.1.0" },
     { :name => "AdNative",:version => "1.0.3"},
-    { :name => "PlayableAds",:version => "1.4.1"},
+    { :name => "PlayableAds",:version => "1.5.5"},
   ]
 
   subspecs.each do |spec|
