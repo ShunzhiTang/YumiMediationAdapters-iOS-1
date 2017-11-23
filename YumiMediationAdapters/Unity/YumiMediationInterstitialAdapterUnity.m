@@ -7,9 +7,10 @@
 //
 
 #import "YumiMediationInterstitialAdapterUnity.h"
+#import "YumiMediationUnityInstance.h"
 #import <UnityAds/UnityAds.h>
 
-@interface YumiMediationInterstitialAdapterUnity () <UnityAdsDelegate>
+@interface YumiMediationInterstitialAdapterUnity ()
 
 @end
 
@@ -28,9 +29,10 @@
 
     self.provider = provider;
     self.delegate = delegate;
-
-    [UnityAds initialize:self.provider.data.key1 delegate:self];
-    [UnityAds setDebugMode:NO];
+    if (![UnityAds isInitialized]) {
+        [UnityAds initialize:provider.data.key1 delegate:[YumiMediationUnityInstance sharedInstance] testMode:NO];
+    }
+    [YumiMediationUnityInstance sharedInstance].unityInterstitialAdapter = self;
 
     return self;
 }
@@ -45,23 +47,6 @@
 
 - (void)present {
     [UnityAds show:[self.delegate rootViewControllerForPresentingModalView] placementId:self.provider.data.key2];
-}
-
-#pragma mark - UnityAdsDelegate
-- (void)unityAdsReady:(NSString *)placementId {
-    [self.delegate adapter:self didReceiveInterstitialAd:nil];
-}
-
-- (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message {
-    [self.delegate adapter:self interstitialAd:nil didFailToReceive:message];
-}
-
-- (void)unityAdsDidStart:(NSString *)placementId {
-    [self.delegate adapter:self willPresentScreen:nil];
-}
-
-- (void)unityAdsDidFinish:(NSString *)placementId withFinishState:(UnityAdsFinishState)state {
-    [self.delegate adapter:self willDismissScreen:nil];
 }
 
 @end
