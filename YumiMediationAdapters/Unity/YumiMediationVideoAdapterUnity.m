@@ -7,9 +7,10 @@
 //
 
 #import "YumiMediationVideoAdapterUnity.h"
+#import "YumiMediationUnityInstance.h"
 #import <UnityAds/UnityAds.h>
 
-@interface YumiMediationVideoAdapterUnity () <UnityAdsDelegate>
+@interface YumiMediationVideoAdapterUnity ()
 
 @end
 
@@ -37,7 +38,10 @@
     self.delegate = delegate;
     self.provider = provider;
 
-    [UnityAds initialize:provider.data.key1 delegate:self testMode:NO];
+    if (![UnityAds isInitialized]) {
+        [UnityAds initialize:provider.data.key1 delegate:[YumiMediationUnityInstance sharedInstance] testMode:NO];
+    }
+    [YumiMediationUnityInstance sharedInstance].unityVideoAdapter = self;
 }
 
 - (void)requestAd {
@@ -50,29 +54,6 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     [UnityAds show:rootViewController placementId:self.provider.data.key2];
-}
-
-#pragma mark - UnityAdsDelegate
-- (void)unityAdsReady:(NSString *)placementId {
-    [self.delegate adapter:self didReceiveVideoAd:nil];
-}
-
-- (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message {
-    [self.delegate adapter:self videoAd:nil didFailToLoad:message];
-}
-
-- (void)unityAdsDidStart:(NSString *)placementId {
-    [self.delegate adapter:self didOpenVideoAd:nil];
-
-    [self.delegate adapter:self didStartPlayingVideoAd:nil];
-}
-
-- (void)unityAdsDidFinish:(NSString *)placementId withFinishState:(UnityAdsFinishState)state {
-    [self.delegate adapter:self didCloseVideoAd:nil];
-
-    if (state == kUnityAdsFinishStateCompleted) {
-        [self.delegate adapter:self videoAd:nil didReward:nil];
-    }
 }
 
 @end
