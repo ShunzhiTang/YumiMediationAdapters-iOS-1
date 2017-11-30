@@ -38,7 +38,7 @@
 
 #pragma mark - YumiMediationNativeAdapter
 - (void)requestAd:(NSUInteger)adCount {
-    self.nativeAd = [[GDTNativeAd alloc] initWithAppkey:@"1106092662" placementId:@"1040629599989432"];
+    self.nativeAd = [[GDTNativeAd alloc] initWithAppkey:self.provider.data.key1 placementId:self.provider.data.key2];
     self.nativeAd.delegate = self;
     self.nativeAd.controller = [UIApplication sharedApplication].keyWindow.rootViewController;
     [self.nativeAd loadAd:(int)adCount];
