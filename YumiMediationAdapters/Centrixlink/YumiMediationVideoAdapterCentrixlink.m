@@ -89,11 +89,10 @@
 }
 
 - (void)centrixLinkVideoADClose:(NSDictionary *)ADInfo {
-
-    BOOL isplayFinished = [ADInfo objectForKey:ADInfoKEYADPlayStatus];
+    NSNumber *isplayFinished = [ADInfo objectForKey:ADInfoKEYADPlayStatus];
     [self.delegate adapter:self didCloseVideoAd:self.video];
 
-    if (isplayFinished) {
+    if ([isplayFinished boolValue]) {
         [self.delegate adapter:self videoAd:self.video didReward:nil];
     }
 }
