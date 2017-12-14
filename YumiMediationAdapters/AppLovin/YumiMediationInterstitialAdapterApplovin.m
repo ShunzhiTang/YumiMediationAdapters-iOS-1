@@ -14,6 +14,7 @@
 @property (nonatomic) ALInterstitialAd *interstitial;
 @property (nonatomic) ALAd *ad;
 @property (nonatomic) ALSdk *sdk;
+@property (nonatomic, assign) BOOL isAdReady;
 
 @end
 
@@ -43,11 +44,12 @@
 }
 
 - (void)requestAd {
+    self.isAdReady = NO;
     [[self.sdk adService] loadNextAd:[ALAdSize sizeInterstitial] andNotify:self];
 }
 
 - (BOOL)isReady {
-    return [ALInterstitialAd isReadyForDisplay];
+    return self.isAdReady;
 }
 
 - (void)present {
@@ -57,7 +59,7 @@
 #pragma mark - Ad Load Delegate
 - (void)adService:(nonnull ALAdService *)adService didLoadAd:(nonnull ALAd *)ad {
     self.ad = ad;
-
+    self.isAdReady = YES;
     [self.delegate adapter:self didReceiveInterstitialAd:ad];
 }
 
