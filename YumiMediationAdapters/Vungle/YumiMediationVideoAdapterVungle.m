@@ -7,9 +7,10 @@
 //
 
 #import "YumiMediationVideoAdapterVungle.h"
+#import "YumiMediationVungleInstance.h"
 #import <VungleSDK/VungleSDK.h>
 
-@interface YumiMediationVideoAdapterVungle () <VungleSDKDelegate>
+@interface YumiMediationVideoAdapterVungle ()
 
 @end
 
@@ -37,11 +38,14 @@
     self.delegate = delegate;
     self.provider = provider;
 
+    YumiMediationVungleInstance *vungleInstance = [YumiMediationVungleInstance sharedInstance];
+    vungleInstance.vungleVideoAdapter = self;
+
     NSError *error;
     NSString *appID = self.provider.data.key1;
-    NSArray *placementIDsArray = @[ self.provider.data.key2 ];
+    NSArray *placementIDsArray = @[ self.provider.data.key2 ?: @"", self.provider.data.key3 ?: @"" ];
     VungleSDK *sdk = [VungleSDK sharedSDK];
-    sdk.delegate = self;
+    sdk.delegate = vungleInstance;
     [sdk setLoggingEnabled:NO];
     [sdk startWithAppId:appID placements:placementIDsArray error:&error];
 }
@@ -63,34 +67,6 @@
     if (error) {
         [self.delegate adapter:self videoAd:nil didFailToLoad:[error localizedDescription]];
     }
-}
-
-#pragma mark - VungleSDKDelegate
-- (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable placementID:(nullable NSString *)placementID {
-    if (isAdPlayable) {
-        [self.delegate adapter:self didReceiveVideoAd:nil];
-    } else if (![self isReady]) {
-        [self.delegate adapter:self videoAd:nil didFailToLoad:@"vungle no ad"];
-    }
-}
-
-- (void)vungleWillShowAdForPlacementID:(nullable NSString *)placementID {
-    [self.delegate adapter:self didOpenVideoAd:nil];
-
-    [self.delegate adapter:self didStartPlayingVideoAd:nil];
-}
-
-- (void)vungleWillCloseAdWithViewInfo:(nonnull VungleViewInfo *)info placementID:(nonnull NSString *)placementID {
-    [self.delegate adapter:self didCloseVideoAd:nil];
-    if ([info.completedView boolValue]) {
-        [self.delegate adapter:self videoAd:nil didReward:nil];
-    }
-}
-
-- (void)vungleSDKDidInitialize {
-}
-
-- (void)vungleSDKFailedToInitializeWithError:(NSError *)error {
 }
 
 @end
