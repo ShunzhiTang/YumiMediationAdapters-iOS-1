@@ -41,10 +41,13 @@
 
     self.provider = provider;
     self.delegate = delegate;
-    
-    [[MVSDK sharedInstance] setAppID:self.provider.data.key1 ApiKey:self.provider.data.key2];
-    self.videoAd = [MVRewardAdManager sharedInstance];
-    self.isAutoRequest = NO;
+
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[MVSDK sharedInstance] setAppID:weakSelf.provider.data.key1 ApiKey:weakSelf.provider.data.key2];
+        weakSelf.videoAd = [MVRewardAdManager sharedInstance];
+        weakSelf.isAutoRequest = NO;
+    });
 }
 
 - (void)requestAd {
