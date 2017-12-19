@@ -41,18 +41,8 @@
 
     self.provider = provider;
     self.delegate = delegate;
-
-    NSString *key1 = @"";
-    NSString *key2 = @"";
-    if (self.provider.data.key1) {
-        NSArray *keys = [self.provider.data.key1 componentsSeparatedByString:@"_"];
-        if (keys.count == 2) {
-            key1 = keys.firstObject;
-            key2 = keys.lastObject;
-        }
-    }
-
-    [[MVSDK sharedInstance] setAppID:key1 ApiKey:key2];
+    
+    [[MVSDK sharedInstance] setAppID:self.provider.data.key1 ApiKey:self.provider.data.key2];
     self.videoAd = [MVRewardAdManager sharedInstance];
     self.isAutoRequest = NO;
 }
@@ -60,13 +50,13 @@
 - (void)requestAd {
     if (!self.isAutoRequest) {
         self.isAutoRequest = YES;
-        [self.videoAd loadVideo:self.provider.data.key2 delegate:self];
+        [self.videoAd loadVideo:self.provider.data.key3 delegate:self];
     }
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [self.videoAd showVideo:self.provider.data.key2
-               withRewardId:self.provider.data.key3
+    [self.videoAd showVideo:self.provider.data.key3
+               withRewardId:self.provider.data.key4
                      userId:@""
                    delegate:self
              viewController:rootViewController];
@@ -74,7 +64,7 @@
 
 - (BOOL)isReady {
 
-    return [self.videoAd isVideoReadyToPlay:self.provider.data.key2];
+    return [self.videoAd isVideoReadyToPlay:self.provider.data.key3];
 }
 
 #pragma mark : - MVRewardAdLoadDelegate
