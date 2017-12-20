@@ -37,6 +37,13 @@
     self.delegate = delegate;
     self.provider = provider;
 
+    NSString *userId = [IronSource advertiserId];
+    if ([userId length] == 0) {
+        // If we couldn't get the advertiser id, we will use a default one.
+        userId = @"YumiMobi";
+    }
+    // After setting the delegates you can go ahead and initialize the SDK.
+    [IronSource setUserId:userId];
     [IronSource setRewardedVideoDelegate:self];
     [IronSource initWithAppKey:provider.data.key1];
 }
@@ -85,6 +92,9 @@
 }
 
 - (void)rewardedVideoDidEnd {
+}
+
+- (void)didClickRewardedVideo:(ISPlacementInfo *)placementInfo{
 }
 
 @end
