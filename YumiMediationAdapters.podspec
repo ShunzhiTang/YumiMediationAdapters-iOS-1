@@ -33,7 +33,7 @@ Pod::Spec.new do |s|
     { :name => "Facebook", :version => "4.26.1", :has_resource_bundle => true },
     { :name => "GDT", :version => "4.5.7" },
     { :name => "InMobi", :version => "6.2.1" },
-    { :name => "IronSource", :version => "6.6.8.1" },
+    { :name => "IronSource", :version => "6.7.3.1" },
     { :name => "StartApp", :version => "3.4.2" },
     { :name => "Unity", :version => "2.1.0" },
     { :name => "Vungle", :version => "5.1.0" },
