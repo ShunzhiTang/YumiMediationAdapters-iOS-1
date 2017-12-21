@@ -90,4 +90,8 @@
 - (void)didDismissLandingPage {
 }
 
+- (void)dealloc {
+    self.bannerView.delegate = nil;
+}
+
 @end
