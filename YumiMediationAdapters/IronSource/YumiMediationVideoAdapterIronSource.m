@@ -94,7 +94,7 @@
 - (void)rewardedVideoDidEnd {
 }
 
-- (void)didClickRewardedVideo:(ISPlacementInfo *)placementInfo{
+- (void)didClickRewardedVideo:(ISPlacementInfo *)placementInfo {
 }
 
 @end

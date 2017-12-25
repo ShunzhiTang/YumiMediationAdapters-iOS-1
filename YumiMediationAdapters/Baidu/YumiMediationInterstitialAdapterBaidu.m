@@ -78,7 +78,7 @@
     [self.delegate adapter:self willDismissScreen:interstitial];
 }
 
-- (void)dealloc{
+- (void)dealloc {
     self.interstitial.delegate = nil;
 }
 
