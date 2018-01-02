@@ -97,8 +97,8 @@
                                        delegate:weakSelf];
         weakSelf.interstitial.isNativeInterstitialGDT = YES;
 
-        weakSelf.nativeAd =
-            [[GDTNativeAd alloc] initWithAppkey:weakSelf.provider.data.key1 placementId:weakSelf.provider.data.key2];
+        weakSelf.nativeAd = [[GDTNativeAd alloc] initWithAppkey:weakSelf.provider.data.key1 ?: @""
+                                                    placementId:weakSelf.provider.data.key2 ?: @""];
         weakSelf.nativeAd.controller = weakSelf.interstitial;
         weakSelf.nativeAd.delegate = weakSelf;
 
