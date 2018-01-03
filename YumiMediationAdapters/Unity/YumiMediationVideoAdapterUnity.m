@@ -46,6 +46,9 @@
 
 - (void)requestAd {
     // NOTE: Unity do not provide any method for requesting ad, it handles the request internally
+    if ([UnityAds isReady:self.provider.data.key2]) {
+        [self.delegate adapter:self didReceiveVideoAd:nil];
+    }
 }
 
 - (BOOL)isReady {

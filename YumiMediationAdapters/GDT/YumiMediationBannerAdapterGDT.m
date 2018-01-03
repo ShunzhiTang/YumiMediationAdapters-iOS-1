@@ -46,8 +46,8 @@
             return;
         }
         strongSelf.bannerView = [[GDTMobBannerView alloc] initWithFrame:adframe
-                                                                 appkey:strongSelf.provider.data.key1
-                                                            placementId:strongSelf.provider.data.key2];
+                                                                 appkey:strongSelf.provider.data.key1 ?: @""
+                                                            placementId:strongSelf.provider.data.key2 ?: @""];
         [strongSelf.bannerView setCurrentViewController:[strongSelf.delegate rootViewControllerForPresentingModalView]];
         strongSelf.bannerView.interval = 0;
         strongSelf.bannerView.isAnimationOn = NO;

@@ -90,8 +90,8 @@
         strongSelf.webView.delegate = strongSelf;
         strongSelf.webView.scrollView.scrollEnabled = NO;
         // nativeAD init
-        strongSelf.nativeAd = [[GDTNativeAd alloc] initWithAppkey:strongSelf.provider.data.key1
-                                                      placementId:strongSelf.provider.data.key2];
+        strongSelf.nativeAd = [[GDTNativeAd alloc] initWithAppkey:strongSelf.provider.data.key1 ?: @""
+                                                      placementId:strongSelf.provider.data.key2 ?: @""];
         strongSelf.nativeAd.controller = strongSelf.delegate.rootViewControllerForPresentingModalView;
         strongSelf.nativeAd.delegate = strongSelf;
 
