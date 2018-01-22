@@ -40,12 +40,15 @@
 
     self.delegate = delegate;
     self.provider = provider;
+
+    self.video = [[PlayableAds alloc] initWithAdUnitID:self.provider.data.key2 appID:self.provider.data.key1];
+    self.video.delegate = self;
+    self.video.autoLoad = YES;
+    [self.video loadAd];
 }
 
 - (void)requestAd {
-    self.video = [[PlayableAds alloc] initWithAdUnitID:self.provider.data.key2 appID:self.provider.data.key1];
-    self.video.delegate = self;
-    [self.video loadAd];
+    // playableads auto load
 }
 
 - (BOOL)isReady {
