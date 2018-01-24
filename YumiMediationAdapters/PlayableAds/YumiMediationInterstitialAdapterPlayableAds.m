@@ -36,6 +36,7 @@
 - (void)requestAd {
     // TODO: request ad
     self.interstitial = [[PlayableAds alloc] initWithAdUnitID:self.provider.data.key2 appID:self.provider.data.key1];
+    self.interstitial.autoLoad = NO;
     self.interstitial.delegate = self;
     [self.interstitial loadAd];
 }
