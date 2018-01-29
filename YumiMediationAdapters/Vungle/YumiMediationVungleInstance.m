@@ -52,10 +52,10 @@
 
 - (void)vungleWillCloseAdWithViewInfo:(nonnull VungleViewInfo *)info placementID:(nonnull NSString *)placementID {
     if ([placementID isEqualToString:self.vungleVideoAdapter.provider.data.key2]) {
-        [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter didCloseVideoAd:nil];
         if ([info.completedView boolValue]) {
             [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter videoAd:nil didReward:nil];
         }
+        [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter didCloseVideoAd:nil];
     } else if ([placementID isEqualToString:self.vungleInterstitialAdapter.provider.data.key3]) {
         [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter willDismissScreen:nil];
         if ([info.didDownload boolValue]) {
