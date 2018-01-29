@@ -10,6 +10,7 @@
 #import "IronSource/IronSource.h"
 
 @interface YumiMediationVideoAdapterIronSource () <ISRewardedVideoDelegate>
+@property (nonatomic, assign) BOOL isReward;
 
 @end
 
@@ -69,7 +70,7 @@
 }
 
 - (void)didReceiveRewardForPlacement:(ISPlacementInfo *)placementInfo {
-    // NOTE: reward user in didClose delegate
+    self.isReward = YES;
 }
 
 - (void)rewardedVideoDidFailToShowWithError:(NSError *)error {
@@ -81,10 +82,12 @@
 }
 
 - (void)rewardedVideoDidClose {
-    [self.delegate adapter:self didCloseVideoAd:nil];
 
-    // NOTE: in case didReceiveRewardForPlacement not executed
-    [self.delegate adapter:self videoAd:nil didReward:nil];
+    if (self.isReward) {
+        [self.delegate adapter:self videoAd:nil didReward:nil];
+        self.isReward = NO;
+    }
+    [self.delegate adapter:self didCloseVideoAd:nil];
 }
 
 - (void)rewardedVideoDidStart {
