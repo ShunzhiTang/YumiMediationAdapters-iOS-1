@@ -12,6 +12,7 @@
 @interface YumiMediationVideoAdapterFacebook () <FBRewardedVideoAdDelegate>
 
 @property (nonatomic) FBRewardedVideoAd *rewardedVideoAd;
+@property (nonatomic, assign) BOOL isReward;
 
 @end
 
@@ -66,10 +67,15 @@
     [self.delegate adapter:self didReceiveVideoAd:rewardedVideoAd];
 }
 
-- (void)rewardedVideoAdComplete:(FBRewardedVideoAd *)rewardedVideoAd;
-{ [self.delegate adapter:self videoAd:rewardedVideoAd didReward:nil]; }
+- (void)rewardedVideoAdComplete:(FBRewardedVideoAd *)rewardedVideoAd{
+    self.isReward = YES;
+}
 
 - (void)rewardedVideoAdDidClose:(FBRewardedVideoAd *)rewardedVideoAd {
+    if (self.isReward) {
+        [self.delegate adapter:self videoAd:rewardedVideoAd didReward:nil];
+        self.isReward = NO;
+    }
     [self.delegate adapter:self didCloseVideoAd:rewardedVideoAd];
     self.rewardedVideoAd = nil;
 }
