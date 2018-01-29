@@ -10,6 +10,7 @@
 #import <Chartboost/Chartboost.h>
 
 @interface YumiMediationVideoAdapterChartboost () <ChartboostDelegate>
+@property (nonatomic,assign) BOOL isReward;
 
 @end
 
@@ -71,14 +72,16 @@
 }
 
 - (void)didCloseRewardedVideo:(CBLocation)location {
-    [self.delegate adapter:self didCloseVideoAd:nil];
 
-    // NOTE: in case didCompleteRewardedVideoWithReward not executed
-    [self.delegate adapter:self videoAd:nil didReward:nil];
+    if (self.isReward) {
+        self.isReward = NO;
+        [self.delegate adapter:self videoAd:nil didReward:nil];
+    }
+    [self.delegate adapter:self didCloseVideoAd:nil];
 }
 
 - (void)didCompleteRewardedVideo:(CBLocation)location withReward:(int)reward {
-    // NOTE: reward user in didClose delegate
+    self.isReward = YES;
 }
 
 @end
