@@ -13,6 +13,7 @@
 
 @property (nonatomic) IndependentVideoManager *videoManager;
 @property (nonatomic, assign) BOOL available;
+@property (nonatomic, assign) BOOL isReward;
 
 @end
 
@@ -72,12 +73,18 @@
     [self.delegate adapter:self didStartPlayingVideoAd:manager];
 }
 
+- (void)ivManagerCompletePlayVideo:(IndependentVideoManager *)manager{
+    self.isReward = YES;
+}
+
 - (void)ivManagerDidClosed:(IndependentVideoManager *)manager {
     self.available = NO;
-
+    if (self.isReward) {
+        [self.delegate adapter:self videoAd:manager didReward:nil];
+        self.isReward = NO;
+    }
     [self.delegate adapter:self didCloseVideoAd:manager];
 
-    [self.delegate adapter:self videoAd:manager didReward:nil];
 }
 
 - (void)ivManager:(IndependentVideoManager *)manager isIndependentVideoAvailable:(BOOL)available {

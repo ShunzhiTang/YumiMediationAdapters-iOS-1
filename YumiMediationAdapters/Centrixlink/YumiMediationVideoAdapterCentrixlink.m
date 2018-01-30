@@ -90,11 +90,10 @@
 
 - (void)centrixLinkVideoADClose:(NSDictionary *)ADInfo {
     NSNumber *isplayFinished = [ADInfo objectForKey:ADInfoKEYADPlayStatus];
-    [self.delegate adapter:self didCloseVideoAd:self.video];
-
     if ([isplayFinished boolValue]) {
         [self.delegate adapter:self videoAd:self.video didReward:nil];
     }
+    [self.delegate adapter:self didCloseVideoAd:self.video];
 }
 
 - (void)centrixLinkVideoADShowFail:(NSError *)error {

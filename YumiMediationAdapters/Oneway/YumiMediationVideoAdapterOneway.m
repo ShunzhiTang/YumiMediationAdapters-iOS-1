@@ -75,8 +75,8 @@
             [self.delegate adapter:self didCloseVideoAd:placementId];
             break;
         case kOneWaySDKFinishStateCompleted:
-            [self.delegate adapter:self didCloseVideoAd:placementId];
             [self.delegate adapter:self videoAd:placementId didReward:nil];
+            [self.delegate adapter:self didCloseVideoAd:placementId];
             break;
         default:
             break;
