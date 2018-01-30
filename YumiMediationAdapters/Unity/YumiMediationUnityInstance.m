@@ -53,11 +53,11 @@
     if ([self.unityInterstitialAdapter.provider.data.key2 isEqualToString:placementId]) {
         [self.unityInterstitialAdapter.delegate adapter:self.unityInterstitialAdapter willDismissScreen:nil];
     } else if ([self.unityVideoAdapter.provider.data.key2 isEqualToString:placementId]) {
-        [self.unityVideoAdapter.delegate adapter:self.unityVideoAdapter didCloseVideoAd:nil];
 
         if (state == kUnityAdsFinishStateCompleted) {
             [self.unityVideoAdapter.delegate adapter:self.unityVideoAdapter videoAd:nil didReward:nil];
         }
+        [self.unityVideoAdapter.delegate adapter:self.unityVideoAdapter didCloseVideoAd:nil];
     }
 }
 

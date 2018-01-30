@@ -12,6 +12,7 @@
 @interface YumiMediationVideoAdapterInMobi () <IMInterstitialDelegate>
 
 @property (nonatomic) IMInterstitial *video;
+@property (nonatomic, assign) BOOL isReward;
 
 @end
 
@@ -75,14 +76,16 @@
 }
 
 - (void)interstitialDidDismiss:(IMInterstitial *)interstitial {
-    [self.delegate adapter:self didCloseVideoAd:interstitial];
 
-    // NOTE: in case didRewardUserWithReward not executed
-    [self.delegate adapter:self videoAd:interstitial didReward:nil];
+    if (self.isReward) {
+        [self.delegate adapter:self videoAd:interstitial didReward:nil];
+        self.isReward = NO;
+    }
+    [self.delegate adapter:self didCloseVideoAd:interstitial];
 }
 
 - (void)interstitial:(IMInterstitial *)interstitial rewardActionCompletedWithRewards:(NSDictionary *)rewards {
-    // NOTE: reward user in didDismiss delegate
+    self.isReward = YES;
 }
 
 @end

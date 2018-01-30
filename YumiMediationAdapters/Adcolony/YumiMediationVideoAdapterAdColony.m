@@ -11,7 +11,8 @@
 
 @interface YumiMediationVideoAdapterAdColony ()
 
-@property (assign) BOOL isAdReady;
+@property (nonatomic,assign) BOOL isAdReady;
+@property (nonatomic,assign) BOOL isReward;
 @property (nonatomic) AdColonyInterstitial *video;
 
 @end
@@ -46,6 +47,7 @@
                       completion:^(NSArray<AdColonyZone *> *_Nonnull zones) {
                           [[zones firstObject] setReward:^(BOOL success, NSString *_Nonnull name, int amount){
                               // NOTE: not reward here but in ad close block
+                              self.isReward = success;
                           }];
                       }];
 }
@@ -62,15 +64,16 @@
 
             [ad setOpen:^{
                 [weakSelf.delegate adapter:weakSelf didOpenVideoAd:weakSelf.video];
-
                 [weakSelf.delegate adapter:weakSelf didStartPlayingVideoAd:weakSelf.video];
             }];
             [ad setClose:^{
                 weakSelf.isAdReady = NO;
-
+                if (self.isReward) {
+                    [weakSelf.delegate adapter:weakSelf videoAd:weakSelf.video didReward:nil];
+                    self.isReward = NO;
+                }
                 [weakSelf.delegate adapter:weakSelf didCloseVideoAd:weakSelf.video];
 
-                [weakSelf.delegate adapter:weakSelf videoAd:weakSelf.video didReward:nil];
             }];
         }
         failure:^(AdColonyAdRequestError *_Nonnull error) {

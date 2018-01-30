@@ -97,10 +97,10 @@
     self.isAutoRequest = NO;
     [self requestAd];
 
-    [self.delegate adapter:self didCloseVideoAd:self.videoAd];
     if (rewardInfo) {
         [self.delegate adapter:self videoAd:self.videoAd didReward:rewardInfo];
     }
+    [self.delegate adapter:self didCloseVideoAd:self.videoAd];
 }
 
 @end
