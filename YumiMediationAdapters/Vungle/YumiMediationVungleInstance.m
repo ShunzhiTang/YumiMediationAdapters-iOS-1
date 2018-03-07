@@ -22,21 +22,13 @@
 - (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable placementID:(nullable NSString *)placementID {
     // video
     if ([placementID isEqualToString:self.vungleVideoAdapter.provider.data.key2]) {
-        if (isAdPlayable || [self.vungleVideoAdapter isReady]) {
+        if (isAdPlayable) {
             [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter didReceiveVideoAd:nil];
-        } else {
-            [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter
-                                              videoAd:nil
-                                        didFailToLoad:@"vungle no ad"];
         }
     } else if ([placementID isEqualToString:self.vungleInterstitialAdapter.provider.data.key3]) {
-        if (isAdPlayable || [self.vungleInterstitialAdapter isReady]) {
+        if (isAdPlayable) {
             [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter
                                     didReceiveInterstitialAd:nil];
-        } else {
-            [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter
-                                              interstitialAd:nil
-                                            didFailToReceive:@"vungle no ad"];
         }
     }
 }
@@ -45,6 +37,7 @@
     if ([placementID isEqualToString:self.vungleVideoAdapter.provider.data.key2]) {
         [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter didOpenVideoAd:nil];
         [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter didStartPlayingVideoAd:nil];
+
     } else if ([placementID isEqualToString:self.vungleInterstitialAdapter.provider.data.key3]) {
         [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter willPresentScreen:nil];
     }
