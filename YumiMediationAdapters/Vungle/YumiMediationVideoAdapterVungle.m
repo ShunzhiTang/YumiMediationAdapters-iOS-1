@@ -54,6 +54,9 @@
     NSError *error;
     VungleSDK *sdk = [VungleSDK sharedSDK];
     [sdk loadPlacementWithID:self.provider.data.key2 error:&error];
+    if (error) {
+        [self.delegate adapter:self videoAd:nil didFailToLoad:[error description]];
+    }
 }
 
 - (BOOL)isReady {
