@@ -33,7 +33,7 @@ Pod::Spec.new do |s|
     { :name => "Facebook", :version => "4.26.1", :has_resource_bundle => true },
     { :name => "GDT", :version => "4.7.0" },
     { :name => "InMobi", :version => "6.2.1" },
-    { :name => "IronSource", :version => "6.7.3.1" },
+    { :name => "IronSource", :version => "6.7.7" },
     { :name => "StartApp", :version => "3.4.2" },
     { :name => "Unity", :version => "2.1.0" },
     { :name => "Vungle", :version => "5.1.0" },
@@ -41,7 +41,7 @@ Pod::Spec.new do |s|
     { :name => "Centrixlink", :version => "2.4.1"},
     { :name => "OneWay",:version => "1.3.0"},
     { :name => "TouTiao",:version => "1.2.0"},
-    { :name => "PlayableAds",:version => "2.0.2"},
+    { :name => "PlayableAds",:version => "2.0.3"},
   ]
 
   subspecs.each do |spec|
