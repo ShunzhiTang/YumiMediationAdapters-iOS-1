@@ -9,7 +9,7 @@
 #import "YumiMediationVideoAdapterOneway.h"
 #import <OneWaySDK.h>
 
-@interface YumiMediationVideoAdapterOneway () <OneWaySDKDelegate>
+@interface YumiMediationVideoAdapterOneway () <oneWaySDKRewardedAdDelegate>
 
 @end
 
@@ -37,50 +37,43 @@
 
     self.delegate = delegate;
     self.provider = provider;
+
+    [OneWaySDK configure:self.provider.data.key1];
 }
 
 - (void)requestAd {
-    [OneWaySDK initialize:self.provider.data.key1 delegate:self];
+    if ([OneWaySDK isConfigured]) {
+        [OWRewardedAd initWithDelegate:self];
+    }
 }
 
 - (BOOL)isReady {
-    return [OneWaySDK isReady];
+    return [OWRewardedAd isReady];
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [OneWaySDK show:rootViewController];
+    [OWRewardedAd show:rootViewController];
 }
 
-#pragma mark - OneWaySDKDelegate
-- (void)oneWaySDKReady:(NSString *)placementId {
-    [self.delegate adapter:self didReceiveVideoAd:placementId];
+#pragma mark : oneWaySDKRewardedAdDelegate
+- (void)oneWaySDKRewardedAdReady {
+    [self.delegate adapter:self didReceiveVideoAd:nil];
 }
 
+- (void)oneWaySDKRewardedAdDidShow:(NSString *)tag {
+    [self.delegate adapter:self didStartPlayingVideoAd:nil];
+    [self.delegate adapter:self didOpenVideoAd:nil];
+}
+
+- (void)oneWaySDKRewardedAdDidClose:(NSString *)tag withState:(NSNumber *)state {
+    [self.delegate adapter:self videoAd:nil didReward:nil];
+    [self.delegate adapter:self didCloseVideoAd:nil];
+}
+
+- (void)oneWaySDKRewardedAdDidClick:(NSString *)tag {
+}
 - (void)oneWaySDKDidError:(OneWaySDKError)error withMessage:(NSString *)message {
     [self.delegate adapter:self videoAd:nil didFailToLoad:message];
-}
-
-- (void)oneWaySDKDidStart:(NSString *)placementId {
-    [self.delegate adapter:self didStartPlayingVideoAd:placementId];
-    [self.delegate adapter:self didOpenVideoAd:placementId];
-}
-
-- (void)oneWaySDKDidFinish:(NSString *)placementId withFinishState:(OneWaySDKFinishState)state {
-
-    switch (state) {
-        case kOneWaySDKFinishStateError:
-            [self.delegate adapter:self videoAd:placementId didFailToLoad:@"the ad did not successfully display"];
-            break;
-        case kOneWaySDKFinishStateSkipped:
-            [self.delegate adapter:self didCloseVideoAd:placementId];
-            break;
-        case kOneWaySDKFinishStateCompleted:
-            [self.delegate adapter:self videoAd:placementId didReward:nil];
-            [self.delegate adapter:self didCloseVideoAd:placementId];
-            break;
-        default:
-            break;
-    }
 }
 
 @end
