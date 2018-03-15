@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
 
   subspecs = [
     { :name => "AdColony", :version => "3.1.1" },
-    { :name => "AdMob", :version => "7.20.0", :has_resource_bundle => true },
+    { :name => "AdMob", :version => "7.29.0", :has_resource_bundle => true },
     { :name => "AppLovin", :version => "4.2.1" },
     { :name => "Baidu", :version => "4.5.0.1" },
     { :name => "Chartboost", :version => "6.6.3" },
@@ -33,15 +33,15 @@ Pod::Spec.new do |s|
     { :name => "Facebook", :version => "4.26.1", :has_resource_bundle => true },
     { :name => "GDT", :version => "4.7.0" },
     { :name => "InMobi", :version => "6.2.1" },
-    { :name => "IronSource", :version => "6.7.7" },
+    { :name => "IronSource", :version => "6.7.6" },
     { :name => "StartApp", :version => "3.4.2" },
     { :name => "Unity", :version => "2.1.0" },
     { :name => "Vungle", :version => "5.1.0" },
     { :name => "Mobvista", :version => "3.3.5"},
     { :name => "Centrixlink", :version => "2.4.1"},
-    { :name => "OneWay",:version => "1.3.0"},
+    { :name => "OneWay",:version => "2.1.0"},
     { :name => "TouTiao",:version => "1.2.0"},
-    { :name => "PlayableAds",:version => "2.0.3"},
+    { :name => "PlayableAds",:version => "2.0.4"},
   ]
 
   subspecs.each do |spec|
