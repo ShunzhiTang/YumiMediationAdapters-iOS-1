@@ -41,7 +41,6 @@ Pod::Spec.new do |s|
     { :name => "Centrixlink", :version => "2.4.1"},
     { :name => "OneWay",:version => "2.1.0"},
     { :name => "TouTiao",:version => "1.2.0"},
-    { :name => "PlayableAds",:version => "2.0.5"},
   ]
 
   subspecs.each do |spec|
@@ -50,10 +49,7 @@ Pod::Spec.new do |s|
     has_resource_bundle = spec[:has_resource_bundle]
 
     s.subspec name do |sp|
-      if name != "PlayableAds"
         sp.dependency "Yumi#{name}", version
-      else
-        sp.dependency "#{name}", version
       end
       sp.source_files = "YumiMediationAdapters/#{name}/*.{h,m}"
 
