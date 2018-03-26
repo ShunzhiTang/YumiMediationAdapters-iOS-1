@@ -50,7 +50,6 @@ Pod::Spec.new do |s|
 
     s.subspec name do |sp|
         sp.dependency "Yumi#{name}", version
-      end
       sp.source_files = "YumiMediationAdapters/#{name}/*.{h,m}"
 
       if has_resource_bundle
