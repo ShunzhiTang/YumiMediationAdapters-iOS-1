@@ -49,7 +49,7 @@ Pod::Spec.new do |s|
     has_resource_bundle = spec[:has_resource_bundle]
 
     s.subspec name do |sp|
-        sp.dependency "Yumi#{name}", version
+      sp.dependency "Yumi#{name}", version
       sp.source_files = "YumiMediationAdapters/#{name}/*.{h,m}"
 
       if has_resource_bundle
