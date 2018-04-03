@@ -24,6 +24,9 @@
 @property (nonatomic) YumiMediationBannerProvider *provider;
 @property (nonatomic) YumiBannerViewTemplateManager *templateManager;
 
+@property (nonatomic, assign) YumiMediationAdViewBannerSize bannerSize;
+@property (nonatomic, assign) BOOL isSmartBanner;
+
 @end
 
 @implementation YumiMediationBannerAdapterNativeGDT
@@ -73,11 +76,20 @@
     return self;
 }
 
+- (void)setBannerSizeWith:(YumiMediationAdViewBannerSize)adSize smartBanner:(BOOL)isSmart {
+    self.bannerSize = adSize;
+    self.isSmartBanner = isSmart;
+}
+
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     // request remote template
     [self requestBannerViewAdTemplate];
 
     CGSize adSize = isiPad ? CGSizeMake(728, 90) : CGSizeMake(320, 50);
+    if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
+        adSize = CGSizeMake(300, 250);
+    }
+
     CGRect adframe = CGRectMake(0, 0, adSize.width, adSize.height);
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{

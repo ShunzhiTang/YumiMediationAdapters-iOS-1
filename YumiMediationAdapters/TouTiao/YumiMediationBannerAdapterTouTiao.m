@@ -19,6 +19,9 @@
 @property (nonatomic) YumiMediationBannerProvider *provider;
 @property (nonatomic) WMBannerAdView *bannerView;
 
+@property (nonatomic, assign) YumiMediationAdViewBannerSize bannerSize;
+@property (nonatomic, assign) BOOL isSmartBanner;
+
 @end
 
 @implementation YumiMediationBannerAdapterTouTiao
@@ -42,16 +45,26 @@
     return self;
 }
 
+- (void)setBannerSizeWith:(YumiMediationAdViewBannerSize)adSize smartBanner:(BOOL)isSmart {
+    self.bannerSize = adSize;
+    self.isSmartBanner = isSmart;
+}
+
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
 
     WMSize *ttSize =
         isiPad ? [WMSize sizeBy:WMProposalSize_Banner600_300] : [WMSize sizeBy:WMProposalSize_Banner600_100];
 
     CGSize adSize = isiPad ? CGSizeMake(728, 90) : CGSizeMake(320, 50);
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:autoAdSize] boolValue]) {
+    if (self.isSmartBanner) {
 
-        adSize = [[YumiTool sharedTool] fetchBannerAdSize];
+        adSize = [[YumiTool sharedTool] fetchBannerAdSizeWith:self.bannerSize smartBanner:self.isSmartBanner];
     }
+    if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
+        ttSize = [WMSize sizeBy:WMProposalSize_Banner600_500];
+        adSize = CGSizeMake(300, 250);
+    }
+
     CGRect adFrame = CGRectMake(0, 0, adSize.width, adSize.height);
 
     __weak typeof(self) weakSelf = self;
