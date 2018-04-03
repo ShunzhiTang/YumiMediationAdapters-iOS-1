@@ -9,6 +9,7 @@
 #import "YumiMediationBannerAdapterInMobi.h"
 #import <InMobiSDK/InMobiSDK.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationBannerAdapterInMobi () <IMBannerDelegate, YumiMediationBannerAdapter>
 
@@ -42,6 +43,13 @@
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     CGRect adFrame = isiPad ? CGRectMake(0, 0, 728, 90) : CGRectMake(0, 0, 320, 50);
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:autoAdSize] boolValue]) {
+        CGSize size = [[YumiTool sharedTool] fetchBannerAdSize];
+        adFrame = CGRectMake(0, 0, size.width, size.height);
+    }
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:YumiMediationBannerSelectableAdSize] integerValue] == kYumiMediationAdViewBanner300x250) {
+        adFrame = CGRectMake(0, 0, 300, 250);
+    }
     long long placementId = [self.provider.data.key2 longLongValue];
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{

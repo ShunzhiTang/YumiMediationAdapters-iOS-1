@@ -40,6 +40,10 @@
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     CGSize adSize = isiPad ? kBaiduAdViewBanner728x90 : kBaiduAdViewBanner320x48;
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:YumiMediationBannerSelectableAdSize] integerValue] == kYumiMediationAdViewBanner300x250) {
+        adSize = kBaiduAdViewSquareBanner300x250;
+    }
+
     CGRect adFrame = CGRectMake(0, 0, adSize.width, adSize.height);
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{

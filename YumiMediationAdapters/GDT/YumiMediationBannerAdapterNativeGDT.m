@@ -78,6 +78,10 @@
     [self requestBannerViewAdTemplate];
 
     CGSize adSize = isiPad ? CGSizeMake(728, 90) : CGSizeMake(320, 50);
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:YumiMediationBannerSelectableAdSize] integerValue] == kYumiMediationAdViewBanner300x250) {
+        adSize = CGSizeMake(300, 250);
+    }
+    
     CGRect adframe = CGRectMake(0, 0, adSize.width, adSize.height);
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
