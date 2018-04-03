@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
 
   subspecs = [
     { :name => "AdColony", :version => "3.1.1" },
-    { :name => "AdMob", :version => "7.29.0", :has_resource_bundle => true },
+    { :name => "AdMob", :version => "7.30.0", :has_resource_bundle => true },
     { :name => "AppLovin", :version => "4.2.1" },
     { :name => "Baidu", :version => "4.5.0.1" },
     { :name => "Chartboost", :version => "6.6.3" },
