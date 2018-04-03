@@ -11,8 +11,8 @@
 
 @interface YumiMediationVideoAdapterAdColony ()
 
-@property (nonatomic,assign) BOOL isAdReady;
-@property (nonatomic,assign) BOOL isReward;
+@property (nonatomic, assign) BOOL isAdReady;
+@property (nonatomic, assign) BOOL isReward;
 @property (nonatomic) AdColonyInterstitial *video;
 
 @end
@@ -45,7 +45,7 @@
                          zoneIDs:@[ provider.data.key2 ]
                          options:nil
                       completion:^(NSArray<AdColonyZone *> *_Nonnull zones) {
-                          [[zones firstObject] setReward:^(BOOL success, NSString *_Nonnull name, int amount){
+                          [[zones firstObject] setReward:^(BOOL success, NSString *_Nonnull name, int amount) {
                               // NOTE: not reward here but in ad close block
                               self.isReward = success;
                           }];

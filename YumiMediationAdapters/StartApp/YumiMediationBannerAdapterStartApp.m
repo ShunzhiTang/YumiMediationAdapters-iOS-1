@@ -40,7 +40,8 @@
 
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:YumiMediationBannerSelectableAdSize] integerValue] == kYumiMediationAdViewBanner300x250) {
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:YumiMediationBannerSelectableAdSize] integerValue] ==
+        kYumiMediationAdViewBanner300x250) {
         [self.delegate adapter:self didFailToReceiveAd:@"StartApp not support kYumiMediationAdViewBanner300x250"];
         return;
     }

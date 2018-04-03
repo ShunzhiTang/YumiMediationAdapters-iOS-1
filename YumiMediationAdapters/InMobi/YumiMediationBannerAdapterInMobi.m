@@ -47,7 +47,8 @@
         CGSize size = [[YumiTool sharedTool] fetchBannerAdSize];
         adFrame = CGRectMake(0, 0, size.width, size.height);
     }
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:YumiMediationBannerSelectableAdSize] integerValue] == kYumiMediationAdViewBanner300x250) {
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:YumiMediationBannerSelectableAdSize] integerValue] ==
+        kYumiMediationAdViewBanner300x250) {
         adFrame = CGRectMake(0, 0, 300, 250);
     }
     long long placementId = [self.provider.data.key2 longLongValue];

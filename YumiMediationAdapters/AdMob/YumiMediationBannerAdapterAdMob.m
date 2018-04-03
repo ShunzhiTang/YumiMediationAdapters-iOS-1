@@ -44,11 +44,12 @@
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:autoAdSize] boolValue]) {
         adSize = isPortrait ? kGADAdSizeSmartBannerPortrait : kGADAdSizeSmartBannerLandscape;
     }
-    
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:YumiMediationBannerSelectableAdSize] integerValue] == kYumiMediationAdViewBanner300x250) {
+
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:YumiMediationBannerSelectableAdSize] integerValue] ==
+        kYumiMediationAdViewBanner300x250) {
         adSize = kGADAdSizeMediumRectangle;
     }
-    
+
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;

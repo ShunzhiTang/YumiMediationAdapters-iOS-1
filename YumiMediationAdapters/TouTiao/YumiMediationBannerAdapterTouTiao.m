@@ -52,11 +52,12 @@
 
         adSize = [[YumiTool sharedTool] fetchBannerAdSize];
     }
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:YumiMediationBannerSelectableAdSize] integerValue] == kYumiMediationAdViewBanner300x250) {
-        ttSize = [WMSize sizeBy:WMProposalSize_Banner600_500] ;
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:YumiMediationBannerSelectableAdSize] integerValue] ==
+        kYumiMediationAdViewBanner300x250) {
+        ttSize = [WMSize sizeBy:WMProposalSize_Banner600_500];
         adSize = CGSizeMake(300, 250);
     }
-    
+
     CGRect adFrame = CGRectMake(0, 0, adSize.width, adSize.height);
 
     __weak typeof(self) weakSelf = self;
