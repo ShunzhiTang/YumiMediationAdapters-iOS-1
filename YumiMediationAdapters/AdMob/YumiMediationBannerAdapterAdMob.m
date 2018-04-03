@@ -17,6 +17,9 @@
 @property (nonatomic) YumiMediationBannerProvider *provider;
 @property (nonatomic) GADBannerView *bannerView;
 
+@property (nonatomic, assign) YumiMediationAdViewBannerSize bannerSize;
+@property (nonatomic, assign) BOOL isSmartBanner;
+
 @end
 
 @implementation YumiMediationBannerAdapterAdMob
@@ -37,16 +40,20 @@
     return self;
 }
 
+- (void)setBannerSizeWith:(YumiMediationAdViewBannerSize)adSize smartBanner:(BOOL)isSmart {
+    self.bannerSize = adSize;
+    self.isSmartBanner = isSmart;
+}
+
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     GADAdSize adSize = isiPad ? kGADAdSizeLeaderboard : kGADAdSizeBanner;
 
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:autoAdSize] boolValue]) {
+    if (self.isSmartBanner) {
         adSize = isPortrait ? kGADAdSizeSmartBannerPortrait : kGADAdSizeSmartBannerLandscape;
     }
 
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:YumiMediationBannerSelectableAdSize] integerValue] ==
-        kYumiMediationAdViewBanner300x250) {
+    if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
         adSize = kGADAdSizeMediumRectangle;
     }
 

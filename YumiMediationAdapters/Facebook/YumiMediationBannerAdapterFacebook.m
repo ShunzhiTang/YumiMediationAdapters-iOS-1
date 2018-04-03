@@ -16,6 +16,9 @@
 @property (nonatomic) YumiMediationBannerProvider *provider;
 @property (nonatomic) FBAdView *bannerView;
 
+@property (nonatomic, assign) YumiMediationAdViewBannerSize bannerSize;
+@property (nonatomic, assign) BOOL isSmartBanner;
+
 @end
 
 @implementation YumiMediationBannerAdapterFacebook
@@ -35,11 +38,15 @@
     return self;
 }
 
+- (void)setBannerSizeWith:(YumiMediationAdViewBannerSize)adSize smartBanner:(BOOL)isSmart {
+    self.bannerSize = adSize;
+    self.isSmartBanner = isSmart;
+}
+
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     FBAdSize adSize = isiPad ? kFBAdSizeHeight90Banner : kFBAdSizeHeight50Banner;
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:YumiMediationBannerSelectableAdSize] integerValue] ==
-        kYumiMediationAdViewBanner300x250) {
+    if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
         adSize = kFBAdSizeHeight250Rectangle;
     }
     CGSize viewSize = [[UIScreen mainScreen] bounds].size;

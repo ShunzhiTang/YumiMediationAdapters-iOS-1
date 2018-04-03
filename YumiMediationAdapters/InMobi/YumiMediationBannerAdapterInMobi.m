@@ -17,6 +17,9 @@
 @property (nonatomic) YumiMediationBannerProvider *provider;
 @property (nonatomic) IMBanner *bannerView;
 
+@property (nonatomic, assign) YumiMediationAdViewBannerSize bannerSize;
+@property (nonatomic, assign) BOOL isSmartBanner;
+
 @end
 
 @implementation YumiMediationBannerAdapterInMobi
@@ -40,15 +43,19 @@
     return self;
 }
 
+- (void)setBannerSizeWith:(YumiMediationAdViewBannerSize)adSize smartBanner:(BOOL)isSmart {
+    self.bannerSize = adSize;
+    self.isSmartBanner = isSmart;
+}
+
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     CGRect adFrame = isiPad ? CGRectMake(0, 0, 728, 90) : CGRectMake(0, 0, 320, 50);
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:autoAdSize] boolValue]) {
-        CGSize size = [[YumiTool sharedTool] fetchBannerAdSize];
+    if (self.isSmartBanner) {
+        CGSize size = [[YumiTool sharedTool] fetchBannerAdSizeWith:self.bannerSize smartBanner:self.isSmartBanner];
         adFrame = CGRectMake(0, 0, size.width, size.height);
     }
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:YumiMediationBannerSelectableAdSize] integerValue] ==
-        kYumiMediationAdViewBanner300x250) {
+    if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
         adFrame = CGRectMake(0, 0, 300, 250);
     }
     long long placementId = [self.provider.data.key2 longLongValue];

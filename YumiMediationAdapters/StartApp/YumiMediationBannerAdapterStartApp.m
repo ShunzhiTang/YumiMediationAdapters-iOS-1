@@ -18,6 +18,9 @@
 @property (nonatomic) YumiMediationBannerProvider *provider;
 @property (nonatomic) STABannerView *bannerView;
 
+@property (nonatomic, assign) YumiMediationAdViewBannerSize bannerSize;
+@property (nonatomic, assign) BOOL isSmartBanner;
+
 @end
 
 @implementation YumiMediationBannerAdapterStartApp
@@ -38,16 +41,20 @@
     return self;
 }
 
+- (void)setBannerSizeWith:(YumiMediationAdViewBannerSize)adSize smartBanner:(BOOL)isSmart {
+    self.bannerSize = adSize;
+    self.isSmartBanner = isSmart;
+}
+
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:YumiMediationBannerSelectableAdSize] integerValue] ==
-        kYumiMediationAdViewBanner300x250) {
+    if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
         [self.delegate adapter:self didFailToReceiveAd:@"StartApp not support kYumiMediationAdViewBanner300x250"];
         return;
     }
     STABannerSize staAdSize = isiPad ? STA_PortraitAdSize_768x90 : STA_PortraitAdSize_320x50;
 
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:autoAdSize] boolValue]) {
+    if (self.isSmartBanner) {
         staAdSize = STA_AutoAdSize;
     }
 
