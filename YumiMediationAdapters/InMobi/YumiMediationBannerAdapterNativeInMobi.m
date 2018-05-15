@@ -51,7 +51,7 @@
         weakSelf.templateModel = templateModel;
     }
         failure:^(NSError *_Nonnull error) {
-            [[YumiLogger stdLogger] log:kLogLevelError message:[error localizedDescription]];
+            [[YumiLogger stdLogger] log:kYumiLogLevelError message:[error localizedDescription]];
         }];
 
     self.currentID = [self.templateManager getCurrentNativeTemplate].templateID;
