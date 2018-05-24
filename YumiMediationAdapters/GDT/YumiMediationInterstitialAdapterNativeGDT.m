@@ -8,16 +8,16 @@
 
 #import "YumiMediationInterstitialAdapterNativeGDT.h"
 #import "GDTNativeAd.h"
-#import <YumiMediationSDK/YumiAdsCustomViewController.h>
+#import <YumiMediationSDK/YumiAdsWKCustomViewController.h>
 #import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
 #import <YumiMediationSDK/YumiTool.h>
 
-@interface YumiMediationInterstitialAdapterNativeGDT () <YumiAdsCustomViewControllerDelegate, GDTNativeAdDelegate>
+@interface YumiMediationInterstitialAdapterNativeGDT () <YumiAdsWKCustomViewControllerDelegate, GDTNativeAdDelegate>
 
 @property (nonatomic) GDTNativeAd *nativeAd;
 @property (nonatomic) GDTNativeAdData *currentAd;
 @property (nonatomic) NSArray *data;
-@property (nonatomic) YumiAdsCustomViewController *interstitial;
+@property (nonatomic) YumiAdsWKCustomViewController *interstitial;
 
 @property (nonatomic) YumiMediationTemplateModel *templateModel;
 @property (nonatomic, assign) NSInteger currentID;
@@ -88,13 +88,13 @@
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.interstitial = [[YumiAdsCustomViewController alloc]
-            initYumiAdsCustomViewControllerWith:gdtFrame
-                                      clickType:YumiAdsClickTypeDownload
-                               closeBtnPosition:weakSelf.provider.data.closeButton.position
-                                  closeBtnFrame:closeBtnFrame
-                                       logoType:YumiAdsLogoGDT
-                                       delegate:weakSelf];
+        weakSelf.interstitial = [[YumiAdsWKCustomViewController alloc]
+            initYumiAdsWKCustomViewControllerWith:gdtFrame
+                                        clickType:YumiAdsClickTypeDownload
+                                 closeBtnPosition:weakSelf.provider.data.closeButton.position
+                                    closeBtnFrame:closeBtnFrame
+                                         logoType:YumiAdsLogoGDT
+                                         delegate:weakSelf];
         weakSelf.interstitial.isNativeInterstitialGDT = YES;
 
         weakSelf.nativeAd = [[GDTNativeAd alloc] initWithAppkey:weakSelf.provider.data.key1 ?: @""
@@ -194,8 +194,8 @@
 - (void)nativeAdApplicationWillEnterBackground {
 }
 
-#pragma mark : YumiAdsCustomViewControllerDelegate
-- (void)yumiAdsCustomViewControllerDidReceivedAd:(UIViewController *)viewController {
+#pragma mark : YumiAdsWKCustomViewControllerDelegate
+- (void)yumiAdsWKCustomViewControllerDidReceivedAd:(UIViewController *)viewController {
 
     [self.delegate adapter:self
         didReceiveInterstitialAd:self.interstitial
@@ -203,22 +203,22 @@
                   withTemplateID:(int)self.currentID];
 }
 
-- (void)yumiAdsCustomViewController:(UIViewController *)viewController didFailToReceiveAdWithError:(NSError *)error {
+- (void)yumiAdsWKCustomViewController:(UIViewController *)viewController didFailToReceiveAdWithError:(NSError *)error {
     [self.delegate adapter:self interstitialAd:self.interstitial didFailToReceive:[error localizedDescription]];
 }
 
-- (void)didClickOnYumiAdsCustomViewController:(UIViewController *)viewController point:(CGPoint)point {
+- (void)didClickOnYumiAdsWKCustomViewController:(UIViewController *)viewController point:(CGPoint)point {
     [self.nativeAd clickAd:self.currentAd];
 
     [self.delegate adapter:self didClickInterstitialAd:self.interstitial on:point withTemplateID:(int)self.currentID];
 }
 
-- (void)yumiAdsCustomViewControllerDidPresent:(UIViewController *)viewController {
+- (void)yumiAdsWKCustomViewControllerDidPresent:(UIViewController *)viewController {
 
     [self.delegate adapter:self willPresentScreen:self.interstitial];
 }
 
-- (void)yumiAdsCustomViewControllerDidClosed:(UIViewController *)viewController {
+- (void)yumiAdsWKCustomViewControllerDidClosed:(UIViewController *)viewController {
     [self.delegate adapter:self willDismissScreen:self.interstitial];
 }
 
