@@ -66,10 +66,11 @@
 
     self.provider = provider;
     self.delegate = delegate;
-
-    [IMSdk initWithAccountID:self.provider.data.key1];
-    [IMSdk setLogLevel:kIMSDKLogLevelNone];
-
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [IMSdk initWithAccountID:self.provider.data.key1];
+        [IMSdk setLogLevel:kIMSDKLogLevelNone];
+    });
     return self;
 }
 
