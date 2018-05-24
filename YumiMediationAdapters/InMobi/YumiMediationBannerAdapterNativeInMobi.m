@@ -8,19 +8,19 @@
 
 #import "YumiMediationBannerAdapterNativeInMobi.h"
 #import <InMobiSDK/InMobiSDK.h>
-#import <YumiMediationSDK/YumiAdsCustomView.h>
+#import <YumiMediationSDK/YumiAdsWKCustomView.h>
 #import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationBannerAdapterNativeInMobi () <YumiMediationBannerAdapter, IMNativeDelegate,
-                                                      YumiAdsCustomViewDelegate>
+                                                      YumiAdsWKCustomViewDelegate>
 
 @property (nonatomic, weak) id<YumiMediationBannerAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationBannerProvider *provider;
 @property (nonatomic) IMNative *nativeAd;
 @property (nonatomic) NSString *nativeContent;
-@property (nonatomic) YumiAdsCustomView *webView;
+@property (nonatomic) YumiAdsWKCustomView *webView;
 @property (nonatomic) YumiMediationTemplateModel *templateModel;
 @property (nonatomic, assign) NSInteger currentID;
 @property (nonatomic) YumiBannerViewTemplateManager *templateManager;
@@ -101,11 +101,11 @@
         if (!strongSelf) {
             return;
         }
-        // YumiAdsCustomView init
-        strongSelf.webView = [[YumiAdsCustomView alloc] initYumiAdsCustomViewWith:adFrame
-                                                                        clickType:YumiAdsClickTypeOpenSystem
-                                                                         logoType:YumiAdsLogoCommon
-                                                                         delegate:strongSelf];
+        // YumiAdsWKCustomView init
+        strongSelf.webView = [[YumiAdsWKCustomView alloc] initYumiAdsWKCustomViewWith:adFrame
+                                                                            clickType:YumiAdsClickTypeOpenSystem
+                                                                             logoType:YumiAdsLogoCommon
+                                                                             delegate:strongSelf];
         // nativeAD init
         strongSelf.nativeAd =
             [[IMNative alloc] initWithPlacementId:[strongSelf.provider.data.key2 longLongValue] delegate:strongSelf];
@@ -175,24 +175,18 @@
 - (void)nativeAdImpressed:(IMNative *)native {
 }
 
-#pragma mark : - YumiAdsCustomViewDelegate
-- (void)yumiAdsCustomViewDidStartLoad:(UIWebView *)webView {
-}
-- (void)yumiAdsCustomViewDidFinishLoad:(UIWebView *)webView {
+#pragma mark : - YumiAdsWKCustomViewDelegate
+- (void)yumiAdsWKCustomViewDidFinishLoad:(WKWebView *)webView {
     [self.delegate adapter:self didReceiveAd:self.webView withTemplateID:(int)self.currentID];
 }
-- (void)yumiAdsCustomView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
+- (void)yumiAdsWKCustomView:(WKWebView *)webView didFailLoadWithError:(NSError *)error {
     [self.delegate adapter:self didFailToReceiveAd:[error localizedDescription]];
 }
 
-- (void)didClickOnYumiAdsCustomViewWithPoint:(CGPoint)point {
+- (void)didClickOnYumiAdsWKCustomView:(WKWebView *)webView point:(CGPoint)point {
     [self.delegate adapter:self didClick:self.webView on:point withTemplateID:(int)self.currentID];
 }
-
-- (void)didClickOnYumiAdsCustomView:(UIWebView *)webView point:(CGPoint)point {
-    [self.delegate adapter:self didClick:self.webView on:CGPointZero withTemplateID:(int)self.currentID];
-}
-- (UIViewController *)rootViewControllerForPresentYumiAdsCustomView {
+- (UIViewController *)rootViewControllerForPresentYumiAdsWKCustomView {
     return [self.delegate rootViewControllerForPresentingModalView];
 }
 
