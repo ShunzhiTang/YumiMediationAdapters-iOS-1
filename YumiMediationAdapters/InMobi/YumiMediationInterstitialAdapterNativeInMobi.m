@@ -7,15 +7,15 @@
 
 #import "YumiMediationInterstitialAdapterNativeInMobi.h"
 #import <InMobiSDK/InMobiSDK.h>
-#import <YumiMediationSDK/YumiAdsCustomViewController.h>
+#import <YumiMediationSDK/YumiAdsWKCustomViewController.h>
 #import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
 #import <YumiMediationSDK/YumiTool.h>
 
-@interface YumiMediationInterstitialAdapterNativeInMobi () <IMNativeDelegate, YumiAdsCustomViewControllerDelegate>
+@interface YumiMediationInterstitialAdapterNativeInMobi () <IMNativeDelegate, YumiAdsWKCustomViewControllerDelegate>
 
 @property (nonatomic) IMNative *imnative;
 @property (nonatomic) NSDictionary *imobeDict;
-@property (nonatomic) YumiAdsCustomViewController *interstitial;
+@property (nonatomic) YumiAdsWKCustomViewController *interstitial;
 
 @property (nonatomic) YumiMediationTemplateModel *templateModel;
 @property (nonatomic, assign) NSInteger currentID;
@@ -49,13 +49,13 @@
         @"closeImage_h" : @(self.provider.data.closeButton.pictureHeight)
     };
 
-    self.interstitial =
-        [[YumiAdsCustomViewController alloc] initYumiAdsCustomViewControllerWith:inmobiFrame
-                                                                       clickType:YumiAdsClickTypeOpenSystem
-                                                                closeBtnPosition:self.provider.data.closeButton.position
-                                                                   closeBtnFrame:closeBtnFrame
-                                                                        logoType:YumiAdsLogoCommon
-                                                                        delegate:self];
+    self.interstitial = [[YumiAdsWKCustomViewController alloc]
+        initYumiAdsWKCustomViewControllerWith:inmobiFrame
+                                    clickType:YumiAdsClickTypeOpenSystem
+                             closeBtnPosition:self.provider.data.closeButton.position
+                                closeBtnFrame:closeBtnFrame
+                                     logoType:YumiAdsLogoCommon
+                                     delegate:self];
     self.interstitial.isNativeInterstitialGDT = NO;
 }
 
@@ -66,10 +66,11 @@
 
     self.provider = provider;
     self.delegate = delegate;
-
-    [IMSdk initWithAccountID:self.provider.data.key1];
-    [IMSdk setLogLevel:kIMSDKLogLevelNone];
-
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [IMSdk initWithAccountID:self.provider.data.key1];
+        [IMSdk setLogLevel:kIMSDKLogLevelNone];
+    });
     return self;
 }
 
@@ -154,8 +155,8 @@
 - (void)nativeAdImpressed:(IMNative *)native {
 }
 
-#pragma mark : YumiAdsCustomViewControllerDelegate
-- (void)yumiAdsCustomViewControllerDidReceivedAd:(UIViewController *)viewController {
+#pragma mark : YumiAdsWKCustomViewControllerDelegate
+- (void)yumiAdsWKCustomViewControllerDidReceivedAd:(UIViewController *)viewController {
 
     [self.delegate adapter:self
         didReceiveInterstitialAd:self.interstitial
@@ -163,23 +164,23 @@
                   withTemplateID:(int)self.currentID];
 }
 
-- (void)yumiAdsCustomViewController:(UIViewController *)viewController didFailToReceiveAdWithError:(NSError *)error {
+- (void)yumiAdsWKCustomViewController:(UIViewController *)viewController didFailToReceiveAdWithError:(NSError *)error {
     [self.delegate adapter:self interstitialAd:self.interstitial didFailToReceive:[error localizedDescription]];
 }
 
-- (void)didClickOnYumiAdsCustomViewController:(UIViewController *)viewController point:(CGPoint)point {
+- (void)didClickOnYumiAdsWKCustomViewController:(UIViewController *)viewController point:(CGPoint)point {
     // inmobi
     [self.imnative reportAdClick:self.imobeDict];
 
     [self.delegate adapter:self didClickInterstitialAd:self.interstitial on:point withTemplateID:(int)self.currentID];
 }
 
-- (void)yumiAdsCustomViewControllerDidPresent:(UIViewController *)viewController {
+- (void)yumiAdsWKCustomViewControllerDidPresent:(UIViewController *)viewController {
 
     [self.delegate adapter:self willPresentScreen:self.interstitial];
 }
 
-- (void)yumiAdsCustomViewControllerDidClosed:(UIViewController *)viewController {
+- (void)yumiAdsWKCustomViewControllerDidClosed:(UIViewController *)viewController {
     [self.delegate adapter:self willDismissScreen:self.interstitial];
 }
 
