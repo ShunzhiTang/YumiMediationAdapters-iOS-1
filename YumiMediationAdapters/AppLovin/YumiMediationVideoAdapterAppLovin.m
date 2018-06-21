@@ -9,7 +9,8 @@
 #import "YumiMediationVideoAdapterAppLovin.h"
 #import <AppLovinSDK/ALIncentivizedInterstitialAd.h>
 
-@interface YumiMediationVideoAdapterAppLovin () <ALAdDisplayDelegate, ALAdVideoPlaybackDelegate, ALAdLoadDelegate,ALAdRewardDelegate>
+@interface YumiMediationVideoAdapterAppLovin () <ALAdDisplayDelegate, ALAdVideoPlaybackDelegate, ALAdLoadDelegate,
+                                                 ALAdRewardDelegate>
 
 @property (nonatomic) ALIncentivizedInterstitialAd *video;
 @property (nonatomic, assign) BOOL isReward;
@@ -95,29 +96,24 @@
     [self.delegate adapter:self videoAd:nil didFailToLoad:error];
 }
 
-#pragma mark: ALAdRewardDelegate
-- (void)rewardValidationRequestForAd:(ALAd *)ad didSucceedWithResponse:(NSDictionary *)response
-{
+#pragma mark : ALAdRewardDelegate
+- (void)rewardValidationRequestForAd:(ALAd *)ad didSucceedWithResponse:(NSDictionary *)response {
     self.isReward = YES;
 }
 
-- (void)rewardValidationRequestForAd:(ALAd *)ad didFailWithError:(NSInteger)responseCode
-{
+- (void)rewardValidationRequestForAd:(ALAd *)ad didFailWithError:(NSInteger)responseCode {
     self.isReward = NO;
 }
 
-- (void)rewardValidationRequestForAd:(ALAd *)ad didExceedQuotaWithResponse:(NSDictionary *)response
-{
-   self.isReward = NO;
+- (void)rewardValidationRequestForAd:(ALAd *)ad didExceedQuotaWithResponse:(NSDictionary *)response {
+    self.isReward = NO;
 }
 
-- (void)rewardValidationRequestForAd:(ALAd *)ad wasRejectedWithResponse:(NSDictionary *)response
-{
-   self.isReward = NO;
+- (void)rewardValidationRequestForAd:(ALAd *)ad wasRejectedWithResponse:(NSDictionary *)response {
+    self.isReward = NO;
 }
 
-- (void)userDeclinedToViewAd:(ALAd *)ad
-{
+- (void)userDeclinedToViewAd:(ALAd *)ad {
     self.isReward = NO;
 }
 
