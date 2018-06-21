@@ -37,7 +37,6 @@
     self.sdk = [ALSdk sharedWithKey:self.provider.data.key1];
 
     self.interstitial = [[ALInterstitialAd alloc] initWithSdk:self.sdk];
-    self.interstitial.adLoadDelegate = self;
     self.interstitial.adDisplayDelegate = self;
 
     return self;
@@ -45,7 +44,7 @@
 
 - (void)requestAd {
     self.isAdReady = NO;
-    [[self.sdk adService] loadNextAd:[ALAdSize sizeInterstitial] andNotify:self];
+    [[self.sdk adService] loadNextAdForZoneIdentifier:self.provider.data.key2 andNotify:self];
 }
 
 - (BOOL)isReady {
