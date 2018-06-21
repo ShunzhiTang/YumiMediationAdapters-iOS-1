@@ -9,7 +9,7 @@
 #import "YumiMediationVideoAdapterAppLovin.h"
 #import <AppLovinSDK/ALIncentivizedInterstitialAd.h>
 
-@interface YumiMediationVideoAdapterAppLovin () <ALAdDisplayDelegate, ALAdVideoPlaybackDelegate, ALAdLoadDelegate>
+@interface YumiMediationVideoAdapterAppLovin () <ALAdDisplayDelegate, ALAdVideoPlaybackDelegate, ALAdLoadDelegate,ALAdRewardDelegate>
 
 @property (nonatomic) ALIncentivizedInterstitialAd *video;
 @property (nonatomic, assign) BOOL isReward;
@@ -39,9 +39,9 @@
                  delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
     self.delegate = delegate;
     self.provider = provider;
-
+    // initialize Sdk
     ALSdk *sdk = [ALSdk sharedWithKey:provider.data.key1];
-    self.video = [[ALIncentivizedInterstitialAd alloc] initWithSdk:sdk];
+    self.video = [[ALIncentivizedInterstitialAd alloc] initWithZoneIdentifier:provider.data.key2 sdk:sdk];
     self.video.adDisplayDelegate = self;
     self.video.adVideoPlaybackDelegate = self;
 }
@@ -55,7 +55,7 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [self.video show];
+    [self.video showAndNotify:self];
 }
 
 #pragma mark - ALAdDisplayDelegate
@@ -82,7 +82,7 @@
 - (void)videoPlaybackEndedInAd:(ALAd *)ad
              atPlaybackPercent:(NSNumber *)percentPlayed
                   fullyWatched:(BOOL)wasFullyWatched {
-    self.isReward = YES;
+    // video end
 }
 
 #pragma mark - ALAdLoadDelegate
@@ -93,6 +93,32 @@
 - (void)adService:(ALAdService *)adService didFailToLoadAdWithError:(int)code {
     NSString *error = [NSString stringWithFormat:@"fail to load applovin video with code %d", code];
     [self.delegate adapter:self videoAd:nil didFailToLoad:error];
+}
+
+#pragma mark: ALAdRewardDelegate
+- (void)rewardValidationRequestForAd:(ALAd *)ad didSucceedWithResponse:(NSDictionary *)response
+{
+    self.isReward = YES;
+}
+
+- (void)rewardValidationRequestForAd:(ALAd *)ad didFailWithError:(NSInteger)responseCode
+{
+    self.isReward = NO;
+}
+
+- (void)rewardValidationRequestForAd:(ALAd *)ad didExceedQuotaWithResponse:(NSDictionary *)response
+{
+   self.isReward = NO;
+}
+
+- (void)rewardValidationRequestForAd:(ALAd *)ad wasRejectedWithResponse:(NSDictionary *)response
+{
+   self.isReward = NO;
+}
+
+- (void)userDeclinedToViewAd:(ALAd *)ad
+{
+    self.isReward = NO;
 }
 
 @end
