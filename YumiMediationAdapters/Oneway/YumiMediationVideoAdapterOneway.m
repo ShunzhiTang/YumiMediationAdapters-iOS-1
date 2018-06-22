@@ -20,17 +20,7 @@
                                                       forProvider:kYumiMediationAdapterIDOneWay
                                                       requestType:YumiMediationSDKAdRequest];
 }
-
-+ (id<YumiMediationVideoAdapter>)sharedInstance {
-    static id<YumiMediationVideoAdapter> sharedInstance;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] init];
-    });
-
-    return sharedInstance;
-}
-
+ 
 #pragma mark - YumiMediationVideoAdapter
 - (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
                  delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
