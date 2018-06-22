@@ -17,7 +17,7 @@
 @implementation YumiMediationVideoAdapterAdMob
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:[self sharedInstance]
+    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
                                                       forProvider:kYumiMediationAdapterIDAdMob
                                                       requestType:YumiMediationSDKAdRequest];
 }
@@ -33,12 +33,16 @@
 }
 
 #pragma mark - YumiMediationVideoAdapter
-- (void)setupWithProvider:(YumiMediationVideoProvider *)provider
+- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
                  delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+    self = [super init];
+    
     self.delegate = delegate;
     self.provider = provider;
 
     [GADRewardBasedVideoAd sharedInstance].delegate = self;
+    
+    return self;
 }
 
 - (void)requestAd {

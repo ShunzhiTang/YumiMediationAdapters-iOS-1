@@ -16,7 +16,7 @@
 
 @implementation YumiMediationVideoAdapterCentrixlink
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:[self sharedInstance]
+    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
                                                       forProvider:kYumiMediationAdapterIDCentrixlink
                                                       requestType:YumiMediationSDKAdRequest];
 }
@@ -32,15 +32,18 @@
 }
 
 #pragma mark : YumiMediationVideoAdapter
-- (void)setupWithProvider:(YumiMediationVideoProvider *)provider
+- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
                  delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
-
+    self = [super init];
+    
     self.provider = provider;
     self.delegate = delegate;
 
     self.video = [CentrixlinkAD sharedInstance];
     [self.video setDebugEnable:NO];
     [self.video setPlayAdOrientation:UIInterfaceOrientationMaskAll];
+    
+    return self;
 }
 
 - (void)requestAd {

@@ -19,7 +19,7 @@
 @implementation YumiMediationVideoAdapterPlayableAds
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:[self sharedInstance]
+    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
                                                       forProvider:kYumiMediationAdapterIDPlayableAds
                                                       requestType:YumiMediationSDKAdRequest];
 }
@@ -35,9 +35,10 @@
 }
 
 #pragma mark - YumiMediationVideoAdapter
-- (void)setupWithProvider:(YumiMediationVideoProvider *)provider
+- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
                  delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
-
+    self = [super init];
+    
     self.delegate = delegate;
     self.provider = provider;
 
@@ -45,6 +46,8 @@
     self.video.delegate = self;
     self.video.autoLoad = YES;
     [self.video loadAd];
+    
+    return self;
 }
 
 - (void)requestAd {

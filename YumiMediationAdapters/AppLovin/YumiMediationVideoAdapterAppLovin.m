@@ -20,7 +20,7 @@
 @implementation YumiMediationVideoAdapterAppLovin
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:[self sharedInstance]
+    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
                                                       forProvider:kYumiMediationAdapterIDAppLovin
                                                       requestType:YumiMediationSDKAdRequest];
 }
@@ -36,8 +36,10 @@
 }
 
 #pragma mark - YumiMediationVideoAdapter
-- (void)setupWithProvider:(YumiMediationVideoProvider *)provider
+- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
                  delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+    self = [super init];
+    
     self.delegate = delegate;
     self.provider = provider;
     // initialize Sdk
@@ -45,6 +47,8 @@
     self.video = [[ALIncentivizedInterstitialAd alloc] initWithZoneIdentifier:provider.data.key2 sdk:sdk];
     self.video.adDisplayDelegate = self;
     self.video.adVideoPlaybackDelegate = self;
+    
+    return self;
 }
 
 - (void)requestAd {

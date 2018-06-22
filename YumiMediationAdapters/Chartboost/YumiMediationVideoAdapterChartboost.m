@@ -17,7 +17,7 @@
 @implementation YumiMediationVideoAdapterChartboost
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:[self sharedInstance]
+    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
                                                       forProvider:kYumiMediationAdapterIDChartboost
                                                       requestType:YumiMediationSDKAdRequest];
 }
@@ -33,13 +33,17 @@
 }
 
 #pragma mark - YumiMediationVideoAdapter
-- (void)setupWithProvider:(YumiMediationVideoProvider *)provider
+- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
                  delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+    self = [super init];
+    
     self.delegate = delegate;
     self.provider = provider;
 
     [Chartboost setShouldPrefetchVideoContent:YES];
     [Chartboost setAutoCacheAds:YES];
+    
+    return self;
 }
 
 - (void)requestAd {

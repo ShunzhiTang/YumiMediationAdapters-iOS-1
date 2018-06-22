@@ -20,7 +20,7 @@
 @implementation YumiMediationVideoAdapterMobvista
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:[self sharedInstance]
+    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
                                                       forProvider:kYumiMediationAdapterIDMobvista
                                                       requestType:YumiMediationSDKAdRequest];
 }
@@ -36,9 +36,10 @@
 }
 
 #pragma mark : YumiMediationVideoAdapter
-- (void)setupWithProvider:(YumiMediationVideoProvider *)provider
+- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
                  delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
-
+    self = [super init];
+    
     self.provider = provider;
     self.delegate = delegate;
 
@@ -48,6 +49,8 @@
         weakSelf.videoAd = [MVRewardAdManager sharedInstance];
         weakSelf.isAutoRequest = NO;
     });
+    
+    return self;
 }
 
 - (void)requestAd {
