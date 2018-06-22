@@ -16,29 +16,22 @@
 @implementation YumiMediationVideoAdapterOneway
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:[self sharedInstance]
+    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
                                                       forProvider:kYumiMediationAdapterIDOneWay
                                                       requestType:YumiMediationSDKAdRequest];
 }
-
-+ (id<YumiMediationVideoAdapter>)sharedInstance {
-    static id<YumiMediationVideoAdapter> sharedInstance;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] init];
-    });
-
-    return sharedInstance;
-}
-
+ 
 #pragma mark - YumiMediationVideoAdapter
-- (void)setupWithProvider:(YumiMediationVideoProvider *)provider
+- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
                  delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
-
+    self = [super init];
+    
     self.delegate = delegate;
     self.provider = provider;
 
     [OneWaySDK configure:self.provider.data.key1];
+    
+    return self;
 }
 
 - (void)requestAd {

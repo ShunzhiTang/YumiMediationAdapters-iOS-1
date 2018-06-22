@@ -20,30 +20,24 @@
 @implementation YumiMediationVideoAdapterDomob
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:[self sharedInstance]
+    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
                                                       forProvider:kYumiMediationAdapterIDDomob
                                                       requestType:YumiMediationSDKAdRequest];
 }
-
-+ (id<YumiMediationVideoAdapter>)sharedInstance {
-    static id<YumiMediationVideoAdapter> sharedInstance;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] init];
-    });
-
-    return sharedInstance;
-}
-
+ 
 #pragma mark - YumiMediationVideoAdapter
-- (void)setupWithProvider:(YumiMediationVideoProvider *)provider
+- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
                  delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+    self = [super init];
+    
     self.delegate = delegate;
     self.provider = provider;
 
     self.videoManager = [[IndependentVideoManager alloc] initWithPublisherID:self.provider.data.key1 andUserID:nil];
     self.videoManager.delegate = self;
     self.videoManager.openLogger = NO;
+    
+    return self;
 }
 
 - (void)requestAd {

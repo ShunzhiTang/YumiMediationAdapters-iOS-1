@@ -17,24 +17,16 @@
 @implementation YumiMediationVideoAdapterUnity
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:[self sharedInstance]
+    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
                                                       forProvider:kYumiMediationAdapterIDUnity
                                                       requestType:YumiMediationSDKAdRequest];
 }
-
-+ (id<YumiMediationVideoAdapter>)sharedInstance {
-    static id<YumiMediationVideoAdapter> sharedInstance;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] init];
-    });
-
-    return sharedInstance;
-}
-
+ 
 #pragma mark - YumiMediationVideoAdapter
-- (void)setupWithProvider:(YumiMediationVideoProvider *)provider
+- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
                  delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+    self = [super init];
+    
     self.delegate = delegate;
     self.provider = provider;
 
@@ -42,6 +34,8 @@
         [UnityAds initialize:provider.data.key1 delegate:[YumiMediationUnityInstance sharedInstance] testMode:NO];
     }
     [YumiMediationUnityInstance sharedInstance].unityVideoAdapter = self;
+    
+    return self;
 }
 
 - (void)requestAd {
