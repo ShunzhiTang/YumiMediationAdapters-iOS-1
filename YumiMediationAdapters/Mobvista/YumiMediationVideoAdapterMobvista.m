@@ -7,12 +7,12 @@
 //
 
 #import "YumiMediationVideoAdapterMobvista.h"
-#import <MVSDK/MVSDK.h>
-#import <MVSDKReward/MVRewardAdManager.h>
+#import <MTGSDK/MTGSDK.h>
+#import <MTGSDKReward/MTGRewardAdManager.h>
 
-@interface YumiMediationVideoAdapterMobvista () <MVRewardAdLoadDelegate, MVRewardAdShowDelegate>
+@interface YumiMediationVideoAdapterMobvista () <MTGRewardAdLoadDelegate, MTGRewardAdShowDelegate>
 
-@property (nonatomic) MVRewardAdManager *videoAd;
+@property (nonatomic) MTGRewardAdManager *videoAd;
 @property (nonatomic, assign) BOOL isAutoRequest;
 
 @end
@@ -35,8 +35,8 @@
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[MVSDK sharedInstance] setAppID:weakSelf.provider.data.key1 ApiKey:weakSelf.provider.data.key2];
-        weakSelf.videoAd = [MVRewardAdManager sharedInstance];
+        [[MTGSDK sharedInstance] setAppID:weakSelf.provider.data.key1 ApiKey:weakSelf.provider.data.key2];
+        weakSelf.videoAd = [MTGRewardAdManager sharedInstance];
         weakSelf.isAutoRequest = NO;
     });
     
@@ -63,7 +63,7 @@
     return [self.videoAd isVideoReadyToPlay:self.provider.data.key3];
 }
 
-#pragma mark : - MVRewardAdLoadDelegate
+#pragma mark : - MTGRewardAdLoadDelegate
 
 - (void)onVideoAdLoadSuccess:(nullable NSString *)unitId {
 
@@ -75,7 +75,7 @@
     [self.delegate adapter:self videoAd:self.videoAd didFailToLoad:[error localizedDescription]];
 }
 
-#pragma mark : - MVRewardAdShowDelegate
+#pragma mark : - MTGRewardAdShowDelegate
 - (void)onVideoAdShowSuccess:(nullable NSString *)unitId {
     [self.delegate adapter:self didOpenVideoAd:self.videoAd];
 }
@@ -85,7 +85,7 @@
 
 - (void)onVideoAdDismissed:(NSString *)unitId
              withConverted:(BOOL)converted
-            withRewardInfo:(MVRewardAdInfo *)rewardInfo {
+            withRewardInfo:(MTGRewardAdInfo *)rewardInfo {
 
     self.isAutoRequest = NO;
     [self requestAd];
