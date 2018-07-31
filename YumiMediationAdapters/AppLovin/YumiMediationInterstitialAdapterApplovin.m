@@ -44,9 +44,7 @@
 
 - (void)requestAd {
     if (self.provider.data.key2.length == 0) {
-        [self.delegate adapter:self
-                interstitialAd:nil
-              didFailToReceive:@"No zone identifier specified"];
+        [self.delegate adapter:self interstitialAd:nil didFailToReceive:@"No zone identifier specified"];
         return;
     }
     self.isAdReady = NO;
