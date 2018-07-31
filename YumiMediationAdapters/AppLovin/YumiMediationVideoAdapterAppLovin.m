@@ -24,12 +24,12 @@
                                                       forProvider:kYumiMediationAdapterIDAppLovin
                                                       requestType:YumiMediationSDKAdRequest];
 }
- 
+
 #pragma mark - YumiMediationVideoAdapter
 - (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                 delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
     self = [super init];
-    
+
     self.delegate = delegate;
     self.provider = provider;
     // initialize Sdk
@@ -37,7 +37,7 @@
     self.video = [[ALIncentivizedInterstitialAd alloc] initWithZoneIdentifier:provider.data.key2 sdk:sdk];
     self.video.adDisplayDelegate = self;
     self.video.adVideoPlaybackDelegate = self;
-    
+
     return self;
 }
 
