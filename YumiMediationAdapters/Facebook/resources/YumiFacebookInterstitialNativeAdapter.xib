@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -28,14 +28,15 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="khb-69-nfp">
                         <rect key="frame" x="29.5" y="186" width="316" height="295"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4tq-qe-WqB">
-                                <rect key="frame" x="8" y="8" width="38" height="38"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dwu-et-jPg" customClass="FBAdIconView">
+                                <rect key="frame" x="8" y="8" width="37" height="37"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="4tq-qe-WqB" secondAttribute="height" multiplier="1:1" id="NJs-KV-QCR"/>
+                                    <constraint firstAttribute="width" secondItem="Dwu-et-jPg" secondAttribute="height" multiplier="1:1" id="XiY-EW-iK3"/>
                                 </constraints>
-                            </imageView>
+                            </view>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="256" translatesAutoresizingMaskIntoConstraints="NO" id="MRx-u0-Cho">
-                                <rect key="frame" x="52" y="8" width="187" height="22"/>
+                                <rect key="frame" x="53" y="8" width="187" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="187" id="2uC-1Z-Thb"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="C26-v6-ETc"/>
@@ -44,9 +45,6 @@
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="OYA-vl-G6t" customClass="FBMediaView">
-                                <rect key="frame" x="8" y="53" width="300" height="157"/>
-                            </view>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" preferredMaxLayoutWidth="191" translatesAutoresizingMaskIntoConstraints="NO" id="Ocf-4Q-5Tp">
                                 <rect key="frame" x="8" y="235" width="191" height="50"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -63,7 +61,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CQS-ZD-0m3">
-                                <rect key="frame" x="52" y="30" width="256" height="16"/>
+                                <rect key="frame" x="53" y="30" width="255" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="16" id="Y4G-C2-3lT"/>
                                 </constraints>
@@ -84,43 +82,46 @@
                                 </state>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gb1-Gf-akf" customClass="FBAdChoicesView">
-                                <rect key="frame" x="247" y="8" width="61" height="15"/>
+                                <rect key="frame" x="248" y="8" width="60" height="15"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="OYA-vl-G6t" customClass="FBMediaView">
+                                <rect key="frame" x="8" y="53" width="300" height="157"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.96470588239999999" green="0.96862745100000003" blue="0.97254901959999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="OYA-vl-G6t" firstAttribute="top" secondItem="Dwu-et-jPg" secondAttribute="bottom" constant="8" id="2qK-JR-3zK"/>
                             <constraint firstItem="CQS-ZD-0m3" firstAttribute="trailing" secondItem="OYA-vl-G6t" secondAttribute="trailing" id="5br-jl-PfW"/>
                             <constraint firstItem="B3g-VI-otC" firstAttribute="top" secondItem="rUp-nQ-uiB" secondAttribute="bottom" constant="2" id="5ti-Kt-kt0"/>
                             <constraint firstItem="B3g-VI-otC" firstAttribute="leading" secondItem="Ocf-4Q-5Tp" secondAttribute="trailing" constant="9" id="7ho-NG-MtV"/>
                             <constraint firstAttribute="height" priority="999" constant="295" id="C1C-S0-qlp"/>
-                            <constraint firstItem="4tq-qe-WqB" firstAttribute="leading" secondItem="khb-69-nfp" secondAttribute="leading" constant="8" id="Eqh-rI-aLv"/>
                             <constraint firstItem="MRx-u0-Cho" firstAttribute="top" secondItem="Gb1-Gf-akf" secondAttribute="top" id="Erp-GO-T4j"/>
                             <constraint firstItem="OYA-vl-G6t" firstAttribute="trailing" secondItem="rUp-nQ-uiB" secondAttribute="trailing" id="FFj-pX-ipD"/>
                             <constraint firstAttribute="bottom" secondItem="B3g-VI-otC" secondAttribute="bottom" constant="32" id="GpE-sB-mc6"/>
-                            <constraint firstItem="4tq-qe-WqB" firstAttribute="top" secondItem="MRx-u0-Cho" secondAttribute="top" id="Hhc-zO-yvh"/>
+                            <constraint firstItem="Dwu-et-jPg" firstAttribute="leading" secondItem="khb-69-nfp" secondAttribute="leading" constant="8" id="JA6-PV-XlM"/>
                             <constraint firstItem="Ocf-4Q-5Tp" firstAttribute="top" secondItem="B3g-VI-otC" secondAttribute="top" id="LT5-Qm-obl"/>
                             <constraint firstItem="OYA-vl-G6t" firstAttribute="top" secondItem="CQS-ZD-0m3" secondAttribute="bottom" constant="7" id="MFP-8b-WDZ"/>
                             <constraint firstAttribute="bottom" secondItem="Ocf-4Q-5Tp" secondAttribute="bottom" constant="10" id="RAl-3q-fBx"/>
                             <constraint firstItem="rUp-nQ-uiB" firstAttribute="leading" secondItem="Ocf-4Q-5Tp" secondAttribute="leading" id="Ubb-n0-JqG"/>
                             <constraint firstItem="Gb1-Gf-akf" firstAttribute="leading" secondItem="MRx-u0-Cho" secondAttribute="trailing" constant="8" symbolic="YES" id="cDq-b0-4ER"/>
                             <constraint firstItem="CQS-ZD-0m3" firstAttribute="top" secondItem="MRx-u0-Cho" secondAttribute="bottom" id="eNu-CY-zUT"/>
-                            <constraint firstItem="CQS-ZD-0m3" firstAttribute="leading" secondItem="4tq-qe-WqB" secondAttribute="trailing" constant="6" id="kVU-IJ-CaU"/>
+                            <constraint firstItem="OYA-vl-G6t" firstAttribute="leading" secondItem="Dwu-et-jPg" secondAttribute="leading" id="grd-3J-nxn"/>
+                            <constraint firstItem="Dwu-et-jPg" firstAttribute="top" secondItem="khb-69-nfp" secondAttribute="top" constant="8" id="hto-lV-LJ7"/>
+                            <constraint firstItem="MRx-u0-Cho" firstAttribute="top" secondItem="Dwu-et-jPg" secondAttribute="top" id="iHP-bt-BHB"/>
                             <constraint firstItem="rUp-nQ-uiB" firstAttribute="top" secondItem="OYA-vl-G6t" secondAttribute="bottom" constant="8" symbolic="YES" id="laF-Cl-zqb"/>
                             <constraint firstAttribute="trailing" secondItem="B3g-VI-otC" secondAttribute="trailing" constant="8" id="oe8-CZ-Wru"/>
                             <constraint firstAttribute="width" secondItem="khb-69-nfp" secondAttribute="height" multiplier="316:295" priority="999" id="one-Yp-hll"/>
                             <constraint firstItem="Gb1-Gf-akf" firstAttribute="trailing" secondItem="CQS-ZD-0m3" secondAttribute="trailing" id="ouf-Vg-fjZ"/>
                             <constraint firstItem="OYA-vl-G6t" firstAttribute="leading" secondItem="rUp-nQ-uiB" secondAttribute="leading" id="p6W-Yp-cia"/>
-                            <constraint firstItem="OYA-vl-G6t" firstAttribute="top" secondItem="4tq-qe-WqB" secondAttribute="bottom" constant="7" id="tZJ-pH-gJm"/>
-                            <constraint firstItem="4tq-qe-WqB" firstAttribute="leading" secondItem="OYA-vl-G6t" secondAttribute="leading" id="v0W-bV-a3A"/>
                             <constraint firstItem="CQS-ZD-0m3" firstAttribute="top" secondItem="Gb1-Gf-akf" secondAttribute="bottom" constant="7" id="wDw-sC-cfC"/>
                             <constraint firstItem="MRx-u0-Cho" firstAttribute="leading" secondItem="CQS-ZD-0m3" secondAttribute="leading" id="wZf-yQ-Qc4"/>
-                            <constraint firstItem="4tq-qe-WqB" firstAttribute="top" secondItem="khb-69-nfp" secondAttribute="top" constant="8" id="yId-da-3BA"/>
                             <constraint firstItem="rUp-nQ-uiB" firstAttribute="trailing" secondItem="B3g-VI-otC" secondAttribute="trailing" id="zP6-Z3-C3D"/>
+                            <constraint firstItem="MRx-u0-Cho" firstAttribute="leading" secondItem="Dwu-et-jPg" secondAttribute="trailing" constant="8" id="zWh-m9-YyG"/>
                         </constraints>
                     </view>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DSj-4l-fn7">
-                        <rect key="frame" x="334" y="25" width="25" height="25"/>
+                        <rect key="frame" x="334" y="45" width="25" height="25"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="25" id="BdT-BV-WVt"/>
                             <constraint firstAttribute="width" constant="25" id="BpR-bU-cgU"/>
@@ -147,7 +148,7 @@
                 <outlet property="adCallToActionButton" destination="B3g-VI-otC" id="lF7-Dr-w3z"/>
                 <outlet property="adChoicesView" destination="Gb1-Gf-akf" id="ds7-0S-WI4"/>
                 <outlet property="adCoverMediaView" destination="OYA-vl-G6t" id="tjL-D2-MeN"/>
-                <outlet property="adIconImageView" destination="4tq-qe-WqB" id="WyL-xc-zYu"/>
+                <outlet property="adIconImageView" destination="Dwu-et-jPg" id="7Bb-kM-Nq1"/>
                 <outlet property="adSocialContextLabel" destination="rUp-nQ-uiB" id="G4a-ZZ-pHZ"/>
                 <outlet property="adTitleLabel" destination="MRx-u0-Cho" id="2u4-4E-qkD"/>
                 <outlet property="adUIView" destination="khb-69-nfp" id="5BC-OJ-iqs"/>

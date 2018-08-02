@@ -10,7 +10,7 @@
 #import "YumiFacebookAdapterInterstitialVc.h"
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
 
-@interface YumiMediationInterstitialAdapterNativeFacebook () <FBNativeAdDelegate>
+@interface YumiMediationInterstitialAdapterNativeFacebook () <FBNativeAdDelegate, FBMediaViewDelegate>
 
 @property (nonatomic) FBNativeAd *nativeAd;
 @property (nonatomic) YumiFacebookAdapterInterstitialVc *interstitial;
@@ -76,7 +76,7 @@
 
     FBNativeAd *nativeAd = [[FBNativeAd alloc] initWithPlacementID:self.provider.data.key1];
     nativeAd.delegate = self;
-    nativeAd.mediaCachePolicy = FBNativeAdsCachePolicyAll;
+
     [nativeAd loadAd];
 }
 
@@ -103,32 +103,29 @@
     self.nativeAd = nativeAd;
 
     // Create native UI using the ad metadata.
-    [self.interstitial.adCoverMediaView setNativeAd:nativeAd];
-
-    __weak typeof(self) weakSelf = self;
-    [self.nativeAd.icon loadImageAsyncWithBlock:^(UIImage *image) {
-        self.interstitial.adIconImageView.image = image;
-        weakSelf.isAdReady = YES;
-
-        [weakSelf.delegate adapter:weakSelf didReceiveInterstitialAd:weakSelf.interstitial];
-    }];
+    self.interstitial.adCoverMediaView.delegate = self;
 
     // Render native ads onto UIView
-    self.interstitial.adTitleLabel.text = self.nativeAd.title;
-    self.interstitial.adBodyLabel.text = self.nativeAd.body;
+    self.interstitial.adTitleLabel.text = self.nativeAd.advertiserName;
+    self.interstitial.adBodyLabel.text = self.nativeAd.bodyText;
     self.interstitial.adSocialContextLabel.text = self.nativeAd.socialContext;
-    self.interstitial.sponsoredLabel.text = @"Sponsored";
+    self.interstitial.sponsoredLabel.text = self.nativeAd.sponsoredTranslation;
     [self.interstitial.adCallToActionButton setHidden:NO];
     [self.interstitial.adCallToActionButton setTitle:self.nativeAd.callToAction forState:UIControlStateNormal];
 
     // Wire up UIView with the native ad; the whole UIView will be clickable.
-    [nativeAd registerViewForInteraction:self.interstitial.adUIView
-                      withViewController:[self.delegate rootViewControllerForPresentingModalView]];
+    [self.nativeAd registerViewForInteraction:self.interstitial.adUIView
+                                    mediaView:self.interstitial.adCoverMediaView
+                                     iconView:self.interstitial.adIconImageView
+                               viewController:[self.delegate rootViewControllerForPresentingModalView]];
 
     // Update AdChoices view
     self.interstitial.adChoicesView.nativeAd = nativeAd;
     self.interstitial.adChoicesView.corner = UIRectCornerTopRight;
     self.interstitial.adChoicesView.hidden = NO;
+
+    self.isAdReady = YES;
+    [self.delegate adapter:self didReceiveInterstitialAd:self.interstitial];
 }
 
 - (void)nativeAd:(FBNativeAd *)nativeAd didFailWithError:(NSError *)error {

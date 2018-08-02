@@ -23,15 +23,15 @@
                                                       forProvider:kYumiMediationAdapterIDFacebook
                                                       requestType:YumiMediationSDKAdRequest];
 }
- 
+
 #pragma mark - YumiMediationVideoAdapter
 - (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                 delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
     self = [super init];
-    
+
     self.delegate = delegate;
     self.provider = provider;
-    
+
     return self;
 }
 
@@ -61,7 +61,7 @@
     [self.delegate adapter:self didReceiveVideoAd:rewardedVideoAd];
 }
 
-- (void)rewardedVideoAdComplete:(FBRewardedVideoAd *)rewardedVideoAd{
+- (void)rewardedVideoAdComplete:(FBRewardedVideoAd *)rewardedVideoAd {
     self.isReward = YES;
 }
 
