@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina5_5" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,14 +18,6 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lgk-wY-XPB">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Pdg-Iv-ZBF">
-                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="50" id="ugI-lX-xJr"/>
-                                <constraint firstAttribute="width" constant="50" id="vdK-A2-rYe"/>
-                            </constraints>
-                        </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zYH-Sq-ub1">
                             <rect key="frame" x="55" y="0.0" width="180" height="30"/>
                             <constraints>
@@ -46,6 +38,13 @@
                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GOD-4n-352" customClass="FBAdIconView">
+                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="50" id="QGx-tX-OPp"/>
+                            </constraints>
+                        </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9n7-PG-F1n">
                             <rect key="frame" x="235" y="20" width="85" height="30"/>
                             <color key="backgroundColor" red="0.29019607843137252" green="0.4823529411764706" blue="0.98431372549019602" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -62,14 +61,15 @@
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="9n7-PG-F1n" secondAttribute="trailing" id="7r3-2w-OoE"/>
                         <constraint firstAttribute="bottom" secondItem="mgR-xG-DJh" secondAttribute="bottom" id="9ub-p6-VSi"/>
-                        <constraint firstItem="zYH-Sq-ub1" firstAttribute="leading" secondItem="Pdg-Iv-ZBF" secondAttribute="trailing" constant="5" id="ASd-iq-gtt"/>
+                        <constraint firstItem="zYH-Sq-ub1" firstAttribute="leading" secondItem="GOD-4n-352" secondAttribute="trailing" constant="5" id="Dot-Lx-8cF"/>
                         <constraint firstAttribute="width" constant="320" id="F1a-5Q-YM0"/>
                         <constraint firstAttribute="bottom" secondItem="9n7-PG-F1n" secondAttribute="bottom" id="G0c-E3-g9f"/>
                         <constraint firstItem="mgR-xG-DJh" firstAttribute="centerX" secondItem="zYH-Sq-ub1" secondAttribute="centerX" id="K4x-43-zPk"/>
+                        <constraint firstAttribute="bottom" secondItem="GOD-4n-352" secondAttribute="bottom" id="Rcy-E2-0gx"/>
                         <constraint firstAttribute="height" constant="50" id="SY7-pd-lkn"/>
+                        <constraint firstItem="GOD-4n-352" firstAttribute="leading" secondItem="lgk-wY-XPB" secondAttribute="leading" id="efC-pd-8ur"/>
                         <constraint firstItem="zYH-Sq-ub1" firstAttribute="top" secondItem="lgk-wY-XPB" secondAttribute="top" id="jrc-vH-eHr"/>
-                        <constraint firstItem="Pdg-Iv-ZBF" firstAttribute="leading" secondItem="lgk-wY-XPB" secondAttribute="leading" id="lYf-bc-uEv"/>
-                        <constraint firstAttribute="bottom" secondItem="Pdg-Iv-ZBF" secondAttribute="bottom" id="vff-6U-8n4"/>
+                        <constraint firstItem="GOD-4n-352" firstAttribute="top" secondItem="lgk-wY-XPB" secondAttribute="top" id="nGW-z4-xVX"/>
                     </constraints>
                 </view>
             </subviews>
@@ -82,7 +82,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="adCallToActionButton" destination="9n7-PG-F1n" id="blc-MY-fLu"/>
-                <outlet property="adIconImageView" destination="Pdg-Iv-ZBF" id="ehJ-0C-DOd"/>
+                <outlet property="adIconImageView" destination="GOD-4n-352" id="pqs-h5-RqD"/>
                 <outlet property="adSocialContextLabel" destination="mgR-xG-DJh" id="krB-zf-gSB"/>
                 <outlet property="adTitleLabel" destination="zYH-Sq-ub1" id="Iw2-Uf-jMs"/>
                 <outlet property="adUIView" destination="lgk-wY-XPB" id="4KY-IQ-DIh"/>
