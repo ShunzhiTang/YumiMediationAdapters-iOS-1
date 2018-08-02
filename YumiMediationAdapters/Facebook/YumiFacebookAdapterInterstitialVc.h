@@ -8,10 +8,11 @@
 
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
 #import <UIKit/UIKit.h>
+#import <FBAudienceNetwork/FBAudienceNetwork.h>
 
 @interface YumiFacebookAdapterInterstitialVc : UIViewController
 
-@property (strong, nonatomic) IBOutlet UIImageView *adIconImageView;
+@property (weak, nonatomic) IBOutlet FBAdIconView *adIconImageView;
 @property (weak, nonatomic) IBOutlet FBMediaView *adCoverMediaView;
 @property (strong, nonatomic) IBOutlet UILabel *adTitleLabel;
 @property (strong, nonatomic) IBOutlet UILabel *adBodyLabel;
