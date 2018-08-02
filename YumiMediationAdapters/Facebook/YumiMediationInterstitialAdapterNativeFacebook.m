@@ -10,7 +10,7 @@
 #import "YumiFacebookAdapterInterstitialVc.h"
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
 
-@interface YumiMediationInterstitialAdapterNativeFacebook () <FBNativeAdDelegate,FBMediaViewDelegate>
+@interface YumiMediationInterstitialAdapterNativeFacebook () <FBNativeAdDelegate, FBMediaViewDelegate>
 
 @property (nonatomic) FBNativeAd *nativeAd;
 @property (nonatomic) YumiFacebookAdapterInterstitialVc *interstitial;
@@ -76,7 +76,7 @@
 
     FBNativeAd *nativeAd = [[FBNativeAd alloc] initWithPlacementID:self.provider.data.key1];
     nativeAd.delegate = self;
-    
+
     [nativeAd loadAd];
 }
 
@@ -114,16 +114,16 @@
     [self.interstitial.adCallToActionButton setTitle:self.nativeAd.callToAction forState:UIControlStateNormal];
 
     // Wire up UIView with the native ad; the whole UIView will be clickable.
-        [self.nativeAd registerViewForInteraction:self.interstitial.adUIView
-                                   mediaView:self.interstitial.adCoverMediaView
-                                    iconView:self.interstitial.adIconImageView
-                              viewController:[self.delegate rootViewControllerForPresentingModalView]];
-    
+    [self.nativeAd registerViewForInteraction:self.interstitial.adUIView
+                                    mediaView:self.interstitial.adCoverMediaView
+                                     iconView:self.interstitial.adIconImageView
+                               viewController:[self.delegate rootViewControllerForPresentingModalView]];
+
     // Update AdChoices view
     self.interstitial.adChoicesView.nativeAd = nativeAd;
     self.interstitial.adChoicesView.corner = UIRectCornerTopRight;
     self.interstitial.adChoicesView.hidden = NO;
-    
+
     self.isAdReady = YES;
     [self.delegate adapter:self didReceiveInterstitialAd:self.interstitial];
 }

@@ -89,7 +89,7 @@
 }
 
 #pragma mark - FBNativeBannerAdDegate
-- (void)nativeBannerAdDidLoad:(FBNativeBannerAd *)nativeBannerAd{
+- (void)nativeBannerAdDidLoad:(FBNativeBannerAd *)nativeBannerAd {
     if (!self.bannerView) {
         return;
     }
@@ -97,11 +97,13 @@
         // disconnect a FBNativeAd with the UIView you used to display the native ads.
         [self.currentNativeAd unregisterView];
     }
-    
+
     self.currentNativeAd = nativeBannerAd;
     // associate a FBNativeAd with the UIView you will use to display the native ads.
-    [self.currentNativeAd registerViewForInteraction:self.bannerView iconView:self.bannerView.adIconImageView viewController:[self.delegate rootViewControllerForPresentingModalView]];
-    
+    [self.currentNativeAd registerViewForInteraction:self.bannerView
+                                            iconView:self.bannerView.adIconImageView
+                                      viewController:[self.delegate rootViewControllerForPresentingModalView]];
+
     // Render native ads data  onto bannerView
     self.bannerView.adTitleLabel.text = self.currentNativeAd.advertiserName;
     self.bannerView.adSocialContextLabel.text = self.currentNativeAd.socialContext;
@@ -113,15 +115,15 @@
     self.adChoicesView.hidden = NO;
     [self.bannerView.adUIView addSubview:self.adChoicesView];
     [self.adChoicesView updateFrameFromSuperview];
-    
+
     [self.delegate adapter:self didReceiveAd:self.bannerView];
 }
 
-- (void)nativeBannerAdDidClick:(FBNativeBannerAd *)nativeBannerAd{
+- (void)nativeBannerAdDidClick:(FBNativeBannerAd *)nativeBannerAd {
     [self.delegate adapter:self didClick:self.bannerView];
 }
 
-- (void)nativeBannerAd:(FBNativeBannerAd *)nativeBannerAd didFailWithError:(NSError *)error{
+- (void)nativeBannerAd:(FBNativeBannerAd *)nativeBannerAd didFailWithError:(NSError *)error {
     [self.delegate adapter:self didFailToReceiveAd:[error localizedDescription]];
 }
 

@@ -6,8 +6,8 @@
 //
 //
 
-#import <UIKit/UIKit.h>
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
+#import <UIKit/UIKit.h>
 
 @interface YumiMediationNativeFacebookBannerView : UIView
 @property (weak, nonatomic) IBOutlet FBAdIconView *adIconImageView;
