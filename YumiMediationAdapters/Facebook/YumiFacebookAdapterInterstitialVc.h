@@ -8,7 +8,6 @@
 
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
 #import <UIKit/UIKit.h>
-#import <FBAudienceNetwork/FBAudienceNetwork.h>
 
 @interface YumiFacebookAdapterInterstitialVc : UIViewController
 
