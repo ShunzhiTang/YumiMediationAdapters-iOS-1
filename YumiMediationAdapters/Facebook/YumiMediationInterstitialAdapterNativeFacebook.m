@@ -138,5 +138,9 @@
 
     [self.delegate adapter:self didClickInterstitialAd:self.interstitial on:CGPointZero];
 }
-
+- (void)nativeAdDidFinishHandlingClick:(FBNativeAd *)nativeAd{
+    [self closeFacebookIntestitial];
+    
+    [self.delegate adapter:self didClickInterstitialAd:self.interstitial on:CGPointZero];
+}
 @end
