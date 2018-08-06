@@ -133,10 +133,10 @@
     [self.delegate adapter:self interstitialAd:self.interstitial didFailToReceive:[error localizedDescription]];
 }
 
-- (void)nativeAdDidClick:(FBNativeAd *)nativeAd {
-    [self closeFacebookIntestitial];
-
+- (void)nativeAdDidFinishHandlingClick:(FBNativeAd *)nativeAd{
+    
     [self.delegate adapter:self didClickInterstitialAd:self.interstitial on:CGPointZero];
+    
+    [self closeFacebookIntestitial];
 }
-
 @end
