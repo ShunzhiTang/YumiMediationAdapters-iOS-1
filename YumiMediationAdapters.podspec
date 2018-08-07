@@ -33,7 +33,7 @@ Pod::Spec.new do |s|
     { :name => "Domob", :version => "3.8.0" },
     { :name => "GDT", :version => "4.7.0" },
     { :name => "InMobi", :version => "6.2.1" },
-    { :name => "IronSource", :version => "6.7.6" },
+    { :name => "IronSource", :version => "6.7.10" },
     { :name => "Unity", :version => "2.1.0" },
     { :name => "Vungle", :version => "5.1.0" },
     { :name => "Mobvista", :version => "3.9.1"},
