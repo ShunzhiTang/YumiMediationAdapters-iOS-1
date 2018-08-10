@@ -88,6 +88,7 @@
  @param error The reason for the error
  */
 - (void)interstitialDidFailToShowWithError:(NSError *)error{
+    [self.delegate adapter:self interstitialAd:nil didFailToReceive:[error localizedDescription]];
 }
 
 /**
