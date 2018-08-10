@@ -31,8 +31,7 @@
     self.provider = provider;
 
     [IronSource setRewardedVideoDelegate:self];
-    [IronSource initWithAppKey:provider.data.key1];
-    
+    [IronSource initWithAppKey:self.provider.data.key1 adUnits:@[IS_REWARDED_VIDEO]];
     return self;
 }
 
