@@ -28,6 +28,9 @@
     self.delegate = delegate;
     
     [IronSource setInterstitialDelegate:self];
+    if (self.provider.data.key1.length == 0) {
+        [self.delegate adapter:self interstitialAd:nil didFailToReceive:@"No app id specified"];
+    }
     [IronSource initWithAppKey:self.provider.data.key1 adUnits:@[IS_INTERSTITIAL]];
     
     return self;
