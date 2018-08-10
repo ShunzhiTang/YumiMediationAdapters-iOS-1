@@ -21,12 +21,12 @@
                                                       forProvider:kYumiMediationAdapterIDVungle
                                                       requestType:YumiMediationSDKAdRequest];
 }
- 
+
 #pragma mark - YumiMediationVideoAdapter
 - (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                 delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
     self = [super init];
-    
+
     self.delegate = delegate;
     self.provider = provider;
 
@@ -40,7 +40,7 @@
     sdk.delegate = vungleInstance;
     [sdk setLoggingEnabled:NO];
     [sdk startWithAppId:appID placements:placementIDsArray error:&error];
-    
+
     return self;
 }
 

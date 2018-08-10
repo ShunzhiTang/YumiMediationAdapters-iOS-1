@@ -24,12 +24,12 @@
                                                       forProvider:kYumiMediationAdapterIDMobvista
                                                       requestType:YumiMediationSDKAdRequest];
 }
- 
+
 #pragma mark : YumiMediationVideoAdapter
 - (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                 delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
     self = [super init];
-    
+
     self.provider = provider;
     self.delegate = delegate;
 
@@ -39,7 +39,7 @@
         weakSelf.videoAd = [MTGRewardAdManager sharedInstance];
         weakSelf.isAutoRequest = NO;
     });
-    
+
     return self;
 }
 
