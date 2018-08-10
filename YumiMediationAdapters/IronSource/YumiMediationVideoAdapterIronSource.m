@@ -32,7 +32,8 @@
 
     [IronSource setRewardedVideoDelegate:self];
     if (self.provider.data.key1.length == 0) {
-        [self.delegate adapter:self interstitialAd:nil didFailToReceive:@"No app id specified"];
+        [self.delegate adapter:self videoAd:nil didFailToLoad:@"No app id specified"];
+        return self;
     }
     [IronSource initWithAppKey:self.provider.data.key1 adUnits:@[IS_REWARDED_VIDEO]];
     return self;
