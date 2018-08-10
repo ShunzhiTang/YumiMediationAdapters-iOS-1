@@ -7,7 +7,7 @@
 //
 
 #import "YumiMediationVideoAdapterIronSource.h"
-#import "IronSource/IronSource.h"
+#import <IronSource/IronSource.h>
 
 @interface YumiMediationVideoAdapterIronSource () <ISRewardedVideoDelegate>
 @property (nonatomic, assign) BOOL isReward;
