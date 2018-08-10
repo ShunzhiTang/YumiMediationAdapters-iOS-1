@@ -23,17 +23,17 @@
 - (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
                                                 delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
     self = [super init];
-    
+
     self.provider = provider;
     self.delegate = delegate;
-    
+
     [IronSource setInterstitialDelegate:self];
     if (self.provider.data.key1.length == 0) {
         [self.delegate adapter:self interstitialAd:nil didFailToReceive:@"No app id specified"];
         return self;
     }
-    [IronSource initWithAppKey:self.provider.data.key1 adUnits:@[IS_INTERSTITIAL]];
-    
+    [IronSource initWithAppKey:self.provider.data.key1 adUnits:@[ IS_INTERSTITIAL ]];
+
     return self;
 }
 
@@ -42,7 +42,8 @@
 }
 
 - (BOOL)isReady {
-    return [IronSource hasInterstitial];;
+    return [IronSource hasInterstitial];
+    ;
 }
 
 - (void)present {
@@ -53,52 +54,52 @@
 /**
  Called after an interstitial has been loaded
  */
-- (void)interstitialDidLoad{
+- (void)interstitialDidLoad {
     [self.delegate adapter:self didReceiveInterstitialAd:nil];
 }
 
 /**
  Called after an interstitial has attempted to load but failed.
- 
+
  @param error The reason for the error
  */
-- (void)interstitialDidFailToLoadWithError:(NSError *)error{
+- (void)interstitialDidFailToLoadWithError:(NSError *)error {
     [self.delegate adapter:self interstitialAd:nil didFailToReceive:[error localizedDescription]];
 }
 
 /**
  Called after an interstitial has been opened.
  */
-- (void)interstitialDidOpen{
+- (void)interstitialDidOpen {
     [self.delegate adapter:self willPresentScreen:nil];
 }
 
 /**
  Called after an interstitial has been dismissed.
  */
-- (void)interstitialDidClose{
+- (void)interstitialDidClose {
     [self.delegate adapter:self willDismissScreen:nil];
 }
 
 /**
  Called after an interstitial has been displayed on the screen.
  */
-- (void)interstitialDidShow{
+- (void)interstitialDidShow {
 }
 
 /**
  Called after an interstitial has attempted to show but failed.
- 
+
  @param error The reason for the error
  */
-- (void)interstitialDidFailToShowWithError:(NSError *)error{
+- (void)interstitialDidFailToShowWithError:(NSError *)error {
     [self.delegate adapter:self interstitialAd:nil didFailToReceive:[error localizedDescription]];
 }
 
 /**
  Called after an interstitial has been clicked.
  */
-- (void)didClickInterstitial{
+- (void)didClickInterstitial {
     [self.delegate adapter:self didClickInterstitialAd:nil];
 }
 

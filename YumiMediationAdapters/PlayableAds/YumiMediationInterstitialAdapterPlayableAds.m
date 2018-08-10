@@ -68,7 +68,7 @@
     [self.delegate adapter:self didClickInterstitialAd:ads];
 }
 
-- (void)playableAdsDidStartPlaying:(PlayableAds *)ads{
+- (void)playableAdsDidStartPlaying:(PlayableAds *)ads {
     [self.delegate adapter:self willPresentScreen:ads];
 }
 

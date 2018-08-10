@@ -7,9 +7,9 @@
 //
 
 #import "YumiMediationVideoAdapterDomob.h"
-#import <YumiMediationSDK/YumiMediationConstants.h>
-#import <YumiMediationSDK/YumiLogger.h>
 #import "DMAdVideoManager.h"
+#import <YumiMediationSDK/YumiLogger.h>
+#import <YumiMediationSDK/YumiMediationConstants.h>
 
 @interface YumiMediationVideoAdapterDomob () <DMAdVideoManagerDelegate>
 
@@ -29,18 +29,18 @@
                                                       forProvider:kYumiMediationAdapterIDDomob
                                                       requestType:YumiMediationSDKAdRequest];
 }
- 
+
 #pragma mark - YumiMediationVideoAdapter
 - (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                 delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
     self = [super init];
-    
+
     self.delegate = delegate;
     self.provider = provider;
 
     self.videoManager = [[DMAdVideoManager alloc] initWithPublisherID:self.provider.data.key1];
     self.videoManager.delegate = self;
-    
+
     return self;
 }
 
@@ -57,22 +57,22 @@
 }
 
 #pragma mark - IndependentVideoManagerDelegate
-- (void)AdVideoManagerDidFinishLoad:(DMAdVideoManager * _Nonnull)manager {
+- (void)AdVideoManagerDidFinishLoad:(DMAdVideoManager *_Nonnull)manager {
     self.available = YES;
     [self.delegate adapter:self didReceiveVideoAd:manager];
 }
 
-- (void)AdVideoManager:(DMAdVideoManager * _Nonnull)manager failedLoadWithError:(NSError * __nullable)error{
+- (void)AdVideoManager:(DMAdVideoManager *_Nonnull)manager failedLoadWithError:(NSError *__nullable)error {
     self.available = NO;
     [self.delegate adapter:self videoAd:manager didFailToLoad:[error localizedDescription]];
 }
 
-- (void)AdVideoManagerPlayVideoComplete:(DMAdVideoManager * _Nonnull)manager {
+- (void)AdVideoManagerPlayVideoComplete:(DMAdVideoManager *_Nonnull)manager {
     self.available = NO;
     [self.delegate adapter:self videoAd:manager didReward:nil];
 }
 
-- (void)AdVideoManagerCloseVideoPlayer:(DMAdVideoManager * _Nonnull)manager {
+- (void)AdVideoManagerCloseVideoPlayer:(DMAdVideoManager *_Nonnull)manager {
     self.available = NO;
     [self.delegate adapter:self didCloseVideoAd:manager];
 }
