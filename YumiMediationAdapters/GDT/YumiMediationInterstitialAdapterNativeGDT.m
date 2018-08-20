@@ -11,17 +11,19 @@
 #import <YumiMediationSDK/YumiAdsWKCustomViewController.h>
 #import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import "YumiGDTAdapterInterstitialViewController.h"
+#import "GDTNativeExpressAd.h"
+#import "GDTNativeExpressAdView.h"
+#import <YumiMediationSDK/YumiMasonry.h>
 
-@interface YumiMediationInterstitialAdapterNativeGDT () <YumiAdsWKCustomViewControllerDelegate, GDTNativeAdDelegate>
+@interface YumiMediationInterstitialAdapterNativeGDT () <GDTNativeExpressAdDelegete>
 
-@property (nonatomic) GDTNativeAd *nativeAd;
-@property (nonatomic) GDTNativeAdData *currentAd;
-@property (nonatomic) NSArray *data;
-@property (nonatomic) YumiAdsWKCustomViewController *interstitial;
+//native express
+@property (nonatomic) GDTNativeExpressAd *nativeExpressAd;
+@property (nonatomic) GDTNativeExpressAdView *expressView;
 
-@property (nonatomic) YumiMediationTemplateModel *templateModel;
-@property (nonatomic, assign) NSInteger currentID;
-@property (nonatomic) YumiBannerViewTemplateManager *templateManager;
+@property (nonatomic) YumiGDTAdapterInterstitialViewController  *interstitialVc;
+@property (nonatomic ,assign) BOOL  isInterstitialReady;
 
 @end
 
@@ -33,32 +35,24 @@
                                                              requestType:YumiMediationSDKAdRequest];
 }
 
-#pragma mark :private method
-- (void)requestInterstitialAdTemplate {
-    NSString *fileName = [NSString stringWithFormat:@"inter%@", self.provider.data.providerID];
-
-    self.templateManager =
-        [[YumiBannerViewTemplateManager alloc] initWithGeneralTemplate:self.provider.data.generalTemplate
-                                                     landscapeTemplate:self.provider.data.landscapeTemplate
-                                                      verticalTemplate:self.provider.data.verticalTemplate
-                                                      saveTemplateName:fileName];
-
-    __weak typeof(self) weakSelf = self;
-    [self.templateManager fetchMediationTemplateSuccess:^(YumiMediationTemplateModel *_Nullable templateModel) {
-        weakSelf.templateModel = templateModel;
+#pragma mark :  private  method
+- (YumiGDTAdapterInterstitialViewController *)getNibResourceFromCustomBundle:(NSString *)name type:(NSString *)type {
+    
+    NSBundle *mainBundle = [NSBundle bundleForClass:[self class]];
+    NSURL *bundleURL = [mainBundle URLForResource:@"YumiMediationGDT" withExtension:@"bundle"];
+    NSBundle *bundle = [NSBundle bundleWithURL:bundleURL];
+    
+    YumiGDTAdapterInterstitialViewController *vc = [[YumiGDTAdapterInterstitialViewController alloc]initWithNibName:name bundle:bundle];
+    if (vc == nil) {
+        NSLog(@"GDT 加载素材失败");
     }
-        failure:^(NSError *_Nonnull error) {
-            [[YumiLogger stdLogger] log:kYumiLogLevelError message:[error localizedDescription]];
-        }];
-
-    self.currentID = [self.templateManager getCurrentNativeTemplate].templateID;
+    return vc;
 }
-
-- (NSString *)resourceNamedFromCustomBundle:(NSString *)name {
-    NSBundle *YumiMediationSDK = [[YumiTool sharedTool] resourcesBundleWithBundleName:@"YumiMediationSDK"];
-    NSString *strPath = [YumiMediationSDK pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"html"];
-
-    return strPath;
+- (void)closeGDTIntestitial{
+      [[self.delegate rootViewControllerForPresentingModalView] dismissViewControllerAnimated:YES completion:nil];
+    
+    [self.delegate adapter:self willDismissScreen:self.interstitialVc];
+    self.interstitialVc = nil;
 }
 
 #pragma mark - YumiMediationInterstitialAdapter
@@ -68,158 +62,79 @@
 
     self.provider = provider;
     self.delegate = delegate;
-
+    self.isInterstitialReady = NO;
     return self;
 }
 
 - (void)requestAd {
-    // request remote template
-    [self requestInterstitialAdTemplate];
 
-    CGRect gdtFrame =
-        CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
-
-    NSDictionary *closeBtnFrame = @{
-        @"closeButton_w" : @(self.provider.data.closeButton.clickAreaWidth),
-        @"closeButton_h" : @(self.provider.data.closeButton.clickAreaHeight),
-        @"closeImage_w" : @(self.provider.data.closeButton.pictureWidth),
-        @"closeImage_h" : @(self.provider.data.closeButton.pictureHeight)
-    };
-
+    CGSize adSize = CGSizeMake(300, 300);
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.interstitial = [[YumiAdsWKCustomViewController alloc]
-            initYumiAdsWKCustomViewControllerWith:gdtFrame
-                                        clickType:YumiAdsClickTypeDownload
-                                 closeBtnPosition:weakSelf.provider.data.closeButton.position
-                                    closeBtnFrame:closeBtnFrame
-                                         logoType:YumiAdsLogoGDT
-                                         delegate:weakSelf];
-        weakSelf.interstitial.isNativeInterstitialGDT = YES;
-
-        weakSelf.nativeAd = [[GDTNativeAd alloc] initWithAppkey:weakSelf.provider.data.key1 ?: @""
-                                                    placementId:weakSelf.provider.data.key2 ?: @""];
-        weakSelf.nativeAd.controller = weakSelf.interstitial;
-        weakSelf.nativeAd.delegate = weakSelf;
-
-        [weakSelf.nativeAd loadAd:1];
+        weakSelf.nativeExpressAd = [[GDTNativeExpressAd alloc] initWithAppkey:weakSelf.provider.data.key1 placementId:weakSelf.provider.data.key2 adSize:adSize];
+        weakSelf.nativeExpressAd.delegate = self;
+        
+        // The number of times a request has been requested
+        [weakSelf.nativeExpressAd loadAd:1];
     });
 }
 
 - (BOOL)isReady {
-    return self.interstitial.isReady;
+    return self.isInterstitialReady;
 }
 
 - (void)present {
-    [self.interstitial presentFromRootViewController:[self.delegate rootViewControllerForPresentingModalView]];
-
-    [self.nativeAd attachAd:self.currentAd toView:self.interstitial.customView];
+    [[self.delegate rootViewControllerForPresentingModalView] presentViewController:self.interstitialVc animated:YES completion:nil];
 }
 
-#pragma mark : - GDTNativeAdDelegate
-- (void)nativeAdSuccessToLoad:(NSArray *)nativeAdDataArray {
-    if (!nativeAdDataArray || ![nativeAdDataArray objectAtIndex:0]) {
-        [self.delegate adapter:self interstitialAd:self.interstitial didFailToReceive:@"GDT no ad"];
+#pragma mark : - GDTNativeExpressAdDelegete
+- (void)nativeExpressAdSuccessToLoad:(GDTNativeExpressAd *)nativeExpressAd views:(NSArray<__kindof GDTNativeExpressAdView *> *)views{
+    
+    if (views.count == 0) {
+        [self.delegate adapter:self interstitialAd:self.interstitialVc didFailToReceive:@"gdt load fail"];
         return;
     }
+    
+    self.expressView = [views objectAtIndex:0];
+    [self.expressView removeFromSuperview];
+    
+    self.expressView.controller = self.interstitialVc;
+    [self.expressView render];
+    
+    self.isInterstitialReady = YES;
+    __weak typeof(self) weakSelf = self;
+    self.interstitialVc.closeBlock = ^{
+        [weakSelf closeGDTIntestitial];
+    };
+    CGSize adSize = self.expressView.frame.size;
+    
+    [self.interstitialVc.view addSubview:self.expressView];
+    [self.expressView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
+        make.centerY.equalTo(self.interstitialVc.view.mas_centerY);
+        make.centerX.equalTo(self.interstitialVc.view.mas_centerX);
+        make.height.mas_equalTo(adSize.height);
+        make.width.mas_equalTo(adSize.width);
+    }];
+    
+    [self.delegate adapter:self didReceiveInterstitialAd:self.interstitialVc];
+}
 
-    _data = nativeAdDataArray;
-    _currentAd = [_data objectAtIndex:0];
-
-    if (!_currentAd.properties || ![_currentAd.properties objectForKey:GDTNativeAdDataKeyImgUrl] ||
-        ![_currentAd.properties objectForKey:GDTNativeAdDataKeyDesc]) {
-        [self.delegate adapter:self interstitialAd:self.interstitial didFailToReceive:@"GDT no ad"];
-        return;
+- (void)nativeExpressAdFailToLoad:(GDTNativeExpressAd *)nativeExpressAd error:(NSError *)error{
+    self.isInterstitialReady = NO;
+    [self.delegate adapter:self interstitialAd:self.interstitialVc didFailToReceive:@"gdt load fail"];
+}
+- (void)nativeExpressAdViewClicked:(GDTNativeExpressAdView *)nativeExpressAdView{
+    [self.delegate adapter:self didClickInterstitialAd:self.interstitialVc];
+}
+- (void)nativeExpressAdViewExposure:(GDTNativeExpressAdView *)nativeExpressAdView{
+    [self.delegate adapter:self willPresentScreen:self.interstitialVc];
+}
+#pragma mark: getter method
+- (YumiGDTAdapterInterstitialViewController *)interstitialVc{
+    if (!_interstitialVc) {
+        _interstitialVc =
+        [self getNibResourceFromCustomBundle:@"YumiGDTAdapterInterstitialViewController" type:@"xib"];
     }
-
-    NSString *bigImg = [_currentAd.properties objectForKey:GDTNativeAdDataKeyImgUrl];
-    NSString *iconImg = [_currentAd.properties objectForKey:GDTNativeAdDataKeyIconUrl];
-    NSString *title = [_currentAd.properties objectForKey:GDTNativeAdDataKeyTitle];
-    NSString *desc = [_currentAd.properties objectForKey:GDTNativeAdDataKeyDesc];
-    NSString *star = [[_currentAd.properties objectForKey:GDTNativeAdDataKeyAppRating] stringValue];
-    if ([star isEqualToString:@""] || !star) {
-        star = @"3.5";
-    }
-
-    NSString *interstitialPath;
-    if ([[YumiTool sharedTool] isInterfaceOrientationPortrait]) {
-        interstitialPath = [self resourceNamedFromCustomBundle:@"cp-native"];
-    } else {
-        interstitialPath = [self resourceNamedFromCustomBundle:@"cp-native-lan"];
-    }
-
-    NSData *interstitialData = [NSData dataWithContentsOfFile:interstitialPath];
-    NSString *interstitialStr = [[NSString alloc] initWithData:interstitialData encoding:NSUTF8StringEncoding];
-
-    if ([[YumiTool sharedTool] isInterfaceOrientationPortrait]) {
-        interstitialStr = [NSString stringWithFormat:interstitialStr, @"100%", @"100%", @"100%", @"100%", @"100%",
-                                                     @"70%", @"100%", @"100%", @"100%", @"50%", bigImg, @"100%",
-                                                     iconImg, title, desc, star, @"about:blank"];
-    } else {
-        interstitialStr = [NSString stringWithFormat:interstitialStr, @"100%", @"100%", @"50%", @"100%", @"100%",
-                                                     @"20%", @"2%", @"74%", @"100%", @"100%", @"65%", @"5%", @"30%",
-                                                     iconImg, title, star, bigImg, @"100%", desc, @"about:blank"];
-    }
-
-    if (self.templateModel) {
-        NSString *templateID = [NSString stringWithFormat:@"%d", self.templateModel.templateID];
-        NSString *currentID = [NSString stringWithFormat:@"%@", [NSNumber numberWithInteger:self.currentID]];
-        if (![templateID isEqualToString:currentID] || !self.templateModel.htmlString) {
-            [self.interstitial loadHTMLString:interstitialStr];
-            return;
-        }
-
-        interstitialStr = self.templateModel.htmlString;
-        interstitialStr = [self.templateManager replaceHtmlCharactersWithString:interstitialStr
-                                                                        iconURL:iconImg
-                                                                          title:title
-                                                                    description:desc
-                                                                       imageURL:bigImg
-                                                                   hyperlinkURL:@"跳转"];
-    }
-
-    [self.interstitial loadHTMLString:interstitialStr];
+    return _interstitialVc;
 }
-
-- (void)nativeAdFailToLoad:(NSError *)error {
-    [self.delegate adapter:self interstitialAd:self.interstitial didFailToReceive:[error localizedDescription]];
-}
-
-- (void)nativeAdClosed {
-    [self.interstitial closeButtonPressed];
-}
-- (void)nativeAdWillPresentScreen {
-}
-
-- (void)nativeAdApplicationWillEnterBackground {
-}
-
-#pragma mark : YumiAdsWKCustomViewControllerDelegate
-- (void)yumiAdsWKCustomViewControllerDidReceivedAd:(UIViewController *)viewController {
-
-    [self.delegate adapter:self
-        didReceiveInterstitialAd:self.interstitial
-               interstitialFrame:CGRectZero
-                  withTemplateID:(int)self.currentID];
-}
-
-- (void)yumiAdsWKCustomViewController:(UIViewController *)viewController didFailToReceiveAdWithError:(NSError *)error {
-    [self.delegate adapter:self interstitialAd:self.interstitial didFailToReceive:[error localizedDescription]];
-}
-
-- (void)didClickOnYumiAdsWKCustomViewController:(UIViewController *)viewController point:(CGPoint)point {
-    [self.nativeAd clickAd:self.currentAd];
-
-    [self.delegate adapter:self didClickInterstitialAd:self.interstitial on:point withTemplateID:(int)self.currentID];
-}
-
-- (void)yumiAdsWKCustomViewControllerDidPresent:(UIViewController *)viewController {
-
-    [self.delegate adapter:self willPresentScreen:self.interstitial];
-}
-
-- (void)yumiAdsWKCustomViewControllerDidClosed:(UIViewController *)viewController {
-    [self.delegate adapter:self willDismissScreen:self.interstitial];
-}
-
 @end
