@@ -9,7 +9,7 @@
 #import "YumiMediationVideoAdapterIronSource.h"
 #import <IronSource/IronSource.h>
 
-@interface YumiMediationVideoAdapterIronSource () <ISRewardedVideoDelegate>
+@interface YumiMediationVideoAdapterIronSource () <ISDemandOnlyRewardedVideoDelegate>
 @property (nonatomic, assign) BOOL isReward;
 
 @end
@@ -30,12 +30,13 @@
     self.delegate = delegate;
     self.provider = provider;
 
-    [IronSource setRewardedVideoDelegate:self];
+    [IronSource setISDemandOnlyRewardedVideoDelegate:self];
+    [IronSource shouldTrackReachability:YES];
     if (self.provider.data.key1.length == 0) {
         [self.delegate adapter:self videoAd:nil didFailToLoad:@"No app id specified"];
         return self;
     }
-    [IronSource initWithAppKey:self.provider.data.key1 adUnits:@[ IS_REWARDED_VIDEO ]];
+    [IronSource initISDemandOnly:self.provider.data.key1 adUnits:@[IS_REWARDED_VIDEO]];
     return self;
 }
 
@@ -51,34 +52,34 @@
     [IronSource showRewardedVideoWithViewController:rootViewController];
 }
 
-#pragma mark - ISRewardedVideoDelegate
-// Called after a rewarded video has changed its availability.
-//@param available The new rewarded video availability. YES if available //and ready to be shown, NO otherwise.
-- (void)rewardedVideoHasChangedAvailability:(BOOL)available {
+#pragma mark - ISDemandOnlyRewardedVideoDelegate
+//Called after a rewarded video has changed its availability.
+//@param available The new rewarded video availability. YES if available and ready to be shown, NO otherwise.
+- (void)rewardedVideoHasChangedAvailability:(BOOL)available instanceId:(NSString *)instanceId{
     if (available) {
         [self.delegate adapter:self didReceiveVideoAd:nil];
     }
 }
 
-// Called after a rewarded video has been viewed completely and the user is //eligible for reward.@param placementInfo
-// An object that contains the //placement's reward name and amount.
-- (void)didReceiveRewardForPlacement:(ISPlacementInfo *)placementInfo {
+//Called after a rewarded video has been viewed completely and the user is eligible for reward.
+//@param placementInfo An object that contains the placement's reward name and amount.
+- (void)didReceiveRewardForPlacement:(ISPlacementInfo *)placementInfo instanceId:(NSString *)instanceId{
     self.isReward = YES;
 }
 
-// Called after a rewarded video has attempted to show but failed.
+//Called after a rewarded video has attempted to show but failed.
 //@param error The reason for the error
-- (void)rewardedVideoDidFailToShowWithError:(NSError *)error {
+- (void)rewardedVideoDidFailToShowWithError:(NSError *)error instanceId:(NSString *)instanceId{
     [self.delegate adapter:self videoAd:nil didFailToLoad:[error localizedDescription]];
 }
 
-// Called after a rewarded video has been opened.
-- (void)rewardedVideoDidOpen {
+//Called after a rewarded video has been opened.
+- (void)rewardedVideoDidOpen:(NSString *)instanceId{
     [self.delegate adapter:self didOpenVideoAd:nil];
 }
 
-// Called after a rewarded video has been dismissed.
-- (void)rewardedVideoDidClose {
+//Called after a rewarded video has been dismissed.
+- (void)rewardedVideoDidClose:(NSString *)instanceId {
     if (self.isReward) {
         [self.delegate adapter:self videoAd:nil didReward:nil];
         self.isReward = NO;
@@ -86,20 +87,8 @@
     [self.delegate adapter:self didCloseVideoAd:nil];
 }
 
-// Note: the events below are not available for all supported rewarded video ad networks. Check which events are
-// available per ad network you choose //to include in your build.  We recommend only using events which register to ALL
-// ad networks you //include in your build.  Called after a rewarded video has started playing.
-- (void)rewardedVideoDidStart {
-    [self.delegate adapter:self didStartPlayingVideoAd:nil];
+//Invoked when the end user clicked on the RewardedVideo ad
+- (void)didClickRewardedVideo:(ISPlacementInfo *)placementInfo instanceId:(NSString *)instanceId{
 }
 
-// Called after a rewarded video has finished playing.
-- (void)rewardedVideoDidEnd {
-}
-
-/**
- Called after a video has been clicked.
- */
-- (void)didClickRewardedVideo:(ISPlacementInfo *)placementInfo {
-}
 @end
