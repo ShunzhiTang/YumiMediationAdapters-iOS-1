@@ -60,38 +60,41 @@
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
         adSize = CGSizeMake(300, 250);
     }
-    
+
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.nativeExpressAd = [[GDTNativeExpressAd alloc] initWithAppkey:weakSelf.provider.data.key1 placementId:weakSelf.provider.data.key2 adSize:adSize];
+        weakSelf.nativeExpressAd = [[GDTNativeExpressAd alloc] initWithAppkey:weakSelf.provider.data.key1
+                                                                  placementId:weakSelf.provider.data.key2
+                                                                       adSize:adSize];
         weakSelf.nativeExpressAd.delegate = self;
-        
+
         // The number of times a request has been requested
         [weakSelf.nativeExpressAd loadAd:1];
     });
 }
 
 #pragma mark : GDTNativeExpressAdDelegete
-- (void)nativeExpressAdSuccessToLoad:(GDTNativeExpressAd *)nativeExpressAd views:(NSArray<__kindof GDTNativeExpressAdView *> *)views{
-    
+- (void)nativeExpressAdSuccessToLoad:(GDTNativeExpressAd *)nativeExpressAd
+                               views:(NSArray<__kindof GDTNativeExpressAdView *> *)views {
+
     if (views.count == 0) {
         [self.delegate adapter:self didFailToReceiveAd:@"gdt load fail"];
         return;
     }
-    
+
     self.expressView = [views objectAtIndex:0];
     [self.expressView removeFromSuperview];
-    
+
     self.expressView.controller = [self.delegate rootViewControllerForPresentingModalView];
     [self.expressView render];
-    
-     [self.delegate adapter:self didReceiveAd:self.expressView];
+
+    [self.delegate adapter:self didReceiveAd:self.expressView];
 }
 
-- (void)nativeExpressAdFailToLoad:(GDTNativeExpressAd *)nativeExpressAd error:(NSError *)error{
+- (void)nativeExpressAdFailToLoad:(GDTNativeExpressAd *)nativeExpressAd error:(NSError *)error {
     [self.delegate adapter:self didFailToReceiveAd:[error localizedDescription]];
 }
-- (void)nativeExpressAdViewClicked:(GDTNativeExpressAdView *)nativeExpressAdView{
+- (void)nativeExpressAdViewClicked:(GDTNativeExpressAdView *)nativeExpressAdView {
     [self.delegate adapter:self didClick:self.expressView];
 }
 

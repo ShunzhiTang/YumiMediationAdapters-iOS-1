@@ -7,10 +7,10 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void(^CloseBlock)(void);
+typedef void (^CloseBlock)(void);
 
 @interface YumiGDTAdapterInterstitialViewController : UIViewController
 
-@property (nonatomic,copy) CloseBlock closeBlock;
+@property (nonatomic, copy) CloseBlock closeBlock;
 
 @end
