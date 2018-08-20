@@ -45,11 +45,11 @@
 }
 
 - (BOOL)isReady {
-    return [IronSource hasRewardedVideo];
+    return [IronSource hasISDemandOnlyRewardedVideo:self.provider.data.key2];
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [IronSource showRewardedVideoWithViewController:rootViewController];
+    [IronSource showISDemandOnlyRewardedVideo:rootViewController instanceId:self.provider.data.key2];
 }
 
 #pragma mark - ISDemandOnlyRewardedVideoDelegate
