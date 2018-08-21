@@ -81,10 +81,10 @@
 //Called after a rewarded video has been dismissed.
 - (void)rewardedVideoDidClose:(NSString *)instanceId {
     if (self.isReward) {
-        [self.delegate adapter:self videoAd:nil didReward:nil];
+        [self.delegate adapter:self videoAd:nil didReward:nil instanceId:instanceId];
         self.isReward = NO;
     }
-    [self.delegate adapter:self didCloseVideoAd:nil];
+    [self.delegate adapter:self didCloseVideoAd:nil instanceId:instanceId];
 }
 
 //Invoked when the end user clicked on the RewardedVideo ad
