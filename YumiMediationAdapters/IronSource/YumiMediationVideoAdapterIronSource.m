@@ -59,7 +59,7 @@
     if (available) {
         [self.delegate adapter:self didReceiveVideoAd:nil];
     }else{
-        [self.delegate adapter:self videoAd:nil didFailToLoad:[error localizedDescription] isRetry:NO];
+        [self.delegate adapter:self videoAd:nil didFailToLoad:@"ironSource is not available" isRetry:NO];
     }
 }
 
