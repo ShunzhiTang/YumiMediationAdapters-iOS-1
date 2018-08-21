@@ -33,12 +33,11 @@
         return self;
     }
     [IronSource initISDemandOnly:self.provider.data.key1 adUnits:@[IS_INTERSTITIAL]];
-    [IronSource loadISDemandOnlyInterstitial:self.provider.data.key2];
     return self;
 }
 
 - (void)requestAd {
-    [IronSource loadInterstitial];
+    [IronSource loadISDemandOnlyInterstitial:self.provider.data.key2];
 }
 
 - (BOOL)isReady {
@@ -55,7 +54,7 @@
  Called after an interstitial has been loaded
  */
 - (void)interstitialDidLoad:(NSString *)instanceId{
-    [self.delegate adapter:self didReceiveInterstitialAd:nil];
+    [self.delegate adapter:self didReceiveInterstitialAd:nil instanceId:instanceId];
 }
 
 /**
@@ -63,7 +62,7 @@
  @param error The reason for the error
  */
 - (void)interstitialDidFailToLoadWithError:(NSError *)error instanceId:(NSString *)instanceId{
-    [self.delegate adapter:self interstitialAd:nil didFailToReceive:[error localizedDescription]];
+    [self.delegate adapter:self interstitialAd:nil didFailToReceive:[error localizedDescription] instanceId:instanceId];
 }
 
 /**
@@ -91,14 +90,13 @@
  @param error The reason for the error
  */
 - (void)interstitialDidFailToShowWithError:(NSError *)error instanceId:(NSString *)instanceId{
-    [self.delegate adapter:self interstitialAd:nil didFailToReceive:[error localizedDescription]];
 }
 
 /**
  Called after an interstitial has been clicked.
  */
 - (void)didClickInterstitial:(NSString *)instanceId{
-    [self.delegate adapter:self didClickInterstitialAd:nil];
+    [self.delegate adapter:self didClickInterstitialAd:nil instanceId:instanceId];
 }
 
 @end
