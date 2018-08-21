@@ -98,4 +98,10 @@
     [self.delegate adapter:self didClick:self.expressView];
 }
 
+- (void)nativeExpressAdViewWillPresentScreen:(GDTNativeExpressAdView *)nativeExpressAdView{
+    [self.delegate adapter:self willPresentScreen:self.expressView];
+}
+- (void)nativeExpressAdViewWillDissmissScreen:(GDTNativeExpressAdView *)nativeExpressAdView{
+    [self.delegate adapter:self willDissmissScreen:self.expressView];
+}
 @end
