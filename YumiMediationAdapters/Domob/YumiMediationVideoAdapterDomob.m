@@ -7,41 +7,45 @@
 //
 
 #import "YumiMediationVideoAdapterDomob.h"
-#import "IndependentVideoManager.h"
+#import "DMAdVideoManager.h"
+#import <YumiMediationSDK/YumiLogger.h>
+#import <YumiMediationSDK/YumiMediationConstants.h>
 
-@interface YumiMediationVideoAdapterDomob () <IndependentVideoManagerDelegate>
+@interface YumiMediationVideoAdapterDomob () <DMAdVideoManagerDelegate>
 
-@property (nonatomic) IndependentVideoManager *videoManager;
+@property (nonatomic) DMAdVideoManager *videoManager;
 @property (nonatomic, assign) BOOL available;
-@property (nonatomic, assign) BOOL isReward;
 
 @end
 
 @implementation YumiMediationVideoAdapterDomob
 
 + (void)load {
+    if (SYSTEM_VERSION_LESS_THAN(@"9.0")) {
+        [[YumiLogger stdLogger] info:@"Domob don't support iOS version below 9.0"];
+        return;
+    }
     [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
                                                       forProvider:kYumiMediationAdapterIDDomob
                                                       requestType:YumiMediationSDKAdRequest];
 }
- 
+
 #pragma mark - YumiMediationVideoAdapter
 - (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                 delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
     self = [super init];
-    
+
     self.delegate = delegate;
     self.provider = provider;
 
-    self.videoManager = [[IndependentVideoManager alloc] initWithPublisherID:self.provider.data.key1 andUserID:nil];
+    self.videoManager = [[DMAdVideoManager alloc] initWithPublisherID:self.provider.data.key1];
     self.videoManager.delegate = self;
-    self.videoManager.openLogger = NO;
-    
+
     return self;
 }
 
 - (void)requestAd {
-    [self.videoManager checkVideoAvailable];
+    [self.videoManager loadAd];
 }
 
 - (BOOL)isReady {
@@ -49,40 +53,28 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [self.videoManager presentIndependentVideoWithViewController:rootViewController];
+    [self.videoManager presentADVideoControllerWithViewController:rootViewController];
 }
 
 #pragma mark - IndependentVideoManagerDelegate
-- (void)ivManagerDidFinishLoad:(IndependentVideoManager *)manager finished:(BOOL)isFinished {
+- (void)AdVideoManagerDidFinishLoad:(DMAdVideoManager *_Nonnull)manager {
+    self.available = YES;
     [self.delegate adapter:self didReceiveVideoAd:manager];
 }
 
-- (void)ivManager:(IndependentVideoManager *)manager failedLoadWithError:(NSError *)error {
+- (void)AdVideoManager:(DMAdVideoManager *_Nonnull)manager failedLoadWithError:(NSError *__nullable)error {
+    self.available = NO;
     [self.delegate adapter:self videoAd:manager didFailToLoad:[error localizedDescription]];
 }
 
-- (void)ivManagerWillPresent:(IndependentVideoManager *)manager {
-    [self.delegate adapter:self didOpenVideoAd:manager];
-
-    [self.delegate adapter:self didStartPlayingVideoAd:manager];
-}
-
-- (void)ivManagerCompletePlayVideo:(IndependentVideoManager *)manager{
-    self.isReward = YES;
-}
-
-- (void)ivManagerDidClosed:(IndependentVideoManager *)manager {
+- (void)AdVideoManagerPlayVideoComplete:(DMAdVideoManager *_Nonnull)manager {
     self.available = NO;
-    if (self.isReward) {
-        [self.delegate adapter:self videoAd:manager didReward:nil];
-        self.isReward = NO;
-    }
-    [self.delegate adapter:self didCloseVideoAd:manager];
-
+    [self.delegate adapter:self videoAd:manager didReward:nil];
 }
 
-- (void)ivManager:(IndependentVideoManager *)manager isIndependentVideoAvailable:(BOOL)available {
-    self.available = available;
+- (void)AdVideoManagerCloseVideoPlayer:(DMAdVideoManager *_Nonnull)manager {
+    self.available = NO;
+    [self.delegate adapter:self didCloseVideoAd:manager];
 }
 
 @end

@@ -43,6 +43,10 @@
 }
 
 - (void)requestAd {
+    if (self.provider.data.key2.length == 0) {
+        [self.delegate adapter:self interstitialAd:nil didFailToReceive:@"No zone identifier specified"];
+        return;
+    }
     self.isAdReady = NO;
     [[self.sdk adService] loadNextAdForZoneIdentifier:self.provider.data.key2 andNotify:self];
 }

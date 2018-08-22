@@ -10,7 +10,7 @@
 #import <Chartboost/Chartboost.h>
 
 @interface YumiMediationVideoAdapterChartboost () <ChartboostDelegate>
-@property (nonatomic,assign) BOOL isReward;
+@property (nonatomic, assign) BOOL isReward;
 
 @end
 
@@ -21,18 +21,18 @@
                                                       forProvider:kYumiMediationAdapterIDChartboost
                                                       requestType:YumiMediationSDKAdRequest];
 }
- 
+
 #pragma mark - YumiMediationVideoAdapter
 - (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                 delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
     self = [super init];
-    
+
     self.delegate = delegate;
     self.provider = provider;
 
     [Chartboost setShouldPrefetchVideoContent:YES];
     [Chartboost setAutoCacheAds:YES];
-    
+
     return self;
 }
 

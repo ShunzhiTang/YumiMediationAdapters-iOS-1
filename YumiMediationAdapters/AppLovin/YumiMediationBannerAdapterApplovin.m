@@ -47,6 +47,11 @@
 }
 
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
+    if (self.provider.data.key2.length == 0) {
+        [self.delegate adapter:self didFailToReceiveAd:@"No zone identifier specified"];
+        return;
+    }
+
     ALAdSize *adSize = isiPad ? [ALAdSize sizeLeader] : [ALAdSize sizeBanner];
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
         adSize = [ALAdSize sizeMRec];
