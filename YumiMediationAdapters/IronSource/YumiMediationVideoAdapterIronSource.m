@@ -64,6 +64,7 @@
 // An object that contains the //placement's reward name and amount.
 - (void)didReceiveRewardForPlacement:(ISPlacementInfo *)placementInfo {
     self.isReward = YES;
+    [self.delegate adapter:self videoAd:nil didReward:nil];
 }
 
 // Called after a rewarded video has attempted to show but failed.
@@ -79,10 +80,10 @@
 
 // Called after a rewarded video has been dismissed.
 - (void)rewardedVideoDidClose {
-    if (self.isReward) {
+    if (!self.isReward) {
         [self.delegate adapter:self videoAd:nil didReward:nil];
-        self.isReward = NO;
     }
+    self.isReward = NO;
     [self.delegate adapter:self didCloseVideoAd:nil];
 }
 
