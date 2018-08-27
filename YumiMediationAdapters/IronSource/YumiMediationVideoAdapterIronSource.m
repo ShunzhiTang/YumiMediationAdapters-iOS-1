@@ -59,7 +59,7 @@
     if (available) {
         [self.delegate adapter:self didReceiveVideoAd:nil];
     }else{
-        [self.delegate adapter:self videoAd:nil didFailToLoad:@"ironSource is not available" isRetry:NO];
+        [self.delegate adapter:self videoAd:nil didFailToLoad:@"ironSource is not available"];
     }
 }
 
@@ -73,7 +73,7 @@
 //Called after a rewarded video has attempted to show but failed.
 //@param error The reason for the error
 - (void)rewardedVideoDidFailToShowWithError:(NSError *)error instanceId:(NSString *)instanceId{
-    [self.delegate adapter:self videoAd:nil didFailToLoad:[error localizedDescription] isRetry:NO];
+    [self.delegate adapter:self videoAd:nil didFailToLoad:[error localizedDescription]];
 }
 
 //Called after a rewarded video has been opened.

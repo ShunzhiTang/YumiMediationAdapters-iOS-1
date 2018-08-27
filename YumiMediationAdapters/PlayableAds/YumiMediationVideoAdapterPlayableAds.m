@@ -63,7 +63,7 @@
 }
 
 - (void)playableAds:(PlayableAds *)ads didFailToLoadWithError:(NSError *)error {
-    [self.delegate adapter:self videoAd:self.video didFailToLoad:[error localizedDescription] isRetry:NO];
+    [self.delegate adapter:self videoAd:self.video didFailToLoad:[error localizedDescription]];
 }
 
 - (void)playableAdsDidStartPlaying:(PlayableAds *)ads {

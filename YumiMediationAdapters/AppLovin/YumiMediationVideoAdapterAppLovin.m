@@ -87,7 +87,7 @@
 
 - (void)adService:(ALAdService *)adService didFailToLoadAdWithError:(int)code {
     NSString *error = [NSString stringWithFormat:@"fail to load applovin video with code %d", code];
-    [self.delegate adapter:self videoAd:nil didFailToLoad:error isRetry:NO];
+    [self.delegate adapter:self videoAd:nil didFailToLoad:error];
 }
 
 #pragma mark : ALAdRewardDelegate
