@@ -63,7 +63,7 @@
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.nativeExpressAd = [[GDTNativeExpressAd alloc] initWithAppkey:weakSelf.provider.data.key1
+        weakSelf.nativeExpressAd = [[GDTNativeExpressAd alloc] initWithAppId:weakSelf.provider.data.key1
                                                                   placementId:weakSelf.provider.data.key2
                                                                        adSize:adSize];
         weakSelf.nativeExpressAd.delegate = self;
