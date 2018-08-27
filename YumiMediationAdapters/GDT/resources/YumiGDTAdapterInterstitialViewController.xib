@@ -23,7 +23,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fsy-T1-gT1">
-                    <rect key="frame" x="338" y="60" width="25" height="25"/>
+                    <rect key="frame" x="320" y="44" width="25" height="25"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="25" id="BGe-7C-cig"/>
                         <constraint firstAttribute="height" constant="25" id="O4n-TK-8E8"/>
@@ -36,12 +36,12 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="Fsy-T1-gT1" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="60" id="Bgz-DV-Q7H"/>
+                <constraint firstItem="Fsy-T1-gT1" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="44" id="Bgz-DV-Q7H"/>
                 <constraint firstItem="E8L-wo-uWY" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="HTu-Z8-284"/>
                 <constraint firstAttribute="bottom" secondItem="E8L-wo-uWY" secondAttribute="bottom" id="YWI-Uc-W2f"/>
                 <constraint firstAttribute="trailing" secondItem="E8L-wo-uWY" secondAttribute="trailing" id="eP7-GZ-XhV"/>
                 <constraint firstItem="E8L-wo-uWY" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="t6j-kc-dT4"/>
-                <constraint firstAttribute="trailing" secondItem="Fsy-T1-gT1" secondAttribute="trailing" constant="12" id="u81-wW-Qgl"/>
+                <constraint firstAttribute="trailing" secondItem="Fsy-T1-gT1" secondAttribute="trailing" constant="30" id="u81-wW-Qgl"/>
             </constraints>
         </view>
     </objects>

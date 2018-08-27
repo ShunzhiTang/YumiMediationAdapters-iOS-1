@@ -69,10 +69,17 @@
 
 - (void)requestAd {
 
-    CGSize adSize = CGSizeMake(300, 300);
+    YumiTool *tool = [YumiTool sharedTool];
+    CGSize adSize = CGSizeMake(ScreenWidth, 300);
+    if (![tool isInterfaceOrientationPortrait]) {
+        adSize = CGSizeMake(ScreenHeight, 300);
+    }
+    if ([tool isiPad]) {
+        adSize = CGSizeMake(500, 500);
+    }
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.nativeExpressAd = [[GDTNativeExpressAd alloc] initWithAppkey:weakSelf.provider.data.key1
+        weakSelf.nativeExpressAd = [[GDTNativeExpressAd alloc] initWithAppId:weakSelf.provider.data.key1
                                                                   placementId:weakSelf.provider.data.key2
                                                                        adSize:adSize];
         weakSelf.nativeExpressAd.delegate = self;
@@ -135,6 +142,10 @@
 - (void)nativeExpressAdViewExposure:(GDTNativeExpressAdView *)nativeExpressAdView {
     [self.delegate adapter:self willPresentScreen:self.interstitialVc];
 }
+- (void)nativeExpressAdViewClosed:(GDTNativeExpressAdView *)nativeExpressAdView{
+    [self closeGDTIntestitial];
+}
+
 #pragma mark : getter method
 - (YumiGDTAdapterInterstitialViewController *)interstitialVc {
     if (!_interstitialVc) {
