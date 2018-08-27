@@ -67,6 +67,7 @@
 //@param placementInfo An object that contains the placement's reward name and amount.
 - (void)didReceiveRewardForPlacement:(ISPlacementInfo *)placementInfo instanceId:(NSString *)instanceId{
     self.isReward = YES;
+    [self.delegate adapter:self videoAd:nil didReward:nil instanceId:instanceId];
 }
 
 //Called after a rewarded video has attempted to show but failed.
@@ -82,10 +83,10 @@
 
 //Called after a rewarded video has been dismissed.
 - (void)rewardedVideoDidClose:(NSString *)instanceId {
-    if (self.isReward) {
+    if (!self.isReward) {//ironsource 确保无中途关闭并且奖励回调始终在关闭之前
         [self.delegate adapter:self videoAd:nil didReward:nil instanceId:instanceId];
-        self.isReward = NO;
     }
+    self.isReward = NO;
     [self.delegate adapter:self didCloseVideoAd:nil instanceId:instanceId];
 }
 
