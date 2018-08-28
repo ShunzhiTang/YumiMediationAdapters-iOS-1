@@ -19,6 +19,8 @@
 @property (nonatomic, assign) YumiMediationAdViewBannerSize bannerSize;
 @property (nonatomic, assign) BOOL isSmartBanner;
 
+@property (nonatomic, getter=fetchFacebookBidderToken) NSString *bidderToken;
+@property (nonatomic) NSString *bidPayload;
 @end
 
 @implementation YumiMediationFacebookHeaderBiddingAdapterBanner

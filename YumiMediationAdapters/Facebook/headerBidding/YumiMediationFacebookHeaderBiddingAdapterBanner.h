@@ -9,6 +9,4 @@
 
 @interface YumiMediationFacebookHeaderBiddingAdapterBanner : NSObject
 
-@property (nonatomic, getter=fetchFacebookBidderToken) NSString *bidderToken;
-@property (nonatomic) NSString *bidPayload;
 @end
