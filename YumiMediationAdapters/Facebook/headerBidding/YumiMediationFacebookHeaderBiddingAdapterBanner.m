@@ -6,8 +6,8 @@
 //
 
 #import "YumiMediationFacebookHeaderBiddingAdapterBanner.h"
-#import <FBAudienceNetwork/FBAdView.h>
 #import <FBAudienceNetwork/FBAdSettings.h>
+#import <FBAudienceNetwork/FBAdView.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
 @interface YumiMediationFacebookHeaderBiddingAdapterBanner () <FBAdViewDelegate, YumiMediationBannerAdapter>
@@ -34,7 +34,7 @@
 - (id<YumiMediationBannerAdapter>)initWithProvider:(YumiMediationBannerProvider *)provider
                                           delegate:(id<YumiMediationBannerAdapterDelegate>)delegate {
     self = [super init];
-    
+
     self.provider = provider;
     self.delegate = delegate;
     return self;
@@ -45,7 +45,7 @@
     self.isSmartBanner = isSmart;
 }
 
-- (NSString *)fetchFacebookBidderToken{
+- (NSString *)fetchFacebookBidderToken {
     return FBAdSettings.bidderToken;
 }
 
@@ -65,12 +65,12 @@
         }
         //@"YOUR_PLACEMENT_ID"
         strongSelf.bannerView =
-        [[FBAdView alloc] initWithPlacementID:strongSelf.provider.data.key1
-                                       adSize:adSize
-                           rootViewController:[strongSelf.delegate rootViewControllerForPresentingModalView]];
+            [[FBAdView alloc] initWithPlacementID:strongSelf.provider.data.key1
+                                           adSize:adSize
+                               rootViewController:[strongSelf.delegate rootViewControllerForPresentingModalView]];
         strongSelf.bannerView.delegate = strongSelf;
         strongSelf.bannerView.frame = adframe;
-        
+
         [strongSelf.bannerView loadAdWithBidPayload:strongSelf.bidPayload];
     });
 }

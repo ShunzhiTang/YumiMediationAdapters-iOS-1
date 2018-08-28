@@ -64,8 +64,8 @@
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         weakSelf.nativeExpressAd = [[GDTNativeExpressAd alloc] initWithAppId:weakSelf.provider.data.key1
-                                                                  placementId:weakSelf.provider.data.key2
-                                                                       adSize:adSize];
+                                                                 placementId:weakSelf.provider.data.key2
+                                                                      adSize:adSize];
         weakSelf.nativeExpressAd.delegate = self;
 
         // The number of times a request has been requested
@@ -98,10 +98,10 @@
     [self.delegate adapter:self didClick:self.expressView];
 }
 
-- (void)nativeExpressAdViewDidPresentScreen:(GDTNativeExpressAdView *)nativeExpressAdView{
+- (void)nativeExpressAdViewDidPresentScreen:(GDTNativeExpressAdView *)nativeExpressAdView {
     [self.delegate adapter:self didPresentInternalBrowser:self.expressView];
 }
-- (void)nativeExpressAdViewDidDissmissScreen:(GDTNativeExpressAdView *)nativeExpressAdView{
+- (void)nativeExpressAdViewDidDissmissScreen:(GDTNativeExpressAdView *)nativeExpressAdView {
     [self.delegate adapter:self didDissmissInternalBrowser:self.expressView];
 }
 @end
