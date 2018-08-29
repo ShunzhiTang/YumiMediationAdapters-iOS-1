@@ -19,8 +19,7 @@
 @property (nonatomic, assign) YumiMediationAdViewBannerSize bannerSize;
 @property (nonatomic, assign) BOOL isSmartBanner;
 
-@property (nonatomic, getter=fetchFacebookBidderToken) NSString *bidderToken;
-@property (nonatomic) NSString *bidPayload;
+@property (nonatomic) NSString *bidPayloadFromServer;
 @end
 
 @implementation YumiMediationFacebookHeaderBiddingAdapterBanner
@@ -43,6 +42,10 @@
 - (void)setBannerSizeWith:(YumiMediationAdViewBannerSize)adSize smartBanner:(BOOL)isSmart {
     self.bannerSize = adSize;
     self.isSmartBanner = isSmart;
+}
+
+- (void)setUpBidPayloadValue:(NSString *)bidPayload{
+    self.bidPayloadFromServer = bidPayload;
 }
 
 - (NSString *)fetchFacebookBidderToken {
@@ -71,7 +74,7 @@
         strongSelf.bannerView.delegate = strongSelf;
         strongSelf.bannerView.frame = adframe;
 
-        [strongSelf.bannerView loadAdWithBidPayload:strongSelf.bidPayload];
+        [strongSelf.bannerView loadAdWithBidPayload:strongSelf.bidPayloadFromServer];
     });
 }
 
