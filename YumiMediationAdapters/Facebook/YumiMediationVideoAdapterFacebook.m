@@ -61,7 +61,7 @@
     [self.delegate adapter:self didReceiveVideoAd:rewardedVideoAd];
 }
 
-- (void)rewardedVideoAdComplete:(FBRewardedVideoAd *)rewardedVideoAd {
+- (void)rewardedVideoAdVideoComplete:(FBRewardedVideoAd *)rewardedVideoAd {
     self.isReward = YES;
 }
 
