@@ -34,7 +34,7 @@
 }
 
 - (NSString *)fetchFacebookBidderToken {
-    return FBAdSettings.bidderToken;
+    return FBAdSettings.bidderToken ? : @"";
 }
 
 - (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider

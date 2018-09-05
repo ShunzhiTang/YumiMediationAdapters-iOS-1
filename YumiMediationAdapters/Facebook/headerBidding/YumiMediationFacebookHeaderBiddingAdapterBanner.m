@@ -49,7 +49,7 @@
 }
 
 - (NSString *)fetchFacebookBidderToken {
-    return FBAdSettings.bidderToken;
+    return FBAdSettings.bidderToken ? : @"";
 }
 
 #pragma mark - YumiMediationBannerAdapter
