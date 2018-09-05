@@ -66,7 +66,6 @@
         if (!strongSelf) {
             return;
         }
-        //@"YOUR_PLACEMENT_ID"
         strongSelf.bannerView =
             [[FBAdView alloc] initWithPlacementID:strongSelf.provider.data.key1
                                            adSize:adSize
