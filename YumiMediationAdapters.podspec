@@ -52,7 +52,7 @@ Pod::Spec.new do |s|
       else
         sp.dependency "#{name}", version
       end
-      sp.source_files = "YumiMediationAdapters/#{name}/*.{h,m}"
+      sp.source_files = "YumiMediationAdapters/#{name}/**/*.{h,m}"
 
       if has_resource_bundle
         sp.resource_bundles = {
