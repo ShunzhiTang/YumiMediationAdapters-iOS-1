@@ -51,7 +51,7 @@
     // FBRewardedVideoAd loadAd can only be called once
     self.rewardedVideoAd = [[FBRewardedVideoAd alloc] initWithPlacementID:self.provider.data.key1];
     self.rewardedVideoAd.delegate = self;
-    [self.rewardedVideoAd loadAd];
+    [self.rewardedVideoAd loadAdWithBidPayload:self.bidPayloadFromServer];
 }
 
 - (BOOL)isReady {
