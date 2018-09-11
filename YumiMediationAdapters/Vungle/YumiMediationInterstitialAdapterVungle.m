@@ -30,11 +30,10 @@
 
     NSError *error;
     NSString *appID = self.provider.data.key1;
-    NSArray *placementIDsArray = @[ self.provider.data.key2 ?: @"", self.provider.data.key3 ?: @"" ];
     VungleSDK *sdk = [VungleSDK sharedSDK];
     sdk.delegate = vungleInstance;
     [sdk setLoggingEnabled:NO];
-    [sdk startWithAppId:appID placements:placementIDsArray error:&error];
+    [sdk startWithAppId:appID error:&error];
 
     return self;
 }

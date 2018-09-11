@@ -19,8 +19,7 @@
 }
 
 #pragma mark : -- VungleSDKDelegate
-- (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable placementID:(nullable NSString *)placementID {
-    // video
+- (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable placementID:(nullable NSString *)placementID error:(nullable NSError *)error{
     if ([placementID isEqualToString:self.vungleVideoAdapter.provider.data.key2]) {
         if (isAdPlayable) {
             [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter didReceiveVideoAd:nil];
