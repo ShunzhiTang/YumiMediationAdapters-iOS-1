@@ -13,7 +13,7 @@
 @interface YumiMediationVideoAdapterMobvista () <MTGRewardAdLoadDelegate, MTGRewardAdShowDelegate>
 
 @property (nonatomic) MTGRewardAdManager *videoAd;
-@property (nonatomic, assign) BOOL isAutoRequest;
+
 
 @end
 
@@ -37,17 +37,13 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [[MTGSDK sharedInstance] setAppID:weakSelf.provider.data.key1 ApiKey:weakSelf.provider.data.key2];
         weakSelf.videoAd = [MTGRewardAdManager sharedInstance];
-        weakSelf.isAutoRequest = NO;
     });
 
     return self;
 }
 
 - (void)requestAd {
-    if (!self.isAutoRequest) {
-        self.isAutoRequest = YES;
         [self.videoAd loadVideo:self.provider.data.key3 delegate:self];
-    }
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
@@ -59,20 +55,16 @@
 }
 
 - (BOOL)isReady {
-
     return [self.videoAd isVideoReadyToPlay:self.provider.data.key3];
 }
 
 #pragma mark : - MTGRewardAdLoadDelegate
 
 - (void)onVideoAdLoadSuccess:(nullable NSString *)unitId {
-
     [self.delegate adapter:self didReceiveVideoAd:self.videoAd];
 }
 - (void)onVideoAdLoadFailed:(nullable NSString *)unitId error:(nonnull NSError *)error {
-
-    self.isAutoRequest = NO;
-    [self.delegate adapter:self videoAd:self.videoAd didFailToLoad:[error localizedDescription]];
+    [self.delegate adapter:self videoAd:self.videoAd didFailToLoad:[error localizedDescription] isRetry:NO];
 }
 
 #pragma mark : - MTGRewardAdShowDelegate
@@ -80,16 +72,12 @@
     [self.delegate adapter:self didOpenVideoAd:self.videoAd];
 }
 - (void)onVideoAdShowFailed:(nullable NSString *)unitId withError:(nonnull NSError *)error {
-    [self.delegate adapter:self videoAd:self.videoAd didFailToLoad:[error localizedDescription]];
+    [self.delegate adapter:self videoAd:self.videoAd didFailToLoad:[error localizedDescription] isRetry:NO];
 }
 
 - (void)onVideoAdDismissed:(NSString *)unitId
              withConverted:(BOOL)converted
             withRewardInfo:(MTGRewardAdInfo *)rewardInfo {
-
-    self.isAutoRequest = NO;
-    [self requestAd];
-
     if (rewardInfo) {
         [self.delegate adapter:self videoAd:self.videoAd didReward:rewardInfo];
     }
