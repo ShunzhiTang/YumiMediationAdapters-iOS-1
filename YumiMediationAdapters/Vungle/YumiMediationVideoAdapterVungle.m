@@ -48,7 +48,7 @@
     VungleSDK *sdk = [VungleSDK sharedSDK];
     [sdk loadPlacementWithID:self.provider.data.key2 error:&error];
     if (error) {
-        [self.delegate adapter:self videoAd:nil didFailToLoad:[error description]];
+        [self.delegate adapter:self videoAd:nil didFailToLoad:[error description] isRetry:NO];
     }
 }
 
@@ -61,7 +61,7 @@
     [[VungleSDK sharedSDK] playAd:rootViewController options:nil placementID:self.provider.data.key2 error:&error];
 
     if (error) {
-        [self.delegate adapter:self videoAd:nil didFailToLoad:[error localizedDescription]];
+        [self.delegate adapter:self videoAd:nil didFailToLoad:[error localizedDescription] isRetry:NO];
     }
 }
 
