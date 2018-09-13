@@ -62,7 +62,7 @@
 - (void)vungleSDKFailedToInitializeWithError:(NSError *)error {
     [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter
                                       videoAd:nil
-                                didFailToLoad:[error localizedDescription]];
+                                didFailToLoad:[error localizedDescription] isRetry:NO];
     [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter
                                       interstitialAd:nil
                                     didFailToReceive:[error localizedDescription]];
