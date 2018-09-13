@@ -36,7 +36,7 @@
                                      interstitialAd:nil
                                    didFailToReceive:message];
 
-    [self.unityVideoAdapter.delegate adapter:self.unityVideoAdapter videoAd:nil didFailToLoad:message];
+    [self.unityVideoAdapter.delegate adapter:self.unityVideoAdapter videoAd:nil didFailToLoad:message isRetry:NO];
 }
 
 - (void)unityAdsDidStart:(NSString *)placementId {
