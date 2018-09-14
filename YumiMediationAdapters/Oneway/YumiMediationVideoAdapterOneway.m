@@ -38,7 +38,7 @@
     if ([OneWaySDK isConfigured]) {
         [OWRewardedAd initWithDelegate:self];
     } else {
-        [self.delegate adapter:self videoAd:nil didFailToLoad:@"OneWaySDK no configured"];
+        [self.delegate adapter:self videoAd:nil didFailToLoad:@"OneWaySDK no configured" isRetry:NO];
     }
 }
 
@@ -71,7 +71,7 @@
 - (void)oneWaySDKRewardedAdDidClick:(NSString *)tag {
 }
 - (void)oneWaySDKDidError:(OneWaySDKError)error withMessage:(NSString *)message {
-    [self.delegate adapter:self videoAd:nil didFailToLoad:message];
+    [self.delegate adapter:self videoAd:nil didFailToLoad:message isRetry:NO];
 }
 
 @end
