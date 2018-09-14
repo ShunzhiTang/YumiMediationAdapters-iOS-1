@@ -35,15 +35,15 @@
 }
 
 - (void)requestAd {
-    [Chartboost cacheInterstitial:CBLocationHomeScreen];
+    [Chartboost cacheInterstitial:CBLocationDefault];
 }
 
 - (BOOL)isReady {
-    return [Chartboost hasInterstitial:CBLocationHomeScreen];
+    return [Chartboost hasInterstitial:CBLocationDefault];
 }
 
 - (void)present {
-    [Chartboost showInterstitial:CBLocationHomeScreen];
+    [Chartboost showInterstitial:CBLocationDefault];
 }
 
 #pragma mark - ChartboostDelegate
