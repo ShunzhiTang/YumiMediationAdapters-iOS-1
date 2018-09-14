@@ -42,9 +42,6 @@
     NSError *error;
     VungleSDK *sdk = [VungleSDK sharedSDK];
     [sdk loadPlacementWithID:self.provider.data.key3 error:&error];
-    if (error) {
-        [self.delegate adapter:self interstitialAd:nil didFailToReceive:[error description]];
-    }
 }
 
 - (BOOL)isReady {
