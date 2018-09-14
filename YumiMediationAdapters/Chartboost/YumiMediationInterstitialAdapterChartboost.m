@@ -28,9 +28,9 @@
 
     self.provider = provider;
     self.delegate = delegate;
-
+    
     [Chartboost startWithAppId:self.provider.data.key1 appSignature:self.provider.data.key2 delegate:self];
-
+    [Chartboost setAutoCacheAds:NO];
     return self;
 }
 
@@ -57,10 +57,17 @@
           didFailToReceive:[NSString stringWithFormat:@"Chartboost error code: %@", @(error)]];
 }
 
-- (BOOL)shouldDisplayInterstitial:(CBLocation)location {
+/*!
+ @abstract
+ Called after an interstitial has been displayed on the screen.
+ 
+ @param location The location for the Chartboost impression type.
+ 
+ @discussion Implement to be notified of when an interstitial has
+ been displayed on the screen for a given CBLocation.
+ */
+- (void)didDisplayInterstitial:(CBLocation)location{
     [self.delegate adapter:self willPresentScreen:nil];
-
-    return YES;
 }
 
 - (void)didDismissInterstitial:(CBLocation)location {

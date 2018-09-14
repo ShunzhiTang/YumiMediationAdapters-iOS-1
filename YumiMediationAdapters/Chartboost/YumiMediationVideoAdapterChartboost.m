@@ -30,6 +30,7 @@
     self.delegate = delegate;
     self.provider = provider;
 
+    [Chartboost startWithAppId:self.provider.data.key1 appSignature:self.provider.data.key2 delegate:self];
     [Chartboost setShouldPrefetchVideoContent:YES];
     [Chartboost setAutoCacheAds:YES];
 
@@ -37,8 +38,6 @@
 }
 
 - (void)requestAd {
-    [Chartboost startWithAppId:self.provider.data.key1 appSignature:self.provider.data.key2 delegate:self];
-
     [Chartboost cacheRewardedVideo:CBLocationDefault];
 }
 
@@ -66,7 +65,6 @@
 }
 
 - (void)didCloseRewardedVideo:(CBLocation)location {
-
     if (self.isReward) {
         self.isReward = NO;
         [self.delegate adapter:self videoAd:nil didReward:nil];
