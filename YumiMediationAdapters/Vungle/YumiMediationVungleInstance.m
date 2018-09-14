@@ -42,7 +42,12 @@
     }
 }
 
-- (void)vungleWillCloseAdWithViewInfo:(nonnull VungleViewInfo *)info placementID:(nonnull NSString *)placementID {
+
+/**
+ * If implemented, this method gets called when a Vungle Ad Unit has been completely dismissed.
+ * At this point, you can load another ad for non-auto-cahced placement if necessary.
+ */
+- (void)vungleDidCloseAdWithViewInfo:(nonnull VungleViewInfo *)info placementID:(nonnull NSString *)placementID{
     if ([placementID isEqualToString:self.vungleVideoAdapter.provider.data.key2]) {
         if ([info.completedView boolValue]) {
             [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter videoAd:nil didReward:nil];
@@ -54,9 +59,6 @@
             [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter didClickInterstitialAd:nil];
         }
     }
-}
-
-- (void)vungleSDKDidInitialize {
 }
 
 - (void)vungleSDKFailedToInitializeWithError:(NSError *)error {
