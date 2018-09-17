@@ -32,9 +32,9 @@
 
     [IronSource setISDemandOnlyRewardedVideoDelegate:self];
     [IronSource shouldTrackReachability:YES];
-    if (self.provider.data.key1.length == 0) {
-        [self.delegate adapter:self videoAd:nil didFailToLoad:@"No app id specified"];
-        return self;
+    if (self.provider.data.key1.length == 0 || self.provider.data.key2.length == 0) {
+        [self.delegate adapter:self videoAd:nil didFailToLoad:@"No app id or instance id specified"];
+        return nil;
     }
     [IronSource initISDemandOnly:self.provider.data.key1 adUnits:@[IS_REWARDED_VIDEO]];
     return self;
