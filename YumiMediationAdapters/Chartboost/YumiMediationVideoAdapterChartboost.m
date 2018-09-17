@@ -11,7 +11,6 @@
 
 @interface YumiMediationVideoAdapterChartboost () <ChartboostDelegate>
 @property (nonatomic, assign) BOOL isReward;
-@property (nonatomic, assign) BOOL isClosed;
 
 @end
 
@@ -64,21 +63,8 @@
 - (void)didFailToLoadRewardedVideo:(CBLocation)location withError:(CBLoadError)error {
     [self.delegate adapter:self videoAd:nil didFailToLoad:[NSString stringWithFormat:@"error code %@", @(error)]];
 }
-//click close button
-- (void)didCloseRewardedVideo:(CBLocation)location {
-    if (self.isReward) {
-        self.isReward = NO;
-        [self.delegate adapter:self videoAd:nil didReward:nil];
-    }
-    self.isClosed = YES;
-    [self.delegate adapter:self didCloseVideoAd:nil];
-}
-//click download
+
 - (void)didDismissRewardedVideo:(CBLocation)location {
-    if (self.isClosed) {
-        self.isClosed = NO;
-        return;
-    }
     if (self.isReward) {
         self.isReward = NO;
         [self.delegate adapter:self videoAd:nil didReward:nil];
