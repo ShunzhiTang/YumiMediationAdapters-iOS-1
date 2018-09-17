@@ -28,9 +28,9 @@
     self.delegate = delegate;
 
     [IronSource setISDemandOnlyInterstitialDelegate:self];
-    if (self.provider.data.key1.length == 0) {
-        [self.delegate adapter:self interstitialAd:nil didFailToReceive:@"No app id specified"];
-        return self;
+    if (self.provider.data.key1.length == 0 || self.provider.data.key2.length == 0) {
+        [self.delegate adapter:self interstitialAd:nil didFailToReceive:@"No app id or instance id specified"];
+        return nil;
     }
     [IronSource initISDemandOnly:self.provider.data.key1 adUnits:@[IS_INTERSTITIAL]];
     return self;
