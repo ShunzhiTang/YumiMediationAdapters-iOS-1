@@ -88,10 +88,12 @@
     [self requestBannerViewAdTemplate];
 
     CGSize adSize = isiPad ? CGSizeMake(728, 90) : CGSizeMake(320, 50);
+    if (self.isSmartBanner) {
+        adSize = [[YumiTool sharedTool] fetchBannerAdSizeWith:self.bannerSize smartBanner:self.isSmartBanner];
+    }
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
         adSize = CGSizeMake(300, 250);
     }
-
     CGRect adframe = CGRectMake(0, 0, adSize.width, adSize.height);
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -105,7 +107,7 @@
                                                                              logoType:YumiAdsLogoGDT
                                                                              delegate:strongSelf];
         // nativeAD init
-        strongSelf.nativeAd = [[GDTNativeAd alloc] initWithAppkey:strongSelf.provider.data.key1 ?: @""
+        strongSelf.nativeAd = [[GDTNativeAd alloc] initWithAppId:strongSelf.provider.data.key1 ?: @""
                                                       placementId:strongSelf.provider.data.key2 ?: @""];
         strongSelf.nativeAd.controller = strongSelf.delegate.rootViewControllerForPresentingModalView;
         strongSelf.nativeAd.delegate = strongSelf;
