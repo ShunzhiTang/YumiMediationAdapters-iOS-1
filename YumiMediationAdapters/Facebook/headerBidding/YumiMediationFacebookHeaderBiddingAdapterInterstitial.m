@@ -8,6 +8,7 @@
 #import "YumiMediationFacebookHeaderBiddingAdapterInterstitial.h"
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <FBAudienceNetwork/FBInterstitialAd.h>
+#import <FBAudienceNetwork/FBAdSettings.h>
 
 @interface YumiMediationFacebookHeaderBiddingAdapterInterstitial ()<YumiMediationInterstitialAdapter,FBInterstitialAdDelegate>
 
