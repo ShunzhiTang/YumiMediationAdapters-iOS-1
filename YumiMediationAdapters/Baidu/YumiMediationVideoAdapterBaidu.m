@@ -14,6 +14,7 @@
 
 @property (nonatomic) BaiduMobAdRewardVideo *rewardVideo;
 @property (nonatomic, assign) BOOL isReward;
+@property (nonatomic, assign)BOOL isPreloadVideo;
 
 @end
 
@@ -41,12 +42,16 @@
 }
 
 - (void)requestAd {
+    self.isPreloadVideo = NO;
     [self.rewardVideo preload];
 }
 
 - (BOOL)isReady {
-
-    return [self.rewardVideo isReady];
+    
+    if (self.isPreloadVideo && [self.rewardVideo isReady]) {
+        return YES;
+    }
+    return NO;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
@@ -55,16 +60,19 @@
 
 #pragma mark :BaiduMobAdRewardVideoDelegate
 - (void)videoPreloadSuccess:(BaiduMobAdRewardVideo *)video {
+    self.isPreloadVideo = YES;
     [self.delegate adapter:self didReceiveVideoAd:video];
 }
 
 - (void)videoPreloadFail:(BaiduMobAdRewardVideo *)video withError:(BaiduMobFailReason)reason {
     self.isReward = NO;
+    self.isPreloadVideo = NO;
     [self.delegate adapter:self videoAd:video didFailToLoad:[NSString stringWithFormat:@"%u", reason] isRetry:YES];
 }
 
 - (void)videoFailPresentScreen:(BaiduMobAdRewardVideo *)video withError:(BaiduMobFailReason)reason {
     self.isReward = NO;
+    self.isPreloadVideo = NO;
     [self.delegate adapter:self videoAd:video didFailToLoad:[NSString stringWithFormat:@"%u", reason] isRetry:YES];
 }
 
