@@ -23,7 +23,7 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDFacebook
+                                                           forProviderID:kYumiMediationAdapterIDFacebookHeaderBidding
                                                              requestType:YumiMediationSDKAdRequest];
 }
 

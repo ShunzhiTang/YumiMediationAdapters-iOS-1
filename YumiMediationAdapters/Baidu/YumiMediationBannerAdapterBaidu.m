@@ -47,9 +47,9 @@
 
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
-    CGSize adSize = isiPad ? kBaiduAdViewBanner728x90 : kBaiduAdViewBanner320x48;
+    CGSize adSize = isiPad ? CGSizeMake(728, 90) : CGSizeMake(320, 50);
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
-        adSize = kBaiduAdViewSquareBanner300x250;
+        adSize = CGSizeMake(300, 250);
     }
 
     CGRect adFrame = CGRectMake(0, 0, adSize.width, adSize.height);

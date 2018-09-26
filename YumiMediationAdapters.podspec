@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
     { :name => "AdColony", :version => "3.1.1" },
     { :name => "AdMob", :version => "7.30.0", :has_resource_bundle => true },
     { :name => "AppLovin", :version => "5.0.2" },
-    { :name => "Baidu", :version => "4.5.0.1" },
+    { :name => "Baidu", :version => "4.5.0.2" },
     { :name => "Chartboost", :version => "7.2.0" },
     { :name => "Facebook", :version => "4.99.3", :has_resource_bundle => true },
     { :name => "Domob", :version => "3.8.0" },
