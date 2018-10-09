@@ -26,15 +26,13 @@
     [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
                                                       forProvider:kYumiMediationAdapterIDFacebookHeaderBidding
                                                       requestType:YumiMediationSDKAdRequest];
+    NSString *key = [NSString stringWithFormat:@"%@_%@",kYumiMediationAdapterIDFacebookHeaderBidding,YumiMediationHeaderBiddingToken];
+    [[NSUserDefaults standardUserDefaults] setObject:FBAdSettings.bidderToken?:@"" forKey:key];
 }
 
 #pragma mark - YumiMediationVideoAdapter
 - (void)setUpBidPayloadValue:(NSString *)bidPayload{
     self.bidPayloadFromServer = bidPayload;
-}
-
-- (NSString *)fetchFacebookBidderToken {
-    return FBAdSettings.bidderToken ? : @"";
 }
 
 - (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
