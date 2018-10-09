@@ -28,7 +28,7 @@
     [[YumiMediationAdapterRegistry registry] registerBannerAdapter:self
                                                      forProviderID:kYumiMediationAdapterIDFacebookHeaderBidding
                                                        requestType:YumiMediationSDKAdRequest];
-    NSString *key = [NSString stringWithFormat:@"%@_%@",kYumiMediationAdapterIDFacebookHeaderBidding,YumiMediationHeaderBiddingToken];
+    NSString *key = [NSString stringWithFormat:@"%@_%ld_%@",kYumiMediationAdapterIDFacebookHeaderBidding,YumiMediationAdTypeBanner,YumiMediationHeaderBiddingToken];
     [[NSUserDefaults standardUserDefaults] setObject:FBAdSettings.bidderToken?:@"" forKey:key];
 }
 
