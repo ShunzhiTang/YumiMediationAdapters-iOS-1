@@ -19,7 +19,6 @@
 @property (nonatomic, assign) YumiMediationAdViewBannerSize bannerSize;
 @property (nonatomic, assign) BOOL isSmartBanner;
 
-@property (nonatomic) NSString *bidPayloadFromServer;
 @end
 
 @implementation YumiMediationFacebookHeaderBiddingAdapterBanner
@@ -28,7 +27,7 @@
     [[YumiMediationAdapterRegistry registry] registerBannerAdapter:self
                                                      forProviderID:kYumiMediationAdapterIDFacebookHeaderBidding
                                                        requestType:YumiMediationSDKAdRequest];
-    NSString *key = [NSString stringWithFormat:@"%@_%ld_%@",kYumiMediationAdapterIDFacebookHeaderBidding,YumiMediationAdTypeBanner,YumiMediationHeaderBiddingToken];
+    NSString *key = [NSString stringWithFormat:@"%@_%lu_%@",kYumiMediationAdapterIDFacebookHeaderBidding,(unsigned long)YumiMediationAdTypeBanner,YumiMediationHeaderBiddingToken];
     [[NSUserDefaults standardUserDefaults] setObject:FBAdSettings.bidderToken?:@"" forKey:key];
 }
 
@@ -44,10 +43,6 @@
 - (void)setBannerSizeWith:(YumiMediationAdViewBannerSize)adSize smartBanner:(BOOL)isSmart {
     self.bannerSize = adSize;
     self.isSmartBanner = isSmart;
-}
-
-- (void)setUpBidPayloadValue:(NSString *)bidPayload{
-    self.bidPayloadFromServer = bidPayload;
 }
 
 #pragma mark - YumiMediationBannerAdapter
@@ -71,7 +66,7 @@
         strongSelf.bannerView.delegate = strongSelf;
         strongSelf.bannerView.frame = adframe;
 
-        [strongSelf.bannerView loadAdWithBidPayload:strongSelf.bidPayloadFromServer];
+        [strongSelf.bannerView loadAdWithBidPayload:strongSelf.provider.data.payload];
     });
 }
 

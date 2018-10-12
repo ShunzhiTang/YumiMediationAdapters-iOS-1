@@ -26,7 +26,7 @@
     [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
                                                       forProvider:kYumiMediationAdapterIDFacebookHeaderBidding
                                                       requestType:YumiMediationSDKAdRequest];
-    NSString *key = [NSString stringWithFormat:@"%@_%ld_%@",kYumiMediationAdapterIDFacebookHeaderBidding,YumiMediationAdTypeVideo,YumiMediationHeaderBiddingToken];
+    NSString *key = [NSString stringWithFormat:@"%@_%lu_%@",kYumiMediationAdapterIDFacebookHeaderBidding,(unsigned long)YumiMediationAdTypeVideo,YumiMediationHeaderBiddingToken];
     [[NSUserDefaults standardUserDefaults] setObject:FBAdSettings.bidderToken?:@"" forKey:key];
 }
 
@@ -49,7 +49,7 @@
     // FBRewardedVideoAd loadAd can only be called once
     self.rewardedVideoAd = [[FBRewardedVideoAd alloc] initWithPlacementID:self.provider.data.key1];
     self.rewardedVideoAd.delegate = self;
-    [self.rewardedVideoAd loadAdWithBidPayload:self.bidPayloadFromServer];
+    [self.rewardedVideoAd loadAdWithBidPayload:self.provider.data.payload];
 }
 
 - (BOOL)isReady {
