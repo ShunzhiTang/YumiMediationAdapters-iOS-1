@@ -15,7 +15,6 @@
 @property (nonatomic, weak) id<YumiMediationInterstitialAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationInterstitialProvider *provider;
 @property (nonatomic) FBInterstitialAd *interstitial;
-@property (nonatomic) NSString *bidPayloadFromServer;
 
 @end
 
@@ -25,12 +24,8 @@
     [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
                                                            forProviderID:kYumiMediationAdapterIDFacebookHeaderBidding
                                                              requestType:YumiMediationSDKAdRequest];
-    NSString *key = [NSString stringWithFormat:@"%@_%ld_%@",kYumiMediationAdapterIDFacebookHeaderBidding,YumiMediationAdTypeInterstitial,YumiMediationHeaderBiddingToken];
+    NSString *key = [NSString stringWithFormat:@"%@_%lu_%@",kYumiMediationAdapterIDFacebookHeaderBidding,(unsigned long)YumiMediationAdTypeInterstitial,YumiMediationHeaderBiddingToken];
     [[NSUserDefaults standardUserDefaults] setObject:FBAdSettings.bidderToken?:@"" forKey:key];
-}
-
-- (void)setUpBidPayloadValue:(NSString *)bidPayload{
-    self.bidPayloadFromServer = bidPayload;
 }
 
 #pragma mark - YumiMediationInterstitialAdapter
@@ -48,7 +43,7 @@
 }
 
 - (void)requestAd {
-    [self.interstitial loadAdWithBidPayload:self.bidPayloadFromServer];
+    [self.interstitial loadAdWithBidPayload:self.provider.data.payload];
 }
 
 - (BOOL)isReady {
