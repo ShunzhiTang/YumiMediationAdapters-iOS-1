@@ -32,7 +32,7 @@
         [self.delegate adapter:self interstitialAd:nil didFailToReceive:@"No app id or instance id specified"];
         return nil;
     }
-    [IronSource initISDemandOnly:self.provider.data.key1 adUnits:@[IS_INTERSTITIAL]];
+    [IronSource initISDemandOnly:self.provider.data.key1 adUnits:@[ IS_INTERSTITIAL ]];
     return self;
 }
 
@@ -46,14 +46,15 @@
 }
 
 - (void)present {
-    [IronSource showISDemandOnlyInterstitial:[self.delegate rootViewControllerForPresentingModalView] instanceId:self.provider.data.key2];
+    [IronSource showISDemandOnlyInterstitial:[self.delegate rootViewControllerForPresentingModalView]
+                                  instanceId:self.provider.data.key2];
 }
 
 #pragma mark - ISDemandOnlyInterstitialDelegate
 /**
  Called after an interstitial has been loaded
  */
-- (void)interstitialDidLoad:(NSString *)instanceId{
+- (void)interstitialDidLoad:(NSString *)instanceId {
     [self.delegate adapter:self didReceiveInterstitialAd:nil instanceId:instanceId];
 }
 
@@ -61,41 +62,41 @@
  Called after an interstitial has attempted to load but failed.
  @param error The reason for the error
  */
-- (void)interstitialDidFailToLoadWithError:(NSError *)error instanceId:(NSString *)instanceId{
+- (void)interstitialDidFailToLoadWithError:(NSError *)error instanceId:(NSString *)instanceId {
     [self.delegate adapter:self interstitialAd:nil didFailToReceive:[error localizedDescription] instanceId:instanceId];
 }
 
 /**
  Called after an interstitial has been opened.
  */
-- (void)interstitialDidOpen:(NSString *)instanceId{
+- (void)interstitialDidOpen:(NSString *)instanceId {
     [self.delegate adapter:self willPresentScreen:nil];
 }
 
 /**
  Called after an interstitial has been dismissed.
  */
-- (void)interstitialDidClose:(NSString *)instanceId{
+- (void)interstitialDidClose:(NSString *)instanceId {
     [self.delegate adapter:self willDismissScreen:nil];
 }
 
 /**
  Called after an interstitial has been displayed on the screen.
  */
-- (void)interstitialDidShow:(NSString *)instanceId{
+- (void)interstitialDidShow:(NSString *)instanceId {
 }
 
 /**
  Called after an interstitial has attempted to show but failed.
  @param error The reason for the error
  */
-- (void)interstitialDidFailToShowWithError:(NSError *)error instanceId:(NSString *)instanceId{
+- (void)interstitialDidFailToShowWithError:(NSError *)error instanceId:(NSString *)instanceId {
 }
 
 /**
  Called after an interstitial has been clicked.
  */
-- (void)didClickInterstitial:(NSString *)instanceId{
+- (void)didClickInterstitial:(NSString *)instanceId {
     [self.delegate adapter:self didClickInterstitialAd:nil instanceId:instanceId];
 }
 
