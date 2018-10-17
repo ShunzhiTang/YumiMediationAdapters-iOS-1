@@ -65,13 +65,13 @@
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.sdk = [ALSdk sharedWithKey:@"qx1n7X8i53FgIANTP6L6vRD5KlRgJCW87XvF41y94CrNMDsnJBuDd6Jyrlc9x8H3fAJlCGuHSkfqxVaFgTSIZn"];
+        weakSelf.sdk = [ALSdk sharedWithKey:weakSelf.provider.data.key1];
         weakSelf.bannerView = [[ALAdView alloc] initWithFrame:adframe size:[ALAdSize sizeBanner] sdk:weakSelf.sdk];
         weakSelf.bannerView.adLoadDelegate = weakSelf;
         weakSelf.bannerView.adDisplayDelegate = weakSelf;
         weakSelf.bannerView.autoload = NO;
         
-        [weakSelf.sdk.adService loadNextAdForZoneIdentifier:@"b7d2933ac89551e7" andNotify:self];
+        [weakSelf.sdk.adService loadNextAdForZoneIdentifier:weakSelf.provider.data.key2 andNotify:self];
     });
 }
 #pragma mark - Ad Load Delegate
