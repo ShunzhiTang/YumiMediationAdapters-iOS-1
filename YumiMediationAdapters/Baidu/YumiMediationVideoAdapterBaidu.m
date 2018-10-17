@@ -14,7 +14,7 @@
 
 @property (nonatomic) BaiduMobAdRewardVideo *rewardVideo;
 @property (nonatomic, assign) BOOL isReward;
-@property (nonatomic, assign)BOOL isPreloadVideo;
+@property (nonatomic, assign) BOOL isPreloadVideo;
 
 @end
 
@@ -47,7 +47,7 @@
 }
 
 - (BOOL)isReady {
-    
+
     if (self.isPreloadVideo && [self.rewardVideo isReady]) {
         return YES;
     }

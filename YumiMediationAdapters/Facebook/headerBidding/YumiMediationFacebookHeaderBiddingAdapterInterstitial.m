@@ -6,11 +6,12 @@
 //
 
 #import "YumiMediationFacebookHeaderBiddingAdapterInterstitial.h"
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
-#import <FBAudienceNetwork/FBInterstitialAd.h>
 #import <FBAudienceNetwork/FBAdSettings.h>
+#import <FBAudienceNetwork/FBInterstitialAd.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
-@interface YumiMediationFacebookHeaderBiddingAdapterInterstitial ()<YumiMediationInterstitialAdapter,FBInterstitialAdDelegate>
+@interface YumiMediationFacebookHeaderBiddingAdapterInterstitial () <YumiMediationInterstitialAdapter,
+                                                                     FBInterstitialAdDelegate>
 
 @property (nonatomic, weak) id<YumiMediationInterstitialAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationInterstitialProvider *provider;
@@ -24,21 +25,23 @@
     [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
                                                            forProviderID:kYumiMediationAdapterIDFacebookHeaderBidding
                                                              requestType:YumiMediationSDKAdRequest];
-    NSString *key = [NSString stringWithFormat:@"%@_%lu_%@",kYumiMediationAdapterIDFacebookHeaderBidding,(unsigned long)YumiMediationAdTypeInterstitial,YumiMediationHeaderBiddingToken];
-    [[NSUserDefaults standardUserDefaults] setObject:FBAdSettings.bidderToken?:@"" forKey:key];
+    NSString *key =
+        [NSString stringWithFormat:@"%@_%lu_%@", kYumiMediationAdapterIDFacebookHeaderBidding,
+                                   (unsigned long)YumiMediationAdTypeInterstitial, YumiMediationHeaderBiddingToken];
+    [[NSUserDefaults standardUserDefaults] setObject:FBAdSettings.bidderToken ?: @"" forKey:key];
 }
 
 #pragma mark - YumiMediationInterstitialAdapter
 - (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
                                                 delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
     self = [super init];
-    
+
     self.provider = provider;
     self.delegate = delegate;
-    
+
     self.interstitial = [[FBInterstitialAd alloc] initWithPlacementID:self.provider.data.key1];
     self.interstitial.delegate = self;
-    
+
     return self;
 }
 

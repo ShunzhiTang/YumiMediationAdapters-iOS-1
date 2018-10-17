@@ -14,7 +14,6 @@
 
 @property (nonatomic) MTGRewardAdManager *videoAd;
 
-
 @end
 
 @implementation YumiMediationVideoAdapterMobvista
@@ -43,7 +42,7 @@
 }
 
 - (void)requestAd {
-        [self.videoAd loadVideo:self.provider.data.key3 delegate:self];
+    [self.videoAd loadVideo:self.provider.data.key3 delegate:self];
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {

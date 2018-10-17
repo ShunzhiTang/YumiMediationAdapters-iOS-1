@@ -108,7 +108,7 @@
                                                                              delegate:strongSelf];
         // nativeAD init
         strongSelf.nativeAd = [[GDTNativeAd alloc] initWithAppId:strongSelf.provider.data.key1 ?: @""
-                                                      placementId:strongSelf.provider.data.key2 ?: @""];
+                                                     placementId:strongSelf.provider.data.key2 ?: @""];
         strongSelf.nativeAd.controller = strongSelf.delegate.rootViewControllerForPresentingModalView;
         strongSelf.nativeAd.delegate = strongSelf;
 

@@ -19,7 +19,9 @@
 }
 
 #pragma mark : -- VungleSDKDelegate
-- (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable placementID:(nullable NSString *)placementID error:(nullable NSError *)error{
+- (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable
+                      placementID:(nullable NSString *)placementID
+                            error:(nullable NSError *)error {
     if ([placementID isEqualToString:self.vungleVideoAdapter.provider.data.key2]) {
         if (isAdPlayable) {
             [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter didReceiveVideoAd:nil];
@@ -42,12 +44,11 @@
     }
 }
 
-
 /**
  * If implemented, this method gets called when a Vungle Ad Unit has been completely dismissed.
  * At this point, you can load another ad for non-auto-cahced placement if necessary.
  */
-- (void)vungleDidCloseAdWithViewInfo:(nonnull VungleViewInfo *)info placementID:(nonnull NSString *)placementID{
+- (void)vungleDidCloseAdWithViewInfo:(nonnull VungleViewInfo *)info placementID:(nonnull NSString *)placementID {
     if ([placementID isEqualToString:self.vungleVideoAdapter.provider.data.key2]) {
         if ([info.completedView boolValue]) {
             [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter videoAd:nil didReward:nil];
@@ -64,7 +65,8 @@
 - (void)vungleSDKFailedToInitializeWithError:(NSError *)error {
     [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter
                                       videoAd:nil
-                                didFailToLoad:[error localizedDescription] isRetry:NO];
+                                didFailToLoad:[error localizedDescription]
+                                      isRetry:NO];
     [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter
                                       interstitialAd:nil
                                     didFailToReceive:[error localizedDescription]];

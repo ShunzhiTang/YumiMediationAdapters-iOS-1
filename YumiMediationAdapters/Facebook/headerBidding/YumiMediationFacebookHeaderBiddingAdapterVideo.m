@@ -6,11 +6,11 @@
 //
 
 #import "YumiMediationFacebookHeaderBiddingAdapterVideo.h"
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
-#import <FBAudienceNetwork/FBAudienceNetwork.h>
 #import <FBAudienceNetwork/FBAdSettings.h>
+#import <FBAudienceNetwork/FBAudienceNetwork.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
-@interface YumiMediationFacebookHeaderBiddingAdapterVideo () <YumiMediationVideoAdapter,FBRewardedVideoAdDelegate>
+@interface YumiMediationFacebookHeaderBiddingAdapterVideo () <YumiMediationVideoAdapter, FBRewardedVideoAdDelegate>
 
 @property (nonatomic, weak) id<YumiMediationVideoAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationVideoProvider *provider;
@@ -26,22 +26,24 @@
     [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
                                                       forProvider:kYumiMediationAdapterIDFacebookHeaderBidding
                                                       requestType:YumiMediationSDKAdRequest];
-    NSString *key = [NSString stringWithFormat:@"%@_%lu_%@",kYumiMediationAdapterIDFacebookHeaderBidding,(unsigned long)YumiMediationAdTypeVideo,YumiMediationHeaderBiddingToken];
-    [[NSUserDefaults standardUserDefaults] setObject:FBAdSettings.bidderToken?:@"" forKey:key];
+    NSString *key =
+        [NSString stringWithFormat:@"%@_%lu_%@", kYumiMediationAdapterIDFacebookHeaderBidding,
+                                   (unsigned long)YumiMediationAdTypeVideo, YumiMediationHeaderBiddingToken];
+    [[NSUserDefaults standardUserDefaults] setObject:FBAdSettings.bidderToken ?: @"" forKey:key];
 }
 
 #pragma mark - YumiMediationVideoAdapter
-- (void)setUpBidPayloadValue:(NSString *)bidPayload{
+- (void)setUpBidPayloadValue:(NSString *)bidPayload {
     self.bidPayloadFromServer = bidPayload;
 }
 
 - (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
                                          delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
     self = [super init];
-    
+
     self.delegate = delegate;
     self.provider = provider;
-    
+
     return self;
 }
 
