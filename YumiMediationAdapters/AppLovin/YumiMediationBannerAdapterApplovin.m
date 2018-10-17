@@ -10,9 +10,11 @@
 #import <AppLovinSDK/AppLovinSDK.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiMediationConstants.h>
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationBannerAdapterApplovin () <YumiMediationBannerAdapter, ALAdLoadDelegate, ALAdDisplayDelegate>
 
+@property (nonatomic) ALSdk *sdk;
 @property (nonatomic, weak) id<YumiMediationBannerAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationBannerProvider *provider;
 @property (nonatomic) ALAdView *bannerView;
@@ -52,24 +54,30 @@
         return;
     }
 
-    ALAdSize *adSize = isiPad ? [ALAdSize sizeLeader] : [ALAdSize sizeBanner];
+    CGRect adframe = isiPad ? CGRectMake(0, 0, 728, 90) : CGRectMake(0, 0, 320, 50);
+    if (self.isSmartBanner) {
+        CGSize size = [[YumiTool sharedTool] fetchBannerAdSizeWith:self.bannerSize smartBanner:self.isSmartBanner];
+        adframe = CGRectMake(0, 0, size.width, size.height);
+    }
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
-        adSize = [ALAdSize sizeMRec];
+        adframe = CGRectMake(0, 0, 300, 250);
     }
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.bannerView = [[ALAdView alloc] initWithSize:adSize zoneIdentifier:weakSelf.provider.data.key2];
+        weakSelf.sdk = [ALSdk sharedWithKey:@"qx1n7X8i53FgIANTP6L6vRD5KlRgJCW87XvF41y94CrNMDsnJBuDd6Jyrlc9x8H3fAJlCGuHSkfqxVaFgTSIZn"];
+        weakSelf.bannerView = [[ALAdView alloc] initWithFrame:adframe size:[ALAdSize sizeBanner] sdk:weakSelf.sdk];
         weakSelf.bannerView.adLoadDelegate = weakSelf;
         weakSelf.bannerView.adDisplayDelegate = weakSelf;
         weakSelf.bannerView.autoload = NO;
-        [weakSelf.bannerView loadNextAd];
+        
+        [weakSelf.sdk.adService loadNextAdForZoneIdentifier:@"b7d2933ac89551e7" andNotify:self];
     });
 }
 #pragma mark - Ad Load Delegate
-
 - (void)adService:(ALAdService *)adService didLoadAd:(ALAd *)ad {
     [self.delegate adapter:self didReceiveAd:self.bannerView];
+    [self.bannerView render:ad];
 }
 
 - (void)adService:(ALAdService *)adService didFailToLoadAdWithError:(int)code {
