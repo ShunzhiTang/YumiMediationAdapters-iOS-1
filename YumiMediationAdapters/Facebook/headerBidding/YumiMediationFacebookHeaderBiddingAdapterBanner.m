@@ -49,6 +49,10 @@
 
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
+    if (self.provider.data.payload.length == 0) {
+        [self.delegate adapter:self didFailToReceiveAd:self.provider.data.errMessage];
+        return;
+    }
     FBAdSize adSize = isiPad ? kFBAdSizeHeight90Banner : kFBAdSizeHeight50Banner;
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
         adSize = kFBAdSizeHeight250Rectangle;
@@ -67,7 +71,6 @@
                                rootViewController:[strongSelf.delegate rootViewControllerForPresentingModalView]];
         strongSelf.bannerView.delegate = strongSelf;
         strongSelf.bannerView.frame = adframe;
-
         [strongSelf.bannerView loadAdWithBidPayload:strongSelf.provider.data.payload];
     });
 }
