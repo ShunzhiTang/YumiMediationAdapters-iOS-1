@@ -49,7 +49,7 @@
 
 - (void)requestAd {
     if (self.provider.data.payload.length == 0) {
-        [self.delegate adapter:self videoAd:nil didFailToLoad:self.provider.data.errMessage];
+        [self.delegate adapter:self videoAd:nil didFailToLoad:self.provider.data.errMessage isRetry:NO];
         return;
     }
     // FBRewardedVideoAd loadAd can only be called once
@@ -69,7 +69,7 @@
 #pragma mark :- FBRewardedVideoAdDelegate
 
 - (void)rewardedVideoAd:(FBRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
-    [self.delegate adapter:self videoAd:rewardedVideoAd didFailToLoad:[error localizedDescription]];
+    [self.delegate adapter:self videoAd:rewardedVideoAd didFailToLoad:[error localizedDescription] isRetry:NO];
     self.rewardedVideoAd = nil;
 }
 
