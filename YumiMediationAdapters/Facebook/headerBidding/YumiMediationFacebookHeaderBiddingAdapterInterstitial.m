@@ -46,6 +46,10 @@
 }
 
 - (void)requestAd {
+    if (self.provider.data.payload.length == 0) {
+        [self.delegate adapter:self interstitialAd:nil didFailToReceive:self.provider.data.errMessage];
+        return;
+    }
     [self.interstitial loadAdWithBidPayload:self.provider.data.payload];
 }
 

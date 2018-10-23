@@ -48,6 +48,10 @@
 }
 
 - (void)requestAd {
+    if (self.provider.data.payload.length == 0) {
+        [self.delegate adapter:self videoAd:nil didFailToLoad:self.provider.data.errMessage];
+        return;
+    }
     // FBRewardedVideoAd loadAd can only be called once
     self.rewardedVideoAd = [[FBRewardedVideoAd alloc] initWithPlacementID:self.provider.data.key1];
     self.rewardedVideoAd.delegate = self;
