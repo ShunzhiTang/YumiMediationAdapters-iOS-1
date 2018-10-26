@@ -43,7 +43,7 @@
 
 - (void)requestAd {
     self.isPreloadVideo = NO;
-    [self.rewardVideo preload];
+    [self.rewardVideo load];
 }
 
 - (BOOL)isReady {
@@ -55,7 +55,7 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [self.rewardVideo loadAndDisplayWithViewController:rootViewController];
+    [self.rewardVideo showFromViewController:rootViewController];
 }
 
 #pragma mark :BaiduMobAdRewardVideoDelegate
