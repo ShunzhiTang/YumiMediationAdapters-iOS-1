@@ -32,14 +32,15 @@
 
     self.delegate = delegate;
     self.provider = provider;
-
+    
+    __weak typeof(self) weakSelf = self;
     [AdColony configureWithAppID:provider.data.key1
                          zoneIDs:@[ provider.data.key2 ]
                          options:nil
                       completion:^(NSArray<AdColonyZone *> *_Nonnull zones) {
                           [[zones firstObject] setReward:^(BOOL success, NSString *_Nonnull name, int amount) {
                               // NOTE: not reward here but in ad close block
-                              self.isReward = success;
+                              weakSelf.isReward = success;
                           }];
                       }];
 
@@ -62,9 +63,9 @@
             }];
             [ad setClose:^{
                 weakSelf.isAdReady = NO;
-                if (self.isReward) {
+                if (weakSelf.isReward) {
                     [weakSelf.delegate adapter:weakSelf videoAd:weakSelf.video didReward:nil];
-                    self.isReward = NO;
+                    weakSelf.isReward = nil;
                 }
                 [weakSelf.delegate adapter:weakSelf didCloseVideoAd:weakSelf.video];
 
