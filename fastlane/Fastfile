@@ -115,7 +115,7 @@ platform :ios do
           podspec.each do |key, val|
             if key == "dependencies" then
               val.each do |d, vs|
-                file.puts("  s.dependency '#{d}', '#{vs[0]}'")
+                file.puts("  s.dependency '#{d}', '~> #{vs[0]}'")
               end
               next
             end
@@ -131,7 +131,7 @@ platform :ios do
 
             if key == "dependencies" then
               val.each do |d, vs|
-                file.puts("  s.dependency '#{d}', '#{vs[0]}'")
+                file.puts("  s.dependency '#{d}', '~> #{vs[0]}'")
               end
               next
             end
