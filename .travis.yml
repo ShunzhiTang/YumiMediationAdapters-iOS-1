@@ -18,8 +18,8 @@ before_install:
 
 install:
   - bundle update
-  - pod repo update
   - pod repo add Specs git@github.com:yumimobi/Specs.git
+  - pod repo update
 
 script:
   - travis_wait 60 fastlane release
