@@ -45,8 +45,6 @@ Pod::Spec.new do |s|
     s.subspec name do |sp|
       if name != "PlayableAds"
         sp.dependency "Yumi#{name}", version
-      else
-        sp.dependency "#{name}", version
       end
       sp.source_files = "YumiMediationAdapters/#{name}/**/*.{h,m}"
 
