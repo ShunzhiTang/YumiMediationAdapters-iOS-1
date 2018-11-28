@@ -7,7 +7,7 @@
 //
 
 #import "YumiMediationVideoAdapterPlayableAds.h"
-#import <PlayableAds/PlayableAds.h>
+#import <YumiMediationSDK/PlayableAds.h>
 
 @interface YumiMediationVideoAdapterPlayableAds () <PlayableAdsDelegate>
 
