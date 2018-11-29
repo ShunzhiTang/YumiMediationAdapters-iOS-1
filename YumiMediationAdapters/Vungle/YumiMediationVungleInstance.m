@@ -22,26 +22,16 @@
 - (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable
                       placementID:(nullable NSString *)placementID
                             error:(nullable NSError *)error {
-    if ([placementID isEqualToString:self.vungleVideoAdapter.provider.data.key2]) {
-        if (isAdPlayable) {
-            [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter didReceiveVideoAd:nil];
-        }
-    } else if ([placementID isEqualToString:self.vungleInterstitialAdapter.provider.data.key3]) {
-        if (isAdPlayable) {
-            [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter
-                                    didReceiveInterstitialAd:nil];
-        }
+    if (isAdPlayable) {
+        [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter didReceiveVideoAd:nil instanceId:placementID];
+        [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter
+                                    didReceiveInterstitialAd:nil instanceId:placementID];
+    } else {
+        [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter interstitialAd:nil didFailToReceive:error.localizedDescription instanceId:placementID];
     }
 }
 
 - (void)vungleWillShowAdForPlacementID:(nullable NSString *)placementID {
-    if ([placementID isEqualToString:self.vungleVideoAdapter.provider.data.key2]) {
-        [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter didOpenVideoAd:nil];
-        [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter didStartPlayingVideoAd:nil];
-
-    } else if ([placementID isEqualToString:self.vungleInterstitialAdapter.provider.data.key3]) {
-        [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter willPresentScreen:nil];
-    }
 }
 
 /**
@@ -49,27 +39,17 @@
  * At this point, you can load another ad for non-auto-cahced placement if necessary.
  */
 - (void)vungleDidCloseAdWithViewInfo:(nonnull VungleViewInfo *)info placementID:(nonnull NSString *)placementID {
-    if ([placementID isEqualToString:self.vungleVideoAdapter.provider.data.key2]) {
-        if ([info.completedView boolValue]) {
-            [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter videoAd:nil didReward:nil];
-        }
-        [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter didCloseVideoAd:nil];
-    } else if ([placementID isEqualToString:self.vungleInterstitialAdapter.provider.data.key3]) {
-        [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter willDismissScreen:nil];
-        if ([info.didDownload boolValue]) {
-            [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter didClickInterstitialAd:nil];
-        }
+    if ([info.completedView boolValue]) {
+        [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter videoAd:nil didReward:nil instanceId:placementID];
     }
+    if ([info.didDownload boolValue]) {
+        [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter didClickInterstitialAd:nil instanceId:placementID];
+    }
+    [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter didCloseVideoAd:nil instanceId:placementID];
+    [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter willDismissScreen:nil instanceId:placementID];
 }
 
 - (void)vungleSDKFailedToInitializeWithError:(NSError *)error {
-    [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter
-                                      videoAd:nil
-                                didFailToLoad:[error localizedDescription]
-                                      isRetry:NO];
-    [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter
-                                      interstitialAd:nil
-                                    didFailToReceive:[error localizedDescription]];
 }
 
 @end
