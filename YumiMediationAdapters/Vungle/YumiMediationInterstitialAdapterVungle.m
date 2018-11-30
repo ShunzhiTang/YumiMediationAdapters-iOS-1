@@ -26,7 +26,7 @@
     self.delegate = delegate;
 
     YumiMediationVungleInstance *vungleInstance = [YumiMediationVungleInstance sharedInstance];
-    vungleInstance.vungleInterstitialAdapter = self;
+    [vungleInstance.vungleInterstitialAdapters addObject:self];
 
     NSError *error;
     NSString *appID = self.provider.data.key1;
