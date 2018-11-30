@@ -31,7 +31,7 @@
     self.provider = provider;
 
     YumiMediationVungleInstance *vungleInstance = [YumiMediationVungleInstance sharedInstance];
-    vungleInstance.vungleVideoAdapter = self;
+    [vungleInstance.vungleVideoAdapters addObject:self];
 
     NSError *error;
     NSString *appID = self.provider.data.key1;
