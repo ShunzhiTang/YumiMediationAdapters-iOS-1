@@ -26,13 +26,14 @@
 - (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
                                          delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
     self = [super init];
-    
+
     self.delegate = delegate;
     self.provider = provider;
-    
-    self.rewardVideoAd = [[GDTRewardVideoAd alloc] initWithAppId:self.provider.data.key1 placementId:self.provider.data.key2];
+
+    self.rewardVideoAd =
+        [[GDTRewardVideoAd alloc] initWithAppId:self.provider.data.key1 placementId:self.provider.data.key2];
     self.rewardVideoAd.delegate = self;
-    
+
     return self;
 }
 
@@ -55,26 +56,26 @@
         [self.delegate adapter:self videoAd:nil didFailToLoad:@"GDT video Ad is not valid" isRetry:YES];
         return;
     }
-    
+
     [self.rewardVideoAd showAdFromRootViewController:rootViewController];
 }
 
 #pragma mark - GDTRewardVideoAdDelegate
-- (void)gdt_rewardVideoAdDidLoad:(GDTRewardVideoAd *)rewardedVideoAd{
+- (void)gdt_rewardVideoAdDidLoad:(GDTRewardVideoAd *)rewardedVideoAd {
 }
 
-- (void)gdt_rewardVideoAdVideoDidLoad:(GDTRewardVideoAd *)rewardedVideoAd{
+- (void)gdt_rewardVideoAdVideoDidLoad:(GDTRewardVideoAd *)rewardedVideoAd {
     [self.delegate adapter:self didReceiveVideoAd:rewardedVideoAd];
 }
 
-- (void)gdt_rewardVideoAdWillVisible:(GDTRewardVideoAd *)rewardedVideoAd{
+- (void)gdt_rewardVideoAdWillVisible:(GDTRewardVideoAd *)rewardedVideoAd {
 }
 
-- (void)gdt_rewardVideoAdDidExposed:(GDTRewardVideoAd *)rewardedVideoAd{
+- (void)gdt_rewardVideoAdDidExposed:(GDTRewardVideoAd *)rewardedVideoAd {
     [self.delegate adapter:self didStartPlayingVideoAd:rewardedVideoAd];
 }
 
-- (void)gdt_rewardVideoAdDidClose:(GDTRewardVideoAd *)rewardedVideoAd{
+- (void)gdt_rewardVideoAdDidClose:(GDTRewardVideoAd *)rewardedVideoAd {
     if (self.isReward) {
         [self.delegate adapter:self videoAd:rewardedVideoAd didReward:nil];
         self.isReward = NO;
@@ -82,20 +83,18 @@
     [self.delegate adapter:self didCloseVideoAd:rewardedVideoAd];
 }
 
-
-- (void)gdt_rewardVideoAdDidClicked:(GDTRewardVideoAd *)rewardedVideoAd{
-
+- (void)gdt_rewardVideoAdDidClicked:(GDTRewardVideoAd *)rewardedVideoAd {
 }
 
-- (void)gdt_rewardVideoAd:(GDTRewardVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error{
+- (void)gdt_rewardVideoAd:(GDTRewardVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
     [self.delegate adapter:self videoAd:rewardedVideoAd didFailToLoad:[error localizedDescription] isRetry:YES];
 }
 
-- (void)gdt_rewardVideoAdDidRewardEffective:(GDTRewardVideoAd *)rewardedVideoAd{
+- (void)gdt_rewardVideoAdDidRewardEffective:(GDTRewardVideoAd *)rewardedVideoAd {
     self.isReward = YES;
 }
 
-- (void)gdt_rewardVideoAdDidPlayFinish:(GDTRewardVideoAd *)rewardedVideoAd{
+- (void)gdt_rewardVideoAdDidPlayFinish:(GDTRewardVideoAd *)rewardedVideoAd {
 }
 
 @end
