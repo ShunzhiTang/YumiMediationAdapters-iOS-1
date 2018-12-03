@@ -18,6 +18,14 @@
     return sharedInstance;
 }
 
+- (id)init {
+    if (self = [super init]) {
+        self.vungleVideoAdapters = [NSMutableArray new];
+        self.vungleInterstitialAdapters = [NSMutableArray new];
+    }
+    return self;
+}
+
 #pragma mark : -- VungleSDKDelegate
 - (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable
                       placementID:(nullable NSString *)placementID
