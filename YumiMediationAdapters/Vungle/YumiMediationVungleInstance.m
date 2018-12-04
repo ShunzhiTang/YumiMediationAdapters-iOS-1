@@ -33,13 +33,15 @@
     for (YumiMediationVideoAdapterVungle *videoAdapter in self.vungleVideoAdapters) {
         if ([videoAdapter.provider.data.key2 isEqualToString:placementID] && isAdPlayable) {
             [videoAdapter.delegate adapter:videoAdapter didReceiveVideoAd:nil];
+        } else if ([videoAdapter.provider.data.key2 isEqualToString:placementID] && !isAdPlayable) {
+            [videoAdapter.delegate adapter:videoAdapter videoAd:nil didFailToLoad:error.localizedDescription isRetry:NO];
         }
     }
 
     for (YumiMediationInterstitialAdapterVungle *interstitialAdapter in self.vungleInterstitialAdapters) {
         if ([interstitialAdapter.provider.data.key3 isEqualToString:placementID] && isAdPlayable) {
             [interstitialAdapter.delegate adapter:interstitialAdapter didReceiveInterstitialAd:nil];
-        } else if ([interstitialAdapter.provider.data.key3 isEqualToString:placementID] && isAdPlayable) {
+        } else if ([interstitialAdapter.provider.data.key3 isEqualToString:placementID] && !isAdPlayable) {
             [interstitialAdapter.delegate adapter:interstitialAdapter
                                    interstitialAd:nil
                                  didFailToReceive:error.localizedDescription];
