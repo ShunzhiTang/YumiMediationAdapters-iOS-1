@@ -34,7 +34,7 @@
         if ([videoAdapter.provider.data.key2 isEqualToString:placementID] && isAdPlayable) {
             [videoAdapter.delegate adapter:videoAdapter didReceiveVideoAd:nil];
         } else if ([videoAdapter.provider.data.key2 isEqualToString:placementID] && !isAdPlayable) {
-            [videoAdapter.delegate adapter:videoAdapter videoAd:nil didFailToLoad:error.localizedDescription isRetry:NO];
+            [videoAdapter.delegate adapter:videoAdapter videoAd:nil didFailToLoad:@"vungle is no fill" isRetry:NO];
         }
     }
 
@@ -44,7 +44,7 @@
         } else if ([interstitialAdapter.provider.data.key3 isEqualToString:placementID] && !isAdPlayable) {
             [interstitialAdapter.delegate adapter:interstitialAdapter
                                    interstitialAd:nil
-                                 didFailToReceive:error.localizedDescription];
+                                 didFailToReceive:@"vungle is no fill"];
         }
     }
 }
