@@ -76,10 +76,10 @@
     for (YumiMediationInterstitialAdapterVungle *interstitialAdapter in self.vungleInterstitialAdapters) {
         if ([interstitialAdapter.provider.data.key3 isEqualToString:placementID]) {
             [interstitialAdapter.delegate adapter:interstitialAdapter willDismissScreen:nil];
-            self.vungleInterstitialAdapters = nil;
             if ([info.didDownload boolValue]) {
                 [interstitialAdapter.delegate adapter:interstitialAdapter didClickInterstitialAd:nil];
             }
+            self.vungleInterstitialAdapters = nil;
         }
     }
 }

@@ -26,6 +26,9 @@
     self.delegate = delegate;
 
     YumiMediationVungleInstance *vungleInstance = [YumiMediationVungleInstance sharedInstance];
+    if (!vungleInstance.vungleInterstitialAdapters) {
+        vungleInstance.vungleInterstitialAdapters = [NSMutableArray new];
+    }
     [vungleInstance.vungleInterstitialAdapters addObject:self];
 
     NSError *error;
