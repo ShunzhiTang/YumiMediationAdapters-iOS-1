@@ -16,5 +16,7 @@
 @property (nonatomic) NSMutableArray<YumiMediationVideoAdapterVungle *> *vungleVideoAdapters;
 
 + (YumiMediationVungleInstance *)sharedInstance;
+- (void)videoVungleSDKFailedToInitializeWith:(YumiMediationVideoAdapterVungle *)videoAdapter;
+- (void)interstitialVungleSDKFailedToInitializeWith:(YumiMediationInterstitialAdapterVungle *)interstitialAdapter;
 
 @end

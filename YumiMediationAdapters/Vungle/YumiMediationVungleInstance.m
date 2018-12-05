@@ -86,7 +86,12 @@
     }
 }
 
-- (void)vungleSDKFailedToInitializeWithError:(NSError *)error {
+- (void)videoVungleSDKFailedToInitializeWith:(YumiMediationVideoAdapterVungle *)videoAdapter {
+    [videoAdapter.delegate adapter:videoAdapter videoAd:nil didFailToLoad:@"vungleSDKFailedToInitialize" isRetry:YES];
+}
+
+- (void)interstitialVungleSDKFailedToInitializeWith:(YumiMediationInterstitialAdapterVungle *)interstitialAdapter {
+    [interstitialAdapter.delegate adapter:interstitialAdapter interstitialAd:nil didFailToReceive:@"vungleSDKFailedToInitialize"];
 }
 
 @end
