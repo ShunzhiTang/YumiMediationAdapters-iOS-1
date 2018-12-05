@@ -44,7 +44,11 @@
 - (void)requestAd {
     NSError *error;
     VungleSDK *sdk = [VungleSDK sharedSDK];
-    [sdk loadPlacementWithID:self.provider.data.key3 error:&error];
+    if (sdk.isInitialized) {
+        [sdk loadPlacementWithID:self.provider.data.key3 error:&error];
+    } else {
+        [[YumiMediationVungleInstance sharedInstance] interstitialVungleSDKFailedToInitializeWith:self];
+    }
 }
 
 - (BOOL)isReady {
