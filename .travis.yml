@@ -26,7 +26,6 @@ script:
   - travis_wait 60 fastlane release
 env:
   matrix:
-    - isTest=true
   global:
     - HOMEBREW_NO_AUTO_UPDATE=1
     - secure: azcJadEcQsZ7DJ5LEO8Ik6gKXvbnLqo7HHa/qGDTtlY2JtLSmzw73q74GBP2sKhHdsVd4a1fJ+AZoxsE6/YXve0mV/KI1EHgLdxzG+JIhMMc8PfQgOwwyEa7xTwnh+0Kc8suB3VYfillGsL1oltAx+LU6soYLh2TXgeRpFYppNL/4QDPJRat3QLgBMUqjHd/NGgn9EdvQz8g3erk3Ixvnf7rvl+3yoPT5peBdHMt8P73g8bhGLrL/7VBqpJTvnFAzGCQrhuYtEaUWwZXzJsObaiBd8SP3rZQMBWSjpkvj/ifTyTad+yXsWRU0Jatl/1UDmwcWD5QLquns+OytI4knIO8jEJRZuwRAmf43F3asW5wHNKCbnf3Fn8NUirlFzy8iLoFVsgAIwREPGZykTgyaeX/CmbXmbR4LZe3A9Vd/7tmywn7I61RYlXid63pPKf0Z2wEdZs526ZkGg994vi0u/9gtL4hC9rQOpT1+afGdRYGek15U+D7Drd/4CSyLJM2WamM66xEShai/K+tXJXhxoq8Yn0Cg4NbV7Qejtt6aVS4Ae4N4/SNVwDH7RrHMu/EPQAiVkqLU4a1dTuXmvDU/AVqAwJ00xvPI8Ud8lVpGoQWtYkUKeeQOUGk6r+x1Sj1tjuTEmfkj4+3OSuQ89jt4F5UfdpIq/oO+9cOjKNNZo8=
