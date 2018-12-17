@@ -70,7 +70,7 @@
         weakSelf.bannerView.adLoadDelegate = weakSelf;
         weakSelf.bannerView.adDisplayDelegate = weakSelf;
         weakSelf.bannerView.autoload = NO;
-        
+
         [weakSelf.sdk.adService loadNextAdForZoneIdentifier:weakSelf.provider.data.key2 andNotify:self];
     });
 }

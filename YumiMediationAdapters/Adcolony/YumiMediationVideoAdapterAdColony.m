@@ -32,7 +32,7 @@
 
     self.delegate = delegate;
     self.provider = provider;
-    
+
     __weak typeof(self) weakSelf = self;
     [AdColony configureWithAppID:provider.data.key1
                          zoneIDs:@[ provider.data.key2 ]
