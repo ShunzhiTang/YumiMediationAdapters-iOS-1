@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
     { :name => "AppLovin", :version => "5.0.2" },
     { :name => "Baidu", :version => "4.5.0.5" },
     { :name => "Chartboost", :version => "7.3.0" },
-    { :name => "Facebook", :version => "4.99.3", :has_resource_bundle => true },
+    { :name => "Facebook", :version => "5.1.0", :has_resource_bundle => true },
     { :name => "Domob", :version => "3.8.0" },
     { :name => "GDT", :version => "4.8.1" ,:has_resource_bundle => true},
     { :name => "InMobi", :version => "6.2.1" },
