@@ -18,29 +18,47 @@
     return sharedInstance;
 }
 
+- (id)init {
+    if (self = [super init]) {
+        self.vungleVideoAdapters = [NSMutableArray new];
+        self.vungleInterstitialAdapters = [NSMutableArray new];
+    }
+    return self;
+}
+
 #pragma mark : -- VungleSDKDelegate
 - (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable
                       placementID:(nullable NSString *)placementID
                             error:(nullable NSError *)error {
-    if ([placementID isEqualToString:self.vungleVideoAdapter.provider.data.key2]) {
-        if (isAdPlayable) {
-            [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter didReceiveVideoAd:nil];
+    for (YumiMediationVideoAdapterVungle *videoAdapter in self.vungleVideoAdapters) {
+        if ([videoAdapter.provider.data.key2 isEqualToString:placementID] && isAdPlayable) {
+            [videoAdapter.delegate adapter:videoAdapter didReceiveVideoAd:nil];
+        } else if ([videoAdapter.provider.data.key2 isEqualToString:placementID] && !isAdPlayable) {
+            [videoAdapter.delegate adapter:videoAdapter videoAd:nil didFailToLoad:@"vungle is no fill" isRetry:NO];
         }
-    } else if ([placementID isEqualToString:self.vungleInterstitialAdapter.provider.data.key3]) {
-        if (isAdPlayable) {
-            [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter
-                                    didReceiveInterstitialAd:nil];
+    }
+
+    for (YumiMediationInterstitialAdapterVungle *interstitialAdapter in self.vungleInterstitialAdapters) {
+        if ([interstitialAdapter.provider.data.key3 isEqualToString:placementID] && isAdPlayable) {
+            [interstitialAdapter.delegate adapter:interstitialAdapter didReceiveInterstitialAd:nil];
+        } else if ([interstitialAdapter.provider.data.key3 isEqualToString:placementID] && !isAdPlayable) {
+            [interstitialAdapter.delegate adapter:interstitialAdapter
+                                   interstitialAd:nil
+                                 didFailToReceive:@"vungle is no fill"];
         }
     }
 }
 
 - (void)vungleWillShowAdForPlacementID:(nullable NSString *)placementID {
-    if ([placementID isEqualToString:self.vungleVideoAdapter.provider.data.key2]) {
-        [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter didOpenVideoAd:nil];
-        [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter didStartPlayingVideoAd:nil];
-
-    } else if ([placementID isEqualToString:self.vungleInterstitialAdapter.provider.data.key3]) {
-        [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter willPresentScreen:nil];
+    for (YumiMediationVideoAdapterVungle *videoAdapter in self.vungleVideoAdapters) {
+        if ([videoAdapter.provider.data.key2 isEqualToString:placementID]) {
+            [videoAdapter.delegate adapter:videoAdapter didStartPlayingVideoAd:nil];
+        }
+    }
+    for (YumiMediationInterstitialAdapterVungle *interstitialAdapter in self.vungleInterstitialAdapters) {
+        if ([interstitialAdapter.provider.data.key3 isEqualToString:placementID]) {
+            [interstitialAdapter.delegate adapter:interstitialAdapter willPresentScreen:nil];
+        }
     }
 }
 
@@ -49,27 +67,31 @@
  * At this point, you can load another ad for non-auto-cahced placement if necessary.
  */
 - (void)vungleDidCloseAdWithViewInfo:(nonnull VungleViewInfo *)info placementID:(nonnull NSString *)placementID {
-    if ([placementID isEqualToString:self.vungleVideoAdapter.provider.data.key2]) {
-        if ([info.completedView boolValue]) {
-            [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter videoAd:nil didReward:nil];
+    for (YumiMediationVideoAdapterVungle *videoAdapter in self.vungleVideoAdapters) {
+        if ([videoAdapter.provider.data.key2 isEqualToString:placementID]) {
+            [videoAdapter.delegate adapter:videoAdapter didCloseVideoAd:nil];
+            if ([info.completedView boolValue]) {
+                [videoAdapter.delegate adapter:videoAdapter videoAd:nil didReward:nil];
+            }
         }
-        [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter didCloseVideoAd:nil];
-    } else if ([placementID isEqualToString:self.vungleInterstitialAdapter.provider.data.key3]) {
-        [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter willDismissScreen:nil];
-        if ([info.didDownload boolValue]) {
-            [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter didClickInterstitialAd:nil];
+    }
+    for (YumiMediationInterstitialAdapterVungle *interstitialAdapter in self.vungleInterstitialAdapters) {
+        if ([interstitialAdapter.provider.data.key3 isEqualToString:placementID]) {
+            if ([info.didDownload boolValue]) {
+                [interstitialAdapter.delegate adapter:interstitialAdapter didClickInterstitialAd:nil];
+            }
+            [interstitialAdapter.delegate adapter:interstitialAdapter willDismissScreen:nil];
+            self.vungleInterstitialAdapters = nil;
         }
     }
 }
 
-- (void)vungleSDKFailedToInitializeWithError:(NSError *)error {
-    [self.vungleVideoAdapter.delegate adapter:self.vungleVideoAdapter
-                                      videoAd:nil
-                                didFailToLoad:[error localizedDescription]
-                                      isRetry:NO];
-    [self.vungleInterstitialAdapter.delegate adapter:self.vungleInterstitialAdapter
-                                      interstitialAd:nil
-                                    didFailToReceive:[error localizedDescription]];
+- (void)videoVungleSDKFailedToInitializeWith:(YumiMediationVideoAdapterVungle *)videoAdapter {
+    [videoAdapter.delegate adapter:videoAdapter videoAd:nil didFailToLoad:@"vungleSDKFailedToInitialize" isRetry:YES];
+}
+
+- (void)interstitialVungleSDKFailedToInitializeWith:(YumiMediationInterstitialAdapterVungle *)interstitialAdapter {
+    [interstitialAdapter.delegate adapter:interstitialAdapter interstitialAd:nil didFailToReceive:@"vungleSDKFailedToInitialize"];
 }
 
 @end

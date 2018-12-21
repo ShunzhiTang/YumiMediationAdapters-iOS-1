@@ -12,8 +12,11 @@
 
 @interface YumiMediationVungleInstance : NSObject <VungleSDKDelegate>
 
-@property (nonatomic) YumiMediationInterstitialAdapterVungle *vungleInterstitialAdapter;
-@property (nonatomic) YumiMediationVideoAdapterVungle *vungleVideoAdapter;
+@property (nonatomic) NSMutableArray<YumiMediationInterstitialAdapterVungle *> *vungleInterstitialAdapters;
+@property (nonatomic) NSMutableArray<YumiMediationVideoAdapterVungle *> *vungleVideoAdapters;
+
 + (YumiMediationVungleInstance *)sharedInstance;
+- (void)videoVungleSDKFailedToInitializeWith:(YumiMediationVideoAdapterVungle *)videoAdapter;
+- (void)interstitialVungleSDKFailedToInitializeWith:(YumiMediationInterstitialAdapterVungle *)interstitialAdapter;
 
 @end

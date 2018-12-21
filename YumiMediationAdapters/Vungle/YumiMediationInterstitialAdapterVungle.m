@@ -26,7 +26,10 @@
     self.delegate = delegate;
 
     YumiMediationVungleInstance *vungleInstance = [YumiMediationVungleInstance sharedInstance];
-    vungleInstance.vungleInterstitialAdapter = self;
+    if (!vungleInstance.vungleInterstitialAdapters) {
+        vungleInstance.vungleInterstitialAdapters = [NSMutableArray new];
+    }
+    [vungleInstance.vungleInterstitialAdapters addObject:self];
 
     NSError *error;
     NSString *appID = self.provider.data.key1;
@@ -41,7 +44,11 @@
 - (void)requestAd {
     NSError *error;
     VungleSDK *sdk = [VungleSDK sharedSDK];
-    [sdk loadPlacementWithID:self.provider.data.key3 error:&error];
+    if (sdk.isInitialized) {
+        [sdk loadPlacementWithID:self.provider.data.key3 error:&error];
+    } else {
+        [[YumiMediationVungleInstance sharedInstance] interstitialVungleSDKFailedToInitializeWith:self];
+    }
 }
 
 - (BOOL)isReady {
