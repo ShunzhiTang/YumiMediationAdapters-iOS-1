@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.frameworks = 'Foundation', 'UIKit'
 
   subspecs = [
-    { :name => "AdColony", :version => "3.1.1" },
+    { :name => "AdColony", :version => "3.3.6" },
     { :name => "AdMob", :version => "7.30.0", :has_resource_bundle => true },
     { :name => "AppLovin", :version => "5.0.2" },
     { :name => "Baidu", :version => "4.5.0.5" },
