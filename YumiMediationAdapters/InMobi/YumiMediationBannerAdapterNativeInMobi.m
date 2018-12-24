@@ -116,7 +116,7 @@
 
 #pragma mark : - IMNativeDelegate
 - (void)nativeDidFinishLoading:(IMNative *)native {
-    self.nativeContent = native.adContent;
+    self.nativeContent = native.customAdContent;
     NSDictionary *jsonDict = nil;
     if (self.nativeContent != nil) {
         NSData *data = [self.nativeContent dataUsingEncoding:NSUTF8StringEncoding];
