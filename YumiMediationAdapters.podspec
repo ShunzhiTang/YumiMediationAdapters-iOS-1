@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
     { :name => "Facebook", :version => "5.1.0", :has_resource_bundle => true },
     { :name => "Domob", :version => "3.8.0" },
     { :name => "GDT", :version => "4.8.1" ,:has_resource_bundle => true},
-    { :name => "InMobi", :version => "6.2.1" },
+    { :name => "InMobi", :version => "7.2.1" },
     { :name => "IronSource", :version => "6.7.10" },
     { :name => "Unity", :version => "2.3.0" },
     { :name => "Vungle", :version => "6.2.0" },
