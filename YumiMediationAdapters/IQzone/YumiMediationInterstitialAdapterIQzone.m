@@ -7,13 +7,13 @@
 //
 
 #import "YumiMediationInterstitialAdapterIQzone.h"
-#import <IMDSDK.h>
 #import <IMDInterstitialViewController.h>
+#import <IMDSDK.h>
 
-@interface YumiMediationInterstitialAdapterIQzone ()<IMDInterstitialViewDelegate>
+@interface YumiMediationInterstitialAdapterIQzone () <IMDInterstitialViewDelegate>
 
 @property (nonatomic) IMDInterstitialViewController *interstitial;
-@property (nonatomic , assign) BOOL isInterstitialReady;
+@property (nonatomic, assign) BOOL isInterstitialReady;
 
 @end
 
@@ -34,8 +34,11 @@
     self.delegate = delegate;
 
     // TODO: setup code
-    self.interstitial = [IMDSDK newInterstitialViewController:[self.delegate rootViewControllerForPresentingModalView] placementID:self.provider.data.key1 loadedListener:self andMetadata:nil];
-    
+    self.interstitial = [IMDSDK newInterstitialViewController:[self.delegate rootViewControllerForPresentingModalView]
+                                                  placementID:self.provider.data.key1
+                                               loadedListener:self
+                                                  andMetadata:nil];
+
     return self;
 }
 
@@ -45,20 +48,20 @@
 }
 
 - (BOOL)isReady {
-    
+
     return self.isInterstitialReady;
 }
 
 - (void)present {
-   
+
     [self.interstitial show:[self.delegate rootViewControllerForPresentingModalView]];
 }
 
-#pragma mark: -IMDInterstitialViewDelegate
+#pragma mark : -IMDInterstitialViewDelegate
 
 - (void)adLoaded {
     self.isInterstitialReady = YES;
-    
+
     [self.delegate adapter:self didReceiveInterstitialAd:self.interstitial];
 }
 
@@ -79,23 +82,18 @@
 }
 
 - (void)adExpanded {
-    
 }
 
 - (void)videoCompleted {
-    
 }
 
 - (void)videoSkipped {
-    
 }
 
 - (void)videoStarted {
-    
 }
 
 - (void)videoTrackerFired {
-    
 }
 
 @end

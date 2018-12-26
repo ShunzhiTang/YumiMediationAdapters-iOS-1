@@ -11,10 +11,10 @@
 #import <IMDSDK.h>
 #import <YumiMediationSDK/YumiTool.h>
 
-@interface YumiMediationVideoAdapterIQzone ()<IMDRewardedViewDelegate>
+@interface YumiMediationVideoAdapterIQzone () <IMDRewardedViewDelegate>
 
 @property (nonatomic) IMDInterstitialViewController *rewardedVideo;
-@property (nonatomic , assign) BOOL isVideoReady;
+@property (nonatomic, assign) BOOL isVideoReady;
 @property (nonatomic, assign) BOOL isReward;
 
 @end
@@ -29,14 +29,19 @@
 
 #pragma mark - YumiMediationVideoAdapter
 
-- (nonnull id<YumiMediationVideoAdapter>)initWithProvider:(nonnull YumiMediationVideoProvider *)provider delegate:(nonnull id<YumiMediationVideoAdapterDelegate>)delegate {
+- (nonnull id<YumiMediationVideoAdapter>)initWithProvider:(nonnull YumiMediationVideoProvider *)provider
+                                                 delegate:(nonnull id<YumiMediationVideoAdapterDelegate>)delegate {
     self = [super init];
-    
+
     self.provider = provider;
     self.delegate = delegate;
-    
-    self.rewardedVideo = [IMDSDK newRewardedInterstitialViewController:[[YumiTool sharedTool] topMostController] placementID:self.provider.data.key1 loadedListener:self andMetadata:nil];;
-    
+
+    self.rewardedVideo = [IMDSDK newRewardedInterstitialViewController:[[YumiTool sharedTool] topMostController]
+                                                           placementID:self.provider.data.key1
+                                                        loadedListener:self
+                                                           andMetadata:nil];
+    ;
+
     return self;
 }
 
@@ -46,20 +51,20 @@
 }
 
 - (BOOL)isReady {
-    
+
     return self.isVideoReady;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    
-    [self.rewardedVideo show: rootViewController];
+
+    [self.rewardedVideo show:rootViewController];
 }
 
-#pragma mark:IMDRewardedViewDelegate
+#pragma mark :IMDRewardedViewDelegate
 
 - (void)adLoaded {
     self.isVideoReady = YES;
-    
+
     [self.delegate adapter:self didReceiveVideoAd:self.rewardedVideo];
 }
 
@@ -71,11 +76,9 @@
 - (void)adImpression {
 
     [self.delegate adapter:self didOpenVideoAd:self.rewardedVideo];
-    
 }
 
 - (void)adClicked {
-    
 }
 
 - (void)adDismissed {
@@ -87,7 +90,6 @@
 }
 
 - (void)adExpanded {
-    
 }
 
 - (void)videoCompleted {
@@ -103,7 +105,6 @@
 }
 
 - (void)videoTrackerFired {
-    
 }
 
 @end
