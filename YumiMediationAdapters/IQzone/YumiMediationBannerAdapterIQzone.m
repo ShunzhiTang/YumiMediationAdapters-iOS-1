@@ -7,11 +7,11 @@
 //
 
 #import "YumiMediationBannerAdapterIQzone.h"
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <IMDAdView.h>
 #import <IMDSDK.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
-@interface YumiMediationBannerAdapterIQzone () <YumiMediationBannerAdapter,IMDAdViewDelegate>
+@interface YumiMediationBannerAdapterIQzone () <YumiMediationBannerAdapter, IMDAdViewDelegate>
 
 @property (nonatomic, weak) id<YumiMediationBannerAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationBannerProvider *provider;
@@ -20,7 +20,7 @@
 @property (nonatomic, assign) BOOL isSmartBanner;
 
 // IQzone banner
-@property (nonatomic) IMDAdView  *bannerView;
+@property (nonatomic) IMDAdView *bannerView;
 
 @end
 
@@ -53,23 +53,23 @@
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
         adSize = CGSizeMake(300, 250);
     }
-    
+
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.bannerView = [IMDSDK newBannerAd:weakSelf.provider.data.key1 withSize:adSize
-                                    andDelegate:weakSelf andMetadata:nil];
+        weakSelf.bannerView =
+            [IMDSDK newBannerAd:weakSelf.provider.data.key1 withSize:adSize andDelegate:weakSelf andMetadata:nil];
         [weakSelf.bannerView setGDPRApplies:IMDGDPR_DoesNotApply withConsent:IMDGDPR_NotConsented];
-        
+
         [weakSelf.bannerView loadAd];
     });
 }
 
-#pragma mark: -IMDAdViewDelegate
-- (UIViewController *)viewControllerForPresentingModalView{
+#pragma mark : -IMDAdViewDelegate
+- (UIViewController *)viewControllerForPresentingModalView {
     return [self.delegate rootViewControllerForPresentingModalView];
 }
 
-#pragma mark: -IMDAdEventsListener
+#pragma mark : -IMDAdEventsListener
 - (void)adLoaded {
     [self.delegate adapter:self didReceiveAd:self.bannerView];
 }
@@ -81,31 +81,24 @@
 }
 
 - (void)adDismissed {
-    
 }
 
 - (void)adExpanded {
-    
 }
 
 - (void)adImpression {
-    
 }
 
 - (void)videoCompleted {
-    
 }
 
 - (void)videoSkipped {
-    
 }
 
 - (void)videoStarted {
-    
 }
 
 - (void)videoTrackerFired {
-    
 }
 
 @end
