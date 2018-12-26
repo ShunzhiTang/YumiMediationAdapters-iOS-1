@@ -33,7 +33,6 @@
     self.provider = provider;
     self.delegate = delegate;
 
-    // TODO: setup code
     self.interstitial = [IMDSDK newInterstitialViewController:[self.delegate rootViewControllerForPresentingModalView]
                                                   placementID:self.provider.data.key1
                                                loadedListener:self
