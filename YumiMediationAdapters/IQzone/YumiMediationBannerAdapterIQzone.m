@@ -8,14 +8,19 @@
 
 #import "YumiMediationBannerAdapterIQzone.h"
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
+#import <IMDAdView.h>
+#import <IMDSDK.h>
 
-@interface YumiMediationBannerAdapterIQzone () <YumiMediationBannerAdapter>
+@interface YumiMediationBannerAdapterIQzone () <YumiMediationBannerAdapter,IMDAdViewDelegate>
 
 @property (nonatomic, weak) id<YumiMediationBannerAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationBannerProvider *provider;
 
 @property (nonatomic, assign) YumiMediationAdViewBannerSize bannerSize;
 @property (nonatomic, assign) BOOL isSmartBanner;
+
+// IQzone banner
+@property (nonatomic) IMDAdView  *bannerView;
 
 @end
 
@@ -44,8 +49,63 @@
 }
 
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
-    // TODO: request ad
+    CGSize adSize = isiPad ? CGSizeMake(728, 90) : CGSizeMake(320, 50);
+    if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
+        adSize = CGSizeMake(300, 250);
+    }
+    
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.bannerView = [IMDSDK newBannerAd:weakSelf.provider.data.key1 withSize:adSize
+                                    andDelegate:weakSelf andMetadata:nil];
+        [weakSelf.bannerView setGDPRApplies:IMDGDPR_DoesNotApply withConsent:IMDGDPR_NotConsented];
+        
+        [weakSelf.bannerView loadAd];
+    });
 }
 
+#pragma mark: -IMDAdViewDelegate
+- (UIViewController *)viewControllerForPresentingModalView{
+    return [self.delegate rootViewControllerForPresentingModalView];
+}
+
+#pragma mark: -IMDAdEventsListener
+- (void)adLoaded {
+    [self.delegate adapter:self didReceiveAd:self.bannerView];
+}
+- (void)adFailedToLoad {
+    [self.delegate adapter:self didFailToReceiveAd:@"banner load failed"];
+}
+- (void)adClicked {
+    [self.delegate adapter:self didClick:self.bannerView];
+}
+
+- (void)adDismissed {
+    
+}
+
+- (void)adExpanded {
+    
+}
+
+- (void)adImpression {
+    
+}
+
+- (void)videoCompleted {
+    
+}
+
+- (void)videoSkipped {
+    
+}
+
+- (void)videoStarted {
+    
+}
+
+- (void)videoTrackerFired {
+    
+}
 
 @end
