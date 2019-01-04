@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'git@github.com:yumimobi/YumiMediationAdapters-iOS.git',:tag => s.version.to_s }
   s.ios.deployment_target = '8.0'
   s.dependency 'YumiMediationSDK', '~> 3.5.0'
-  s.frameworks = 'Foundation', 'UIKit'
+  s.frameworks = 'Foundation', 'UIKit','CoreServices'
 
   subspecs = [
     { :name => "AdColony", :version => "3.3.6" },
