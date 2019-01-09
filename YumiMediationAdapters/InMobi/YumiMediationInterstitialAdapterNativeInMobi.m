@@ -51,7 +51,7 @@
 
     self.interstitial = [[YumiAdsWKCustomViewController alloc]
         initYumiAdsWKCustomViewControllerWith:inmobiFrame
-                                    clickType:YumiAdsClickTypeOpenSystem
+                                    clickType:YumiAdsClickTypeOpenSystemSafari
                              closeBtnPosition:self.provider.data.closeButton.position
                                 closeBtnFrame:closeBtnFrame
                                      logoType:YumiAdsLogoCommon
