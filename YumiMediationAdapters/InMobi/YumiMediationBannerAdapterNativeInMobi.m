@@ -103,7 +103,7 @@
         }
         // YumiAdsWKCustomView init
         strongSelf.webView = [[YumiAdsWKCustomView alloc] initYumiAdsWKCustomViewWith:adFrame
-                                                                            clickType:YumiAdsClickTypeOpenSystem
+                                                                            clickType:YumiAdsClickTypeOpenSystemSafari
                                                                              logoType:YumiAdsLogoCommon
                                                                              delegate:strongSelf];
         // nativeAD init
