@@ -9,7 +9,7 @@
 
 @interface YumiMediationNativeAdapterGDTConnector ()
 
-@property(nonatomic)GDTNativeAdData *gdtNativeAdData;
+@property (nonatomic) GDTNativeAdData *gdtNativeAdData;
 @property (nonatomic) YumiMediationNativeAdImage  *icon;
 @property (nonatomic) YumiMediationNativeAdImage  *coverImage;
 @property (nonatomic) id<YumiMediationNativeAdapter> adapter;
@@ -115,7 +115,6 @@
 
 #pragma mark: YumiMediationUnifiedNativeAd
 - (NSString *)title{
-   
     return self.gdtNativeAdData.properties[GDTNativeAdDataKeyTitle];
 }
 - (NSString *)desc{

@@ -50,7 +50,6 @@
     [self clearNativeData];
     
     __weak typeof(self) weakSelf = self;
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         [weakSelf loadNativeAdsWith:adCount];
     });
@@ -85,7 +84,6 @@
     [nativeAdDataArray enumerateObjectsUsingBlock:^(GDTNativeAdData *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
         YumiMediationNativeAdapterGDTConnector *connector = [[YumiMediationNativeAdapterGDTConnector alloc] initWithYumiNativeConnector:obj withAdapter:weakSelf disableImageLoading:weakSelf.disableImageLoading connectorDelegate:weakSelf];
     }];
-    
 }
 
 - (void)nativeAdFailToLoad:(NSError *)error {
@@ -105,7 +103,6 @@
 
 #pragma mark: -YumiMediationNativeAdapterConnectorDelegate
 - (void)yumiMediationNativeAdSuccessful:(YumiMediationNativeModel *)nativeModel{
-    
     [self.mappingData addObject:nativeModel];
     if (self.mappingData.count == self.gdtNativeData.count) {
         [self.delegate adapter:self didReceiveAd:[self.mappingData copy]];
@@ -118,7 +115,6 @@
 }
 
 - (void)handleNativeError:(NSError *)error{
-    
     [self clearNativeData];
     [self.delegate adapter:self didFailToReceiveAd:error.localizedDescription];
 }
@@ -130,7 +126,6 @@
 #pragma mark: - getter method
 - (NSMutableArray<YumiMediationNativeModel *> *)mappingData{
     if (!_mappingData) {
-        
         _mappingData = [NSMutableArray arrayWithCapacity:1];
     }
     return _mappingData;
