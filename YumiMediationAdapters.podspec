@@ -16,25 +16,27 @@ Pod::Spec.new do |s|
   s.author           = { 'zplay sdk team' => 'ad-client@zplay.cn' }
   s.source           = { :git => 'git@github.com:yumimobi/YumiMediationAdapters-iOS.git',:tag => s.version.to_s }
   s.ios.deployment_target = '8.0'
-  s.dependency 'YumiMediationSDK', '~> 3.4.0'
+  s.dependency 'YumiMediationSDK', '~> 3.5.0'
   s.frameworks = 'Foundation', 'UIKit'
 
   subspecs = [
-    { :name => "AdColony", :version => "3.1.1" },
+    { :name => "AdColony", :version => "3.3.6" },
     { :name => "AdMob", :version => "7.30.0", :has_resource_bundle => true },
     { :name => "AppLovin", :version => "5.0.2" },
-    { :name => "Baidu", :version => "4.5.0.4" },
-    { :name => "Chartboost", :version => "7.2.0" },
-    { :name => "Facebook", :version => "4.99.3", :has_resource_bundle => true },
+    { :name => "Baidu", :version => "4.6.0" },
+    { :name => "Chartboost", :version => "7.3.0" },
+    { :name => "Facebook", :version => "5.1.0", :has_resource_bundle => true },
     { :name => "Domob", :version => "3.8.0" },
     { :name => "GDT", :version => "4.8.1" ,:has_resource_bundle => true},
-    { :name => "InMobi", :version => "6.2.1" },
+    { :name => "InMobi", :version => "7.2.1" },
     { :name => "IronSource", :version => "6.7.10" },
     { :name => "Unity", :version => "2.3.0" },
     { :name => "Vungle", :version => "6.2.0" },
     { :name => "Mintegral", :version => "3.9.1"},
     { :name => "OneWay",:version => "2.1.0"},
     { :name => "PlayableAds",:version => "2.3.0"},
+    { :name => "IQzone",:version => "3.0.2132"},
+    
   ]
 
   subspecs.each do |spec|
@@ -45,8 +47,6 @@ Pod::Spec.new do |s|
     s.subspec name do |sp|
       if name != "PlayableAds"
         sp.dependency "Yumi#{name}", version
-      else
-        sp.dependency "#{name}", version
       end
       sp.source_files = "YumiMediationAdapters/#{name}/**/*.{h,m}"
 

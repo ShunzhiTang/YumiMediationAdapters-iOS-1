@@ -161,7 +161,7 @@ platform :ios do
         file.puts("Pod::Spec.new do |s|")
 
         values_to_replace = {
-          "source" => { :http => "http://adsdk.yumimobi.com/iOS/YumiMediationAdapters/#{source}" }
+          "source" => { :http => "https://adsdk.yumimobi.com/iOS/YumiMediationAdapters/#{source}" }
         }
 
         podspec.each do |key, val|

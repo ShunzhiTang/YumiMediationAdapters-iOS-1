@@ -51,7 +51,7 @@
 
     self.interstitial = [[YumiAdsWKCustomViewController alloc]
         initYumiAdsWKCustomViewControllerWith:inmobiFrame
-                                    clickType:YumiAdsClickTypeOpenSystem
+                                    clickType:YumiAdsClickTypeOpenSystemSafari
                              closeBtnPosition:self.provider.data.closeButton.position
                                 closeBtnFrame:closeBtnFrame
                                      logoType:YumiAdsLogoCommon
@@ -94,20 +94,20 @@
     [self.interstitial presentFromRootViewController:[self.delegate rootViewControllerForPresentingModalView]];
 
     // inmobi present
-    [IMNative bindNative:self.imnative toView:self.interstitial.customView];
+    [self.imnative recyclePrimaryView];
 }
 
 #pragma mark : - IMNativeDelegate
 
 - (void)nativeDidFinishLoading:(IMNative *)native {
 
-    if (!native || !native.adContent) {
+    if (!native || !native.customAdContent) {
         [self.delegate adapter:self interstitialAd:self.interstitial didFailToReceive:@"Inmobi native no ad"];
         return;
     }
 
-    if (native.adContent != nil) {
-        NSData *data = [native.adContent dataUsingEncoding:NSUTF8StringEncoding];
+    if (native.customAdContent != nil) {
+        NSData *data = [native.customAdContent dataUsingEncoding:NSUTF8StringEncoding];
         NSError *error = nil;
         self.imobeDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     }
@@ -170,7 +170,7 @@
 
 - (void)didClickOnYumiAdsWKCustomViewController:(UIViewController *)viewController point:(CGPoint)point {
     // inmobi
-    [self.imnative reportAdClick:self.imobeDict];
+    [self.imnative reportAdClickAndOpenLandingPage];
 
     [self.delegate adapter:self didClickInterstitialAd:self.interstitial on:point withTemplateID:(int)self.currentID];
 }
