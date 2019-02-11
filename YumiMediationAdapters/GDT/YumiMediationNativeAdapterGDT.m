@@ -9,12 +9,18 @@
 #import "YumiMediationNativeAdapterGDT.h"
 #import "GDTNativeAd.h"
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
+#import "YumiMediationNativeAdapterGDTConnector.h"
 
-@interface YumiMediationNativeAdapterGDT () <YumiMediationNativeAdapter, GDTNativeAdDelegate>
+@interface YumiMediationNativeAdapterGDT () <YumiMediationNativeAdapter, GDTNativeAdDelegate,YumiMediationNativeAdapterConnectorDelegate>
 
 @property (nonatomic, weak) id<YumiMediationNativeAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationNativeProvider *provider;
 @property (nonatomic) GDTNativeAd *nativeAd;
+
+// origin gdt ads data
+@property (nonatomic) NSArray<GDTNativeAdData *> *gdtNativeData;
+// mapping data
+@property (nonatomic) NSMutableArray<YumiMediationNativeModel *> *mappingData;
 
 @end
 
@@ -38,8 +44,19 @@
 
 #pragma mark - YumiMediationNativeAdapter
 - (void)requestAd:(NSUInteger)adCount {
+    // remove last data
+    [self clearNativeData];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf loadNativeAdsWith:adCount];
+    });
+    
+}
+- (void)loadNativeAdsWith:(NSUInteger)adCount{
     self.nativeAd =
-        [[GDTNativeAd alloc] initWithAppId:self.provider.data.key1 ?: @"" placementId:self.provider.data.key2 ?: @""];
+    [[GDTNativeAd alloc] initWithAppId:self.provider.data.key1 ?: @"" placementId:self.provider.data.key2 ?: @""];
     self.nativeAd.delegate = self;
     self.nativeAd.controller = [UIApplication sharedApplication].keyWindow.rootViewController;
     [self.nativeAd loadAd:(int)adCount];
@@ -60,12 +77,18 @@
 
 #pragma mark - GDTNativeAdDelegate
 - (void)nativeAdSuccessToLoad:(NSArray *)nativeAdDataArray {
-    NSArray<YumiMediationNativeModel *> *mediationArray = [self transitToMediationModel:nativeAdDataArray];
-    [self.delegate adapter:self didReceiveAd:mediationArray];
+    self.gdtNativeData = nativeAdDataArray;
+    
+    __weak typeof(self) weakSelf = self;
+    [nativeAdDataArray enumerateObjectsUsingBlock:^(GDTNativeAdData *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
+        YumiMediationNativeAdapterGDTConnector *connector = [[YumiMediationNativeAdapterGDTConnector alloc] initWithYumiNativeConnector:obj withAdapter:weakSelf shouldDownloadImage:YES];
+        connector.connectorDelegate = weakSelf;
+    }];
+    
 }
 
 - (void)nativeAdFailToLoad:(NSError *)error {
-    [self.delegate adapter:self didFailToReceiveAd:error.localizedDescription];
+    [self handleNativeError:error];
 }
 
 - (void)nativeAdWillPresentScreen {
@@ -79,42 +102,36 @@
 - (void)nativeAdClosed {
 }
 
-#pragma mark - transitModel
-- (NSArray<YumiMediationNativeModel *> *)transitToMediationModel:(NSArray *)thirdpartyData {
-    YumiMediationNativeModel *mediationModel = [YumiMediationNativeModel new];
-    NSMutableArray<YumiMediationNativeModel *> *mediationArray =
-        [NSMutableArray arrayWithCapacity:thirdpartyData.count];
-
-    [thirdpartyData enumerateObjectsUsingBlock:^(GDTNativeAdData *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
-        [mediationModel setValue:obj forKey:@"data"];
-
-        if (obj.properties[GDTNativeAdDataKeyTitle] &&
-            [obj.properties[GDTNativeAdDataKeyTitle] isKindOfClass:[NSString class]]) {
-            [mediationModel setValue:obj.properties[GDTNativeAdDataKeyTitle] forKey:@"title"];
-        }
-        if (obj.properties[GDTNativeAdDataKeyDesc] &&
-            [obj.properties[GDTNativeAdDataKeyDesc] isKindOfClass:[NSString class]]) {
-            [mediationModel setValue:obj.properties[GDTNativeAdDataKeyDesc] forKey:@"desc"];
-        }
-        if (obj.properties[GDTNativeAdDataKeyImgUrl] &&
-            [obj.properties[GDTNativeAdDataKeyImgUrl] isKindOfClass:[NSString class]]) {
-            [mediationModel setValue:obj.properties[GDTNativeAdDataKeyImgUrl] forKey:@"coverImageURL"];
-        }
-        if (obj.properties[GDTNativeAdDataKeyIconUrl] &&
-            [obj.properties[GDTNativeAdDataKeyIconUrl] isKindOfClass:[NSString class]]) {
-            [mediationModel setValue:obj.properties[GDTNativeAdDataKeyIconUrl] forKey:@"iconURL"];
-        }
-        if (obj.properties[GDTNativeAdDataKeyAppRating] &&
-            [obj.properties[GDTNativeAdDataKeyAppRating] isKindOfClass:[NSString class]]) {
-            [mediationModel setValue:obj.properties[GDTNativeAdDataKeyAppRating] forKey:@"appRating"];
-        }
-        if (obj.properties[GDTNativeAdDataKeyAppPrice] &&
-            [obj.properties[GDTNativeAdDataKeyAppPrice] isKindOfClass:[NSString class]]) {
-            [mediationModel setValue:obj.properties[GDTNativeAdDataKeyAppPrice] forKey:@"appPrice"];
-        }
-        [mediationArray addObject:mediationModel];
-    }];
-    return mediationArray;
+#pragma mark: -YumiMediationNativeAdapterConnectorDelegate
+- (void)yumiMediationNativeAdSuccessful:(YumiMediationNativeModel *)nativeModel{
+    
+    [self.mappingData addObject:nativeModel];
+    if (self.mappingData.count == self.gdtNativeData.count) {
+        [self.delegate adapter:self didReceiveAd:[self.mappingData copy]];
+    }
 }
 
+- (void)yumiMediationNativeAdFailed{
+    NSError *error = [NSError errorWithDomain:@"" code:501 userInfo:@{@"error reason" : @"connector yumiAds data error"}];
+    [self handleNativeError:error];
+}
+
+- (void)handleNativeError:(NSError *)error{
+    
+    [self clearNativeData];
+    [self.delegate adapter:self didFailToReceiveAd:error.localizedDescription];
+}
+
+- (void)clearNativeData{
+    self.gdtNativeData = nil;
+    [self.mappingData removeAllObjects];
+}
+#pragma mark: - getter method
+- (NSMutableArray<YumiMediationNativeModel *> *)mappingData{
+    if (!_mappingData) {
+        
+        _mappingData = [NSMutableArray arrayWithCapacity:1];
+    }
+    return _mappingData;
+}
 @end
