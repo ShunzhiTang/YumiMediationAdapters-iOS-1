@@ -25,6 +25,8 @@
 @end
 
 @implementation YumiMediationNativeAdapterGDT
+/// when conforming to a protocol, any property the protocol defines won't be automatically synthesized
+@synthesize disableImageLoading;
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerNativeAdapter:self
@@ -81,8 +83,7 @@
     
     __weak typeof(self) weakSelf = self;
     [nativeAdDataArray enumerateObjectsUsingBlock:^(GDTNativeAdData *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
-        YumiMediationNativeAdapterGDTConnector *connector = [[YumiMediationNativeAdapterGDTConnector alloc] initWithYumiNativeConnector:obj withAdapter:weakSelf shouldDownloadImage:YES];
-        connector.connectorDelegate = weakSelf;
+        YumiMediationNativeAdapterGDTConnector *connector = [[YumiMediationNativeAdapterGDTConnector alloc] initWithYumiNativeConnector:obj withAdapter:weakSelf disableImageLoading:weakSelf.disableImageLoading connectorDelegate:weakSelf];
     }];
     
 }
@@ -134,4 +135,5 @@
     }
     return _mappingData;
 }
+
 @end

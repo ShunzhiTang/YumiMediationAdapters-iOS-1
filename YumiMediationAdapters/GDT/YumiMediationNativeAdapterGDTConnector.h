@@ -16,8 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithYumiNativeConnector:(nullable GDTNativeAdData *)gdtNativeAdData
                                          withAdapter:(id<YumiMediationNativeAdapter>)adapter
-                                 shouldDownloadImage:(BOOL)shouldDownloadImage;
-@property (nonatomic ,strong) id<YumiMediationNativeAdapterConnectorDelegate> connectorDelegate;
+                                 disableImageLoading:(BOOL)disableImageLoading connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate;
 
 @end
 

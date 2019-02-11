@@ -13,6 +13,7 @@
 @property (nonatomic) YumiMediationNativeAdImage  *icon;
 @property (nonatomic) YumiMediationNativeAdImage  *coverImage;
 @property (nonatomic) id<YumiMediationNativeAdapter> adapter;
+@property (nonatomic ,weak) id<YumiMediationNativeAdapterConnectorDelegate> connectorDelegate;
 
 @end
 
@@ -20,15 +21,17 @@
 
 - (nullable instancetype)initWithYumiNativeConnector:(nullable GDTNativeAdData *)gdtNativeAdData
                                          withAdapter:(id<YumiMediationNativeAdapter>)adapter
-                                 shouldDownloadImage:(BOOL)shouldDownloadImage{
+                                 disableImageLoading:(BOOL)disableImageLoading connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate{
     self = [super init];
     
     if (self) {
         self.adapter = adapter;
         self.gdtNativeAdData = gdtNativeAdData;
+        self.connectorDelegate = connectorDelegate;
+        
         NSString *iconUrl = gdtNativeAdData.properties[GDTNativeAdDataKeyIconUrl];
         NSString *coverImageUrl = gdtNativeAdData.properties[GDTNativeAdDataKeyImgUrl];
-        [self downloadIcon:iconUrl coverImage:coverImageUrl shouldDownloadImage:shouldDownloadImage completed:^(BOOL isSuccessed) {
+        [self downloadIcon:iconUrl coverImage:coverImageUrl disableImageLoading:disableImageLoading completed:^(BOOL isSuccessed) {
             [self notifyCompletionWithResult:isSuccessed];
         }];
     }
@@ -38,7 +41,7 @@
 
 #pragma mark: handle download images
 
-- (void)downloadIcon:(NSString *)iconUrl coverImage:(NSString *)coverImageUrl shouldDownloadImage:(BOOL)shouldDownloadImage completed:(void (^)(BOOL isSuccessed))completed{
+- (void)downloadIcon:(NSString *)iconUrl coverImage:(NSString *)coverImageUrl disableImageLoading:(BOOL)disableImageLoading completed:(void (^)(BOOL isSuccessed))completed{
     
     NSURL *iconImgUrl = [NSURL URLWithString:iconUrl];
     NSURL *coverUrl = [NSURL URLWithString:coverImageUrl];
@@ -46,7 +49,7 @@
     self.icon = [[YumiMediationNativeAdImage alloc] initWithURL:iconImgUrl];
     self.coverImage = [[YumiMediationNativeAdImage alloc] initWithURL:coverUrl];
     
-    if (!shouldDownloadImage) {
+    if (disableImageLoading) {
         
         completed(YES);
         return;
