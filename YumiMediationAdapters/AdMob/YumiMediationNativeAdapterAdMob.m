@@ -18,7 +18,7 @@
 @property (nonatomic, weak) id<YumiMediationNativeAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationNativeProvider *provider;
 @property (nonatomic) GADAdLoader *adLoader;
-// origin gdt ads data
+// origin gad ads data
 @property (nonatomic) NSMutableArray<GADUnifiedNativeAd *> *gadNativeData;
 // mapping data
 @property (nonatomic) NSMutableArray<YumiMediationNativeModel *> *mappingData;
@@ -160,7 +160,6 @@
 #pragma mark : - getter method
 - (NSMutableArray<YumiMediationNativeModel *> *)mappingData {
     if (!_mappingData) {
-        
         _mappingData = [NSMutableArray arrayWithCapacity:1];
     }
     return _mappingData;

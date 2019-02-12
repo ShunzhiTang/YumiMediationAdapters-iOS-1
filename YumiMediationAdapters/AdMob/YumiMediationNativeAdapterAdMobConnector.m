@@ -39,32 +39,24 @@
 }
 
 #pragma mark: GADUnifiedNativeAdDelegate
-
-- (void)nativeAdDidRecordImpression:(GADUnifiedNativeAd *)nativeAd{
-    
-}
+- (void)nativeAdDidRecordImpression:(GADUnifiedNativeAd *)nativeAd{}
 
 - (void)nativeAdDidRecordClick:(GADUnifiedNativeAd *)nativeAd{
     if ([self.connectorDelegate respondsToSelector:@selector(yumiMediationNativeAdDidClick:)]) {
         [self.connectorDelegate yumiMediationNativeAdDidClick:self.nativeModel];
     }
 }
-- (void)nativeAdWillPresentScreen:(GADUnifiedNativeAd *)nativeAd{
-    
-}
+
+- (void)nativeAdWillPresentScreen:(GADUnifiedNativeAd *)nativeAd{}
 
 /// Called before dismissing a full screen view.
-- (void)nativeAdWillDismissScreen:(GADUnifiedNativeAd *)nativeAd{
-    
-}
+- (void)nativeAdWillDismissScreen:(GADUnifiedNativeAd *)nativeAd{}
 
 /// Called after dismissing a full screen view. Use this opportunity to restart anything you may
 /// have stopped as part of nativeAdWillPresentScreen:.
-- (void)nativeAdDidDismissScreen:(GADUnifiedNativeAd *)nativeAd{
-    
-}
-#pragma mark : YumiMediationUnifiedNativeAd
+- (void)nativeAdDidDismissScreen:(GADUnifiedNativeAd *)nativeAd{}
 
+#pragma mark : YumiMediationUnifiedNativeAd
 -(YumiMediationNativeAdImage *)icon{
     GADNativeAdImage *gadIcon = self.gadNativeAd.icon;
     
@@ -75,7 +67,6 @@
     
     return icon;
 }
-
 - (YumiMediationNativeAdImage *)coverImage{
     GADNativeAdImage *gadImg;
     if (self.gadNativeAd.images.count > 0 ) {
@@ -88,15 +79,12 @@
     
     return coverImage;
 }
-
 - (NSString *)title {
-    
     return self.gadNativeAd.headline;
 }
 - (NSString *)desc {
     return self.gadNativeAd.body;
 }
-
 - (NSString *)callToAction {
     return self.gadNativeAd.callToAction;
 }
@@ -115,15 +103,12 @@
 - (NSString *)other {
     return nil;
 }
-
 - (id)data {
     return self.gadNativeAd;
 }
-
 - (id<YumiMediationNativeAdapter>)thirdparty {
     return self.adapter;
 }
-
 - (NSDictionary<NSString *, id> *)extraAssets {
     return nil;
 }
