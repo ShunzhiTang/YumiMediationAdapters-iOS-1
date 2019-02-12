@@ -82,7 +82,7 @@
     
     __weak typeof(self) weakSelf = self;
     [nativeAdDataArray enumerateObjectsUsingBlock:^(GDTNativeAdData *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
-        YumiMediationNativeAdapterGDTConnector *connector = [[YumiMediationNativeAdapterGDTConnector alloc] initWithYumiNativeConnector:obj withAdapter:weakSelf disableImageLoading:weakSelf.disableImageLoading connectorDelegate:weakSelf];
+        [[[YumiMediationNativeAdapterGDTConnector alloc] init] convertWithNativeData:obj withAdapter:weakSelf disableImageLoading:weakSelf.disableImageLoading connectorDelegate:weakSelf];
     }];
 }
 

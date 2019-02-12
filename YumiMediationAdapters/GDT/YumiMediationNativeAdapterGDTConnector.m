@@ -19,28 +19,21 @@
 
 @implementation YumiMediationNativeAdapterGDTConnector
 
-- (nullable instancetype)initWithYumiNativeConnector:(nullable GDTNativeAdData *)gdtNativeAdData
-                                         withAdapter:(id<YumiMediationNativeAdapter>)adapter
-                                 disableImageLoading:(BOOL)disableImageLoading connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate{
-    self = [super init];
-    
-    if (self) {
-        self.adapter = adapter;
-        self.gdtNativeAdData = gdtNativeAdData;
-        self.connectorDelegate = connectorDelegate;
+- (void)convertWithNativeData:(nullable GDTNativeAdData *)gdtNativeAdData
+                  withAdapter:(id<YumiMediationNativeAdapter>)adapter
+          disableImageLoading:(BOOL)disableImageLoading connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate {
+    self.adapter = adapter;
+    self.gdtNativeAdData = gdtNativeAdData;
+    self.connectorDelegate = connectorDelegate;
         
-        NSString *iconUrl = gdtNativeAdData.properties[GDTNativeAdDataKeyIconUrl];
-        NSString *coverImageUrl = gdtNativeAdData.properties[GDTNativeAdDataKeyImgUrl];
-        [self downloadIcon:iconUrl coverImage:coverImageUrl disableImageLoading:disableImageLoading completed:^(BOOL isSuccessed) {
-            [self notifyCompletionWithResult:isSuccessed];
-        }];
-    }
-    
-    return self;
+    NSString *iconUrl = gdtNativeAdData.properties[GDTNativeAdDataKeyIconUrl];
+    NSString *coverImageUrl = gdtNativeAdData.properties[GDTNativeAdDataKeyImgUrl];
+    [self downloadIcon:iconUrl coverImage:coverImageUrl disableImageLoading:disableImageLoading completed:^(BOOL isSuccessed) {
+        [self notifyCompletionWithResult:isSuccessed];
+    }];
 }
 
 #pragma mark: handle download images
-
 - (void)downloadIcon:(NSString *)iconUrl coverImage:(NSString *)coverImageUrl disableImageLoading:(BOOL)disableImageLoading completed:(void (^)(BOOL isSuccessed))completed{
     
     NSURL *iconImgUrl = [NSURL URLWithString:iconUrl];
@@ -56,7 +49,6 @@
     }
     
     __weak typeof(self) weakSelf = self;
-    
     NSMutableArray *imageTemps = [NSMutableArray arrayWithCapacity:1];
     dispatch_group_t group = dispatch_group_create();
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
