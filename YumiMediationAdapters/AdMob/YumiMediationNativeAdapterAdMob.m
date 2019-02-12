@@ -22,6 +22,7 @@
 @property (nonatomic) NSMutableArray<GADUnifiedNativeAd *> *gadNativeData;
 // mapping data
 @property (nonatomic) NSMutableArray<YumiMediationNativeModel *> *mappingData;
+@property (nonatomic, assign) BOOL isFinishLoading;
 
 @end
 
@@ -116,6 +117,7 @@
 }
 /// Called after adLoader has finished loading.
 - (void)adLoaderDidFinishLoading:(GADAdLoader *)adLoader{
+    self.isFinishLoading = YES;
 }
 #pragma mark: -GADUnifiedNativeAdLoaderDelegate
 /// Called when a unified native ad is received.
@@ -129,7 +131,8 @@
 #pragma mark: YumiMediationNativeAdapterConnectorDelegate
 - (void)yumiMediationNativeAdSuccessful:(YumiMediationNativeModel *)nativeModel {
     [self.mappingData addObject:nativeModel];
-    if (self.mappingData.count == self.gadNativeData.count) {
+    if (self.isFinishLoading && self.mappingData.count == self.gadNativeData.count) {
+        self.isFinishLoading = NO;
         [self.delegate adapter:self didReceiveAd:[self.mappingData copy]];
     }
 }
