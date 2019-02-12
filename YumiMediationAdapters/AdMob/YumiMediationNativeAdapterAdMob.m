@@ -18,7 +18,7 @@
 @property (nonatomic, weak) id<YumiMediationNativeAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationNativeProvider *provider;
 @property (nonatomic) GADAdLoader *adLoader;
-// origin gdt ads data
+// origin gad ads data
 @property (nonatomic) NSMutableArray<GADUnifiedNativeAd *> *gadNativeData;
 // mapping data
 @property (nonatomic) NSMutableArray<YumiMediationNativeModel *> *mappingData;
@@ -116,23 +116,23 @@
 }
 /// Called after adLoader has finished loading.
 - (void)adLoaderDidFinishLoading:(GADAdLoader *)adLoader{
-    if (self.mappingData.count == self.gadNativeData.count) {
-        [self.delegate adapter:self didReceiveAd:[self.mappingData copy]];
-    }
+    __weak typeof(self) weakSelf = self;
+    [self.gadNativeData enumerateObjectsUsingBlock:^(GADUnifiedNativeAd * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [[[YumiMediationNativeAdapterAdMobConnector alloc] init] convertWithNativeData:obj withAdapter:weakSelf connectorDelegate:weakSelf];
+    }];
 }
 #pragma mark: -GADUnifiedNativeAdLoaderDelegate
 /// Called when a unified native ad is received.
 - (void)adLoader:(nonnull GADAdLoader *)adLoader didReceiveUnifiedNativeAd:(nonnull GADUnifiedNativeAd *)nativeAd {
     [self.gadNativeData addObject:nativeAd];
-    
-    YumiMediationNativeAdapterAdMobConnector *admobConnector = [[YumiMediationNativeAdapterAdMobConnector alloc] init];
-    [admobConnector convertWithNativeData:nativeAd withAdapter:self connectorDelegate:self];
 }
 
 #pragma mark: YumiMediationNativeAdapterConnectorDelegate
 - (void)yumiMediationNativeAdSuccessful:(YumiMediationNativeModel *)nativeModel {
-    
     [self.mappingData addObject:nativeModel];
+    if (self.mappingData.count == self.gadNativeData.count) {
+        [self.delegate adapter:self didReceiveAd:[self.mappingData copy]];
+    }
 }
 
 - (void)yumiMediationNativeAdFailed {
@@ -160,7 +160,6 @@
 #pragma mark : - getter method
 - (NSMutableArray<YumiMediationNativeModel *> *)mappingData {
     if (!_mappingData) {
-        
         _mappingData = [NSMutableArray arrayWithCapacity:1];
     }
     return _mappingData;
