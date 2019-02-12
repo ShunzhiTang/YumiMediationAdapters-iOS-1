@@ -117,22 +117,21 @@
 }
 /// Called after adLoader has finished loading.
 - (void)adLoaderDidFinishLoading:(GADAdLoader *)adLoader{
-    self.isFinishLoading = YES;
+    __weak typeof(self) weakSelf = self;
+    [self.gadNativeData enumerateObjectsUsingBlock:^(GADUnifiedNativeAd * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [[[YumiMediationNativeAdapterAdMobConnector alloc] init] convertWithNativeData:obj withAdapter:weakSelf connectorDelegate:weakSelf];
+    }];
 }
 #pragma mark: -GADUnifiedNativeAdLoaderDelegate
 /// Called when a unified native ad is received.
 - (void)adLoader:(nonnull GADAdLoader *)adLoader didReceiveUnifiedNativeAd:(nonnull GADUnifiedNativeAd *)nativeAd {
     [self.gadNativeData addObject:nativeAd];
-    
-    YumiMediationNativeAdapterAdMobConnector *admobConnector = [[YumiMediationNativeAdapterAdMobConnector alloc] init];
-    [admobConnector convertWithNativeData:nativeAd withAdapter:self connectorDelegate:self];
 }
 
 #pragma mark: YumiMediationNativeAdapterConnectorDelegate
 - (void)yumiMediationNativeAdSuccessful:(YumiMediationNativeModel *)nativeModel {
     [self.mappingData addObject:nativeModel];
-    if (self.isFinishLoading && self.mappingData.count == self.gadNativeData.count) {
-        self.isFinishLoading = NO;
+    if (self.mappingData.count == self.gadNativeData.count) {
         [self.delegate adapter:self didReceiveAd:[self.mappingData copy]];
     }
 }
