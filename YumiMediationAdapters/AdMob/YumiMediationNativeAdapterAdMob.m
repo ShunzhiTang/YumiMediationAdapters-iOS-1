@@ -22,7 +22,6 @@
 @property (nonatomic) NSMutableArray<GADUnifiedNativeAd *> *gadNativeData;
 // mapping data
 @property (nonatomic) NSMutableArray<YumiMediationNativeModel *> *mappingData;
-@property (nonatomic, assign) BOOL isFinishLoading;
 
 @end
 
