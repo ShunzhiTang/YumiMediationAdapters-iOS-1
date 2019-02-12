@@ -116,9 +116,6 @@
 }
 /// Called after adLoader has finished loading.
 - (void)adLoaderDidFinishLoading:(GADAdLoader *)adLoader{
-    if (self.mappingData.count == self.gadNativeData.count) {
-        [self.delegate adapter:self didReceiveAd:[self.mappingData copy]];
-    }
 }
 #pragma mark: -GADUnifiedNativeAdLoaderDelegate
 /// Called when a unified native ad is received.
@@ -131,8 +128,10 @@
 
 #pragma mark: YumiMediationNativeAdapterConnectorDelegate
 - (void)yumiMediationNativeAdSuccessful:(YumiMediationNativeModel *)nativeModel {
-    
     [self.mappingData addObject:nativeModel];
+    if (self.mappingData.count == self.gadNativeData.count) {
+        [self.delegate adapter:self didReceiveAd:[self.mappingData copy]];
+    }
 }
 
 - (void)yumiMediationNativeAdFailed {
