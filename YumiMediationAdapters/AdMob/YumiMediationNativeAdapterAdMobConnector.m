@@ -18,7 +18,7 @@
 
 @implementation YumiMediationNativeAdapterAdMobConnector
 
-- (void)setupYumiNativeConnector:(nullable GADUnifiedNativeAd *)gadNativeAd
+- (void)convertWithNativeData:(nullable GADUnifiedNativeAd *)gadNativeAd
                      withAdapter:(id<YumiMediationNativeAdapter>)adapter
                connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate{
     

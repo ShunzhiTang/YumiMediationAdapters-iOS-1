@@ -126,7 +126,7 @@
     [self.gadNativeData addObject:nativeAd];
     
     YumiMediationNativeAdapterAdMobConnector *admobConnector = [[YumiMediationNativeAdapterAdMobConnector alloc] init];
-    [admobConnector setupYumiNativeConnector:nativeAd withAdapter:self connectorDelegate:self];
+    [admobConnector convertWithNativeData:nativeAd withAdapter:self connectorDelegate:self];
 }
 
 #pragma mark: YumiMediationNativeAdapterConnectorDelegate
