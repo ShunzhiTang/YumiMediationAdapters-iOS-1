@@ -7,13 +7,15 @@
 //
 
 #import "YumiMediationNativeAdapterAdMob.h"
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
+#import "YumiMediationNativeAdapterAdMobConnector.h"
 #import <GoogleMobileAds/GADNativeAdViewAdOptions.h>
 #import <GoogleMobileAds/GoogleMobileAds.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiTool.h>
-#import "YumiMediationNativeAdapterAdMobConnector.h"
 
-@interface YumiMediationNativeAdapterAdMob () <YumiMediationNativeAdapter,GADAdLoaderDelegate,GADUnifiedNativeAdLoaderDelegate,YumiMediationNativeAdapterConnectorDelegate>
+@interface YumiMediationNativeAdapterAdMob () <YumiMediationNativeAdapter, GADAdLoaderDelegate,
+                                               GADUnifiedNativeAdLoaderDelegate,
+                                               YumiMediationNativeAdapterConnectorDelegate>
 
 @property (nonatomic, weak) id<YumiMediationNativeAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationNativeProvider *provider;
@@ -47,49 +49,52 @@
 }
 
 - (void)requestAd:(NSUInteger)adCount {
-    
+
     [self clearNativeData];
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        
+
         // options
         GADNativeAdViewAdOptions *adViewoption = [[GADNativeAdViewAdOptions alloc] init];
         adViewoption.preferredAdChoicesPosition = GADAdChoicesPositionBottomRightCorner;
-        
+
         GADMultipleAdsAdLoaderOptions *multipleAdsOptions = [[GADMultipleAdsAdLoaderOptions alloc] init];
         multipleAdsOptions.numberOfAds = adCount;
-        
+
         GADNativeAdImageAdLoaderOptions *imageOptions = [[GADNativeAdImageAdLoaderOptions alloc] init];
         imageOptions.disableImageLoading = weakSelf.disableImageLoading;
         // adType
         NSMutableArray *adTypes = [[NSMutableArray alloc] init];
         [adTypes addObject:kGADAdLoaderAdTypeUnifiedNative];
-        
-        weakSelf.adLoader =
-        [[GADAdLoader alloc] initWithAdUnitID:weakSelf.provider.data.key1
-                           rootViewController:[[YumiTool sharedTool] topMostController]
-                                      adTypes:adTypes
-                                      options:@[adViewoption,multipleAdsOptions,imageOptions]];
-        
+
+        weakSelf.adLoader = [[GADAdLoader alloc] initWithAdUnitID:weakSelf.provider.data.key1
+                                               rootViewController:[[YumiTool sharedTool] topMostController]
+                                                          adTypes:adTypes
+                                                          options:@[ adViewoption, multipleAdsOptions, imageOptions ]];
+
         GADRequest *request = [GADRequest request];
-        
+
         weakSelf.adLoader.delegate = weakSelf;
         [weakSelf.adLoader loadRequest:request];
     });
 }
-- (void)registerViewForNativeAdapterWith:(UIView *)view clickableAssetViews:(NSDictionary<YumiMediationUnifiedNativeAssetIdentifier,UIView *> *)clickableAssetViews withViewController:(UIViewController *)viewController nativeAd:(YumiMediationNativeModel *)nativeAd {
+- (void)registerViewForNativeAdapterWith:(UIView *)view
+                     clickableAssetViews:
+                         (NSDictionary<YumiMediationUnifiedNativeAssetIdentifier, UIView *> *)clickableAssetViews
+                      withViewController:(UIViewController *)viewController
+                                nativeAd:(YumiMediationNativeModel *)nativeAd {
     GADUnifiedNativeAd *gadNativeAd = (GADUnifiedNativeAd *)nativeAd.data;
-    
+
     GADUnifiedNativeAdView *gadView = [[GADUnifiedNativeAdView alloc] initWithFrame:view.bounds];
     gadView.nativeAd = gadNativeAd;
-    
+
     if (clickableAssetViews[YumiMediationUnifiedNativeTitleAsset]) {
         gadView.headlineView = clickableAssetViews[YumiMediationUnifiedNativeTitleAsset];
     }
     if (clickableAssetViews[YumiMediationUnifiedNativeDescAsset]) {
         gadView.bodyView = clickableAssetViews[YumiMediationUnifiedNativeDescAsset];
     }
-    
+
     if (clickableAssetViews[YumiMediationUnifiedNativeIconAsset]) {
         gadView.iconView = clickableAssetViews[YumiMediationUnifiedNativeIconAsset];
     }
@@ -102,7 +107,7 @@
     if (clickableAssetViews[YumiMediationUnifiedNativeAppPriceAsset]) {
         gadView.priceView = clickableAssetViews[YumiMediationUnifiedNativeAppPriceAsset];
     }
-    
+
     if (clickableAssetViews[YumiMediationUnifiedNativeStoreAsset]) {
         gadView.storeView = clickableAssetViews[YumiMediationUnifiedNativeStoreAsset];
     }
@@ -112,8 +117,7 @@
     if (clickableAssetViews[YumiMediationUnifiedNativeAdvertiserAsset]) {
         gadView.advertiserView = clickableAssetViews[YumiMediationUnifiedNativeAdvertiserAsset];
     }
-    
-    
+
     [view addSubview:gadView];
 }
 
@@ -123,24 +127,27 @@
 - (void)clickAd:(YumiMediationNativeModel *)nativeAd {
 }
 
-#pragma mark: -GADAdLoaderDelegate
+#pragma mark : -GADAdLoaderDelegate
 - (void)adLoader:(nonnull GADAdLoader *)adLoader didFailToReceiveAdWithError:(nonnull GADRequestError *)error {
     [self.delegate adapter:self didFailToReceiveAd:[error localizedDescription]];
 }
 /// Called after adLoader has finished loading.
-- (void)adLoaderDidFinishLoading:(GADAdLoader *)adLoader{
+- (void)adLoaderDidFinishLoading:(GADAdLoader *)adLoader {
     __weak typeof(self) weakSelf = self;
-    [self.gadNativeData enumerateObjectsUsingBlock:^(GADUnifiedNativeAd * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [[[YumiMediationNativeAdapterAdMobConnector alloc] init] convertWithNativeData:obj withAdapter:weakSelf connectorDelegate:weakSelf];
-    }];
+    [self.gadNativeData
+        enumerateObjectsUsingBlock:^(GADUnifiedNativeAd *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
+            [[[YumiMediationNativeAdapterAdMobConnector alloc] init] convertWithNativeData:obj
+                                                                               withAdapter:weakSelf
+                                                                         connectorDelegate:weakSelf];
+        }];
 }
-#pragma mark: -GADUnifiedNativeAdLoaderDelegate
+#pragma mark : -GADUnifiedNativeAdLoaderDelegate
 /// Called when a unified native ad is received.
 - (void)adLoader:(nonnull GADAdLoader *)adLoader didReceiveUnifiedNativeAd:(nonnull GADUnifiedNativeAd *)nativeAd {
     [self.gadNativeData addObject:nativeAd];
 }
 
-#pragma mark: YumiMediationNativeAdapterConnectorDelegate
+#pragma mark : YumiMediationNativeAdapterConnectorDelegate
 - (void)yumiMediationNativeAdSuccessful:(YumiMediationNativeModel *)nativeModel {
     [self.mappingData addObject:nativeModel];
     if (self.mappingData.count == self.gadNativeData.count) {
@@ -150,13 +157,13 @@
 
 - (void)yumiMediationNativeAdFailed {
     NSError *error =
-    [NSError errorWithDomain:@"" code:501 userInfo:@{
-                                                     @"error reason" : @"connector yumiAds data error"
-                                                     }];
+        [NSError errorWithDomain:@"" code:501 userInfo:@{
+            @"error reason" : @"connector yumiAds data error"
+        }];
     [self handleNativeError:error];
 }
 
-- (void)yumiMediationNativeAdDidClick:(YumiMediationNativeModel *)nativeModel{
+- (void)yumiMediationNativeAdDidClick:(YumiMediationNativeModel *)nativeModel {
     [self.delegate adapter:self didClick:nil];
 }
 
@@ -177,7 +184,7 @@
     }
     return _mappingData;
 }
-- (NSMutableArray<GADUnifiedNativeAd *> *)gadNativeData{
+- (NSMutableArray<GADUnifiedNativeAd *> *)gadNativeData {
     if (!_gadNativeData) {
         _gadNativeData = [NSMutableArray arrayWithCapacity:1];
     }

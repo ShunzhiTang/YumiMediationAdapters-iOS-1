@@ -7,7 +7,7 @@
 
 #import "YumiMediationNativeAdapterAdMobConnector.h"
 
-@interface YumiMediationNativeAdapterAdMobConnector()<GADUnifiedNativeAdDelegate>
+@interface YumiMediationNativeAdapterAdMobConnector () <GADUnifiedNativeAdDelegate>
 
 @property (nonatomic) id<YumiMediationNativeAdapter> adapter;
 @property (nonatomic, weak) id<YumiMediationNativeAdapterConnectorDelegate> connectorDelegate;
@@ -19,9 +19,9 @@
 @implementation YumiMediationNativeAdapterAdMobConnector
 
 - (void)convertWithNativeData:(nullable GADUnifiedNativeAd *)gadNativeAd
-                     withAdapter:(id<YumiMediationNativeAdapter>)adapter
-               connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate{
-    
+                  withAdapter:(id<YumiMediationNativeAdapter>)adapter
+            connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate {
+
     self.gadNativeAd = gadNativeAd;
     self.adapter = adapter;
     self.connectorDelegate = connectorDelegate;
@@ -32,51 +32,55 @@
 - (void)notifyMediatedNativeAdSuccessful {
     self.nativeModel = [[YumiMediationNativeModel alloc] init];
     [self.nativeModel setValue:self forKey:@"unifiedNativeAd"];
-    
+
     if ([self.connectorDelegate respondsToSelector:@selector(yumiMediationNativeAdSuccessful:)]) {
         [self.connectorDelegate yumiMediationNativeAdSuccessful:self.nativeModel];
     }
 }
 
-#pragma mark: GADUnifiedNativeAdDelegate
-- (void)nativeAdDidRecordImpression:(GADUnifiedNativeAd *)nativeAd{}
+#pragma mark : GADUnifiedNativeAdDelegate
+- (void)nativeAdDidRecordImpression:(GADUnifiedNativeAd *)nativeAd {
+}
 
-- (void)nativeAdDidRecordClick:(GADUnifiedNativeAd *)nativeAd{
+- (void)nativeAdDidRecordClick:(GADUnifiedNativeAd *)nativeAd {
     if ([self.connectorDelegate respondsToSelector:@selector(yumiMediationNativeAdDidClick:)]) {
         [self.connectorDelegate yumiMediationNativeAdDidClick:self.nativeModel];
     }
 }
 
-- (void)nativeAdWillPresentScreen:(GADUnifiedNativeAd *)nativeAd{}
+- (void)nativeAdWillPresentScreen:(GADUnifiedNativeAd *)nativeAd {
+}
 
 /// Called before dismissing a full screen view.
-- (void)nativeAdWillDismissScreen:(GADUnifiedNativeAd *)nativeAd{}
+- (void)nativeAdWillDismissScreen:(GADUnifiedNativeAd *)nativeAd {
+}
 
 /// Called after dismissing a full screen view. Use this opportunity to restart anything you may
 /// have stopped as part of nativeAdWillPresentScreen:.
-- (void)nativeAdDidDismissScreen:(GADUnifiedNativeAd *)nativeAd{}
+- (void)nativeAdDidDismissScreen:(GADUnifiedNativeAd *)nativeAd {
+}
 
 #pragma mark : YumiMediationUnifiedNativeAd
--(YumiMediationNativeAdImage *)icon{
+- (YumiMediationNativeAdImage *)icon {
     GADNativeAdImage *gadIcon = self.gadNativeAd.icon;
-    
+
     YumiMediationNativeAdImage *icon = [[YumiMediationNativeAdImage alloc] init];
     [icon setValue:gadIcon.image forKey:@"image"];
     [icon setValue:gadIcon.imageURL forKey:@"imageURL"];
     [icon setValue:@(gadIcon.scale) forKey:@"ratios"];
-    
+
     return icon;
 }
-- (YumiMediationNativeAdImage *)coverImage{
+- (YumiMediationNativeAdImage *)coverImage {
     GADNativeAdImage *gadImg;
-    if (self.gadNativeAd.images.count > 0 ) {
+    if (self.gadNativeAd.images.count > 0) {
         gadImg = self.gadNativeAd.images[0];
     }
     YumiMediationNativeAdImage *coverImage = [[YumiMediationNativeAdImage alloc] init];
     [coverImage setValue:gadImg.image forKey:@"image"];
     [coverImage setValue:gadImg.imageURL forKey:@"imageURL"];
     [coverImage setValue:@(gadImg.scale) forKey:@"ratios"];
-    
+
     return coverImage;
 }
 - (NSString *)title {
@@ -98,7 +102,7 @@
     return self.gadNativeAd.store;
 }
 - (NSString *)appRating {
-    return [NSString stringWithFormat:@"%zd",[self.gadNativeAd.starRating integerValue] ];
+    return [NSString stringWithFormat:@"%zd", [self.gadNativeAd.starRating integerValue]];
 }
 - (NSString *)other {
     return nil;
