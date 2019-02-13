@@ -39,11 +39,24 @@
 #pragma mark : YumiMediationUnifiedNativeAd
 - (YumiMediationNativeAdImage *)icon {
 
-    return nil;
+    YumiMediationNativeAdImage * icon = [[YumiMediationNativeAdImage alloc] init];
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(1, 1), NO, 0.0);
+    UIImage *graphicsImg = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    [icon setValue:graphicsImg forKey:@"image"];
+    
+    return icon;
 }
 - (YumiMediationNativeAdImage *)coverImage {
-
-    return nil;
+    YumiMediationNativeAdImage * coverImage = [[YumiMediationNativeAdImage alloc] init];
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(1, 1), NO, 0.0);
+    UIImage *graphicsImg = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    [coverImage setValue:graphicsImg forKey:@"image"];
+    
+    return coverImage;
 }
 - (NSString *)title {
     return self.fbNativeAd.headline;
