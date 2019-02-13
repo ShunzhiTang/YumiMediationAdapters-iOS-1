@@ -77,31 +77,44 @@
         [weakSelf.adLoader loadRequest:request];
     });
 }
-- (void)registerViewForNativeAdapterWith:(UIView *)view
-                          viewController:(nullable UIViewController *)viewController
-                                nativeAd:(YumiMediationNativeModel *)nativeAd {
+- (void)registerViewForNativeAdapterWith:(UIView *)view clickableAssetViews:(NSDictionary<YumiMediationUnifiedNativeAssetIdentifier,UIView *> *)clickableAssetViews withViewController:(UIViewController *)viewController nativeAd:(YumiMediationNativeModel *)nativeAd {
     GADUnifiedNativeAd *gadNativeAd = (GADUnifiedNativeAd *)nativeAd.data;
-    [gadNativeAd registerClickConfirmingView:view];
-    UIView *button = nil;
-    UIView *adView = nil;
-    UIImageView *coverImg = nil;
-    for (UIView *subview in view.subviews) {
-        if ([subview isKindOfClass:[UIButton class]] ) {
-            button = subview;
-        }
-        if ([subview isKindOfClass:[UIView class]] && subview.tag == 100) {
-            adView = subview;
-            for (UIView *subs in subview.subviews) {
-                if (subs.tag == 200) {
-                    coverImg = (UIImageView *)subs;
-                }
-            }
-        }
+    
+    GADUnifiedNativeAdView *gadView = [[GADUnifiedNativeAdView alloc] initWithFrame:view.bounds];
+    gadView.nativeAd = gadNativeAd;
+    
+    if (clickableAssetViews[YumiMediationUnifiedNativeTitleAsset]) {
+        gadView.headlineView = clickableAssetViews[YumiMediationUnifiedNativeTitleAsset];
     }
-    [gadNativeAd registerAdView:adView clickableAssetViews:
-     @{GADUnifiedNativeCallToActionAsset : button,
-       GADUnifiedNativeImageAsset : coverImg}
-         nonclickableAssetViews:@{}];
+    if (clickableAssetViews[YumiMediationUnifiedNativeDescAsset]) {
+        gadView.bodyView = clickableAssetViews[YumiMediationUnifiedNativeDescAsset];
+    }
+    
+    if (clickableAssetViews[YumiMediationUnifiedNativeIconAsset]) {
+        gadView.iconView = clickableAssetViews[YumiMediationUnifiedNativeIconAsset];
+    }
+    if (clickableAssetViews[YumiMediationUnifiedNativeCoverImageAsset]) {
+        gadView.imageView = clickableAssetViews[YumiMediationUnifiedNativeCoverImageAsset];
+    }
+    if (clickableAssetViews[YumiMediationUnifiedNativeCallToActionAsset]) {
+        gadView.callToActionView = clickableAssetViews[YumiMediationUnifiedNativeCallToActionAsset];
+    }
+    if (clickableAssetViews[YumiMediationUnifiedNativeAppPriceAsset]) {
+        gadView.priceView = clickableAssetViews[YumiMediationUnifiedNativeAppPriceAsset];
+    }
+    
+    if (clickableAssetViews[YumiMediationUnifiedNativeStoreAsset]) {
+        gadView.storeView = clickableAssetViews[YumiMediationUnifiedNativeStoreAsset];
+    }
+    if (clickableAssetViews[YumiMediationUnifiedNativeAppRatingAsset]) {
+        gadView.starRatingView = clickableAssetViews[YumiMediationUnifiedNativeAppRatingAsset];
+    }
+    if (clickableAssetViews[YumiMediationUnifiedNativeAdvertiserAsset]) {
+        gadView.advertiserView = clickableAssetViews[YumiMediationUnifiedNativeAdvertiserAsset];
+    }
+    
+    
+    [view addSubview:gadView];
 }
 
 /// report impression when display the native ad.
