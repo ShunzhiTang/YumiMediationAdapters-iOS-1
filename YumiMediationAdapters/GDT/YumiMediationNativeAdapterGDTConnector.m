@@ -10,10 +10,10 @@
 @interface YumiMediationNativeAdapterGDTConnector ()
 
 @property (nonatomic) GDTNativeAdData *gdtNativeAdData;
-@property (nonatomic) YumiMediationNativeAdImage  *icon;
-@property (nonatomic) YumiMediationNativeAdImage  *coverImage;
+@property (nonatomic) YumiMediationNativeAdImage *icon;
+@property (nonatomic) YumiMediationNativeAdImage *coverImage;
 @property (nonatomic) id<YumiMediationNativeAdapter> adapter;
-@property (nonatomic ,weak) id<YumiMediationNativeAdapterConnectorDelegate> connectorDelegate;
+@property (nonatomic, weak) id<YumiMediationNativeAdapterConnectorDelegate> connectorDelegate;
 
 @end
 
@@ -21,33 +21,40 @@
 
 - (void)convertWithNativeData:(nullable GDTNativeAdData *)gdtNativeAdData
                   withAdapter:(id<YumiMediationNativeAdapter>)adapter
-          disableImageLoading:(BOOL)disableImageLoading connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate {
+          disableImageLoading:(BOOL)disableImageLoading
+            connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate {
     self.adapter = adapter;
     self.gdtNativeAdData = gdtNativeAdData;
     self.connectorDelegate = connectorDelegate;
-        
+
     NSString *iconUrl = gdtNativeAdData.properties[GDTNativeAdDataKeyIconUrl];
     NSString *coverImageUrl = gdtNativeAdData.properties[GDTNativeAdDataKeyImgUrl];
-    [self downloadIcon:iconUrl coverImage:coverImageUrl disableImageLoading:disableImageLoading completed:^(BOOL isSuccessed) {
-        [self notifyCompletionWithResult:isSuccessed];
-    }];
+    [self downloadIcon:iconUrl
+                 coverImage:coverImageUrl
+        disableImageLoading:disableImageLoading
+                  completed:^(BOOL isSuccessed) {
+                      [self notifyCompletionWithResult:isSuccessed];
+                  }];
 }
 
-#pragma mark: handle download images
-- (void)downloadIcon:(NSString *)iconUrl coverImage:(NSString *)coverImageUrl disableImageLoading:(BOOL)disableImageLoading completed:(void (^)(BOOL isSuccessed))completed{
-    
+#pragma mark : handle download images
+- (void)downloadIcon:(NSString *)iconUrl
+             coverImage:(NSString *)coverImageUrl
+    disableImageLoading:(BOOL)disableImageLoading
+              completed:(void (^)(BOOL isSuccessed))completed {
+
     NSURL *iconImgUrl = [NSURL URLWithString:iconUrl];
     NSURL *coverUrl = [NSURL URLWithString:coverImageUrl];
-    
+
     self.icon = [[YumiMediationNativeAdImage alloc] initWithURL:iconImgUrl];
     self.coverImage = [[YumiMediationNativeAdImage alloc] initWithURL:coverUrl];
-    
+
     if (disableImageLoading) {
-        
+
         completed(YES);
         return;
     }
-    
+
     __weak typeof(self) weakSelf = self;
     NSMutableArray *imageTemps = [NSMutableArray arrayWithCapacity:1];
     dispatch_group_t group = dispatch_group_create();
@@ -58,7 +65,7 @@
             [imageTemps addObject:@"1"];
             [weakSelf.icon setValue:@(image.size.width / image.size.height) forKey:@"ratios"];
         }
-        
+
         dispatch_group_leave(group);
     }];
     dispatch_group_enter(group);
@@ -77,7 +84,6 @@
         }
         completed(YES);
     });
-    
 }
 
 #pragma mark - Completion
@@ -93,7 +99,7 @@
 - (void)notifyMediatedNativeAdSuccessful {
     YumiMediationNativeModel *nativeModel = [[YumiMediationNativeModel alloc] init];
     [nativeModel setValue:self forKey:@"unifiedNativeAd"];
-    
+
     if ([self.connectorDelegate respondsToSelector:@selector(yumiMediationNativeAdSuccessful:)]) {
         [self.connectorDelegate yumiMediationNativeAdSuccessful:nativeModel];
     }
@@ -105,42 +111,43 @@
     }
 }
 
-#pragma mark: YumiMediationUnifiedNativeAd
-- (NSString *)title{
+#pragma mark : YumiMediationUnifiedNativeAd
+- (NSString *)title {
     return self.gdtNativeAdData.properties[GDTNativeAdDataKeyTitle];
 }
-- (NSString *)desc{
+- (NSString *)desc {
     return self.gdtNativeAdData.properties[GDTNativeAdDataKeyDesc];
 }
 
-- (NSString *)callToAction{
+- (NSString *)callToAction {
     return nil;
 }
-- (NSString *)appPrice{
+- (NSString *)appPrice {
     return self.gdtNativeAdData.properties[GDTNativeAdDataKeyAppPrice];
 }
--(NSString *)advertiser{
+- (NSString *)advertiser {
     return nil;
 }
-- (NSString *)store{
+- (NSString *)store {
     return nil;
 }
--(NSString *)appRating{
-    return self.gdtNativeAdData.properties[GDTNativeAdDataKeyAppRating];;
+- (NSString *)appRating {
+    return self.gdtNativeAdData.properties[GDTNativeAdDataKeyAppRating];
+    ;
 }
-- (NSString *)other{
+- (NSString *)other {
     return nil;
 }
 
-- (id)data{
+- (id)data {
     return self.gdtNativeAdData;
 }
 
-- (id<YumiMediationNativeAdapter>)thirdparty{
+- (id<YumiMediationNativeAdapter>)thirdparty {
     return self.adapter;
 }
 
--(NSDictionary<NSString *,id> *)extraAssets{
+- (NSDictionary<NSString *, id> *)extraAssets {
     return nil;
 }
 @end

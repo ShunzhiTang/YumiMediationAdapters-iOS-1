@@ -7,18 +7,19 @@
 //
 
 #import "YumiMediationNativeAdapterFacebook.h"
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
-#import <FBAudienceNetwork/FBAudienceNetwork.h>
 #import "YumiMediationNativeAdapterFacebookConnector.h"
+#import <FBAudienceNetwork/FBAudienceNetwork.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
-@interface YumiMediationNativeAdapterFacebook () <YumiMediationNativeAdapter,FBNativeAdDelegate,YumiMediationNativeAdapterConnectorDelegate>
+@interface YumiMediationNativeAdapterFacebook () <YumiMediationNativeAdapter, FBNativeAdDelegate,
+                                                  YumiMediationNativeAdapterConnectorDelegate>
 
 @property (nonatomic, weak) id<YumiMediationNativeAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationNativeProvider *provider;
 
-@property (nonatomic) FBNativeAd  *fbNativeAd;
-@property (nonatomic) FBMediaView  *mediaView;
-@property (nonatomic) FBAdIconView  *iconView;
+@property (nonatomic) FBNativeAd *fbNativeAd;
+@property (nonatomic) FBMediaView *mediaView;
+@property (nonatomic) FBAdIconView *iconView;
 
 @end
 
@@ -44,7 +45,7 @@
 }
 
 - (void)requestAd:(NSUInteger)adCount {
-    
+
     self.fbNativeAd = nil;
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -58,7 +59,7 @@
                          (NSDictionary<YumiMediationUnifiedNativeAssetIdentifier, UIView *> *)clickableAssetViews
                       withViewController:(UIViewController *)viewController
                                 nativeAd:(YumiMediationNativeModel *)nativeAd {
-    
+
     if (clickableAssetViews[YumiMediationUnifiedNativeIconAsset]) {
         UIView *icon = clickableAssetViews[YumiMediationUnifiedNativeIconAsset];
         self.iconView = [[FBAdIconView alloc] initWithFrame:icon.bounds];
@@ -66,17 +67,19 @@
     }
     if (clickableAssetViews[YumiMediationUnifiedNativeCoverImageAsset]) {
         UIView *mediaView = clickableAssetViews[YumiMediationUnifiedNativeCoverImageAsset];
-         self.mediaView = [[FBMediaView alloc] initWithFrame:mediaView.bounds];
+        self.mediaView = [[FBMediaView alloc] initWithFrame:mediaView.bounds];
         [mediaView addSubview:self.mediaView];
     }
-    //AdChoices icon
+    // AdChoices icon
     FBAdChoicesView *adChoicesView = [[FBAdChoicesView alloc] initWithNativeAd:self.fbNativeAd];
     adChoicesView.corner = UIRectCornerTopRight;
     [view addSubview:adChoicesView];
     [adChoicesView updateFrameFromSuperview];
-    
-    [self.fbNativeAd registerViewForInteraction:view mediaView:self.mediaView iconView:self.iconView viewController:viewController];
-    
+
+    [self.fbNativeAd registerViewForInteraction:view
+                                      mediaView:self.mediaView
+                                       iconView:self.iconView
+                                 viewController:viewController];
 }
 
 /// report impression when display the native ad.
@@ -85,16 +88,19 @@
 - (void)clickAd:(YumiMediationNativeModel *)nativeAd {
 }
 
-#pragma mark: FBNativeAdDelegate
+#pragma mark : FBNativeAdDelegate
 - (void)nativeAdDidLoad:(FBNativeAd *)nativeAd {
-    
+
     if (self.fbNativeAd) {
         [self.fbNativeAd unregisterView];
     }
-    
+
     self.fbNativeAd = nativeAd;
-    
-    [[[YumiMediationNativeAdapterFacebookConnector alloc] init] convertWithNativeData:nativeAd withAdapter:self disableImageLoading:self.disableImageLoading connectorDelegate:self];
+
+    [[[YumiMediationNativeAdapterFacebookConnector alloc] init] convertWithNativeData:nativeAd
+                                                                          withAdapter:self
+                                                                  disableImageLoading:self.disableImageLoading
+                                                                    connectorDelegate:self];
 }
 
 - (void)nativeAd:(FBNativeAd *)nativeAd didFailWithError:(NSError *)error {
@@ -102,27 +108,27 @@
 }
 
 - (void)nativeAdDidFinishHandlingClick:(FBNativeAd *)nativeAd {
-    
+
     [self.delegate adapter:self didClick:nil];
 }
 
-#pragma mark: YumiMediationNativeAdapterConnectorDelegate
+#pragma mark : YumiMediationNativeAdapterConnectorDelegate
 - (void)yumiMediationNativeAdSuccessful:(YumiMediationNativeModel *)nativeModel {
     if (nativeModel) {
-        [self.delegate adapter:self didReceiveAd:@[nativeModel]];
+        [self.delegate adapter:self didReceiveAd:@[ nativeModel ]];
     }
 }
 
 - (void)yumiMediationNativeAdFailed {
     NSError *error =
-    [NSError errorWithDomain:@"" code:501 userInfo:@{
-                                                     @"error reason" : @"connector yumiAds data error"
-                                                     }];
+        [NSError errorWithDomain:@"" code:501 userInfo:@{
+            @"error reason" : @"connector yumiAds data error"
+        }];
     [self handleNativeError:error];
 }
 
 - (void)handleNativeError:(NSError *)error {
-    
+
     [self.delegate adapter:self didFailToReceiveAd:error.localizedDescription];
 }
 @end

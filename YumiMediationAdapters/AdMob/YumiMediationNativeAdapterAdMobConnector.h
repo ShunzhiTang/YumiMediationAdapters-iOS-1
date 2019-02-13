@@ -6,17 +6,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <GoogleMobileAds/GoogleMobileAds.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiMediationUnifiedNativeAd.h>
-#import <GoogleMobileAds/GoogleMobileAds.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface YumiMediationNativeAdapterAdMobConnector : NSObject <YumiMediationUnifiedNativeAd>
 
 - (void)convertWithNativeData:(nullable GADUnifiedNativeAd *)gadNativeAd
-                     withAdapter:(id<YumiMediationNativeAdapter>)adapter
-               connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate;
+                  withAdapter:(id<YumiMediationNativeAdapter>)adapter
+            connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate;
 
 @end
 

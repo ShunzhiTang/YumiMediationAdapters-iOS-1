@@ -5,18 +5,19 @@
 //  Created by Michael Tang on 2019/2/1.
 //
 
-#import <Foundation/Foundation.h>
-#import "YumiMediationUnifiedNativeAd.h"
-#import "YumiMediationAdapterRegistry.h"
 #import "GDTNativeAd.h"
+#import "YumiMediationAdapterRegistry.h"
+#import "YumiMediationUnifiedNativeAd.h"
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface YumiMediationNativeAdapterGDTConnector : NSObject<YumiMediationUnifiedNativeAd>
+@interface YumiMediationNativeAdapterGDTConnector : NSObject <YumiMediationUnifiedNativeAd>
 
 - (void)convertWithNativeData:(nullable GDTNativeAdData *)gdtNativeAdData
-                                         withAdapter:(id<YumiMediationNativeAdapter>)adapter
-                                 disableImageLoading:(BOOL)disableImageLoading connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate;
+                  withAdapter:(id<YumiMediationNativeAdapter>)adapter
+          disableImageLoading:(BOOL)disableImageLoading
+            connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate;
 
 @end
 

@@ -7,11 +7,11 @@
 
 #import "YumiMediationNativeAdapterFacebookConnector.h"
 
-@interface YumiMediationNativeAdapterFacebookConnector()
+@interface YumiMediationNativeAdapterFacebookConnector ()
 
 @property (nonatomic) id<YumiMediationNativeAdapter> adapter;
 @property (nonatomic, weak) id<YumiMediationNativeAdapterConnectorDelegate> connectorDelegate;
-@property (nonatomic) FBNativeAd  *fbNativeAd;
+@property (nonatomic) FBNativeAd *fbNativeAd;
 
 @end
 
@@ -19,30 +19,30 @@
 
 - (void)convertWithNativeData:(nullable FBNativeAd *)fbNativeAd
                   withAdapter:(id<YumiMediationNativeAdapter>)adapter
-          disableImageLoading:(BOOL)disableImageLoading connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate{
-    
+          disableImageLoading:(BOOL)disableImageLoading
+            connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate {
+
     self.fbNativeAd = fbNativeAd;
     self.adapter = adapter;
     self.connectorDelegate = connectorDelegate;
-    
+
     [self notifyMediatedNativeAdSuccessful];
-    
 }
 - (void)notifyMediatedNativeAdSuccessful {
     YumiMediationNativeModel *nativeModel = [[YumiMediationNativeModel alloc] init];
     [nativeModel setValue:self forKey:@"unifiedNativeAd"];
-    
+
     if ([self.connectorDelegate respondsToSelector:@selector(yumiMediationNativeAdSuccessful:)]) {
         [self.connectorDelegate yumiMediationNativeAdSuccessful:nativeModel];
     }
 }
 #pragma mark : YumiMediationUnifiedNativeAd
--(YumiMediationNativeAdImage *)icon{
-    
+- (YumiMediationNativeAdImage *)icon {
+
     return nil;
 }
-- (YumiMediationNativeAdImage *)coverImage{
-    
+- (YumiMediationNativeAdImage *)coverImage {
+
     return nil;
 }
 - (NSString *)title {
