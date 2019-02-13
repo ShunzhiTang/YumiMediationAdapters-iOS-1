@@ -10,6 +10,7 @@
 #import "GDTNativeAd.h"
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import "YumiMediationNativeAdapterGDTConnector.h"
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationNativeAdapterGDT () <YumiMediationNativeAdapter, GDTNativeAdDelegate,YumiMediationNativeAdapterConnectorDelegate>
 
@@ -59,13 +60,12 @@
     self.nativeAd =
     [[GDTNativeAd alloc] initWithAppId:self.provider.data.key1 ?: @"" placementId:self.provider.data.key2 ?: @""];
     self.nativeAd.delegate = self;
-    self.nativeAd.controller = [UIApplication sharedApplication].keyWindow.rootViewController;
+    self.nativeAd.controller = [[YumiTool sharedTool] topMostController];
     [self.nativeAd loadAd:(int)adCount];
 }
 
-- (void)registerViewForNativeAdapterWith:(UIView *)view
-                          viewController:(UIViewController *)viewController
-                                nativeAd:(YumiMediationNativeModel *)nativeAd {
+- (void)registerViewForNativeAdapterWith:(UIView *)view clickableAssetViews:(NSDictionary<YumiMediationUnifiedNativeAssetIdentifier,UIView *> *)clickableAssetViews withViewController:(UIViewController *)viewController nativeAd:(YumiMediationNativeModel *)nativeAd{
+    
 }
 
 - (void)reportImpressionForNativeAdapter:(YumiMediationNativeModel *)nativeAd view:(nonnull UIView *)view {
