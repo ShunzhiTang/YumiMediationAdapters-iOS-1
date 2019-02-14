@@ -64,37 +64,19 @@
                          (NSDictionary<YumiMediationUnifiedNativeAssetIdentifier, UIView *> *)clickableAssetViews
                       withViewController:(UIViewController *)viewController
                                 nativeAd:(YumiMediationNativeModel *)nativeAd {
+    
     BaiduMobAdNativeAdObject *bdNativeAd = (BaiduMobAdNativeAdObject *)nativeAd.data;
-    
-    UILabel *titlLab = nil;
-    UILabel *desLab = nil;
-    UIImageView *iconImgView = nil;
-    UIImageView *coverImgView = nil;
-    
-    if (clickableAssetViews[YumiMediationUnifiedNativeTitleAsset]) {
-        titlLab = [[UILabel alloc] initWithFrame:clickableAssetViews[YumiMediationUnifiedNativeTitleAsset].frame];
-    }
-    if (clickableAssetViews[YumiMediationUnifiedNativeDescAsset]) {
-        desLab = [[UILabel alloc] initWithFrame:clickableAssetViews[YumiMediationUnifiedNativeDescAsset].frame];
-    }
-    
-    if (clickableAssetViews[YumiMediationUnifiedNativeIconAsset]) {
-        iconImgView = [[UIImageView alloc] initWithFrame:clickableAssetViews[YumiMediationUnifiedNativeIconAsset].frame];
-    }
-    if (clickableAssetViews[YumiMediationUnifiedNativeCoverImageAsset]) {
-        coverImgView = [[UIImageView alloc] initWithFrame:clickableAssetViews[YumiMediationUnifiedNativeCoverImageAsset].frame];
-    }
     
     BaiduMobAdNativeAdView *bdView = nil;
     if (bdNativeAd.materialType == NORMAL) {
-         bdView = [[BaiduMobAdNativeAdView alloc] initWithFrame:view.bounds brandName:nil title:titlLab text:desLab icon:iconImgView mainImage:coverImgView];
+         bdView = [[BaiduMobAdNativeAdView alloc] initWithFrame:view.bounds brandName:nil title:nil text:nil icon:nil mainImage:nil];
     }
     
     if (bdView) {
         [view addSubview:bdView];
         
         [bdView loadAndDisplayNativeAdWithObject:bdNativeAd completion:^(NSArray *errors) {
-            
+           
         }];
     }
 }
