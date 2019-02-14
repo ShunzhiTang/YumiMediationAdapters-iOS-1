@@ -72,17 +72,17 @@
     UIImageView *coverImgView = nil;
     
     if (clickableAssetViews[YumiMediationUnifiedNativeTitleAsset]) {
-        titlLab = (UILabel *)clickableAssetViews[YumiMediationUnifiedNativeTitleAsset];
+        titlLab = [[UILabel alloc] initWithFrame:clickableAssetViews[YumiMediationUnifiedNativeTitleAsset].frame];
     }
     if (clickableAssetViews[YumiMediationUnifiedNativeDescAsset]) {
-        desLab = (UILabel *)clickableAssetViews[YumiMediationUnifiedNativeDescAsset];
+        desLab = [[UILabel alloc] initWithFrame:clickableAssetViews[YumiMediationUnifiedNativeDescAsset].frame];
     }
     
     if (clickableAssetViews[YumiMediationUnifiedNativeIconAsset]) {
-        iconImgView = (UIImageView *)clickableAssetViews[YumiMediationUnifiedNativeIconAsset];
+        iconImgView = [[UIImageView alloc] initWithFrame:clickableAssetViews[YumiMediationUnifiedNativeIconAsset].frame];
     }
     if (clickableAssetViews[YumiMediationUnifiedNativeCoverImageAsset]) {
-        coverImgView = (UIImageView *)clickableAssetViews[YumiMediationUnifiedNativeCoverImageAsset];
+        coverImgView = [[UIImageView alloc] initWithFrame:clickableAssetViews[YumiMediationUnifiedNativeCoverImageAsset].frame];
     }
     
     BaiduMobAdNativeAdView *bdView = nil;
