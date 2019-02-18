@@ -59,7 +59,8 @@
     return coverImage;
 }
 - (NSString *)title {
-    return self.fbNativeAd.headline;
+   // sdk version above 4.99 ,must dispaly advertiserName
+    return self.fbNativeAd.advertiserName;
 }
 - (NSString *)desc {
     return self.fbNativeAd.bodyText;
