@@ -7,15 +7,16 @@
 //
 
 #import "YumiMediationNativeAdapterBaidu.h"
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
-#import <BaiduMobAdSDK/BaiduMobAdNativeAdView.h>
-#import <BaiduMobAdSDK/BaiduMobAdNativeAdDelegate.h>
-#import <BaiduMobAdSDK/BaiduMobAdNative.h>
-#import <BaiduMobAdSDK/BaiduMobAdNativeAdObject.h>
 #import "YumiMediationNativeAdapterBaiduConnector.h"
+#import <BaiduMobAdSDK/BaiduMobAdNative.h>
+#import <BaiduMobAdSDK/BaiduMobAdNativeAdDelegate.h>
+#import <BaiduMobAdSDK/BaiduMobAdNativeAdObject.h>
+#import <BaiduMobAdSDK/BaiduMobAdNativeAdView.h>
 #import <YumiMediationSDK/YumiMasonry.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
-@interface YumiMediationNativeAdapterBaidu () <YumiMediationNativeAdapter,BaiduMobAdNativeAdDelegate,YumiMediationNativeAdapterConnectorDelegate>
+@interface YumiMediationNativeAdapterBaidu () <YumiMediationNativeAdapter, BaiduMobAdNativeAdDelegate,
+                                               YumiMediationNativeAdapterConnectorDelegate>
 
 @property (nonatomic, weak) id<YumiMediationNativeAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationNativeProvider *provider;
@@ -50,14 +51,14 @@
 }
 
 - (void)requestAd:(NSUInteger)adCount {
-   
+
     [self clearNativeData];
-    
-    self.native = [[BaiduMobAdNative alloc]init];
+
+    self.native = [[BaiduMobAdNative alloc] init];
     self.native.publisherId = self.provider.data.key1;
     self.native.adId = self.provider.data.key2;
     self.native.delegate = self;
-    //request native ads
+    // request native ads
     [self.native requestNativeAds];
 }
 - (void)registerViewForNativeAdapterWith:(UIView *)view
@@ -65,19 +66,24 @@
                          (NSDictionary<YumiMediationUnifiedNativeAssetIdentifier, UIView *> *)clickableAssetViews
                       withViewController:(UIViewController *)viewController
                                 nativeAd:(YumiMediationNativeModel *)nativeAd {
-    
+
     BaiduMobAdNativeAdObject *bdNativeAd = (BaiduMobAdNativeAdObject *)nativeAd.data;
-    
+
     BaiduMobAdNativeAdView *bdView = nil;
     if (bdNativeAd.materialType == NORMAL) {
-         bdView = [[BaiduMobAdNativeAdView alloc] initWithFrame:view.bounds brandName:nil title:nil text:nil icon:nil mainImage:nil];
+        bdView = [[BaiduMobAdNativeAdView alloc] initWithFrame:view.bounds
+                                                     brandName:nil
+                                                         title:nil
+                                                          text:nil
+                                                          icon:nil
+                                                     mainImage:nil];
     }
-    
+
     if (bdView) {
         [view addSubview:bdView];
-        
+
         // add baidu logo
-         UIImageView *baiduLogoView = [[UIImageView alloc] init];
+        UIImageView *baiduLogoView = [[UIImageView alloc] init];
         bdView.baiduLogoImageView = baiduLogoView;
         [bdView addSubview:baiduLogoView];
         [baiduLogoView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
@@ -85,10 +91,11 @@
             make.right.equalTo(bdView.mas_right).offset(-5);
             make.height.width.mas_equalTo(18);
         }];
-        
-        [bdView loadAndDisplayNativeAdWithObject:bdNativeAd completion:^(NSArray *errors) {
-           
-        }];
+
+        [bdView loadAndDisplayNativeAdWithObject:bdNativeAd
+                                      completion:^(NSArray *errors){
+
+                                      }];
     }
 }
 
@@ -98,40 +105,36 @@
 - (void)clickAd:(YumiMediationNativeModel *)nativeAd {
 }
 
-#pragma mark: BaiduMobAdNativeAdDelegate
+#pragma mark : BaiduMobAdNativeAdDelegate
 
-- (void)nativeAdObjectsSuccessLoad:(NSArray*)nativeAds{
-    
+- (void)nativeAdObjectsSuccessLoad:(NSArray *)nativeAds {
+
     self.bdNativeData = nativeAds;
-    
+
     __weak typeof(self) weakSelf = self;
     [nativeAds
-     enumerateObjectsUsingBlock:^(BaiduMobAdNativeAdObject *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
-         [[[YumiMediationNativeAdapterBaiduConnector alloc] init] convertWithNativeData:obj
-                                                                          withAdapter:weakSelf
-                                                                  disableImageLoading:weakSelf.disableImageLoading
-                                                                    connectorDelegate:weakSelf];
-     }];
+        enumerateObjectsUsingBlock:^(BaiduMobAdNativeAdObject *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
+            [[[YumiMediationNativeAdapterBaiduConnector alloc] init] convertWithNativeData:obj
+                                                                               withAdapter:weakSelf
+                                                                       disableImageLoading:weakSelf.disableImageLoading
+                                                                         connectorDelegate:weakSelf];
+        }];
 }
 
-- (void)nativeAdsFailLoad:(BaiduMobFailReason) reason{
-    NSString *errorReason = [NSString stringWithFormat:@"BaiduMobFailReason is %u",reason];
-    NSError *error =
-    [NSError errorWithDomain:@"" code:501 userInfo:@{
-                                                     @"error reason" : errorReason
-                                                     }];
+- (void)nativeAdsFailLoad:(BaiduMobFailReason)reason {
+    NSString *errorReason = [NSString stringWithFormat:@"BaiduMobFailReason is %u", reason];
+    NSError *error = [NSError errorWithDomain:@"" code:501 userInfo:@{@"error reason" : errorReason}];
     [self handleNativeError:error];
 }
 
-- (void)nativeAdClicked:(UIView*)nativeAdView{
+- (void)nativeAdClicked:(UIView *)nativeAdView {
     [self.delegate adapter:self didClick:nil];
 }
 
--(void)didDismissLandingPage:(UIView *)nativeAdView{
-    
+- (void)didDismissLandingPage:(UIView *)nativeAdView {
 }
 
-#pragma mark: YumiMediationNativeAdapterConnectorDelegate
+#pragma mark : YumiMediationNativeAdapterConnectorDelegate
 - (void)yumiMediationNativeAdSuccessful:(YumiMediationNativeModel *)nativeModel {
     [self.mappingData addObject:nativeModel];
     if (self.mappingData.count == self.bdNativeData.count) {
@@ -141,9 +144,7 @@
 
 - (void)yumiMediationNativeAdFailed {
     NSError *error =
-    [NSError errorWithDomain:@"" code:501 userInfo:@{
-                                                     @"error reason" : @"connector yumiAds data error"
-                                                     }];
+        [NSError errorWithDomain:@"" code:501 userInfo:@{@"error reason" : @"connector yumiAds data error"}];
     [self handleNativeError:error];
 }
 

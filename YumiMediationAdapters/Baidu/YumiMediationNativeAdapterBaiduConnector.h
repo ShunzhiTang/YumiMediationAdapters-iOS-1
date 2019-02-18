@@ -5,8 +5,8 @@
 //  Created by Michael Tang on 2019/2/14.
 //
 
-#import <Foundation/Foundation.h>
 #import <BaiduMobAdSDK/BaiduMobAdNativeAdObject.h>
+#import <Foundation/Foundation.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiMediationUnifiedNativeAd.h>
 

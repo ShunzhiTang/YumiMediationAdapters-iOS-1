@@ -39,23 +39,23 @@
 #pragma mark : YumiMediationUnifiedNativeAd
 - (YumiMediationNativeAdImage *)icon {
 
-    YumiMediationNativeAdImage * icon = [[YumiMediationNativeAdImage alloc] init];
+    YumiMediationNativeAdImage *icon = [[YumiMediationNativeAdImage alloc] init];
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(1, 1), NO, 0.0);
     UIImage *graphicsImg = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
+
     [icon setValue:graphicsImg forKey:@"image"];
-    
+
     return icon;
 }
 - (YumiMediationNativeAdImage *)coverImage {
-    YumiMediationNativeAdImage * coverImage = [[YumiMediationNativeAdImage alloc] init];
+    YumiMediationNativeAdImage *coverImage = [[YumiMediationNativeAdImage alloc] init];
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(1, 1), NO, 0.0);
     UIImage *graphicsImg = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
+
     [coverImage setValue:graphicsImg forKey:@"image"];
-    
+
     return coverImage;
 }
 - (NSString *)title {
