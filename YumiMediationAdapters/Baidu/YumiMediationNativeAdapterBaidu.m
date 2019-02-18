@@ -101,6 +101,8 @@
 
 /// report impression when display the native ad.
 - (void)reportImpressionForNativeAdapter:(YumiMediationNativeModel *)nativeAd view:(UIView *)view {
+    BaiduMobAdNativeAdObject *bdNativeAd = (BaiduMobAdNativeAdObject *)nativeAd.data;
+    [bdNativeAd trackImpression:view];
 }
 - (void)clickAd:(YumiMediationNativeModel *)nativeAd {
 }
