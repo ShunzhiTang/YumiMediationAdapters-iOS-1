@@ -13,6 +13,7 @@
 #import <BaiduMobAdSDK/BaiduMobAdNative.h>
 #import <BaiduMobAdSDK/BaiduMobAdNativeAdObject.h>
 #import "YumiMediationNativeAdapterBaiduConnector.h"
+#import <YumiMediationSDK/YumiMasonry.h>
 
 @interface YumiMediationNativeAdapterBaidu () <YumiMediationNativeAdapter,BaiduMobAdNativeAdDelegate,YumiMediationNativeAdapterConnectorDelegate>
 
@@ -74,6 +75,16 @@
     
     if (bdView) {
         [view addSubview:bdView];
+        
+        // add baidu logo
+         UIImageView *baiduLogoView = [[UIImageView alloc] init];
+        bdView.baiduLogoImageView = baiduLogoView;
+        [bdView addSubview:baiduLogoView];
+        [baiduLogoView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
+            make.bottom.equalTo(bdView.mas_bottom).offset(-5);
+            make.right.equalTo(bdView.mas_right).offset(-5);
+            make.height.width.mas_equalTo(18);
+        }];
         
         [bdView loadAndDisplayNativeAdWithObject:bdNativeAd completion:^(NSArray *errors) {
            
