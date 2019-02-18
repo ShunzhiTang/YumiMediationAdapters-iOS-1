@@ -22,39 +22,39 @@
 - (void)convertWithNativeData:(nullable BaiduMobAdNativeAdObject *)nativeObject
                   withAdapter:(id<YumiMediationNativeAdapter>)adapter
           disableImageLoading:(BOOL)disableImageLoading
-            connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate{
-    
+            connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate {
+
     self.adapter = adapter;
     self.nativeObject = nativeObject;
     self.connectorDelegate = connectorDelegate;
-    
+
     NSString *iconUrl = nativeObject.iconImageURLString;
     NSString *coverImageUrl = nativeObject.mainImageURLString;
     [self downloadIcon:iconUrl
-            coverImage:coverImageUrl
-   disableImageLoading:disableImageLoading
-             completed:^(BOOL isSuccessed) {
-                 [self notifyCompletionWithResult:isSuccessed];
-             }];
+                 coverImage:coverImageUrl
+        disableImageLoading:disableImageLoading
+                  completed:^(BOOL isSuccessed) {
+                      [self notifyCompletionWithResult:isSuccessed];
+                  }];
 }
 #pragma mark : handle download images
 - (void)downloadIcon:(NSString *)iconUrl
-          coverImage:(NSString *)coverImageUrl
- disableImageLoading:(BOOL)disableImageLoading
-           completed:(void (^)(BOOL isSuccessed))completed {
-    
+             coverImage:(NSString *)coverImageUrl
+    disableImageLoading:(BOOL)disableImageLoading
+              completed:(void (^)(BOOL isSuccessed))completed {
+
     NSURL *iconImgUrl = [NSURL URLWithString:iconUrl];
     NSURL *coverUrl = [NSURL URLWithString:coverImageUrl];
-    
+
     self.icon = [[YumiMediationNativeAdImage alloc] initWithURL:iconImgUrl];
     self.coverImage = [[YumiMediationNativeAdImage alloc] initWithURL:coverUrl];
-    
+
     if (disableImageLoading) {
-        
+
         completed(YES);
         return;
     }
-    
+
     __weak typeof(self) weakSelf = self;
     NSMutableArray *imageTemps = [NSMutableArray arrayWithCapacity:1];
     dispatch_group_t group = dispatch_group_create();
@@ -65,7 +65,7 @@
             [imageTemps addObject:@"1"];
             [weakSelf.icon setValue:@(image.size.width / image.size.height) forKey:@"ratios"];
         }
-        
+
         dispatch_group_leave(group);
     }];
     dispatch_group_enter(group);
@@ -99,7 +99,7 @@
 - (void)notifyMediatedNativeAdSuccessful {
     YumiMediationNativeModel *nativeModel = [[YumiMediationNativeModel alloc] init];
     [nativeModel setValue:self forKey:@"unifiedNativeAd"];
-    
+
     if ([self.connectorDelegate respondsToSelector:@selector(yumiMediationNativeAdSuccessful:)]) {
         [self.connectorDelegate yumiMediationNativeAdSuccessful:nativeModel];
     }

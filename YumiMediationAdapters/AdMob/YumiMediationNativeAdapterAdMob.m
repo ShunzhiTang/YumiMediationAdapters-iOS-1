@@ -157,9 +157,7 @@
 
 - (void)yumiMediationNativeAdFailed {
     NSError *error =
-        [NSError errorWithDomain:@"" code:501 userInfo:@{
-            @"error reason" : @"connector yumiAds data error"
-        }];
+        [NSError errorWithDomain:@"" code:501 userInfo:@{@"error reason" : @"connector yumiAds data error"}];
     [self handleNativeError:error];
 }
 
