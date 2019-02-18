@@ -91,7 +91,9 @@
 }
 
 - (void)interstitialVungleSDKFailedToInitializeWith:(YumiMediationInterstitialAdapterVungle *)interstitialAdapter {
-    [interstitialAdapter.delegate adapter:interstitialAdapter interstitialAd:nil didFailToReceive:@"vungleSDKFailedToInitialize"];
+    [interstitialAdapter.delegate adapter:interstitialAdapter
+                           interstitialAd:nil
+                         didFailToReceive:@"vungleSDKFailedToInitialize"];
 }
 
 @end
