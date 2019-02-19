@@ -15,7 +15,6 @@
 #import <YumiMediationSDK/YumiMasonry.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiMediationNativeAdImageOptions.h>
-#import <YumiMediationSDK/YumiMediationNativeAdViewOptions.h>
 
 @interface YumiMediationNativeAdapterBaidu () <YumiMediationNativeAdapter, BaiduMobAdNativeAdDelegate,
                                                YumiMediationNativeAdapterConnectorDelegate>
@@ -88,42 +87,13 @@
         UIImageView *baiduLogoView = [[UIImageView alloc] init];
         bdView.baiduLogoImageView = baiduLogoView;
         [bdView addSubview:baiduLogoView];
-        __block YumiMediationNativeAdViewOptions *yumiAdViewOption = nil;
-        [self.nativeOptions enumerateObjectsUsingBlock:^(YumiMediationNativeOptions * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([obj isKindOfClass:[YumiMediationNativeAdViewOptions class]]) {
-                yumiAdViewOption = (YumiMediationNativeAdViewOptions *)obj;
-                *stop = YES;
-            }
-        }];
-        
+       
+        CGFloat margin = 5;
         [baiduLogoView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
             make.height.width.mas_equalTo(18);
+            make.bottom.equalTo(bdView.mas_bottom).offset(-margin);
+            make.right.equalTo(bdView.mas_right).offset(-margin);
         }];
-        CGFloat margin = 5;
-        if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionTopRightCorner) {
-            [baiduLogoView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
-                make.top.equalTo(bdView.mas_top).offset(margin);
-                make.right.equalTo(bdView.mas_right).offset(-margin);
-            }];
-        }
-        if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionTopLeftCorner) {
-            [baiduLogoView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
-                make.top.equalTo(bdView.mas_top).offset(margin);
-                make.left.equalTo(bdView.mas_left).offset(margin);
-            }];
-        }
-        if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionBottomRightCorner) {
-            [baiduLogoView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
-                make.bottom.equalTo(bdView.mas_bottom).offset(-margin);
-                make.right.equalTo(bdView.mas_right).offset(-margin);
-            }];
-        }
-        if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionBottomLeftCorner) {
-            [baiduLogoView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
-                make.bottom.equalTo(bdView.mas_bottom).offset(-margin);
-                make.left.equalTo(bdView.mas_left).offset(margin);
-            }];
-        }
         
         [bdView loadAndDisplayNativeAdWithObject:bdNativeAd
                                       completion:^(NSArray *errors){
