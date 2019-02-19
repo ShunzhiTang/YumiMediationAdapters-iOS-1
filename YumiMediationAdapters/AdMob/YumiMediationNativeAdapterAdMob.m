@@ -68,17 +68,17 @@
         
         // options
         GADNativeAdViewAdOptions *adViewoption = [[GADNativeAdViewAdOptions alloc] init];
-        if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionTopRightCorner) {
-            adViewoption.preferredAdChoicesPosition = YumiMediationAdViewPositionTopRightCorner;
+        if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionTopRightCorner || yumiAdViewOption.preferredAdChoicesPosition == 0) {
+            adViewoption.preferredAdChoicesPosition = GADAdChoicesPositionTopRightCorner;
         }
         if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionTopLeftCorner) {
-            adViewoption.preferredAdChoicesPosition = YumiMediationAdViewPositionTopLeftCorner;
+            adViewoption.preferredAdChoicesPosition = GADAdChoicesPositionTopLeftCorner;
         }
         if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionBottomRightCorner) {
-            adViewoption.preferredAdChoicesPosition = YumiMediationAdViewPositionBottomRightCorner;
+            adViewoption.preferredAdChoicesPosition = GADAdChoicesPositionBottomRightCorner;
         }
         if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionBottomLeftCorner) {
-            adViewoption.preferredAdChoicesPosition = YumiMediationAdViewPositionBottomLeftCorner;
+            adViewoption.preferredAdChoicesPosition = GADAdChoicesPositionBottomLeftCorner;
         }
 
         GADMultipleAdsAdLoaderOptions *multipleAdsOptions = [[GADMultipleAdsAdLoaderOptions alloc] init];

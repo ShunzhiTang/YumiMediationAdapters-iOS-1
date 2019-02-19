@@ -6,6 +6,7 @@
 //
 
 #import "YumiMediationNativeAdapterGDTConnector.h"
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationNativeAdapterGDTConnector ()
 
@@ -120,7 +121,10 @@
 }
 
 - (NSString *)callToAction {
-    return nil;
+    if ([[YumiTool sharedTool] iSSimplifiedChinese]) {
+        return @"查看详情";
+    }
+    return @"Learn More";
 }
 - (NSString *)appPrice {
     return self.gdtNativeAdData.properties[GDTNativeAdDataKeyAppPrice];

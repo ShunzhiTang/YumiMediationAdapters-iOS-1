@@ -12,6 +12,7 @@
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiTool.h>
 #import <YumiMediationSDK/YumiMediationNativeAdImageOptions.h>
+#import <YumiMediationSDK/YumiMasonry.h>
 
 @interface YumiMediationNativeAdapterGDT () <YumiMediationNativeAdapter, GDTNativeAdDelegate,
                                              YumiMediationNativeAdapterConnectorDelegate>
@@ -24,7 +25,8 @@
 @property (nonatomic) NSArray<GDTNativeAdData *> *gdtNativeData;
 // mapping data
 @property (nonatomic) NSMutableArray<YumiMediationNativeModel *> *mappingData;
-
+/// gdt Logo view
+@property (nonatomic) UIImageView  *logoImgView;
 @end
 
 @implementation YumiMediationNativeAdapterGDT
@@ -70,6 +72,16 @@
                          (NSDictionary<YumiMediationUnifiedNativeAssetIdentifier, UIView *> *)clickableAssetViews
                       withViewController:(UIViewController *)viewController
                                 nativeAd:(YumiMediationNativeModel *)nativeAd {
+    if (self.logoImgView.superview == nil) {
+        [view addSubview:self.logoImgView];
+        CGFloat margin = 5;
+        [self.logoImgView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
+            make.width.mas_equalTo(38);
+            make.height.mas_equalTo(19);
+            make.bottom.equalTo(view.mas_bottom).offset(-margin);
+            make.right.equalTo(view.mas_right).offset(-margin);
+        }];
+    }
 }
 
 - (void)reportImpressionForNativeAdapter:(YumiMediationNativeModel *)nativeAd view:(nonnull UIView *)view {
@@ -147,5 +159,15 @@
     }
     return _mappingData;
 }
-
+- (UIImageView *)logoImgView{
+    if (!_logoImgView) {
+        _logoImgView = [[UIImageView alloc] init];
+        
+        NSBundle *YumiAdsSDK = [[YumiTool sharedTool] resourcesBundleWithBundleName:@"YumiAdsSDK"];;
+        NSString *strPath = [YumiAdsSDK pathForResource:@"yumiad_flag_gdt@2x" ofType:@"png"];
+        UIImage *image = [UIImage imageWithContentsOfFile:strPath];
+        _logoImgView.image = image;
+    }
+    return _logoImgView;
+}
 @end
