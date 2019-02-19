@@ -11,6 +11,7 @@
 #import "YumiMediationNativeAdapterGDTConnector.h"
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import <YumiMediationSDK/YumiMediationNativeAdImageOptions.h>
 
 @interface YumiMediationNativeAdapterGDT () <YumiMediationNativeAdapter, GDTNativeAdDelegate,
                                              YumiMediationNativeAdapterConnectorDelegate>
@@ -28,7 +29,7 @@
 
 @implementation YumiMediationNativeAdapterGDT
 /// when conforming to a protocol, any property the protocol defines won't be automatically synthesized
-@synthesize disableImageLoading;
+@synthesize nativeOptions;
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerNativeAdapter:self
@@ -83,12 +84,20 @@
 - (void)nativeAdSuccessToLoad:(NSArray *)nativeAdDataArray {
     self.gdtNativeData = nativeAdDataArray;
 
+    __block BOOL disableImageLoading;
+    [self.nativeOptions enumerateObjectsUsingBlock:^(YumiMediationNativeOptions * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj isKindOfClass:[YumiMediationNativeAdImageOptions class]]) {
+            disableImageLoading = ((YumiMediationNativeAdImageOptions *)obj).disableImageLoading;
+            *stop = YES;
+        }
+    }];
+    
     __weak typeof(self) weakSelf = self;
     [nativeAdDataArray
         enumerateObjectsUsingBlock:^(GDTNativeAdData *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
             [[[YumiMediationNativeAdapterGDTConnector alloc] init] convertWithNativeData:obj
                                                                              withAdapter:weakSelf
-                                                                     disableImageLoading:weakSelf.disableImageLoading
+                                                                     disableImageLoading:disableImageLoading
                                                                        connectorDelegate:weakSelf];
         }];
 }
