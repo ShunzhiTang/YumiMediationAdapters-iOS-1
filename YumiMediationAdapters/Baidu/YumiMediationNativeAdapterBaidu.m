@@ -14,6 +14,8 @@
 #import <BaiduMobAdSDK/BaiduMobAdNativeAdView.h>
 #import <YumiMediationSDK/YumiMasonry.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
+#import <YumiMediationSDK/YumiMediationNativeAdImageOptions.h>
+#import <YumiMediationSDK/YumiMediationNativeAdViewOptions.h>
 
 @interface YumiMediationNativeAdapterBaidu () <YumiMediationNativeAdapter, BaiduMobAdNativeAdDelegate,
                                                YumiMediationNativeAdapterConnectorDelegate>
@@ -31,7 +33,7 @@
 
 @implementation YumiMediationNativeAdapterBaidu
 /// when conforming to a protocol, any property the protocol defines won't be automatically synthesized
-@synthesize disableImageLoading;
+@synthesize nativeOptions;
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerNativeAdapter:self
@@ -86,12 +88,43 @@
         UIImageView *baiduLogoView = [[UIImageView alloc] init];
         bdView.baiduLogoImageView = baiduLogoView;
         [bdView addSubview:baiduLogoView];
+        __block YumiMediationNativeAdViewOptions *yumiAdViewOption = nil;
+        [self.nativeOptions enumerateObjectsUsingBlock:^(YumiMediationNativeOptions * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj isKindOfClass:[YumiMediationNativeAdViewOptions class]]) {
+                yumiAdViewOption = (YumiMediationNativeAdViewOptions *)obj;
+                *stop = YES;
+            }
+        }];
+        
         [baiduLogoView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
-            make.bottom.equalTo(bdView.mas_bottom).offset(-5);
-            make.right.equalTo(bdView.mas_right).offset(-5);
             make.height.width.mas_equalTo(18);
         }];
-
+        CGFloat margin = 5;
+        if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionTopRightCorner) {
+            [baiduLogoView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
+                make.top.equalTo(bdView.mas_top).offset(margin);
+                make.right.equalTo(bdView.mas_right).offset(-margin);
+            }];
+        }
+        if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionTopLeftCorner) {
+            [baiduLogoView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
+                make.top.equalTo(bdView.mas_top).offset(margin);
+                make.left.equalTo(bdView.mas_left).offset(margin);
+            }];
+        }
+        if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionBottomRightCorner) {
+            [baiduLogoView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
+                make.bottom.equalTo(bdView.mas_bottom).offset(-margin);
+                make.right.equalTo(bdView.mas_right).offset(-margin);
+            }];
+        }
+        if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionBottomLeftCorner) {
+            [baiduLogoView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
+                make.bottom.equalTo(bdView.mas_bottom).offset(-margin);
+                make.left.equalTo(bdView.mas_left).offset(margin);
+            }];
+        }
+        
         [bdView loadAndDisplayNativeAdWithObject:bdNativeAd
                                       completion:^(NSArray *errors){
 
@@ -113,12 +146,20 @@
 
     self.bdNativeData = nativeAds;
 
+    __block BOOL disableImageLoading;
+    [self.nativeOptions enumerateObjectsUsingBlock:^(YumiMediationNativeOptions * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj isKindOfClass:[YumiMediationNativeAdImageOptions class]]) {
+            disableImageLoading = ((YumiMediationNativeAdImageOptions *)obj).disableImageLoading;
+            *stop = YES;
+        }
+    }];
+    
     __weak typeof(self) weakSelf = self;
     [nativeAds
         enumerateObjectsUsingBlock:^(BaiduMobAdNativeAdObject *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
             [[[YumiMediationNativeAdapterBaiduConnector alloc] init] convertWithNativeData:obj
                                                                                withAdapter:weakSelf
-                                                                       disableImageLoading:weakSelf.disableImageLoading
+                                                                       disableImageLoading:disableImageLoading
                                                                          connectorDelegate:weakSelf];
         }];
 }
