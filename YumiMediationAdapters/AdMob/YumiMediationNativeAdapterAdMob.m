@@ -12,6 +12,8 @@
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import <YumiMediationSDK/YumiMediationNativeAdImageOptions.h>
+#import <YumiMediationSDK/YumiMediationNativeAdViewOptions.h>
 
 @interface YumiMediationNativeAdapterAdMob () <YumiMediationNativeAdapter, GADAdLoaderDelegate,
                                                GADUnifiedNativeAdLoaderDelegate,
@@ -29,7 +31,7 @@
 
 @implementation YumiMediationNativeAdapterAdMob
 /// when conforming to a protocol, any property the protocol defines won't be automatically synthesized
-@synthesize disableImageLoading;
+@synthesize nativeOptions;
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerNativeAdapter:self
@@ -53,16 +55,37 @@
     [self clearNativeData];
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-
+        __block YumiMediationNativeAdImageOptions *yumiImageOption = nil;
+        __block YumiMediationNativeAdViewOptions *yumiAdViewOption = nil;
+        [weakSelf.nativeOptions enumerateObjectsUsingBlock:^(YumiMediationNativeOptions * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj isKindOfClass:[YumiMediationNativeAdImageOptions class]]) {
+                yumiImageOption = (YumiMediationNativeAdImageOptions *)obj;
+            }
+            if ([obj isKindOfClass:[YumiMediationNativeAdViewOptions class]]) {
+                yumiAdViewOption = (YumiMediationNativeAdViewOptions *)obj;
+            }
+        }];
+        
         // options
         GADNativeAdViewAdOptions *adViewoption = [[GADNativeAdViewAdOptions alloc] init];
-        adViewoption.preferredAdChoicesPosition = GADAdChoicesPositionBottomRightCorner;
+        if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionTopRightCorner) {
+            adViewoption.preferredAdChoicesPosition = YumiMediationAdViewPositionTopRightCorner;
+        }
+        if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionTopLeftCorner) {
+            adViewoption.preferredAdChoicesPosition = YumiMediationAdViewPositionTopLeftCorner;
+        }
+        if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionBottomRightCorner) {
+            adViewoption.preferredAdChoicesPosition = YumiMediationAdViewPositionBottomRightCorner;
+        }
+        if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionBottomLeftCorner) {
+            adViewoption.preferredAdChoicesPosition = YumiMediationAdViewPositionBottomLeftCorner;
+        }
 
         GADMultipleAdsAdLoaderOptions *multipleAdsOptions = [[GADMultipleAdsAdLoaderOptions alloc] init];
         multipleAdsOptions.numberOfAds = adCount;
-
+        
         GADNativeAdImageAdLoaderOptions *imageOptions = [[GADNativeAdImageAdLoaderOptions alloc] init];
-        imageOptions.disableImageLoading = weakSelf.disableImageLoading;
+        imageOptions.disableImageLoading = yumiImageOption.disableImageLoading;
         // adType
         NSMutableArray *adTypes = [[NSMutableArray alloc] init];
         [adTypes addObject:kGADAdLoaderAdTypeUnifiedNative];
