@@ -14,7 +14,6 @@
 #import <BaiduMobAdSDK/BaiduMobAdNativeAdView.h>
 #import <YumiMediationSDK/YumiMasonry.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
-#import <YumiMediationSDK/YumiMediationNativeAdImageOptions.h>
 
 @interface YumiMediationNativeAdapterBaidu () <YumiMediationNativeAdapter, BaiduMobAdNativeAdDelegate,
                                                YumiMediationNativeAdapterConnectorDelegate>
@@ -32,7 +31,7 @@
 
 @implementation YumiMediationNativeAdapterBaidu
 /// when conforming to a protocol, any property the protocol defines won't be automatically synthesized
-@synthesize nativeOptions;
+@synthesize nativeConfig;
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerNativeAdapter:self
@@ -115,21 +114,13 @@
 - (void)nativeAdObjectsSuccessLoad:(NSArray *)nativeAds {
 
     self.bdNativeData = nativeAds;
-
-    __block BOOL disableImageLoading;
-    [self.nativeOptions enumerateObjectsUsingBlock:^(YumiMediationNativeOptions * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([obj isKindOfClass:[YumiMediationNativeAdImageOptions class]]) {
-            disableImageLoading = ((YumiMediationNativeAdImageOptions *)obj).disableImageLoading;
-            *stop = YES;
-        }
-    }];
     
     __weak typeof(self) weakSelf = self;
     [nativeAds
         enumerateObjectsUsingBlock:^(BaiduMobAdNativeAdObject *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
             [[[YumiMediationNativeAdapterBaiduConnector alloc] init] convertWithNativeData:obj
                                                                                withAdapter:weakSelf
-                                                                       disableImageLoading:disableImageLoading
+                                                                       disableImageLoading:weakSelf.nativeConfig.disableImageLoading
                                                                          connectorDelegate:weakSelf];
         }];
 }

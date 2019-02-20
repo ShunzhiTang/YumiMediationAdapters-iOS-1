@@ -10,8 +10,6 @@
 #import "YumiMediationNativeAdapterFacebookConnector.h"
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
-#import <YumiMediationSDK/YumiMediationNativeAdImageOptions.h>
-#import <YumiMediationSDK/YumiMediationNativeAdViewOptions.h>
 
 @interface YumiMediationNativeAdapterFacebook () <YumiMediationNativeAdapter, FBNativeAdDelegate,
                                                   YumiMediationNativeAdapterConnectorDelegate>
@@ -27,7 +25,7 @@
 
 @implementation YumiMediationNativeAdapterFacebook
 /// when conforming to a protocol, any property the protocol defines won't be automatically synthesized
-@synthesize nativeOptions;
+@synthesize nativeConfig;
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerNativeAdapter:self
@@ -72,26 +70,18 @@
         self.mediaView = [[FBMediaView alloc] initWithFrame:mediaView.bounds];
         [mediaView addSubview:self.mediaView];
     }
-    // AdChoices icon
-    __block YumiMediationNativeAdViewOptions *yumiAdViewOption = nil;
-    [self.nativeOptions enumerateObjectsUsingBlock:^(YumiMediationNativeOptions * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([obj isKindOfClass:[YumiMediationNativeAdViewOptions class]]) {
-            yumiAdViewOption = (YumiMediationNativeAdViewOptions *)obj;
-            *stop = YES;
-        }
-    }];
     
     FBAdChoicesView *adChoicesView = [[FBAdChoicesView alloc] initWithNativeAd:self.fbNativeAd];
-    if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionTopRightCorner || yumiAdViewOption.preferredAdChoicesPosition == 0) {
+    if (self.nativeConfig.preferredAdChoicesPosition == YumiMediationAdViewPositionTopRightCorner || self.nativeConfig.preferredAdChoicesPosition == 0) {
        adChoicesView.corner = UIRectCornerTopRight;
     }
-    if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionTopLeftCorner) {
+    if (self.nativeConfig.preferredAdChoicesPosition == YumiMediationAdViewPositionTopLeftCorner) {
         adChoicesView.corner = UIRectCornerTopLeft;
     }
-    if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionBottomRightCorner) {
+    if (self.nativeConfig.preferredAdChoicesPosition == YumiMediationAdViewPositionBottomRightCorner) {
         adChoicesView.corner = UIRectCornerBottomRight;
     }
-    if (yumiAdViewOption.preferredAdChoicesPosition == YumiMediationAdViewPositionBottomLeftCorner) {
+    if (self.nativeConfig.preferredAdChoicesPosition == YumiMediationAdViewPositionBottomLeftCorner) {
        adChoicesView.corner = UIRectCornerBottomLeft;
     }
     
@@ -119,17 +109,9 @@
 
     self.fbNativeAd = nativeAd;
     
-    __block BOOL disableImageLoading;
-    [self.nativeOptions enumerateObjectsUsingBlock:^(YumiMediationNativeOptions * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([obj isKindOfClass:[YumiMediationNativeAdImageOptions class]]) {
-            disableImageLoading = ((YumiMediationNativeAdImageOptions *)obj).disableImageLoading;
-            *stop = YES;
-        }
-    }];
-    
     [[[YumiMediationNativeAdapterFacebookConnector alloc] init] convertWithNativeData:nativeAd
                                                                           withAdapter:self
-                                                                  disableImageLoading:disableImageLoading
+                                                                  disableImageLoading:self.nativeConfig.disableImageLoading
                                                                     connectorDelegate:self];
 }
 
