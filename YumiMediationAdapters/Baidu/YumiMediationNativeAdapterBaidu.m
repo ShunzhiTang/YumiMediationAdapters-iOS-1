@@ -87,7 +87,7 @@
         bdView.baiduLogoImageView = baiduLogoView;
         [bdView addSubview:baiduLogoView];
        
-        CGFloat margin = 5;
+        CGFloat margin = 0;
         [baiduLogoView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
             make.height.width.mas_equalTo(18);
             make.bottom.equalTo(bdView.mas_bottom).offset(-margin);
