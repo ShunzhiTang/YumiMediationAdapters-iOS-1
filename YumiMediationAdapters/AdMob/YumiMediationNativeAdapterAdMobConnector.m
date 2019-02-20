@@ -6,6 +6,7 @@
 //
 
 #import "YumiMediationNativeAdapterAdMobConnector.h"
+#import <YumiMediationSDK/YumiTime.h>
 
 @interface YumiMediationNativeAdapterAdMobConnector () <GADUnifiedNativeAdDelegate>
 
@@ -32,7 +33,8 @@
 - (void)notifyMediatedNativeAdSuccessful {
     self.nativeModel = [[YumiMediationNativeModel alloc] init];
     [self.nativeModel setValue:self forKey:@"unifiedNativeAd"];
-
+    [self.nativeModel setValue:@([[YumiTime timestamp] doubleValue]) forKey:@"timestamp"];
+    
     if ([self.connectorDelegate respondsToSelector:@selector(yumiMediationNativeAdSuccessful:)]) {
         [self.connectorDelegate yumiMediationNativeAdSuccessful:self.nativeModel];
     }
