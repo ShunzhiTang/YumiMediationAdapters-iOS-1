@@ -14,7 +14,6 @@
 #import <BaiduMobAdSDK/BaiduMobAdNativeAdView.h>
 #import <YumiMediationSDK/YumiMasonry.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
-#import <YumiMediationSDK/YumiMediationNativeAdImageOptions.h>
 
 @interface YumiMediationNativeAdapterBaidu () <YumiMediationNativeAdapter, BaiduMobAdNativeAdDelegate,
                                                YumiMediationNativeAdapterConnectorDelegate>
@@ -26,13 +25,13 @@
 // origin baidu ads data
 @property (nonatomic) NSArray<BaiduMobAdNativeAdObject *> *bdNativeData;
 // mapping data
-@property (nonatomic) NSMutableArray<YumiMediationNativeModel *> *mappingData;
+@property (nonatomic) NSMutableArray *mappingData;
 
 @end
 
 @implementation YumiMediationNativeAdapterBaidu
 /// when conforming to a protocol, any property the protocol defines won't be automatically synthesized
-@synthesize nativeOptions;
+@synthesize nativeConfig;
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerNativeAdapter:self
@@ -88,7 +87,7 @@
         bdView.baiduLogoImageView = baiduLogoView;
         [bdView addSubview:baiduLogoView];
        
-        CGFloat margin = 5;
+        CGFloat margin = 0;
         [baiduLogoView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
             make.height.width.mas_equalTo(18);
             make.bottom.equalTo(bdView.mas_bottom).offset(-margin);
@@ -115,21 +114,13 @@
 - (void)nativeAdObjectsSuccessLoad:(NSArray *)nativeAds {
 
     self.bdNativeData = nativeAds;
-
-    __block BOOL disableImageLoading;
-    [self.nativeOptions enumerateObjectsUsingBlock:^(YumiMediationNativeOptions * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([obj isKindOfClass:[YumiMediationNativeAdImageOptions class]]) {
-            disableImageLoading = ((YumiMediationNativeAdImageOptions *)obj).disableImageLoading;
-            *stop = YES;
-        }
-    }];
     
     __weak typeof(self) weakSelf = self;
     [nativeAds
         enumerateObjectsUsingBlock:^(BaiduMobAdNativeAdObject *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
             [[[YumiMediationNativeAdapterBaiduConnector alloc] init] convertWithNativeData:obj
                                                                                withAdapter:weakSelf
-                                                                       disableImageLoading:disableImageLoading
+                                                                       disableImageLoading:weakSelf.nativeConfig.disableImageLoading
                                                                          connectorDelegate:weakSelf];
         }];
 }
@@ -150,15 +141,34 @@
 #pragma mark : YumiMediationNativeAdapterConnectorDelegate
 - (void)yumiMediationNativeAdSuccessful:(YumiMediationNativeModel *)nativeModel {
     [self.mappingData addObject:nativeModel];
-    if (self.mappingData.count == self.bdNativeData.count) {
-        [self.delegate adapter:self didReceiveAd:[self.mappingData copy]];
-    }
+    
+    [self connectorDidFinishConvert];
 }
 
 - (void)yumiMediationNativeAdFailed {
-    NSError *error =
-        [NSError errorWithDomain:@"" code:501 userInfo:@{@"error reason" : @"connector yumiAds data error"}];
-    [self handleNativeError:error];
+    
+    [self.mappingData addObject:@"error"];
+    [self connectorDidFinishConvert];
+}
+
+- (void)connectorDidFinishConvert{
+    if (self.mappingData.count == self.bdNativeData.count) {
+        NSMutableArray<YumiMediationNativeModel *> *results = [NSMutableArray arrayWithCapacity:1];
+        [self.mappingData enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj isKindOfClass:[YumiMediationNativeModel class]]) {
+                [results addObject:obj];
+            }
+        }];
+        
+        if (results.count > 0) {
+            [self.delegate adapter:self didReceiveAd:[results copy]];
+            return;
+        }
+        NSError *error =
+        [NSError errorWithDomain:@"" code:501 userInfo:@{@"error reason" : @"connector yumiAds all data error"}];
+        [self handleNativeError:error];
+        
+    }
 }
 
 - (void)handleNativeError:(NSError *)error {
@@ -171,7 +181,7 @@
     [self.mappingData removeAllObjects];
 }
 #pragma mark : - getter method
-- (NSMutableArray<YumiMediationNativeModel *> *)mappingData {
+- (NSMutableArray *)mappingData {
     if (!_mappingData) {
         _mappingData = [NSMutableArray arrayWithCapacity:1];
     }
