@@ -73,7 +73,7 @@
                                 nativeAd:(YumiMediationNativeModel *)nativeAd {
     if (self.logoImgView.superview == nil) {
         [view addSubview:self.logoImgView];
-        CGFloat margin = 5;
+        CGFloat margin = 0;
         [self.logoImgView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
             make.width.mas_equalTo(38);
             make.height.mas_equalTo(19);
