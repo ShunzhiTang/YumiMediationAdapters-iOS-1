@@ -25,7 +25,7 @@
 // origin baidu ads data
 @property (nonatomic) NSArray<BaiduMobAdNativeAdObject *> *bdNativeData;
 // mapping data
-@property (nonatomic) NSMutableArray<YumiMediationNativeModel *> *mappingData;
+@property (nonatomic) NSMutableArray *mappingData;
 
 @end
 
@@ -141,15 +141,34 @@
 #pragma mark : YumiMediationNativeAdapterConnectorDelegate
 - (void)yumiMediationNativeAdSuccessful:(YumiMediationNativeModel *)nativeModel {
     [self.mappingData addObject:nativeModel];
-    if (self.mappingData.count == self.bdNativeData.count) {
-        [self.delegate adapter:self didReceiveAd:[self.mappingData copy]];
-    }
+    
+    [self connectorDidFinishConvert];
 }
 
 - (void)yumiMediationNativeAdFailed {
-    NSError *error =
-        [NSError errorWithDomain:@"" code:501 userInfo:@{@"error reason" : @"connector yumiAds data error"}];
-    [self handleNativeError:error];
+    
+    [self.mappingData addObject:@"error"];
+    [self connectorDidFinishConvert];
+}
+
+- (void)connectorDidFinishConvert{
+    if (self.mappingData.count == self.bdNativeData.count) {
+        NSMutableArray<YumiMediationNativeModel *> *results = [NSMutableArray arrayWithCapacity:1];
+        [self.mappingData enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj isKindOfClass:[YumiMediationNativeModel class]]) {
+                [results addObject:obj];
+            }
+        }];
+        
+        if (results.count > 0) {
+            [self.delegate adapter:self didReceiveAd:[results copy]];
+            return;
+        }
+        NSError *error =
+        [NSError errorWithDomain:@"" code:501 userInfo:@{@"error reason" : @"connector yumiAds all data error"}];
+        [self handleNativeError:error];
+        
+    }
 }
 
 - (void)handleNativeError:(NSError *)error {
@@ -162,7 +181,7 @@
     [self.mappingData removeAllObjects];
 }
 #pragma mark : - getter method
-- (NSMutableArray<YumiMediationNativeModel *> *)mappingData {
+- (NSMutableArray *)mappingData {
     if (!_mappingData) {
         _mappingData = [NSMutableArray arrayWithCapacity:1];
     }
