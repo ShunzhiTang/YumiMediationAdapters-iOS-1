@@ -7,6 +7,7 @@
 
 #import "YumiMediationNativeAdapterGDTConnector.h"
 #import <YumiMediationSDK/YumiTool.h>
+#import <YumiMediationSDK/YumiTime.h>
 
 @interface YumiMediationNativeAdapterGDTConnector ()
 
@@ -100,7 +101,8 @@
 - (void)notifyMediatedNativeAdSuccessful {
     YumiMediationNativeModel *nativeModel = [[YumiMediationNativeModel alloc] init];
     [nativeModel setValue:self forKey:@"unifiedNativeAd"];
-
+    [nativeModel setValue:@([[YumiTime timestamp] doubleValue]) forKey:@"timestamp"];
+    
     if ([self.connectorDelegate respondsToSelector:@selector(yumiMediationNativeAdSuccessful:)]) {
         [self.connectorDelegate yumiMediationNativeAdSuccessful:nativeModel];
     }
