@@ -75,8 +75,8 @@
         [view addSubview:self.logoImgView];
         CGFloat margin = 0;
         [self.logoImgView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
-            make.width.mas_equalTo(38);
-            make.height.mas_equalTo(19);
+            make.width.mas_equalTo(20);
+            make.height.mas_equalTo(20);
             make.bottom.equalTo(view.mas_bottom).offset(-margin);
             make.right.equalTo(view.mas_right).offset(-margin);
         }];
@@ -174,7 +174,7 @@
         _logoImgView = [[UIImageView alloc] init];
         
         NSBundle *YumiAdsSDK = [[YumiTool sharedTool] resourcesBundleWithBundleName:@"YumiAdsSDK"];;
-        NSString *strPath = [YumiAdsSDK pathForResource:@"yumiad_flag_gdt@2x" ofType:@"png"];
+        NSString *strPath = [YumiAdsSDK pathForResource:@"gdt_icon@2x" ofType:@"png"];
         UIImage *image = [UIImage imageWithContentsOfFile:strPath];
         _logoImgView.image = image;
     }
