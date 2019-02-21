@@ -13,6 +13,8 @@
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiTool.h>
 
+static NSUInteger maxNumberOfAds = 5;
+
 @interface YumiMediationNativeAdapterAdMob () <YumiMediationNativeAdapter, GADAdLoaderDelegate,
                                                GADUnifiedNativeAdLoaderDelegate,
                                                YumiMediationNativeAdapterConnectorDelegate>
@@ -51,6 +53,7 @@
 - (void)requestAd:(NSUInteger)adCount {
 
     [self clearNativeData];
+    adCount = adCount <=5 ? adCount : maxNumberOfAds;
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -127,6 +130,14 @@
     }
     if (clickableAssetViews[YumiMediationUnifiedNativeAdvertiserAsset]) {
         gadView.advertiserView = clickableAssetViews[YumiMediationUnifiedNativeAdvertiserAsset];
+    }
+    
+    // media view
+    if (clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset]) {
+        UIView *mediaSuperView = clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset];
+        GADMediaView *mediaView = [[GADMediaView alloc] initWithFrame:mediaSuperView.bounds];
+        [mediaSuperView addSubview:mediaView];
+        gadView.mediaView = mediaView;
     }
 
     [view addSubview:gadView];

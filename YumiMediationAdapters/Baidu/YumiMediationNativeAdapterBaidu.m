@@ -12,6 +12,7 @@
 #import <BaiduMobAdSDK/BaiduMobAdNativeAdDelegate.h>
 #import <BaiduMobAdSDK/BaiduMobAdNativeAdObject.h>
 #import <BaiduMobAdSDK/BaiduMobAdNativeAdView.h>
+#import <BaiduMobAdSDK/BaiduMobAdNativeVideoView.h>
 #import <YumiMediationSDK/YumiMasonry.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
@@ -77,6 +78,18 @@
                                                           text:nil
                                                           icon:nil
                                                      mainImage:nil];
+    }else if(bdNativeAd.materialType == VIDEO){
+        
+        BaiduMobAdNativeVideoView *videoView;
+       
+        if (clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset]) {
+            UIView *mediaSuperView = clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset];
+            videoView = [[BaiduMobAdNativeVideoView alloc] initWithFrame:mediaSuperView.bounds andObject:bdNativeAd];
+        }
+        
+        bdView = [[BaiduMobAdNativeAdView alloc] initWithFrame:view.bounds brandName:nil title:nil text:nil icon:nil mainImage:nil videoView:videoView];
+        // set baidu video view
+        ((YumiMediationNativeAdapterBaiduConnector *)nativeAd.extraAssets[adapterConnectorKey]).videoView = videoView;
     }
 
     if (bdView) {
