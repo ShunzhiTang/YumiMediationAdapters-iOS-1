@@ -16,6 +16,9 @@
 @property (nonatomic) YumiMediationNativeAdImage *coverImage;
 @property (nonatomic) id<YumiMediationNativeAdapter> adapter;
 @property (nonatomic, weak) id<YumiMediationNativeAdapterConnectorDelegate> connectorDelegate;
+/// media view
+@property (nonatomic) id<YumiMediationNativeAdapterConnectorMediaDelegate> mediaDelegate;
+@property(nonatomic) YumiMediationNativeVideoController *videoController;
 
 @end
 
@@ -113,7 +116,32 @@
         [self.connectorDelegate yumiMediationNativeAdFailed];
     }
 }
+#pragma mark: YumiMediationNativeAdapterConnectorMedia
+/// Play the video. Doesn't do anything if the video is already playing.
+- (void)play{
+    [self.videoView play];
+    [self.videoView sendVideoEvent:onStart currentTime:0.0];
+    if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidPlayVideo:)]   ) {
+        [self.mediaDelegate adapterConnectorVideoDidPlayVideo:self];
+    }
+}
 
+/// Pause the video. Doesn't do anything if the video is already paused.
+- (void)pause{
+    [self.videoView pause];
+    if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidPauseVideo:)]   ) {
+        [self.mediaDelegate adapterConnectorVideoDidPauseVideo:self];
+    }
+}
+
+/// Returns the video's aspect ratio (width/height) or 0 if no video is present.
+- (double)aspectRatio{
+    return  0;
+}
+
+- (void)setConnectorMediaDelegate:(id<YumiMediationNativeAdapterConnectorMediaDelegate>)mediaDelegate{
+    self.mediaDelegate = mediaDelegate;
+}
 #pragma mark : YumiMediationUnifiedNativeAd
 - (NSString *)title {
     return self.nativeObject.title;
@@ -154,6 +182,22 @@
 }
 
 - (NSDictionary<NSString *, id> *)extraAssets {
-    return nil;
+    return @{adapterConnectorKey : self};
+}
+- (BOOL)hasVideoContent{
+    return self.nativeObject.materialType == VIDEO;
+}
+- (YumiMediationNativeVideoController *)videoController{
+    
+    if (![self hasVideoContent]) {
+        return nil;
+    }
+    if (!_videoController) {
+        _videoController = [[YumiMediationNativeVideoController alloc] init];
+        // set value to connector
+        [_videoController setValue:self forKey:@"connector"];
+    }
+    
+    return _videoController;
 }
 @end

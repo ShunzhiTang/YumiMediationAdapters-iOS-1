@@ -79,6 +79,7 @@
                                                           icon:nil
                                                      mainImage:nil];
     }else if(bdNativeAd.materialType == VIDEO){
+        
         BaiduMobAdNativeVideoView *videoView;
        
         if (clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset]) {
@@ -87,6 +88,8 @@
         }
         
         bdView = [[BaiduMobAdNativeAdView alloc] initWithFrame:view.bounds brandName:nil title:nil text:nil icon:nil mainImage:nil videoView:videoView];
+        // set baidu video view
+        ((YumiMediationNativeAdapterBaiduConnector *)nativeAd.extraAssets[adapterConnectorKey]).videoView = videoView;
     }
 
     if (bdView) {

@@ -9,15 +9,18 @@
 #import <Foundation/Foundation.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiMediationUnifiedNativeAd.h>
+#import <BaiduMobAdSDK/BaiduMobAdNativeVideoView.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface YumiMediationNativeAdapterBaiduConnector : NSObject <YumiMediationUnifiedNativeAd>
+@interface YumiMediationNativeAdapterBaiduConnector : NSObject <YumiMediationUnifiedNativeAd,YumiMediationNativeAdapterConnectorMedia>
 
 - (void)convertWithNativeData:(nullable BaiduMobAdNativeAdObject *)nativeObject
                   withAdapter:(id<YumiMediationNativeAdapter>)adapter
           disableImageLoading:(BOOL)disableImageLoading
             connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate;
+
+@property (nonatomic) BaiduMobAdNativeVideoView  *videoView;
 
 @end
 
