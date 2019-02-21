@@ -50,6 +50,11 @@
 
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
+    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait || self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
+        [self.delegate adapter:self didFailToReceiveAd:@"inmobi not support kYumiMediationAdViewSmartBannerPortrait or kYumiMediationAdViewSmartBannerLandscape"];
+        return;
+    }
+
     CGRect adFrame = isiPad ? CGRectMake(0, 0, 728, 90) : CGRectMake(0, 0, 320, 50);
     if (self.isSmartBanner) {
         CGSize size = [[YumiTool sharedTool] fetchBannerAdSizeWith:self.bannerSize smartBanner:self.isSmartBanner];
