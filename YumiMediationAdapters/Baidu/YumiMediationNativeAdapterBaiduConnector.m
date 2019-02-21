@@ -189,9 +189,6 @@
 }
 - (YumiMediationNativeVideoController *)videoController{
     
-    if (![self hasVideoContent]) {
-        return nil;
-    }
     if (!_videoController) {
         _videoController = [[YumiMediationNativeVideoController alloc] init];
         // set value to connector
