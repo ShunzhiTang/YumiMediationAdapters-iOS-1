@@ -12,12 +12,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface YumiMediationNativeAdapterFacebookConnector : NSObject <YumiMediationUnifiedNativeAd>
+@interface YumiMediationNativeAdapterFacebookConnector : NSObject <YumiMediationUnifiedNativeAd,YumiMediationNativeAdapterConnectorMedia>
 
 - (void)convertWithNativeData:(nullable FBNativeAd *)fbNativeAd
                   withAdapter:(id<YumiMediationNativeAdapter>)adapter
           disableImageLoading:(BOOL)disableImageLoading
             connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate;
+
+@property (nonatomic) FBMediaView *mediaView;
 
 @end
 
