@@ -128,6 +128,14 @@
     if (clickableAssetViews[YumiMediationUnifiedNativeAdvertiserAsset]) {
         gadView.advertiserView = clickableAssetViews[YumiMediationUnifiedNativeAdvertiserAsset];
     }
+    
+    // media view
+    if (clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset]) {
+        UIView *mediaSuperView = clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset];
+        GADMediaView *mediaView = [[GADMediaView alloc] initWithFrame:mediaSuperView.bounds];
+        [mediaSuperView addSubview:mediaView];
+        gadView.mediaView = mediaView;
+    }
 
     [view addSubview:gadView];
 }
