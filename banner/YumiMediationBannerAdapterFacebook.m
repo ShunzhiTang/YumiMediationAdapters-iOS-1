@@ -9,6 +9,7 @@
 #import "YumiMediationBannerAdapterFacebook.h"
 #import <FBAudienceNetwork/FBAdView.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationBannerAdapterFacebook () <FBAdViewDelegate, YumiMediationBannerAdapter>
 
@@ -45,6 +46,10 @@
 
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
+    if (self.bannerSize == kYumiMediationAdViewSmartBannerLandscape && [[YumiTool sharedTool] isiPhone]) {
+        [self.delegate adapter:self didFailToReceiveAd:@"Facebook not support kYumiMediationAdViewSmartBannerLandscape in iPhone"];
+        return;
+    }
     FBAdSize adSize = isiPad ? kFBAdSizeHeight90Banner : kFBAdSizeHeight50Banner;
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
         adSize = kFBAdSizeHeight250Rectangle;
