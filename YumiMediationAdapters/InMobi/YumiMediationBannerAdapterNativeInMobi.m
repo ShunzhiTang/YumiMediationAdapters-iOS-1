@@ -85,6 +85,11 @@
 }
 
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
+    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait || self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
+        [self.delegate adapter:self didFailToReceiveAd:@"inmobi-ys not support kYumiMediationAdViewSmartBannerPortrait or kYumiMediationAdViewSmartBannerLandscape"];
+        return;
+    }
+
     [self requestBannerViewAdTemplate];
 
     CGSize adSize = isiPad ? CGSizeMake(728, 90) : CGSizeMake(320, 50);
