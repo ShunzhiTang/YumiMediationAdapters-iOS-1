@@ -53,7 +53,7 @@
         [self.delegate adapter:self didFailToReceiveAd:@"No zone identifier specified"];
         return;
     }
-
+    // set adFrame
     CGRect adframe = isiPad ? CGRectMake(0, 0, 728, 90) : CGRectMake(0, 0, 320, 50);
     if (self.isSmartBanner) {
         CGSize size = [[YumiTool sharedTool] fetchBannerAdSizeWith:self.bannerSize smartBanner:self.isSmartBanner];
@@ -61,6 +61,10 @@
     }
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
         adframe = CGRectMake(0, 0, 300, 250);
+    }
+    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait || self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
+        [self.delegate adapter:self didFailToReceiveAd:@"applovin not support kYumiMediationAdViewSmartBannerPortrait or kYumiMediationAdViewSmartBannerLandscape"];
+        return;
     }
 
     __weak typeof(self) weakSelf = self;

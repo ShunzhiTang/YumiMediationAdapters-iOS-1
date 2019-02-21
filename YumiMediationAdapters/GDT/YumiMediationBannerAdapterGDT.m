@@ -45,6 +45,10 @@
 
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
+    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait || self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
+        [self.delegate adapter:self didFailToReceiveAd:@"baidu not support kYumiMediationAdViewSmartBannerPortrait or kYumiMediationAdViewSmartBannerLandscape"];
+        return;
+    }
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
         [self.delegate adapter:self didFailToReceiveAd:@"GDT not support kYumiMediationAdViewBanner300x250"];
         return;
