@@ -70,7 +70,11 @@
         self.mediaView = [[FBMediaView alloc] initWithFrame:mediaView.bounds];
         [mediaView addSubview:self.mediaView];
     }
-    
+    if (clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset]) {
+        UIView *mediaView = clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset];
+        self.mediaView = [[FBMediaView alloc] initWithFrame:mediaView.bounds];
+        [mediaView addSubview:self.mediaView];
+    }
     FBAdChoicesView *adChoicesView = [[FBAdChoicesView alloc] initWithNativeAd:self.fbNativeAd];
     if (self.nativeConfig.preferredAdChoicesPosition == YumiMediationAdViewPositionTopRightCorner || self.nativeConfig.preferredAdChoicesPosition == 0) {
        adChoicesView.corner = UIRectCornerTopRight;
