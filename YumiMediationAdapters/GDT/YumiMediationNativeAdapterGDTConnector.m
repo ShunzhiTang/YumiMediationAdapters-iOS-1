@@ -16,6 +16,7 @@
 @property (nonatomic) YumiMediationNativeAdImage *coverImage;
 @property (nonatomic) id<YumiMediationNativeAdapter> adapter;
 @property (nonatomic, weak) id<YumiMediationNativeAdapterConnectorDelegate> connectorDelegate;
+@property(nonatomic) YumiMediationNativeVideoController *videoController;
 
 @end
 
@@ -114,6 +115,25 @@
     }
 }
 
+#pragma mark: YumiMediationNativeAdapterConnectorMedia
+/// Play the video. Doesn't do anything if the video is already playing.
+- (void)play{
+    
+}
+
+/// Pause the video. Doesn't do anything if the video is already paused.
+- (void)pause{
+    
+}
+
+/// Returns the video's aspect ratio (width/height) or 0 if no video is present.
+- (double)aspectRatio{
+    return 0;
+}
+
+- (void)setConnectorMediaDelegate:(id<YumiMediationNativeAdapterConnectorMediaDelegate>)mediaDelegate{
+    
+}
 #pragma mark : YumiMediationUnifiedNativeAd
 - (NSString *)title {
     return self.gdtNativeAdData.properties[GDTNativeAdDataKeyTitle];
@@ -155,5 +175,18 @@
 
 - (NSDictionary<NSString *, id> *)extraAssets {
     return nil;
+}
+- (BOOL)hasVideoContent{
+    return NO;
+}
+- (YumiMediationNativeVideoController *)videoController{
+    if (!_videoController) {
+        _videoController = [[YumiMediationNativeVideoController alloc] init];
+        // set value to connector
+        [_videoController setValue:self forKey:@"connector"];
+        
+    }
+    
+    return _videoController;
 }
 @end
