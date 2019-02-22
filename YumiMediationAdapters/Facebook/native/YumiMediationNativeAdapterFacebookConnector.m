@@ -43,11 +43,13 @@
 }
 #pragma mark: YumiMediationNativeAdapterConnectorMedia
 /// Play the video. Doesn't do anything if the video is already playing.
+///this unavailable
 - (void)play{
     [self.mediaView.videoRenderer playVideo];
 }
 
 /// Pause the video. Doesn't do anything if the video is already paused.
+///this unavailable
 - (void)pause{
     [self.mediaView.videoRenderer pauseVideo];
 }
