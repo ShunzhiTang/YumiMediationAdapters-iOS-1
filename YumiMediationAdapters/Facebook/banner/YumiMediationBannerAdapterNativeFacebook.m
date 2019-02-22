@@ -65,8 +65,8 @@
 }
 
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
-    if (self.bannerSize == kYumiMediationAdViewSmartBannerLandscape && [[YumiTool sharedTool] isiPhone]) {
-        [self.delegate adapter:self didFailToReceiveAd:@"Facebook-ys not support kYumiMediationAdViewSmartBannerLandscape in iPhone"];
+    if (self.bannerSize == kYumiMediationAdViewSmartBannerLandscape || self.bannerSize == kYumiMediationAdViewSmartBannerPortrait) {
+        [self.delegate adapter:self didFailToReceiveAd:@"Facebook-ys not support kYumiMediationAdViewSmartBannerLandscape & kYumiMediationAdViewSmartBannerPortrait"];
         return;
     }
     FBAdSize adSize = isiPad ? kFBAdSizeHeight90Banner : kFBAdSizeHeight50Banner;
