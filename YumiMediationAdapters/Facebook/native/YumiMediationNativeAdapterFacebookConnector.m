@@ -16,7 +16,6 @@
 /// media view
 @property (nonatomic) id<YumiMediationNativeAdapterConnectorMediaDelegate> mediaDelegate;
 @property(nonatomic) YumiMediationNativeVideoController *videoController;
-@property (nonatomic) FBMediaViewVideoRenderer  *fbVideoRenderer;
 
 @end
 
@@ -44,18 +43,20 @@
 }
 #pragma mark: YumiMediationNativeAdapterConnectorMedia
 /// Play the video. Doesn't do anything if the video is already playing.
+///this unavailable
 - (void)play{
-    [self.fbVideoRenderer playVideo];
+    [self.mediaView.videoRenderer playVideo];
 }
 
 /// Pause the video. Doesn't do anything if the video is already paused.
+///this unavailable
 - (void)pause{
-    [self.fbVideoRenderer pauseVideo];
+    [self.mediaView.videoRenderer pauseVideo];
 }
 
 /// Returns the video's aspect ratio (width/height) or 0 if no video is present.
 - (double)aspectRatio{
-    return self.fbVideoRenderer.aspectRatio;
+    return self.mediaView.aspectRatio;
 }
 
 - (void)setConnectorMediaDelegate:(id<YumiMediationNativeAdapterConnectorMediaDelegate>)mediaDelegate{
@@ -135,9 +136,6 @@
 - (void)setMediaView:(FBMediaView *)mediaView{
     _mediaView = mediaView;
     
-    self.fbVideoRenderer = [[FBMediaViewVideoRenderer alloc] init];
-    
-    _mediaView.videoRenderer = self.fbVideoRenderer;
     _mediaView.delegate = self;
     
 }
