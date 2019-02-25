@@ -84,7 +84,7 @@
        
         if (clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset]) {
             UIView *mediaSuperView = clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset];
-            videoView = [[BaiduMobAdNativeVideoView alloc] initWithFrame:mediaSuperView.bounds andObject:bdNativeAd];
+            videoView = [[BaiduMobAdNativeVideoView alloc] initWithFrame:mediaSuperView.frame andObject:bdNativeAd];
         }
         
         bdView = [[BaiduMobAdNativeAdView alloc] initWithFrame:view.bounds brandName:nil title:nil text:nil icon:nil mainImage:nil videoView:videoView];
