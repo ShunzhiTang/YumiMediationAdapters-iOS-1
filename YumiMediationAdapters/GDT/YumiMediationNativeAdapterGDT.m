@@ -71,7 +71,7 @@
                          (NSDictionary<YumiMediationUnifiedNativeAssetIdentifier, UIView *> *)clickableAssetViews
                       withViewController:(UIViewController *)viewController
                                 nativeAd:(YumiMediationNativeModel *)nativeAd {
-    if (self.logoImgView.superview == nil) {
+    if (![self.logoImgView.superview isEqual:view]) {
         [view addSubview:self.logoImgView];
         CGFloat margin = 0;
         [self.logoImgView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
