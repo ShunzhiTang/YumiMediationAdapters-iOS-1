@@ -32,7 +32,7 @@ Pod::Spec.new do |s|
     { :name => "IronSource", :version => "6.7.10" },
     { :name => "Unity", :version => "2.3.0" },
     { :name => "Vungle", :version => "6.2.0" },
-    { :name => "Mintegral", :version => "3.9.1"},
+    { :name => "Mintegral", :version => "4.9.3"},
     { :name => "OneWay",:version => "2.1.0"},
     { :name => "PlayableAds",:version => "2.3.0"},
     { :name => "IQzone",:version => "3.0.2133"},
