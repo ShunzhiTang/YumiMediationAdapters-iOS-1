@@ -6,10 +6,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface YumiMediationinterstitialVideoAdapterMintegral : NSObject
+@interface YumiMediationinterstitialVideoAdapterMintegral : NSObject <YumiMediationInterstitialAdapter>
+
+@property (nonatomic, weak) id<YumiMediationInterstitialAdapterDelegate> delegate;
+@property (nonatomic) YumiMediationInterstitialProvider *provider;
 
 @end
 
