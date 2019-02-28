@@ -35,7 +35,7 @@ Pod::Spec.new do |s|
     { :name => "Mintegral", :version => "3.9.1"},
     { :name => "OneWay",:version => "2.1.0"},
     { :name => "PlayableAds",:version => "2.3.0"},
-    { :name => "IQzone",:version => "3.0.2132"},
+    { :name => "IQzone",:version => "3.0.2133"},
     
   ]
 
