@@ -5,10 +5,10 @@
 //  Created by Michael Tang on 2019/2/13.
 //
 
-#import "YumiMediationAdapterRegistry.h"
-#import "YumiMediationUnifiedNativeAd.h"
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
 #import <Foundation/Foundation.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
+#import <YumiMediationSDK/YumiMediationUnifiedNativeAd.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
