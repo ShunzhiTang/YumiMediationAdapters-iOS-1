@@ -18,7 +18,7 @@
 @implementation YumiMediationinterstitialVideoAdapterMintegral
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDMobvista
+                                                           forProviderID:kYumiMediationAdapterIDAdColony
                                                              requestType:YumiMediationSDKAdRequest];
 }
 
