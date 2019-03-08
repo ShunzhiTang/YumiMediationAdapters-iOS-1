@@ -18,7 +18,7 @@
 @implementation YumiMediationInterstitialAdapterMintegral
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDMobvista
+                                                           forProviderID:kYumiMediationAdapterIDMobvistaInterstitial
                                                              requestType:YumiMediationSDKAdRequest];
 }
 
