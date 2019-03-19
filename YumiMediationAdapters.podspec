@@ -34,7 +34,7 @@ Pod::Spec.new do |s|
     { :name => "Vungle", :version => "6.2.0" },
     { :name => "Mintegral", :version => "4.9.4"},
     { :name => "OneWay",:version => "2.1.0"},
-    { :name => "PlayableAds",:version => "2.3.0"},
+    { :name => "PlayableAds",:version => "2.4.0"},
     { :name => "IQzone",:version => "3.0.2134"},
     
   ]
