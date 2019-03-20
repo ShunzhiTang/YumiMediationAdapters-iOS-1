@@ -47,14 +47,19 @@
 
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
+    // set adSize
     GADAdSize adSize = isiPad ? kGADAdSizeLeaderboard : kGADAdSizeBanner;
-
     if (self.isSmartBanner) {
         adSize = isPortrait ? kGADAdSizeSmartBannerPortrait : kGADAdSizeSmartBannerLandscape;
     }
-
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
         adSize = kGADAdSizeMediumRectangle;
+    }
+    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait) {
+        adSize = kGADAdSizeSmartBannerPortrait;
+    }
+    if (self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
+        adSize = kGADAdSizeSmartBannerLandscape;
     }
 
     __weak typeof(self) weakSelf = self;

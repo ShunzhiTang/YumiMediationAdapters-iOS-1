@@ -65,10 +65,15 @@
 }
 
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
-    FBAdSize adSize = isiPad ? kFBAdSizeHeight90Banner : kFBAdSizeHeight50Banner;
-    if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
-        adSize = kFBAdSizeHeight250Rectangle;
+    if (self.bannerSize == kYumiMediationAdViewSmartBannerLandscape || self.bannerSize == kYumiMediationAdViewSmartBannerPortrait) {
+        [self.delegate adapter:self didFailToReceiveAd:@"Facebook-ys not support kYumiMediationAdViewSmartBannerLandscape & kYumiMediationAdViewSmartBannerPortrait"];
+        return;
     }
+    if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
+        [self.delegate adapter:self didFailToReceiveAd:@"Facebook-ys not support kYumiMediationAdViewBanner300x250"];
+        return;
+    }
+    FBAdSize adSize = isiPad ? kFBAdSizeHeight90Banner : kFBAdSizeHeight50Banner;
     CGSize viewSize = [[UIScreen mainScreen] bounds].size;
     CGRect adframe = CGRectMake(0, 0, viewSize.width, adSize.size.height);
 
