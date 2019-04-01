@@ -87,5 +87,8 @@
     }
     [self.delegate adapter:self didCloseVideoAd:video];
 }
-
+// 用户点击下载/查看详情
+- (void)userDidClickLP:(BaiduMobAdRewardVideo *)video withPlayingProgress:(CGFloat)progress{
+    [self.delegate adapter:self didClickVideoAd:video];
+}
 @end
