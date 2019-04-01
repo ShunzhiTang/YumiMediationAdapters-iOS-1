@@ -75,5 +75,8 @@
     }
     [self.delegate adapter:self didCloseVideoAd:rewardBasedVideoAd];
 }
-
+/// Tells the delegate that the reward based video ad will leave the application.
+- (void)rewardBasedVideoAdWillLeaveApplication:(GADRewardBasedVideoAd *)rewardBasedVideoAd{
+    [self.delegate adapter:self didClickVideoAd:rewardBasedVideoAd];
+}
 @end
