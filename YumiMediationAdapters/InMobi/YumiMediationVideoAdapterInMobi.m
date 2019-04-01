@@ -81,5 +81,9 @@
 - (void)interstitial:(IMInterstitial *)interstitial rewardActionCompletedWithRewards:(NSDictionary *)rewards {
     self.isReward = YES;
 }
+///  Notifies the delegate that the user will leave application context.
+-(void)userWillLeaveApplicationFromInterstitial:(IMInterstitial*)interstitial{
+    [self.delegate adapter:self didClickVideoAd:interstitial];
+}
 
 @end
