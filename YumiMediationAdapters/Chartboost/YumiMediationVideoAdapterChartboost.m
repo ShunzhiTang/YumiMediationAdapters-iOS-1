@@ -76,4 +76,7 @@
     self.isReward = YES;
 }
 
+- (void)didClickInterstitial:(CBLocation)location{
+    [self.delegate adapter:self didClickVideoAd:nil];
+}
 @end
