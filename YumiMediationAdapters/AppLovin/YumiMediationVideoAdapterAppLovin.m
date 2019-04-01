@@ -67,6 +67,7 @@
 }
 
 - (void)ad:(ALAd *)ad wasClickedIn:(UIView *)view {
+    [self.delegate adapter:self didClickVideoAd:ad];
 }
 
 #pragma mark - ALAdVideoPlaybackDelegate
