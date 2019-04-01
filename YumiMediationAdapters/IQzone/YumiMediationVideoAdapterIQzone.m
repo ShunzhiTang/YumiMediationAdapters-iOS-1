@@ -78,9 +78,6 @@
     [self.delegate adapter:self didOpenVideoAd:self.rewardedVideo];
 }
 
-- (void)adClicked {
-}
-
 - (void)adDismissed {
     if (self.isReward) {
         [self.delegate adapter:self videoAd:self.rewardedVideo didReward:nil];
@@ -105,6 +102,10 @@
 }
 
 - (void)videoTrackerFired {
+}
+
+- (void)adClicked {
+    [self.delegate adapter:self didClickVideoAd:self.rewardedVideo];
 }
 
 @end
