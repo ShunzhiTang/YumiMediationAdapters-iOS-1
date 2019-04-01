@@ -78,5 +78,8 @@
     }
     [self.delegate adapter:self didCloseVideoAd:self.video];
 }
-
+/// Tells the delegate that the ad is clicked
+- (void)playableAdsDidClick:(PlayableAds *)ads{
+    [self.delegate adapter:self didClickVideoAd:self.video];
+}
 @end
