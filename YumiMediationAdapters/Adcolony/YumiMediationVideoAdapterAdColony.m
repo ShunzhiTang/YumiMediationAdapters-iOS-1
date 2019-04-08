@@ -70,6 +70,9 @@
                 [weakSelf.delegate adapter:weakSelf didCloseVideoAd:weakSelf.video];
 
             }];
+            [ad setClick:^{
+                [weakSelf.delegate adapter:weakSelf didClickVideoAd:weakSelf.video];
+            }];
         }
         failure:^(AdColonyAdRequestError *_Nonnull error) {
             weakSelf.isAdReady = NO;

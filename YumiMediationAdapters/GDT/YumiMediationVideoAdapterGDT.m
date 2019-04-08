@@ -83,9 +83,6 @@
     [self.delegate adapter:self didCloseVideoAd:rewardedVideoAd];
 }
 
-- (void)gdt_rewardVideoAdDidClicked:(GDTRewardVideoAd *)rewardedVideoAd {
-}
-
 - (void)gdt_rewardVideoAd:(GDTRewardVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
     [self.delegate adapter:self videoAd:rewardedVideoAd didFailToLoad:[error localizedDescription] isRetry:YES];
 }
@@ -97,4 +94,7 @@
 - (void)gdt_rewardVideoAdDidPlayFinish:(GDTRewardVideoAd *)rewardedVideoAd {
 }
 
+- (void)gdt_rewardVideoAdDidClicked:(GDTRewardVideoAd *)rewardedVideoAd{
+    [self.delegate adapter:self didClickVideoAd:rewardedVideoAd];
+}
 @end

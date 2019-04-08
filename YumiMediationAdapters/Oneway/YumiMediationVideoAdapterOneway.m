@@ -68,10 +68,12 @@
     [self.delegate adapter:self didCloseVideoAd:nil];
 }
 
-- (void)oneWaySDKRewardedAdDidClick:(NSString *)tag {
-}
 - (void)oneWaySDKDidError:(OneWaySDKError)error withMessage:(NSString *)message {
     [self.delegate adapter:self videoAd:nil didFailToLoad:message isRetry:NO];
+}
+
+- (void)oneWaySDKRewardedAdDidClick:(NSString *)tag {
+    [self.delegate adapter:self didClickVideoAd:nil];
 }
 
 @end

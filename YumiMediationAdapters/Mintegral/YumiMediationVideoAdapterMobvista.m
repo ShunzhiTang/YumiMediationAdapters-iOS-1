@@ -82,5 +82,9 @@
     }
     [self.delegate adapter:self didCloseVideoAd:self.videoAd];
 }
+///  Called when the ad is clicked
+- (void)onVideoAdClicked:(nullable NSString *)unitId{
+    [self.delegate adapter:self didClickVideoAd:self.videoAd];
+}
 
 @end

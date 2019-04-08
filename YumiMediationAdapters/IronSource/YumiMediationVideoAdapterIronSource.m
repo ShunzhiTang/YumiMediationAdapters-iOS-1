@@ -92,6 +92,7 @@
 
 // Invoked when the end user clicked on the RewardedVideo ad
 - (void)didClickRewardedVideo:(ISPlacementInfo *)placementInfo instanceId:(NSString *)instanceId {
+    [self.delegate adapter:self didClickVideoAd:nil instanceId:instanceId];
 }
 
 @end
