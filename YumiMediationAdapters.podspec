@@ -16,14 +16,14 @@ Pod::Spec.new do |s|
   s.author           = { 'zplay sdk team' => 'ad-client@zplay.cn' }
   s.source           = { :git => 'git@github.com:yumimobi/YumiMediationAdapters-iOS.git',:tag => s.version.to_s }
   s.ios.deployment_target = '8.0'
-  s.dependency 'YumiMediationSDK', '~> 3.6.0'
+  s.dependency 'YumiMediationSDK', '~> 4.0.0'
   s.frameworks = 'Foundation', 'UIKit'
 
   subspecs = [
     { :name => "AdColony", :version => "3.3.6" },
     { :name => "AdMob", :version => "7.30.0", :has_resource_bundle => true },
     { :name => "AppLovin", :version => "5.0.2" },
-    { :name => "Baidu", :version => "4.6.0" },
+    { :name => "Baidu", :version => "4.6.1" },
     { :name => "Chartboost", :version => "7.3.0" },
     { :name => "Facebook", :version => "5.1.0", :has_resource_bundle => true },
     { :name => "Domob", :version => "3.8.0" },
