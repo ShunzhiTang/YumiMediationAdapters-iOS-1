@@ -10,7 +10,7 @@
 #import <MTGSDKInterstitialVideo/MTGInterstitialVideoAdManager.h>
 
 @interface YumiMediationinterstitialVideoAdapterMintegral () <MTGInterstitialVideoDelegate>
-@property (nonatomic,strong)  MTGInterstitialVideoAdManager *ivAdManager;
+@property (nonatomic, strong) MTGInterstitialVideoAdManager *ivAdManager;
 @property (nonatomic, assign) BOOL available;
 
 @end
@@ -26,15 +26,16 @@
 - (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
                                                 delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
     self = [super init];
-    
+
     self.provider = provider;
     self.delegate = delegate;
-    
+
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [[MTGSDK sharedInstance] setAppID:weakSelf.provider.data.key1 ApiKey:weakSelf.provider.data.key2];
         if (!weakSelf.ivAdManager) {
-            weakSelf.ivAdManager = [[MTGInterstitialVideoAdManager alloc] initWithUnitID:weakSelf.provider.data.key3 delegate:weakSelf];
+            weakSelf.ivAdManager =
+                [[MTGInterstitialVideoAdManager alloc] initWithUnitID:weakSelf.provider.data.key3 delegate:weakSelf];
             weakSelf.ivAdManager.delegate = weakSelf;
         }
     });
@@ -55,30 +56,31 @@
 }
 
 #pragma mark - Interstitial Delegate Methods
-- (void) onInterstitialVideoLoadSuccess:(MTGInterstitialVideoAdManager *_Nonnull)adManager{
+- (void)onInterstitialVideoLoadSuccess:(MTGInterstitialVideoAdManager *_Nonnull)adManager {
     self.available = YES;
     [self.delegate adapter:self didReceiveInterstitialAd:nil];
 }
-- (void) onInterstitialVideoLoadFail:(nonnull NSError *)error adManager:(MTGInterstitialVideoAdManager *_Nonnull)adManager;{
+- (void)onInterstitialVideoLoadFail:(nonnull NSError *)error
+                          adManager:(MTGInterstitialVideoAdManager *_Nonnull)adManager;
+{
     self.available = NO;
-    [self.delegate adapter:self
-            interstitialAd:nil
-          didFailToReceive:error.localizedDescription];
+    [self.delegate adapter:self interstitialAd:nil didFailToReceive:error.localizedDescription];
 }
 
-- (void) onInterstitialVideoShowSuccess:(MTGInterstitialVideoAdManager *_Nonnull)adManager{
+- (void)onInterstitialVideoShowSuccess:(MTGInterstitialVideoAdManager *_Nonnull)adManager {
     [self.delegate adapter:self willPresentScreen:nil];
 }
 
-- (void) onInterstitialVideoShowFail:(nonnull NSError *)error adManager:(MTGInterstitialVideoAdManager *_Nonnull)adManager{
-    
+- (void)onInterstitialVideoShowFail:(nonnull NSError *)error
+                          adManager:(MTGInterstitialVideoAdManager *_Nonnull)adManager {
 }
 
-- (void) onInterstitialVideoAdClick:(MTGInterstitialVideoAdManager *_Nonnull)adManager{
+- (void)onInterstitialVideoAdClick:(MTGInterstitialVideoAdManager *_Nonnull)adManager {
     [self.delegate adapter:self didClickInterstitialAd:nil];
 }
 
-- (void)onInterstitialVideoAdDismissedWithConverted:(BOOL)converted adManager:(MTGInterstitialVideoAdManager *_Nonnull)adManager{
+- (void)onInterstitialVideoAdDismissedWithConverted:(BOOL)converted
+                                          adManager:(MTGInterstitialVideoAdManager *_Nonnull)adManager {
     self.available = NO;
     [self.delegate adapter:self willDismissScreen:nil];
 }

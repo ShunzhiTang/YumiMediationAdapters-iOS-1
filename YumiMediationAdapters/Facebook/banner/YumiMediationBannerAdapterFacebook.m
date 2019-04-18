@@ -47,7 +47,8 @@
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     if (self.bannerSize == kYumiMediationAdViewSmartBannerLandscape && [[YumiTool sharedTool] isiPhone]) {
-        [self.delegate adapter:self didFailToReceiveAd:@"Facebook not support kYumiMediationAdViewSmartBannerLandscape in iPhone"];
+        [self.delegate adapter:self
+            didFailToReceiveAd:@"Facebook not support kYumiMediationAdViewSmartBannerLandscape in iPhone"];
         return;
     }
     FBAdSize adSize = isiPad ? kFBAdSizeHeight90Banner : kFBAdSizeHeight50Banner;

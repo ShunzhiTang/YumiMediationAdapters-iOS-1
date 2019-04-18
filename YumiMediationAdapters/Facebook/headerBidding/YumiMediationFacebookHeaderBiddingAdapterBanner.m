@@ -55,7 +55,9 @@
         return;
     }
     if (self.bannerSize == kYumiMediationAdViewSmartBannerLandscape && [[YumiTool sharedTool] isiPhone]) {
-        [self.delegate adapter:self didFailToReceiveAd:@"Facebook header bidding not support kYumiMediationAdViewSmartBannerLandscape in iPhone"];
+        [self.delegate adapter:self
+            didFailToReceiveAd:
+                @"Facebook header bidding not support kYumiMediationAdViewSmartBannerLandscape in iPhone"];
         return;
     }
     FBAdSize adSize = isiPad ? kFBAdSizeHeight90Banner : kFBAdSizeHeight50Banner;

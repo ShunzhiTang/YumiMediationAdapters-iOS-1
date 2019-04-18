@@ -85,8 +85,11 @@
 }
 
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
-    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait || self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
-        [self.delegate adapter:self didFailToReceiveAd:@"inmobi-ys not support kYumiMediationAdViewSmartBannerPortrait or kYumiMediationAdViewSmartBannerLandscape"];
+    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait ||
+        self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
+        [self.delegate adapter:self
+            didFailToReceiveAd:@"inmobi-ys not support kYumiMediationAdViewSmartBannerPortrait or "
+                               @"kYumiMediationAdViewSmartBannerLandscape"];
         return;
     }
 

@@ -9,9 +9,9 @@
 #import "YumiMediationNativeAdapterGDT.h"
 #import "GDTNativeAd.h"
 #import "YumiMediationNativeAdapterGDTConnector.h"
+#import <YumiMediationSDK/YumiMasonry.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiTool.h>
-#import <YumiMediationSDK/YumiMasonry.h>
 
 @interface YumiMediationNativeAdapterGDT () <YumiMediationNativeAdapter, GDTNativeAdDelegate,
                                              YumiMediationNativeAdapterConnectorDelegate>
@@ -25,7 +25,7 @@
 // mapping data
 @property (nonatomic) NSMutableArray *mappingData;
 /// gdt Logo view
-@property (nonatomic) UIImageView  *logoImgView;
+@property (nonatomic) UIImageView *logoImgView;
 @end
 
 @implementation YumiMediationNativeAdapterGDT
@@ -94,14 +94,15 @@
 #pragma mark - GDTNativeAdDelegate
 - (void)nativeAdSuccessToLoad:(NSArray *)nativeAdDataArray {
     self.gdtNativeData = nativeAdDataArray;
-    
+
     __weak typeof(self) weakSelf = self;
     [nativeAdDataArray
         enumerateObjectsUsingBlock:^(GDTNativeAdData *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
-            [[[YumiMediationNativeAdapterGDTConnector alloc] init] convertWithNativeData:obj
-                                                                             withAdapter:weakSelf
-                                                                     disableImageLoading:weakSelf.nativeConfig.disableImageLoading
-                                                                       connectorDelegate:weakSelf];
+            [[[YumiMediationNativeAdapterGDTConnector alloc] init]
+                convertWithNativeData:obj
+                          withAdapter:weakSelf
+                  disableImageLoading:weakSelf.nativeConfig.disableImageLoading
+                    connectorDelegate:weakSelf];
         }];
 }
 
@@ -123,33 +124,32 @@
 #pragma mark : -YumiMediationNativeAdapterConnectorDelegate
 - (void)yumiMediationNativeAdSuccessful:(YumiMediationNativeModel *)nativeModel {
     [self.mappingData addObject:nativeModel];
-    
+
     [self connectorDidFinishConvert];
 }
 
 - (void)yumiMediationNativeAdFailed {
-    
+
     [self.mappingData addObject:@"error"];
     [self connectorDidFinishConvert];
 }
 
-- (void)connectorDidFinishConvert{
+- (void)connectorDidFinishConvert {
     if (self.mappingData.count == self.gdtNativeData.count) {
         NSMutableArray<YumiMediationNativeModel *> *results = [NSMutableArray arrayWithCapacity:1];
-        [self.mappingData enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self.mappingData enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
             if ([obj isKindOfClass:[YumiMediationNativeModel class]]) {
                 [results addObject:obj];
             }
         }];
-        
+
         if (results.count > 0) {
             [self.delegate adapter:self didReceiveAd:[results copy]];
             return;
         }
         NSError *error =
-        [NSError errorWithDomain:@"" code:501 userInfo:@{@"error reason" : @"connector yumiAds all data error"}];
+            [NSError errorWithDomain:@"" code:501 userInfo:@{@"error reason" : @"connector yumiAds all data error"}];
         [self handleNativeError:error];
-        
     }
 }
 
@@ -169,11 +169,12 @@
     }
     return _mappingData;
 }
-- (UIImageView *)logoImgView{
+- (UIImageView *)logoImgView {
     if (!_logoImgView) {
         _logoImgView = [[UIImageView alloc] init];
-        
-        NSBundle *YumiAdsSDK = [[YumiTool sharedTool] resourcesBundleWithBundleName:@"YumiAdsSDK"];;
+
+        NSBundle *YumiAdsSDK = [[YumiTool sharedTool] resourcesBundleWithBundleName:@"YumiAdsSDK"];
+        ;
         NSString *strPath = [YumiAdsSDK pathForResource:@"gdt_icon@2x" ofType:@"png"];
         UIImage *image = [UIImage imageWithContentsOfFile:strPath];
         _logoImgView.image = image;

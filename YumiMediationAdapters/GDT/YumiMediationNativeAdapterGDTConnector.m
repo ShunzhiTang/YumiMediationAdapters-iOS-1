@@ -6,8 +6,8 @@
 //
 
 #import "YumiMediationNativeAdapterGDTConnector.h"
-#import <YumiMediationSDK/YumiTool.h>
 #import <YumiMediationSDK/YumiTime.h>
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationNativeAdapterGDTConnector ()
 
@@ -16,7 +16,7 @@
 @property (nonatomic) YumiMediationNativeAdImage *coverImage;
 @property (nonatomic) id<YumiMediationNativeAdapter> adapter;
 @property (nonatomic, weak) id<YumiMediationNativeAdapterConnectorDelegate> connectorDelegate;
-@property(nonatomic) YumiMediationNativeVideoController *videoController;
+@property (nonatomic) YumiMediationNativeVideoController *videoController;
 
 @end
 
@@ -103,7 +103,7 @@
     YumiMediationNativeModel *nativeModel = [[YumiMediationNativeModel alloc] init];
     [nativeModel setValue:self forKey:@"unifiedNativeAd"];
     [nativeModel setValue:@([[YumiTime timestamp] doubleValue]) forKey:@"timestamp"];
-    
+
     if ([self.connectorDelegate respondsToSelector:@selector(yumiMediationNativeAdSuccessful:)]) {
         [self.connectorDelegate yumiMediationNativeAdSuccessful:nativeModel];
     }
@@ -115,24 +115,21 @@
     }
 }
 
-#pragma mark: YumiMediationNativeAdapterConnectorMedia
+#pragma mark : YumiMediationNativeAdapterConnectorMedia
 /// Play the video. Doesn't do anything if the video is already playing.
-- (void)play{
-    
+- (void)play {
 }
 
 /// Pause the video. Doesn't do anything if the video is already paused.
-- (void)pause{
-    
+- (void)pause {
 }
 
 /// Returns the video's aspect ratio (width/height) or 0 if no video is present.
-- (double)aspectRatio{
+- (double)aspectRatio {
     return 0;
 }
 
-- (void)setConnectorMediaDelegate:(id<YumiMediationNativeAdapterConnectorMediaDelegate>)mediaDelegate{
-    
+- (void)setConnectorMediaDelegate:(id<YumiMediationNativeAdapterConnectorMediaDelegate>)mediaDelegate {
 }
 #pragma mark : YumiMediationUnifiedNativeAd
 - (NSString *)title {
@@ -176,17 +173,16 @@
 - (NSDictionary<NSString *, id> *)extraAssets {
     return nil;
 }
-- (BOOL)hasVideoContent{
+- (BOOL)hasVideoContent {
     return NO;
 }
-- (YumiMediationNativeVideoController *)videoController{
+- (YumiMediationNativeVideoController *)videoController {
     if (!_videoController) {
         _videoController = [[YumiMediationNativeVideoController alloc] init];
         // set value to connector
         [_videoController setValue:self forKey:@"connector"];
-        
     }
-    
+
     return _videoController;
 }
 @end
