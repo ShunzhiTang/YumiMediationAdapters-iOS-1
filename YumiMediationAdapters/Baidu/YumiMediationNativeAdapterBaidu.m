@@ -78,16 +78,22 @@
                                                           text:nil
                                                           icon:nil
                                                      mainImage:nil];
-    }else if(bdNativeAd.materialType == VIDEO){
-        
+    } else if (bdNativeAd.materialType == VIDEO) {
+
         BaiduMobAdNativeVideoView *videoView;
-       
+
         if (clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset]) {
             UIView *mediaSuperView = clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset];
             videoView = [[BaiduMobAdNativeVideoView alloc] initWithFrame:mediaSuperView.frame andObject:bdNativeAd];
         }
-        
-        bdView = [[BaiduMobAdNativeAdView alloc] initWithFrame:view.bounds brandName:nil title:nil text:nil icon:nil mainImage:nil videoView:videoView];
+
+        bdView = [[BaiduMobAdNativeAdView alloc] initWithFrame:view.bounds
+                                                     brandName:nil
+                                                         title:nil
+                                                          text:nil
+                                                          icon:nil
+                                                     mainImage:nil
+                                                     videoView:videoView];
         // set baidu video view
         ((YumiMediationNativeAdapterBaiduConnector *)nativeAd.extraAssets[adapterConnectorKey]).videoView = videoView;
     }
@@ -99,14 +105,14 @@
         UIImageView *baiduLogoView = [[UIImageView alloc] init];
         bdView.baiduLogoImageView = baiduLogoView;
         [bdView addSubview:baiduLogoView];
-       
+
         CGFloat margin = 0;
         [baiduLogoView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
             make.height.width.mas_equalTo(18);
             make.bottom.equalTo(bdView.mas_bottom).offset(-margin);
             make.right.equalTo(bdView.mas_right).offset(-margin);
         }];
-        
+
         [bdView loadAndDisplayNativeAdWithObject:bdNativeAd
                                       completion:^(NSArray *errors){
 
@@ -127,14 +133,15 @@
 - (void)nativeAdObjectsSuccessLoad:(NSArray *)nativeAds {
 
     self.bdNativeData = nativeAds;
-    
+
     __weak typeof(self) weakSelf = self;
     [nativeAds
         enumerateObjectsUsingBlock:^(BaiduMobAdNativeAdObject *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
-            [[[YumiMediationNativeAdapterBaiduConnector alloc] init] convertWithNativeData:obj
-                                                                               withAdapter:weakSelf
-                                                                       disableImageLoading:weakSelf.nativeConfig.disableImageLoading
-                                                                         connectorDelegate:weakSelf];
+            [[[YumiMediationNativeAdapterBaiduConnector alloc] init]
+                convertWithNativeData:obj
+                          withAdapter:weakSelf
+                  disableImageLoading:weakSelf.nativeConfig.disableImageLoading
+                    connectorDelegate:weakSelf];
         }];
 }
 
@@ -154,33 +161,32 @@
 #pragma mark : YumiMediationNativeAdapterConnectorDelegate
 - (void)yumiMediationNativeAdSuccessful:(YumiMediationNativeModel *)nativeModel {
     [self.mappingData addObject:nativeModel];
-    
+
     [self connectorDidFinishConvert];
 }
 
 - (void)yumiMediationNativeAdFailed {
-    
+
     [self.mappingData addObject:@"error"];
     [self connectorDidFinishConvert];
 }
 
-- (void)connectorDidFinishConvert{
+- (void)connectorDidFinishConvert {
     if (self.mappingData.count == self.bdNativeData.count) {
         NSMutableArray<YumiMediationNativeModel *> *results = [NSMutableArray arrayWithCapacity:1];
-        [self.mappingData enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self.mappingData enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
             if ([obj isKindOfClass:[YumiMediationNativeModel class]]) {
                 [results addObject:obj];
             }
         }];
-        
+
         if (results.count > 0) {
             [self.delegate adapter:self didReceiveAd:[results copy]];
             return;
         }
         NSError *error =
-        [NSError errorWithDomain:@"" code:501 userInfo:@{@"error reason" : @"connector yumiAds all data error"}];
+            [NSError errorWithDomain:@"" code:501 userInfo:@{@"error reason" : @"connector yumiAds all data error"}];
         [self handleNativeError:error];
-        
     }
 }
 

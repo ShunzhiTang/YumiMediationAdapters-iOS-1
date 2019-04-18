@@ -51,8 +51,11 @@
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
         adSize = CGSizeMake(300, 250);
     }
-    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait || self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
-        [self.delegate adapter:self didFailToReceiveAd:@"baidu not support kYumiMediationAdViewSmartBannerPortrait or kYumiMediationAdViewSmartBannerLandscape"];
+    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait ||
+        self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
+        [self.delegate adapter:self
+            didFailToReceiveAd:@"baidu not support kYumiMediationAdViewSmartBannerPortrait or "
+                               @"kYumiMediationAdViewSmartBannerLandscape"];
         return;
     }
 

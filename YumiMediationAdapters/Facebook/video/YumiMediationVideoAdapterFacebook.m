@@ -79,7 +79,7 @@
     [self.delegate adapter:self didStartPlayingVideoAd:rewardedVideoAd];
 }
 
-- (void)rewardedVideoAdDidClick:(FBRewardedVideoAd *)rewardedVideoAd{
+- (void)rewardedVideoAdDidClick:(FBRewardedVideoAd *)rewardedVideoAd {
     [self.delegate adapter:self didClickVideoAd:rewardedVideoAd];
 }
 @end

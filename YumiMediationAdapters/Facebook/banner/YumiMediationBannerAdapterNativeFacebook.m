@@ -65,8 +65,11 @@
 }
 
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
-    if (self.bannerSize == kYumiMediationAdViewSmartBannerLandscape || self.bannerSize == kYumiMediationAdViewSmartBannerPortrait) {
-        [self.delegate adapter:self didFailToReceiveAd:@"Facebook-ys not support kYumiMediationAdViewSmartBannerLandscape & kYumiMediationAdViewSmartBannerPortrait"];
+    if (self.bannerSize == kYumiMediationAdViewSmartBannerLandscape ||
+        self.bannerSize == kYumiMediationAdViewSmartBannerPortrait) {
+        [self.delegate adapter:self
+            didFailToReceiveAd:@"Facebook-ys not support kYumiMediationAdViewSmartBannerLandscape & "
+                               @"kYumiMediationAdViewSmartBannerPortrait"];
         return;
     }
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {

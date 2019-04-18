@@ -51,7 +51,7 @@ static NSUInteger maxNumberOfAds = 5;
     if ([standardUserDefaults objectForKey:YumiMediationAdmobAdapterUUID]) {
         return self;
     }
-    [[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus * _Nonnull status) {
+    [[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *_Nonnull status) {
         [standardUserDefaults setObject:@"Admob_is_starting" forKey:YumiMediationAdmobAdapterUUID];
         [standardUserDefaults synchronize];
     }];
@@ -61,13 +61,14 @@ static NSUInteger maxNumberOfAds = 5;
 - (void)requestAd:(NSUInteger)adCount {
 
     [self clearNativeData];
-    adCount = adCount <=5 ? adCount : maxNumberOfAds;
+    adCount = adCount <= 5 ? adCount : maxNumberOfAds;
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        
+
         // options
         GADNativeAdViewAdOptions *adViewoption = [[GADNativeAdViewAdOptions alloc] init];
-        if (self.nativeConfig.preferredAdChoicesPosition == YumiMediationAdViewPositionTopRightCorner || self.nativeConfig.preferredAdChoicesPosition == 0) {
+        if (self.nativeConfig.preferredAdChoicesPosition == YumiMediationAdViewPositionTopRightCorner ||
+            self.nativeConfig.preferredAdChoicesPosition == 0) {
             adViewoption.preferredAdChoicesPosition = GADAdChoicesPositionTopRightCorner;
         }
         if (self.nativeConfig.preferredAdChoicesPosition == YumiMediationAdViewPositionTopLeftCorner) {
@@ -82,7 +83,7 @@ static NSUInteger maxNumberOfAds = 5;
 
         GADMultipleAdsAdLoaderOptions *multipleAdsOptions = [[GADMultipleAdsAdLoaderOptions alloc] init];
         multipleAdsOptions.numberOfAds = adCount;
-        
+
         GADNativeAdImageAdLoaderOptions *imageOptions = [[GADNativeAdImageAdLoaderOptions alloc] init];
         imageOptions.disableImageLoading = self.nativeConfig.disableImageLoading;
         // adType
@@ -139,7 +140,7 @@ static NSUInteger maxNumberOfAds = 5;
     if (clickableAssetViews[YumiMediationUnifiedNativeAdvertiserAsset]) {
         gadView.advertiserView = clickableAssetViews[YumiMediationUnifiedNativeAdvertiserAsset];
     }
-    
+
     // media view
     if (clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset]) {
         UIView *mediaSuperView = clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset];
