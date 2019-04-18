@@ -6,8 +6,8 @@
 //
 
 #import "YumiMediationNativeAdapterBaiduConnector.h"
-#import <YumiMediationSDK/YumiTool.h>
 #import <YumiMediationSDK/YumiTime.h>
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationNativeAdapterBaiduConnector ()
 
@@ -18,7 +18,7 @@
 @property (nonatomic, weak) id<YumiMediationNativeAdapterConnectorDelegate> connectorDelegate;
 /// media view
 @property (nonatomic) id<YumiMediationNativeAdapterConnectorMediaDelegate> mediaDelegate;
-@property(nonatomic) YumiMediationNativeVideoController *videoController;
+@property (nonatomic) YumiMediationNativeVideoController *videoController;
 
 @end
 
@@ -105,7 +105,7 @@
     YumiMediationNativeModel *nativeModel = [[YumiMediationNativeModel alloc] init];
     [nativeModel setValue:self forKey:@"unifiedNativeAd"];
     [nativeModel setValue:@([[YumiTime timestamp] doubleValue]) forKey:@"timestamp"];
-    
+
     if ([self.connectorDelegate respondsToSelector:@selector(yumiMediationNativeAdSuccessful:)]) {
         [self.connectorDelegate yumiMediationNativeAdSuccessful:nativeModel];
     }
@@ -116,30 +116,30 @@
         [self.connectorDelegate yumiMediationNativeAdFailed];
     }
 }
-#pragma mark: YumiMediationNativeAdapterConnectorMedia
+#pragma mark : YumiMediationNativeAdapterConnectorMedia
 /// Play the video. Doesn't do anything if the video is already playing.
-- (void)play{
+- (void)play {
     [self.videoView play];
     [self.videoView sendVideoEvent:onStart currentTime:0.0];
-    if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidPlayVideo:)]   ) {
+    if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidPlayVideo:)]) {
         [self.mediaDelegate adapterConnectorVideoDidPlayVideo:self];
     }
 }
 
 /// Pause the video. Doesn't do anything if the video is already paused.
-- (void)pause{
+- (void)pause {
     [self.videoView pause];
-    if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidPauseVideo:)]   ) {
+    if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidPauseVideo:)]) {
         [self.mediaDelegate adapterConnectorVideoDidPauseVideo:self];
     }
 }
 
 /// Returns the video's aspect ratio (width/height) or 0 if no video is present.
-- (double)aspectRatio{
-    return  0;
+- (double)aspectRatio {
+    return 0;
 }
 
-- (void)setConnectorMediaDelegate:(id<YumiMediationNativeAdapterConnectorMediaDelegate>)mediaDelegate{
+- (void)setConnectorMediaDelegate:(id<YumiMediationNativeAdapterConnectorMediaDelegate>)mediaDelegate {
     self.mediaDelegate = mediaDelegate;
 }
 #pragma mark : YumiMediationUnifiedNativeAd
@@ -184,17 +184,17 @@
 - (NSDictionary<NSString *, id> *)extraAssets {
     return @{adapterConnectorKey : self};
 }
-- (BOOL)hasVideoContent{
+- (BOOL)hasVideoContent {
     return self.nativeObject.materialType == VIDEO;
 }
-- (YumiMediationNativeVideoController *)videoController{
-    
+- (YumiMediationNativeVideoController *)videoController {
+
     if (!_videoController) {
         _videoController = [[YumiMediationNativeVideoController alloc] init];
         // set value to connector
         [_videoController setValue:self forKey:@"connector"];
     }
-    
+
     return _videoController;
 }
 @end

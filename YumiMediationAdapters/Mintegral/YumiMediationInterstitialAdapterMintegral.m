@@ -9,7 +9,7 @@
 #import <MTGSDK/MTGSDK.h>
 #import <MTGSDKInterstitial/MTGInterstitialAdManager.h>
 
-@interface YumiMediationInterstitialAdapterMintegral () <MTGInterstitialAdLoadDelegate,MTGInterstitialAdShowDelegate>
+@interface YumiMediationInterstitialAdapterMintegral () <MTGInterstitialAdLoadDelegate, MTGInterstitialAdShowDelegate>
 @property (nonatomic, strong) MTGInterstitialAdManager *interstitialAdManager;
 @property (nonatomic, assign) BOOL available;
 
@@ -26,15 +26,16 @@
 - (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
                                                 delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
     self = [super init];
-    
+
     self.provider = provider;
     self.delegate = delegate;
-    
+
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [[MTGSDK sharedInstance] setAppID:weakSelf.provider.data.key1 ApiKey:weakSelf.provider.data.key2];
         if (!weakSelf.interstitialAdManager) {
-            weakSelf.interstitialAdManager = [[MTGInterstitialAdManager alloc] initWithUnitID:weakSelf.provider.data.key3 adCategory:0];
+            weakSelf.interstitialAdManager =
+                [[MTGInterstitialAdManager alloc] initWithUnitID:weakSelf.provider.data.key3 adCategory:0];
         }
     });
     return self;
@@ -50,30 +51,29 @@
 
 - (void)present {
     self.available = NO;
-    [_interstitialAdManager showWithDelegate:self presentingViewController:[self.delegate rootViewControllerForPresentingModalView]];
+    [_interstitialAdManager showWithDelegate:self
+                    presentingViewController:[self.delegate rootViewControllerForPresentingModalView]];
 }
 
 #pragma mark - Interstitial Delegate Methods
-- (void) onInterstitialLoadSuccess:adManager{
+- (void)onInterstitialLoadSuccess:adManager {
     self.available = YES;
     [self.delegate adapter:self didReceiveInterstitialAd:nil];
 }
-- (void) onInterstitialLoadFail:(nonnull NSError *)error adManager:(MTGInterstitialAdManager * _Nonnull)adManager{
+- (void)onInterstitialLoadFail:(nonnull NSError *)error adManager:(MTGInterstitialAdManager *_Nonnull)adManager {
     self.available = NO;
-    [self.delegate adapter:self
-            interstitialAd:nil
-          didFailToReceive:error.localizedDescription];
+    [self.delegate adapter:self interstitialAd:nil didFailToReceive:error.localizedDescription];
 }
-- (void) onInterstitialShowSuccess:adManager{
+- (void)onInterstitialShowSuccess:adManager {
     [self.delegate adapter:self willPresentScreen:nil];
 }
-- (void) onInterstitialShowFail:(nonnull NSError *)error adManager:(MTGInterstitialAdManager * _Nonnull)adManager{
+- (void)onInterstitialShowFail:(nonnull NSError *)error adManager:(MTGInterstitialAdManager *_Nonnull)adManager {
 }
-- (void) onInterstitialClosed:adManager{
+- (void)onInterstitialClosed:adManager {
     self.available = NO;
     [self.delegate adapter:self willDismissScreen:nil];
 }
-- (void) onInterstitialAdClick:adManager{
+- (void)onInterstitialAdClick:adManager {
     [self.delegate adapter:self didClickInterstitialAd:nil];
 }
 

@@ -67,7 +67,7 @@
     }
     if (clickableAssetViews[YumiMediationUnifiedNativeCoverImageAsset]) {
         UIView *mediaView = clickableAssetViews[YumiMediationUnifiedNativeCoverImageAsset];
-        
+
         [self.mediaView setFrame:mediaView.bounds];
         [mediaView addSubview:self.mediaView];
     }
@@ -77,8 +77,9 @@
         [mediaView addSubview:self.mediaView];
     }
     FBAdChoicesView *adChoicesView = [[FBAdChoicesView alloc] initWithNativeAd:self.fbNativeAd];
-    if (self.nativeConfig.preferredAdChoicesPosition == YumiMediationAdViewPositionTopRightCorner || self.nativeConfig.preferredAdChoicesPosition == 0) {
-       adChoicesView.corner = UIRectCornerTopRight;
+    if (self.nativeConfig.preferredAdChoicesPosition == YumiMediationAdViewPositionTopRightCorner ||
+        self.nativeConfig.preferredAdChoicesPosition == 0) {
+        adChoicesView.corner = UIRectCornerTopRight;
     }
     if (self.nativeConfig.preferredAdChoicesPosition == YumiMediationAdViewPositionTopLeftCorner) {
         adChoicesView.corner = UIRectCornerTopLeft;
@@ -87,9 +88,9 @@
         adChoicesView.corner = UIRectCornerBottomRight;
     }
     if (self.nativeConfig.preferredAdChoicesPosition == YumiMediationAdViewPositionBottomLeftCorner) {
-       adChoicesView.corner = UIRectCornerBottomLeft;
+        adChoicesView.corner = UIRectCornerBottomLeft;
     }
-    
+
     [view addSubview:adChoicesView];
     [adChoicesView updateFrameFromSuperview];
 
@@ -113,14 +114,13 @@
     }
 
     self.fbNativeAd = nativeAd;
-    
+
     YumiMediationNativeAdapterFacebookConnector *connector = [[YumiMediationNativeAdapterFacebookConnector alloc] init];
     connector.mediaView = self.mediaView;
     [connector convertWithNativeData:nativeAd
-                                                                          withAdapter:self
-                                                                  disableImageLoading:self.nativeConfig.disableImageLoading
-                                                                    connectorDelegate:self];
-    
+                         withAdapter:self
+                 disableImageLoading:self.nativeConfig.disableImageLoading
+                   connectorDelegate:self];
 }
 
 - (void)nativeAd:(FBNativeAd *)nativeAd didFailWithError:(NSError *)error {
@@ -150,10 +150,10 @@
     [self.delegate adapter:self didFailToReceiveAd:error.localizedDescription];
 }
 
-#pragma mark: getter
-- (FBMediaView *)mediaView{
+#pragma mark : getter
+- (FBMediaView *)mediaView {
     if (!_mediaView) {
-        _mediaView = [[FBMediaView  alloc] init];
+        _mediaView = [[FBMediaView alloc] init];
     }
     return _mediaView;
 }

@@ -12,12 +12,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface YumiMediationNativeAdapterAdMobConnector : NSObject <YumiMediationUnifiedNativeAd,YumiMediationNativeAdapterConnectorMedia>
+@interface YumiMediationNativeAdapterAdMobConnector
+    : NSObject <YumiMediationUnifiedNativeAd, YumiMediationNativeAdapterConnectorMedia>
 
 - (void)convertWithNativeData:(nullable GADUnifiedNativeAd *)gadNativeAd
                   withAdapter:(id<YumiMediationNativeAdapter>)adapter
             connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate;
-
 
 @end
 

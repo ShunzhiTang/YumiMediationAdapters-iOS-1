@@ -50,8 +50,11 @@
 
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
-    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait || self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
-        [self.delegate adapter:self didFailToReceiveAd:@"inmobi not support kYumiMediationAdViewSmartBannerPortrait or kYumiMediationAdViewSmartBannerLandscape"];
+    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait ||
+        self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
+        [self.delegate adapter:self
+            didFailToReceiveAd:@"inmobi not support kYumiMediationAdViewSmartBannerPortrait or "
+                               @"kYumiMediationAdViewSmartBannerLandscape"];
         return;
     }
 

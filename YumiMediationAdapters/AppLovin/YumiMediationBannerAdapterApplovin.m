@@ -62,8 +62,11 @@
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
         adframe = CGRectMake(0, 0, 300, 250);
     }
-    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait || self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
-        [self.delegate adapter:self didFailToReceiveAd:@"applovin not support kYumiMediationAdViewSmartBannerPortrait or kYumiMediationAdViewSmartBannerLandscape"];
+    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait ||
+        self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
+        [self.delegate adapter:self
+            didFailToReceiveAd:@"applovin not support kYumiMediationAdViewSmartBannerPortrait or "
+                               @"kYumiMediationAdViewSmartBannerLandscape"];
         return;
     }
 

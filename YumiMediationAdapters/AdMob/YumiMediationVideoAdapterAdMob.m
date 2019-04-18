@@ -29,16 +29,16 @@
 
     self.delegate = delegate;
     self.provider = provider;
-    
+
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     if ([standardUserDefaults objectForKey:YumiMediationAdmobAdapterUUID]) {
         return self;
     }
-    [[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus * _Nonnull status) {
+    [[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *_Nonnull status) {
         [standardUserDefaults setObject:@"Admob_is_starting" forKey:YumiMediationAdmobAdapterUUID];
         [standardUserDefaults synchronize];
     }];
-    
+
     [GADRewardBasedVideoAd sharedInstance].delegate = self;
     return self;
 }
@@ -84,7 +84,7 @@
     [self.delegate adapter:self didCloseVideoAd:rewardBasedVideoAd];
 }
 /// Tells the delegate that the reward based video ad will leave the application.
-- (void)rewardBasedVideoAdWillLeaveApplication:(GADRewardBasedVideoAd *)rewardBasedVideoAd{
+- (void)rewardBasedVideoAdWillLeaveApplication:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
     [self.delegate adapter:self didClickVideoAd:rewardBasedVideoAd];
 }
 @end
