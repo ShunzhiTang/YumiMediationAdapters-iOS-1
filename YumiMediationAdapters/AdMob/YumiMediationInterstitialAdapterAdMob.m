@@ -31,9 +31,6 @@
     self.provider = provider;
     self.delegate = delegate;
 
-    self.interstitial = [[GADInterstitial alloc] initWithAdUnitID:self.provider.data.key1];
-    self.interstitial.delegate = self;
-
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     if ([standardUserDefaults objectForKey:YumiMediationAdmobAdapterUUID]) {
         return self;
@@ -46,6 +43,10 @@
 }
 
 - (void)requestAd {
+    //  Only one interstitial request is allowed at a time.
+    self.interstitial = [[GADInterstitial alloc] initWithAdUnitID:self.provider.data.key1];
+    self.interstitial.delegate = self;
+    
     GADRequest *request = [GADRequest request];
     [self.interstitial loadRequest:request];
 }
