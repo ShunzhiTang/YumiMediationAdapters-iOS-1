@@ -13,25 +13,25 @@
 
 @property (nonatomic) IMInterstitial *video;
 @property (nonatomic, assign) BOOL isReward;
-
+@property (nonatomic, assign) YumiMediationAdType adType;
 @end
 
 @implementation YumiMediationVideoAdapterInMobi
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
-                                                      forProvider:kYumiMediationAdapterIDInMobi
-                                                      requestType:YumiMediationSDKAdRequest];
+     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDInMobi requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeVideo];
 }
 
-#pragma mark - YumiMediationVideoAdapter
-- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+#pragma mark - YumiMediationCoreAdapter
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType  {
     self = [super init];
 
     self.delegate = delegate;
     self.provider = provider;
-
+    self.adType = adType;
+    
     [IMSdk initWithAccountID:self.provider.data.key1];
     self.video = [[IMInterstitial alloc] initWithPlacementId:[self.provider.data.key2 longLongValue] delegate:self];
 
@@ -52,38 +52,37 @@
 
 #pragma mark - IMInterstitialDelegate
 - (void)interstitialDidReceiveAd:(IMInterstitial *)interstitial {
-    [self.delegate adapter:self didReceiveVideoAd:interstitial];
+    [self.delegate coreAdapter:self didReceivedCoreAd:interstitial adType:self.adType];
 }
 
 - (void)interstitial:(IMInterstitial *)interstitial didFailToLoadWithError:(IMRequestStatus *)error {
-    [self.delegate adapter:self videoAd:interstitial didFailToLoad:[error localizedDescription]];
+    [self.delegate coreAdapter:self coreAd:interstitial didFailToLoad:error.localizedDescription adType:self.adType];
 }
 
 - (void)interstitialDidPresent:(IMInterstitial *)interstitial {
-    [self.delegate adapter:self didOpenVideoAd:interstitial];
-
-    [self.delegate adapter:self didStartPlayingVideoAd:interstitial];
+    [self.delegate coreAdapter:self didOpenCoreAd:interstitial adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:interstitial adType:self.adType];
 }
 
 - (void)interstitial:(IMInterstitial *)interstitial didFailToPresentWithError:(IMRequestStatus *)error {
-    [self.provider.logger debug:@"InMobi video fail to present" extras:@{@"error" : error}];
+     [self.delegate coreAdapter:self failedToShowAd:interstitial errorString:error.localizedDescription adType:self.adType];
 }
 
 - (void)interstitialDidDismiss:(IMInterstitial *)interstitial {
 
     if (self.isReward) {
-        [self.delegate adapter:self videoAd:interstitial didReward:nil];
+        [self.delegate coreAdapter:self coreAd:interstitial didReward:YES adType:self.adType];
         self.isReward = NO;
     }
-    [self.delegate adapter:self didCloseVideoAd:interstitial];
+    [self.delegate coreAdapter:self didCloseCoreAd:interstitial isCompletePlaying:YES adType:self.adType];
 }
 
 - (void)interstitial:(IMInterstitial *)interstitial rewardActionCompletedWithRewards:(NSDictionary *)rewards {
     self.isReward = YES;
 }
 ///  Notifies the delegate that the user will leave application context.
-- (void)userWillLeaveApplicationFromInterstitial:(IMInterstitial *)interstitial {
-    [self.delegate adapter:self didClickVideoAd:interstitial];
+-(void)interstitial:(IMInterstitial*)interstitial didInteractWithParams:(NSDictionary*)params {
+     [self.delegate coreAdapter:self didClickCoreAd:interstitial adType:self.adType];
 }
 
 @end
