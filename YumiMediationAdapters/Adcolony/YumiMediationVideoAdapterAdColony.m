@@ -14,24 +14,28 @@
 @property (nonatomic, assign) BOOL isAdReady;
 @property (nonatomic, assign) BOOL isReward;
 @property (nonatomic) AdColonyInterstitial *video;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationVideoAdapterAdColony
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
-                                                      forProvider:kYumiMediationAdapterIDAdColony
-                                                      requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDAdColony
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeVideo];
 }
 
 #pragma mark - YumiMediationVideoAdapter
-- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.delegate = delegate;
     self.provider = provider;
+    self.adType = adType;
 
     __weak typeof(self) weakSelf = self;
     [AdColony configureWithAppID:provider.data.key1
@@ -54,30 +58,26 @@
         success:^(AdColonyInterstitial *_Nonnull ad) {
             weakSelf.isAdReady = YES;
             weakSelf.video = ad;
-
-            [weakSelf.delegate adapter:weakSelf didReceiveVideoAd:weakSelf.video];
-
+            [weakSelf.delegate coreAdapter:weakSelf didReceivedCoreAd:weakSelf.video adType:weakSelf.adType];
             [ad setOpen:^{
-                [weakSelf.delegate adapter:weakSelf didOpenVideoAd:weakSelf.video];
-                [weakSelf.delegate adapter:weakSelf didStartPlayingVideoAd:weakSelf.video];
+                [weakSelf.delegate coreAdapter:weakSelf didOpenCoreAd:weakSelf.video adType:weakSelf.adType];
+                [weakSelf.delegate coreAdapter:weakSelf didStartPlayingAd:weakSelf.video adType:weakSelf.adType];
             }];
             [ad setClose:^{
+                [weakSelf.delegate coreAdapter:weakSelf didCloseCoreAd:weakSelf.video isCompletePlaying:weakSelf.isReward adType:weakSelf.adType];
                 weakSelf.isAdReady = NO;
                 if (weakSelf.isReward) {
-                    [weakSelf.delegate adapter:weakSelf videoAd:weakSelf.video didReward:nil];
-                    weakSelf.isReward = nil;
+                    [weakSelf.delegate coreAdapter:weakSelf coreAd:weakSelf.video didReward:YES adType:weakSelf.adType];
+                    weakSelf.isReward = NO;
                 }
-                [weakSelf.delegate adapter:weakSelf didCloseVideoAd:weakSelf.video];
-
             }];
             [ad setClick:^{
-                [weakSelf.delegate adapter:weakSelf didClickVideoAd:weakSelf.video];
+                [weakSelf.delegate coreAdapter:weakSelf didClickCoreAd:weakSelf.video adType:weakSelf.adType];
             }];
         }
         failure:^(AdColonyAdRequestError *_Nonnull error) {
             weakSelf.isAdReady = NO;
-
-            [weakSelf.delegate adapter:weakSelf videoAd:nil didFailToLoad:[error localizedDescription]];
+            [weakSelf.delegate coreAdapter:weakSelf coreAd:nil didFailToLoad:[error localizedDescription] adType:weakSelf.adType];
         }];
 }
 
