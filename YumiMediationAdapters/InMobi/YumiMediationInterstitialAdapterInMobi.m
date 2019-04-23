@@ -48,7 +48,7 @@
     return [self.interstitial isReady];
 }
 
-- (void)presentFromRootViewController:(UIViewController *)rootViewController; {
+- (void)presentFromRootViewController:(UIViewController *)rootViewController{
     [self.interstitial showFromViewController:rootViewController];
 }
 
