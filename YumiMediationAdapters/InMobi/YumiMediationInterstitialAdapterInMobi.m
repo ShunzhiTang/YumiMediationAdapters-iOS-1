@@ -22,7 +22,7 @@
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDInMobi requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeInterstitial];
 }
 
-#pragma mark - YumiMediationInterstitialAdapter
+#pragma mark - YumiMediationCoreAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
                                           adType:(YumiMediationAdType)adType {

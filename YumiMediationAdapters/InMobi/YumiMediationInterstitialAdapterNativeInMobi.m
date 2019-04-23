@@ -58,7 +58,7 @@
     self.interstitial.isNativeInterstitialGDT = NO;
 }
 
-#pragma mark - YumiMediationInterstitialAdapter
+#pragma mark - YumiMediationCoreAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
                                           adType:(YumiMediationAdType)adType{
