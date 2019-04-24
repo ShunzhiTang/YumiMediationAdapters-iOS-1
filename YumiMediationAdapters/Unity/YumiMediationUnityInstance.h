@@ -14,6 +14,8 @@
 
 @property (nonatomic) YumiMediationInterstitialAdapterUnity *unityInterstitialAdapter;
 @property (nonatomic) YumiMediationVideoAdapterUnity *unityVideoAdapter;
+@property (nonatomic, assign) YumiMediationAdType adType;
+
 + (YumiMediationUnityInstance *)sharedInstance;
 
 @end
