@@ -32,6 +32,14 @@
 }
 
 - (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message {
+    
+    // show or player ad fail
+    if (error == kUnityAdsErrorShowError || error == kUnityAdsErrorVideoPlayerError) {
+        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter failedToShowAd:nil errorString:message adType:self.adType];
+        
+        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter failedToShowAd:nil errorString:message adType:self.adType];
+        return;
+    }
     [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter coreAd:nil didFailToLoad:message adType:self.adType];
 
     [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter coreAd:nil didFailToLoad:message adType:self.adType];
