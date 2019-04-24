@@ -12,23 +12,26 @@
 
 @interface YumiMediationInterstitialAdapterUnity ()
 
+@property (nonatomic, assign) YumiMediationAdType adType;
+
 @end
 
 @implementation YumiMediationInterstitialAdapterUnity
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDUnity
-                                                             requestType:YumiMediationSDKAdRequest];
+     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDUnity requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeInterstitial];
 }
 
-#pragma mark - YumiMediationInterstitialAdapter
-- (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
-                                                delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
+#pragma mark - YumiMediationCoreAdapter
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
     self.delegate = delegate;
+    self.adType = adType;
+    
     if (![UnityAds isInitialized]) {
         [UnityAds initialize:provider.data.key1 delegate:[YumiMediationUnityInstance sharedInstance] testMode:NO];
     }
@@ -40,7 +43,7 @@
 - (void)requestAd {
     // NOTE: Unity do not provide any method for requesting ad, it handles the request internally
     if ([UnityAds isReady:self.provider.data.key2]) {
-        [self.delegate adapter:self didReceiveInterstitialAd:nil];
+        [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
     }
 }
 
@@ -48,8 +51,8 @@
     return [UnityAds isReady:self.provider.data.key2];
 }
 
-- (void)present {
-    [UnityAds show:[self.delegate rootViewControllerForPresentingModalView] placementId:self.provider.data.key2];
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [UnityAds show:rootViewController placementId:self.provider.data.key2];
 }
 
 @end
