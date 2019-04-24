@@ -12,25 +12,26 @@
 @interface YumiMediationInterstitialAdapterInMobi () <IMInterstitialDelegate>
 
 @property (nonatomic) IMInterstitial *interstitial;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationInterstitialAdapterInMobi
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDInMobi
-                                                             requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDInMobi requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeInterstitial];
 }
 
-#pragma mark - YumiMediationInterstitialAdapter
-- (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
-                                                delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
+#pragma mark - YumiMediationCoreAdapter
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
     self.delegate = delegate;
-
+    self.adType = adType;
+    
     [IMSdk initWithAccountID:self.provider.data.key1];
     [IMSdk setLogLevel:kIMSDKLogLevelNone];
 
@@ -48,29 +49,33 @@
     return [self.interstitial isReady];
 }
 
-- (void)present {
-    [self.interstitial showFromViewController:[self.delegate rootViewControllerForPresentingModalView]];
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [self.interstitial showFromViewController:rootViewController];
 }
 
 #pragma mark - IMInterstitialDelegate
 - (void)interstitialDidFinishLoading:(IMInterstitial *)interstitial {
-    [self.delegate adapter:self didReceiveInterstitialAd:interstitial];
+    [self.delegate coreAdapter:self didReceivedCoreAd:interstitial adType:self.adType];
 }
 
 - (void)interstitial:(IMInterstitial *)interstitial didFailToLoadWithError:(IMRequestStatus *)error {
-    [self.delegate adapter:self interstitialAd:interstitial didFailToReceive:[error localizedDescription]];
+    [self.delegate coreAdapter:self coreAd:interstitial didFailToLoad:error.localizedDescription adType:self.adType];
 }
 
 - (void)interstitialWillPresent:(IMInterstitial *)interstitial {
-    [self.delegate adapter:self willPresentScreen:interstitial];
+    [self.delegate coreAdapter:self didOpenCoreAd:interstitial adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:interstitial adType:self.adType];
 }
 
 - (void)interstitialDidDismiss:(IMInterstitial *)interstitial {
-    [self.delegate adapter:self willDismissScreen:interstitial];
+    [self.delegate coreAdapter:self didCloseCoreAd:interstitial isCompletePlaying:NO adType:self.adType];
 }
 
 - (void)interstitial:(IMInterstitial *)interstitial didInteractWithParams:(NSDictionary *)params {
-    [self.delegate adapter:self didClickInterstitialAd:interstitial];
+    [self.delegate coreAdapter:self didClickCoreAd:interstitial adType:self.adType];
 }
 
+-(void)interstitial:(IMInterstitial*)interstitial didFailToPresentWithError:(IMRequestStatus*)error{
+    [self.delegate coreAdapter:self failedToShowAd:interstitial errorString:error.localizedDescription adType:self.adType];
+}
 @end
