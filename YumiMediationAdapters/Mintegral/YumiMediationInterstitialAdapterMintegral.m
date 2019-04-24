@@ -12,24 +12,25 @@
 @interface YumiMediationInterstitialAdapterMintegral () <MTGInterstitialAdLoadDelegate, MTGInterstitialAdShowDelegate>
 @property (nonatomic, strong) MTGInterstitialAdManager *interstitialAdManager;
 @property (nonatomic, assign) BOOL available;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationInterstitialAdapterMintegral
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDMobvistaInterstitial
-                                                             requestType:YumiMediationSDKAdRequest];
+  [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDMobvista requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeInterstitial];
 }
-
-#pragma mark - YumiMediationInterstitialAdapter
-- (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
-                                                delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
+    
+#pragma mark - YumiMediationCoreAdapter
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
     self.delegate = delegate;
-
+    self.adType = adType;
+    
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [[MTGSDK sharedInstance] setAppID:weakSelf.provider.data.key1 ApiKey:weakSelf.provider.data.key2];
@@ -49,32 +50,34 @@
     return self.available;
 }
 
-- (void)present {
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
     self.available = NO;
     [_interstitialAdManager showWithDelegate:self
-                    presentingViewController:[self.delegate rootViewControllerForPresentingModalView]];
+                    presentingViewController:rootViewController];
 }
 
 #pragma mark - Interstitial Delegate Methods
-- (void)onInterstitialLoadSuccess:adManager {
+- (void)onInterstitialLoadSuccess:(MTGInterstitialAdManager *)adManager {
     self.available = YES;
-    [self.delegate adapter:self didReceiveInterstitialAd:nil];
+    [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
 }
 - (void)onInterstitialLoadFail:(nonnull NSError *)error adManager:(MTGInterstitialAdManager *_Nonnull)adManager {
     self.available = NO;
-    [self.delegate adapter:self interstitialAd:nil didFailToReceive:error.localizedDescription];
+    [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:self.adType];
 }
-- (void)onInterstitialShowSuccess:adManager {
-    [self.delegate adapter:self willPresentScreen:nil];
+- (void)onInterstitialShowSuccess:(MTGInterstitialAdManager *)adManager {
+    [self.delegate coreAdapter:self didOpenCoreAd:nil adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:nil adType:self.adType];
 }
 - (void)onInterstitialShowFail:(nonnull NSError *)error adManager:(MTGInterstitialAdManager *_Nonnull)adManager {
+    [self.delegate coreAdapter:self failedToShowAd:nil errorString:error.localizedDescription adType:self.adType];
 }
-- (void)onInterstitialClosed:adManager {
+- (void)onInterstitialClosed:(MTGInterstitialAdManager *)adManager {
     self.available = NO;
-    [self.delegate adapter:self willDismissScreen:nil];
+    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
 }
-- (void)onInterstitialAdClick:adManager {
-    [self.delegate adapter:self didClickInterstitialAd:nil];
+- (void)onInterstitialAdClick:(MTGInterstitialAdManager *)adManager {
+    [self.delegate coreAdapter:self didClickCoreAd:nil adType:self.adType];
 }
 
 @end
