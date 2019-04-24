@@ -9,27 +9,30 @@
 #import <IronSource/IronSource.h>
 
 @interface YumiMediationInterstitialAdapterIronSource () <ISDemandOnlyInterstitialDelegate>
+
+@property (nonatomic, assign) YumiMediationAdType adType;
+
 @end
 
 @implementation YumiMediationInterstitialAdapterIronSource
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDIronsource
-                                                             requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDIronsource requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeInterstitial];
 }
 
-#pragma mark - YumiMediationInterstitialAdapter
-- (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
-                                                delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
+#pragma mark - YumiMediationCoreAdapter
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
     self.delegate = delegate;
+    self.adType = adType;
 
     [IronSource setISDemandOnlyInterstitialDelegate:self];
     if (self.provider.data.key1.length == 0 || self.provider.data.key2.length == 0) {
-        [self.delegate adapter:self interstitialAd:nil didFailToReceive:@"No app id or instance id specified"];
+        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"No app id or instance id specified" adType:self.adType];
         return nil;
     }
     [IronSource initISDemandOnly:self.provider.data.key1 adUnits:@[ IS_INTERSTITIAL ]];
@@ -42,12 +45,10 @@
 
 - (BOOL)isReady {
     return [IronSource hasISDemandOnlyInterstitial:self.provider.data.key2];
-    ;
 }
 
-- (void)present {
-    [IronSource showISDemandOnlyInterstitial:[self.delegate rootViewControllerForPresentingModalView]
-                                  instanceId:self.provider.data.key2];
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [IronSource showISDemandOnlyInterstitial:rootViewController instanceId:self.provider.data.key2];
 }
 
 #pragma mark - ISDemandOnlyInterstitialDelegate
@@ -55,7 +56,7 @@
  Called after an interstitial has been loaded
  */
 - (void)interstitialDidLoad:(NSString *)instanceId {
-    [self.delegate adapter:self didReceiveInterstitialAd:nil instanceId:instanceId];
+    [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
 }
 
 /**
@@ -63,27 +64,28 @@
  @param error The reason for the error
  */
 - (void)interstitialDidFailToLoadWithError:(NSError *)error instanceId:(NSString *)instanceId {
-    [self.delegate adapter:self interstitialAd:nil didFailToReceive:[error localizedDescription] instanceId:instanceId];
+    [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:self.adType];
 }
-
 /**
  Called after an interstitial has been opened.
  */
 - (void)interstitialDidOpen:(NSString *)instanceId {
-    [self.delegate adapter:self willPresentScreen:nil];
+    [self.delegate coreAdapter:self didOpenCoreAd:nil adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:nil adType:self.adType];
 }
 
 /**
  Called after an interstitial has been dismissed.
  */
 - (void)interstitialDidClose:(NSString *)instanceId {
-    [self.delegate adapter:self willDismissScreen:nil];
+     [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
 }
 
 /**
  Called after an interstitial has been displayed on the screen.
  */
 - (void)interstitialDidShow:(NSString *)instanceId {
+    
 }
 
 /**
@@ -91,13 +93,14 @@
  @param error The reason for the error
  */
 - (void)interstitialDidFailToShowWithError:(NSError *)error instanceId:(NSString *)instanceId {
+    [self.delegate coreAdapter:self failedToShowAd:nil errorString:error.localizedDescription adType:self.adType];
 }
 
 /**
  Called after an interstitial has been clicked.
  */
 - (void)didClickInterstitial:(NSString *)instanceId {
-    [self.delegate adapter:self didClickInterstitialAd:nil instanceId:instanceId];
+   [self.delegate coreAdapter:self didClickCoreAd:nil adType:self.adType];
 }
 
 @end
