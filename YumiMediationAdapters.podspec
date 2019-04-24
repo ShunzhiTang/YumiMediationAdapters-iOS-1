@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
     # { :name => "GDT", :version => "4.8.1" ,:has_resource_bundle => true},
     { :name => "InMobi", :version => "7.2.1" },
     { :name => "IronSource", :version => "6.8.1.0" },
-    # { :name => "Unity", :version => "2.3.0" },
+    { :name => "Unity", :version => "2.3.0" },
     # { :name => "Vungle", :version => "6.2.0" },
     # { :name => "Mintegral", :version => "4.9.4"},
     # { :name => "OneWay",:version => "2.1.0"},
