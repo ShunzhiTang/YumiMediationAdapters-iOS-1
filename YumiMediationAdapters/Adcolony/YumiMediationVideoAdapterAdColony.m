@@ -64,12 +64,12 @@
                 [weakSelf.delegate coreAdapter:weakSelf didStartPlayingAd:weakSelf.video adType:weakSelf.adType];
             }];
             [ad setClose:^{
-                [weakSelf.delegate coreAdapter:weakSelf didCloseCoreAd:weakSelf.video isCompletePlaying:weakSelf.isReward adType:weakSelf.adType];
-                weakSelf.isAdReady = NO;
                 if (weakSelf.isReward) {
                     [weakSelf.delegate coreAdapter:weakSelf coreAd:weakSelf.video didReward:YES adType:weakSelf.adType];
                     weakSelf.isReward = NO;
                 }
+                [weakSelf.delegate coreAdapter:weakSelf didCloseCoreAd:weakSelf.video isCompletePlaying:weakSelf.isReward adType:weakSelf.adType];
+                weakSelf.isAdReady = NO;
             }];
             [ad setClick:^{
                 [weakSelf.delegate coreAdapter:weakSelf didClickCoreAd:weakSelf.video adType:weakSelf.adType];
