@@ -52,6 +52,9 @@
 }
 
 - (void)requestAd {
+    self.isAdReady = NO;
+    self.isReward = NO;
+    
     __weak typeof(self) weakSelf = self;
     [AdColony requestInterstitialInZone:self.provider.data.key2
         options:nil
@@ -66,10 +69,10 @@
             [ad setClose:^{
                 if (weakSelf.isReward) {
                     [weakSelf.delegate coreAdapter:weakSelf coreAd:weakSelf.video didReward:YES adType:weakSelf.adType];
-                    weakSelf.isReward = NO;
                 }
                 [weakSelf.delegate coreAdapter:weakSelf didCloseCoreAd:weakSelf.video isCompletePlaying:weakSelf.isReward adType:weakSelf.adType];
                 weakSelf.isAdReady = NO;
+                weakSelf.isReward = NO;
             }];
             [ad setClick:^{
                 [weakSelf.delegate coreAdapter:weakSelf didClickCoreAd:weakSelf.video adType:weakSelf.adType];
