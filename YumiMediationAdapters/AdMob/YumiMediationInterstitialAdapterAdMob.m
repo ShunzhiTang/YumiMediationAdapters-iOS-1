@@ -12,24 +12,28 @@
 @interface YumiMediationInterstitialAdapterAdMob () <GADInterstitialDelegate>
 
 @property (nonatomic) GADInterstitial *interstitial;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationInterstitialAdapterAdMob
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDAdMob
-                                                             requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDAdMob
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeVideo];
 }
 
 #pragma mark - YumiMediationInterstitialAdapter
-- (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
-                                                delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
     self.delegate = delegate;
+    self.adType = adType;
 
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     if ([standardUserDefaults objectForKey:YumiMediationAdmobAdapterUUID]) {
@@ -55,28 +59,30 @@
     return [self.interstitial isReady];
 }
 
-- (void)present {
-    [self.interstitial presentFromRootViewController:[self.delegate rootViewControllerForPresentingModalView]];
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [self.interstitial presentFromRootViewController:rootViewController];
 }
 
 #pragma mark - GADInterstitialDelegate
 - (void)interstitialDidReceiveAd:(GADInterstitial *)ad {
-    [self.delegate adapter:self didReceiveInterstitialAd:ad];
+    [self.delegate coreAdapter:self didReceivedCoreAd:ad adType:self.adType];
 }
 
 - (void)interstitial:(GADInterstitial *)ad didFailToReceiveAdWithError:(GADRequestError *)error {
-    [self.delegate adapter:self interstitialAd:ad didFailToReceive:[error localizedDescription]];
+    [self.delegate coreAdapter:self coreAd:ad didFailToLoad:[error localizedDescription] adType:self.adType];
 }
 
 - (void)interstitialWillPresentScreen:(GADInterstitial *)ad {
+    [self.delegate coreAdapter:self didOpenCoreAd:ad adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:ad adType:self.adType];
 }
 
 - (void)interstitialWillDismissScreen:(GADInterstitial *)ad {
-    [self.delegate adapter:self willDismissScreen:ad];
+    [self.delegate coreAdapter:self didCloseCoreAd:ad isCompletePlaying:NO adType:self.adType];
 }
 
 - (void)interstitialWillLeaveApplication:(GADInterstitial *)ad {
-    [self.delegate adapter:self didClickInterstitialAd:ad];
+    [self.delegate coreAdapter:self didClickCoreAd:ad adType:self.adType];
 }
 
 @end
