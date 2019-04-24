@@ -30,7 +30,8 @@
 
     self.provider = provider;
     self.delegate = delegate;
-
+    self.adType = adType;
+    
     [IMSdk initWithAccountID:self.provider.data.key1];
     [IMSdk setLogLevel:kIMSDKLogLevelNone];
 
