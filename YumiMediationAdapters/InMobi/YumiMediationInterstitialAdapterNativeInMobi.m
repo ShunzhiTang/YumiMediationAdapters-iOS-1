@@ -179,7 +179,7 @@
 }
 
 - (void)yumiAdsWKCustomViewControllerDidClosed:(UIViewController *)viewController {
-    [self.delegate coreAdapter:self didCloseCoreAd:self.interstitial isCompletePlaying:YES adType:self.adType];
+    [self.delegate coreAdapter:self didCloseCoreAd:self.interstitial isCompletePlaying:NO adType:self.adType];
 }
 
 @end
