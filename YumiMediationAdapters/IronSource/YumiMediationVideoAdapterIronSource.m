@@ -10,30 +10,31 @@
 #import <IronSource/IronSource.h>
 
 @interface YumiMediationVideoAdapterIronSource () <ISDemandOnlyRewardedVideoDelegate>
+
 @property (nonatomic, assign) BOOL isReward;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationVideoAdapterIronSource
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
-                                                      forProvider:kYumiMediationAdapterIDIronsource
-                                                      requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDIronsource requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeVideo];
 }
 
-#pragma mark - YumiMediationVideoAdapter
-- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+#pragma mark - YumiMediationCoreAdapter
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType  {
     self = [super init];
 
     self.delegate = delegate;
     self.provider = provider;
-
+    self.adType = adType;
     [IronSource setISDemandOnlyRewardedVideoDelegate:self];
     [IronSource shouldTrackReachability:YES];
     if (self.provider.data.key1.length == 0 || self.provider.data.key2.length == 0) {
-        [self.delegate adapter:self videoAd:nil didFailToLoad:@"No app id or instance id specified"];
+        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"No app id or instance id specified" adType:self.adType];
         return nil;
     }
     [IronSource initISDemandOnly:self.provider.data.key1 adUnits:@[ IS_REWARDED_VIDEO ]];
@@ -57,9 +58,9 @@
 //@param available The new rewarded video availability. YES if available and ready to be shown, NO otherwise.
 - (void)rewardedVideoHasChangedAvailability:(BOOL)available instanceId:(NSString *)instanceId {
     if (available) {
-        [self.delegate adapter:self didReceiveVideoAd:nil];
+        [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
     } else {
-        [self.delegate adapter:self videoAd:nil didFailToLoad:@"ironSource is not available" isRetry:NO];
+        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"ironSource is not available" adType:self.adType];
     }
 }
 
@@ -67,32 +68,34 @@
 //@param placementInfo An object that contains the placement's reward name and amount.
 - (void)didReceiveRewardForPlacement:(ISPlacementInfo *)placementInfo instanceId:(NSString *)instanceId {
     self.isReward = YES;
-    [self.delegate adapter:self videoAd:nil didReward:nil instanceId:instanceId];
+    [self.delegate coreAdapter:self coreAd:nil didReward:self.isReward adType:self.adType];
 }
 
 // Called after a rewarded video has attempted to show but failed.
 //@param error The reason for the error
 - (void)rewardedVideoDidFailToShowWithError:(NSError *)error instanceId:(NSString *)instanceId {
-    [self.delegate adapter:self videoAd:nil didFailToLoad:[error localizedDescription] isRetry:NO];
+    [self.delegate coreAdapter:self failedToShowAd:nil errorString:error.localizedDescription adType:self.adType];
 }
 
 // Called after a rewarded video has been opened.
 - (void)rewardedVideoDidOpen:(NSString *)instanceId {
-    [self.delegate adapter:self didOpenVideoAd:nil];
+    [self.delegate coreAdapter:self didOpenCoreAd:nil adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:nil adType:self.adType];
 }
 
 // Called after a rewarded video has been dismissed.
 - (void)rewardedVideoDidClose:(NSString *)instanceId {
     if (!self.isReward) { // ironsource 确保无中途关闭并且奖励回调始终在关闭之前
-        [self.delegate adapter:self videoAd:nil didReward:nil instanceId:instanceId];
+        [self.delegate coreAdapter:self coreAd:nil didReward:self.isReward adType:self.adType];
     }
+    
+    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:self.isReward adType:self.adType];
     self.isReward = NO;
-    [self.delegate adapter:self didCloseVideoAd:nil instanceId:instanceId];
 }
 
 // Invoked when the end user clicked on the RewardedVideo ad
 - (void)didClickRewardedVideo:(ISPlacementInfo *)placementInfo instanceId:(NSString *)instanceId {
-    [self.delegate adapter:self didClickVideoAd:nil instanceId:instanceId];
+   [self.delegate coreAdapter:self didClickCoreAd:nil adType:self.adType];
 }
 
 @end
