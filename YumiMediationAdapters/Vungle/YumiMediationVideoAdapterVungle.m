@@ -12,26 +12,29 @@
 
 @interface YumiMediationVideoAdapterVungle ()
 
+@property (nonatomic, assign) YumiMediationAdType adType;
+
 @end
 
 @implementation YumiMediationVideoAdapterVungle
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
-                                                      forProvider:kYumiMediationAdapterIDVungle
-                                                      requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDVungle requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeVideo];
 }
 
-#pragma mark - YumiMediationVideoAdapter
-- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+#pragma mark - YumiMediationCoreAdapter
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.delegate = delegate;
     self.provider = provider;
-
+    self.adType = adType;
+    
     YumiMediationVungleInstance *vungleInstance = [YumiMediationVungleInstance sharedInstance];
     [vungleInstance.vungleVideoAdapters addObject:self];
+    vungleInstance.adType = adType;
 
     NSError *error;
     NSString *appID = self.provider.data.key1;
@@ -61,8 +64,8 @@
     NSError *error;
     [[VungleSDK sharedSDK] playAd:rootViewController options:nil placementID:self.provider.data.key2 error:&error];
 
-    if (error) {
-        [self.delegate adapter:self videoAd:nil didFailToLoad:[error localizedDescription] isRetry:NO];
+    if (error) {[self.delegate coreAdapter:self failedToShowAd:nil errorString:[error localizedDescription] adType:self.adType];
+       [self.delegate coreAdapter:self failedToShowAd:nil errorString:[error localizedDescription] adType:self.adType];
     }
 }
 
