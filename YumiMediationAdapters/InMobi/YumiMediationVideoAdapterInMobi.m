@@ -40,6 +40,7 @@
 
 - (void)requestAd {
     [self.video load];
+    self.isReward = NO;
 }
 
 - (BOOL)isReady {
@@ -72,9 +73,9 @@
 
     if (self.isReward) {
         [self.delegate coreAdapter:self coreAd:interstitial didReward:YES adType:self.adType];
-        self.isReward = NO;
     }
-    [self.delegate coreAdapter:self didCloseCoreAd:interstitial isCompletePlaying:YES adType:self.adType];
+    [self.delegate coreAdapter:self didCloseCoreAd:interstitial isCompletePlaying:self.isReward adType:self.adType];
+    self.isReward = NO;
 }
 
 - (void)interstitial:(IMInterstitial *)interstitial rewardActionCompletedWithRewards:(NSDictionary *)rewards {
