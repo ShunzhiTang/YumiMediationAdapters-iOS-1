@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
-@interface YumiMediationVideoAdapterFacebook : NSObject <YumiMediationVideoAdapter>
+@interface YumiMediationVideoAdapterFacebook : NSObject <YumiMediationCoreAdapter>
 
-@property (nonatomic, weak) id<YumiMediationVideoAdapterDelegate> delegate;
-@property (nonatomic) YumiMediationVideoProvider *provider;
+@property (nonatomic, weak) id<YumiMediationCoreAdapterDelegate> delegate;
+@property (nonatomic) YumiMediationCoreProvider *provider;
 
 @end
