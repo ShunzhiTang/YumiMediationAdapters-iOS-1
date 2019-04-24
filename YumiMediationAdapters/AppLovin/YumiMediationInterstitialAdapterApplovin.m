@@ -15,24 +15,28 @@
 @property (nonatomic) ALAd *ad;
 @property (nonatomic) ALSdk *sdk;
 @property (nonatomic, assign) BOOL isAdReady;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationInterstitialAdapterApplovin
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDAppLovin
-                                                             requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDAppLovin
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark - YumiMediationInterstitialAdapter
-- (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
-                                                delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType{
     self = [super init];
 
     self.provider = provider;
     self.delegate = delegate;
+    self.adType = adType;
 
     self.sdk = [ALSdk sharedWithKey:self.provider.data.key1];
 
@@ -44,7 +48,7 @@
 
 - (void)requestAd {
     if (self.provider.data.key2.length == 0) {
-        [self.delegate adapter:self interstitialAd:nil didFailToReceive:@"No zone identifier specified"];
+        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"No zone identifier specified" adType:self.adType];
         return;
     }
     self.isAdReady = NO;
@@ -55,7 +59,7 @@
     return self.isAdReady;
 }
 
-- (void)present {
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
     [self.interstitial showOver:[UIApplication sharedApplication].keyWindow andRender:self.ad];
 }
 
@@ -63,26 +67,25 @@
 - (void)adService:(nonnull ALAdService *)adService didLoadAd:(nonnull ALAd *)ad {
     self.ad = ad;
     self.isAdReady = YES;
-    [self.delegate adapter:self didReceiveInterstitialAd:ad];
+    [self.delegate coreAdapter:self didReceivedCoreAd:ad adType:self.adType];
 }
 
 - (void)adService:(nonnull ALAdService *)adService didFailToLoadAdWithError:(int)code {
-    [self.delegate adapter:self
-            interstitialAd:nil
-          didFailToReceive:[NSString stringWithFormat:@"applovin error code:%d", code]];
+    [self.delegate coreAdapter:self coreAd:nil didFailToLoad:[NSString stringWithFormat:@"applovin error code:%d", code] adType:self.adType];
 }
 
 #pragma mark - Ad Display Delegate
 - (void)ad:(nonnull ALAd *)ad wasDisplayedIn:(nonnull UIView *)view {
-    [self.delegate adapter:self willPresentScreen:ad];
+    [self.delegate coreAdapter:self didOpenCoreAd:ad adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:ad adType:self.adType];
 }
 
 - (void)ad:(nonnull ALAd *)ad wasHiddenIn:(nonnull UIView *)view {
-    [self.delegate adapter:self willDismissScreen:ad];
+    [self.delegate coreAdapter:self didCloseCoreAd:ad isCompletePlaying:NO adType:self.adType];
 }
 
 - (void)ad:(nonnull ALAd *)ad wasClickedIn:(nonnull UIView *)view {
-    [self.delegate adapter:self didClickInterstitialAd:ad];
+    [self.delegate coreAdapter:self didClickCoreAd:ad adType:self.adType];
 }
 
 @end
