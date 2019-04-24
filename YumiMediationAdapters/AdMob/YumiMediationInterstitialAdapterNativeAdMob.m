@@ -17,15 +17,17 @@
 @property (nonatomic) GADAdLoader *adLoader;
 @property (nonatomic) GADNativeAppInstallAdView *appInstallAdView;
 @property (nonatomic, assign) BOOL isAdReady;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationInterstitialAdapterNativeAdMob
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
                                                            forProviderID:kYumiMediationAdapterIDAdmobNative
-                                                             requestType:YumiMediationSDKAdRequest];
+                                                             requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark : - private method
@@ -46,26 +48,26 @@
     self.isAdReady = NO;
 
     [self.appInstallAdView removeFromSuperview];
-    [self.delegate adapter:self willDismissScreen:self.appInstallAdView];
+    [self.delegate coreAdapter:self didCloseCoreAd:self.appInstallAdView isCompletePlaying:NO adType:self.adType];
 }
 
 #pragma mark : YumiMediationInterstitialAdapter
 
-- (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
-                                                delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType{
     self = [super init];
 
     self.provider = provider;
     self.delegate = delegate;
+    self.adType = adType;
 
     return self;
 }
 
 - (void)requestAd {
-
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-
         GADNativeAdViewAdOptions *option = [[GADNativeAdViewAdOptions alloc] init];
         option.preferredAdChoicesPosition = GADAdChoicesPositionBottomRightCorner;
         NSMutableArray *adTypes = [[NSMutableArray alloc] init];
@@ -73,7 +75,7 @@
 
         weakSelf.adLoader =
             [[GADAdLoader alloc] initWithAdUnitID:weakSelf.provider.data.key1
-                               rootViewController:[weakSelf.delegate rootViewControllerForPresentingModalView]
+                               rootViewController:[[YumiTool sharedTool] topMostController]
                                           adTypes:adTypes
                                           options:@[ option ]];
 
@@ -89,15 +91,15 @@
     return self.isAdReady;
 }
 
-- (void)present {
-    [[self.delegate rootViewControllerForPresentingModalView].view addSubview:self.appInstallAdView];
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[[YumiTool sharedTool] topMostController].view addSubview:self.appInstallAdView];
 }
 
 #pragma mark : - GADAdLoaderDelegate
 - (void)adLoader:(GADAdLoader *)adLoader didFailToReceiveAdWithError:(GADRequestError *)error {
     self.isAdReady = NO;
 
-    [self.delegate adapter:self interstitialAd:adLoader didFailToReceive:[error localizedDescription]];
+    [self.delegate coreAdapter:self coreAd:adLoader didFailToLoad:[error localizedDescription] adType:self.adType];
 }
 
 #pragma mark : - GADNativeAppInstallAdLoaderDelegate
@@ -153,16 +155,17 @@
         self.appInstallAdView.priceView.hidden = YES;
     }
 
-    [self.delegate adapter:self didReceiveInterstitialAd:self.appInstallAdView];
+    [self.delegate coreAdapter:self didReceivedCoreAd:self.appInstallAdView adType:self.adType];
 }
 
 #pragma mark : - GADNativeAdDelegate
 - (void)nativeAdDidRecordImpression:(GADNativeAd *)nativeAd {
-    [self.delegate adapter:self willPresentScreen:self.appInstallAdView];
+    [self.delegate coreAdapter:self didOpenCoreAd:self.appInstallAdView adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:self.appInstallAdView adType:self.adType];
 }
 
 - (void)nativeAdDidRecordClick:(GADNativeAd *)nativeAd {
-    [self.delegate adapter:self didClickInterstitialAd:self.appInstallAdView];
+    [self.delegate coreAdapter:self didClickCoreAd:self.appInstallAdView adType:self.adType];
 }
 
 - (void)nativeAdWillLeaveApplication:(GADNativeAd *)nativeAd {
