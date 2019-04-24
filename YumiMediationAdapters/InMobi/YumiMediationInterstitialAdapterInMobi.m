@@ -49,7 +49,7 @@
     return [self.interstitial isReady];
 }
 
-- (void)presentFromRootViewController:(UIViewController *)rootViewController{
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
     [self.interstitial showFromViewController:rootViewController];
 }
 
@@ -68,7 +68,7 @@
 }
 
 - (void)interstitialDidDismiss:(IMInterstitial *)interstitial {
-    [self.delegate coreAdapter:self didCloseCoreAd:interstitial isCompletePlaying:YES adType:self.adType];
+    [self.delegate coreAdapter:self didCloseCoreAd:interstitial isCompletePlaying:NO adType:self.adType];
 }
 
 - (void)interstitial:(IMInterstitial *)interstitial didInteractWithParams:(NSDictionary *)params {
