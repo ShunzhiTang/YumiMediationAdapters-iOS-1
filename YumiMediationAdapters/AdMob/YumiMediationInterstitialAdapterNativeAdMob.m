@@ -27,7 +27,7 @@
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
                                                            forProviderID:kYumiMediationAdapterIDAdmobNative
                                                              requestType:YumiMediationSDKAdRequest
-                                                          adType:YumiMediationAdTypeVideo];
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark : - private method
