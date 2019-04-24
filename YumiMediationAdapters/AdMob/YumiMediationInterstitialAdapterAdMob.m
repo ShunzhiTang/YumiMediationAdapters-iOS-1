@@ -22,7 +22,7 @@
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
                                                    forProviderID:kYumiMediationAdapterIDAdMob
                                                      requestType:YumiMediationSDKAdRequest
-                                                          adType:YumiMediationAdTypeVideo];
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark - YumiMediationInterstitialAdapter
@@ -75,6 +75,11 @@
 - (void)interstitialWillPresentScreen:(GADInterstitial *)ad {
     [self.delegate coreAdapter:self didOpenCoreAd:ad adType:self.adType];
     [self.delegate coreAdapter:self didStartPlayingAd:ad adType:self.adType];
+}
+
+/// Called when |ad| fails to present.
+- (void)interstitialDidFailToPresentScreen:(GADInterstitial *)ad {
+    [self.delegate coreAdapter:self failedToShowAd:ad errorString:@"admob did fail to show ad" adType:self.adType];
 }
 
 - (void)interstitialWillDismissScreen:(GADInterstitial *)ad {
