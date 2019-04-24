@@ -19,7 +19,4 @@
 - (void)videoVungleSDKFailedToInitializeWith:(YumiMediationVideoAdapterVungle *)videoAdapter;
 - (void)interstitialVungleSDKFailedToInitializeWith:(YumiMediationInterstitialAdapterVungle *)interstitialAdapter;
 
-// adType
-@property (nonatomic, assign) YumiMediationAdType adType;
-
 @end
