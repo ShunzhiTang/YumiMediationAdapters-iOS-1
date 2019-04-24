@@ -13,25 +13,26 @@
 @interface YumiMediationVideoAdapterMobvista () <MTGRewardAdLoadDelegate, MTGRewardAdShowDelegate>
 
 @property (nonatomic) MTGRewardAdManager *videoAd;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationVideoAdapterMobvista
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
-                                                      forProvider:kYumiMediationAdapterIDMobvista
-                                                      requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDMobvista requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeVideo];
 }
 
-#pragma mark : YumiMediationVideoAdapter
-- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+#pragma mark - YumiMediationCoreAdapter
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
     self.delegate = delegate;
-
+    self.adType = adType;
+    
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [[MTGSDK sharedInstance] setAppID:weakSelf.provider.data.key1 ApiKey:weakSelf.provider.data.key2];
@@ -60,31 +61,32 @@
 #pragma mark : - MTGRewardAdLoadDelegate
 
 - (void)onVideoAdLoadSuccess:(nullable NSString *)unitId {
-    [self.delegate adapter:self didReceiveVideoAd:self.videoAd];
+    [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
 }
 - (void)onVideoAdLoadFailed:(nullable NSString *)unitId error:(nonnull NSError *)error {
-    [self.delegate adapter:self videoAd:self.videoAd didFailToLoad:[error localizedDescription] isRetry:NO];
+     [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:self.adType];
 }
 
 #pragma mark : - MTGRewardAdShowDelegate
 - (void)onVideoAdShowSuccess:(nullable NSString *)unitId {
-    [self.delegate adapter:self didOpenVideoAd:self.videoAd];
+    [self.delegate coreAdapter:self didOpenCoreAd:nil adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:nil adType:self.adType];
 }
 - (void)onVideoAdShowFailed:(nullable NSString *)unitId withError:(nonnull NSError *)error {
-    [self.delegate adapter:self videoAd:self.videoAd didFailToLoad:[error localizedDescription] isRetry:NO];
+    [self.delegate coreAdapter:self failedToShowAd:nil errorString:error.localizedDescription adType:self.adType];
 }
 
 - (void)onVideoAdDismissed:(NSString *)unitId
              withConverted:(BOOL)converted
             withRewardInfo:(MTGRewardAdInfo *)rewardInfo {
     if (rewardInfo) {
-        [self.delegate adapter:self videoAd:self.videoAd didReward:rewardInfo];
+        [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
     }
-    [self.delegate adapter:self didCloseVideoAd:self.videoAd];
+    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:YES adType:self.adType];
 }
 ///  Called when the ad is clicked
 - (void)onVideoAdClicked:(nullable NSString *)unitId {
-    [self.delegate adapter:self didClickVideoAd:self.videoAd];
+    [self.delegate coreAdapter:self didClickCoreAd:nil adType:self.adType];
 }
 
 @end

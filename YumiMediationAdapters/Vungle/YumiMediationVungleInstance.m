@@ -32,19 +32,17 @@
                             error:(nullable NSError *)error {
     for (YumiMediationVideoAdapterVungle *videoAdapter in self.vungleVideoAdapters) {
         if ([videoAdapter.provider.data.key2 isEqualToString:placementID] && isAdPlayable) {
-            [videoAdapter.delegate adapter:videoAdapter didReceiveVideoAd:nil];
+            [videoAdapter.delegate coreAdapter:videoAdapter didReceivedCoreAd:nil adType:self.adType];
         } else if ([videoAdapter.provider.data.key2 isEqualToString:placementID] && !isAdPlayable) {
-            [videoAdapter.delegate adapter:videoAdapter videoAd:nil didFailToLoad:@"vungle is no fill" isRetry:NO];
+             [videoAdapter.delegate coreAdapter:videoAdapter coreAd:nil didFailToLoad:@"vungle is no fill" adType:self.adType];
         }
     }
 
     for (YumiMediationInterstitialAdapterVungle *interstitialAdapter in self.vungleInterstitialAdapters) {
         if ([interstitialAdapter.provider.data.key3 isEqualToString:placementID] && isAdPlayable) {
-            [interstitialAdapter.delegate adapter:interstitialAdapter didReceiveInterstitialAd:nil];
+            [interstitialAdapter.delegate coreAdapter:interstitialAdapter didReceivedCoreAd:nil adType:self.adType];
         } else if ([interstitialAdapter.provider.data.key3 isEqualToString:placementID] && !isAdPlayable) {
-            [interstitialAdapter.delegate adapter:interstitialAdapter
-                                   interstitialAd:nil
-                                 didFailToReceive:@"vungle is no fill"];
+            [interstitialAdapter.delegate coreAdapter:interstitialAdapter coreAd:nil didFailToLoad:@"vungle is no fill" adType:self.adType];
         }
     }
 }
@@ -52,12 +50,14 @@
 - (void)vungleWillShowAdForPlacementID:(nullable NSString *)placementID {
     for (YumiMediationVideoAdapterVungle *videoAdapter in self.vungleVideoAdapters) {
         if ([videoAdapter.provider.data.key2 isEqualToString:placementID]) {
-            [videoAdapter.delegate adapter:videoAdapter didStartPlayingVideoAd:nil];
+            [videoAdapter.delegate coreAdapter:videoAdapter didOpenCoreAd:nil adType:self.adType];
+            [videoAdapter.delegate coreAdapter:videoAdapter didStartPlayingAd:nil adType:self.adType];
         }
     }
     for (YumiMediationInterstitialAdapterVungle *interstitialAdapter in self.vungleInterstitialAdapters) {
         if ([interstitialAdapter.provider.data.key3 isEqualToString:placementID]) {
-            [interstitialAdapter.delegate adapter:interstitialAdapter willPresentScreen:nil];
+            [interstitialAdapter.delegate coreAdapter:interstitialAdapter didOpenCoreAd:nil adType:self.adType];
+            [interstitialAdapter.delegate coreAdapter:interstitialAdapter didStartPlayingAd:nil adType:self.adType];
         }
     }
 }
@@ -69,31 +69,33 @@
 - (void)vungleDidCloseAdWithViewInfo:(nonnull VungleViewInfo *)info placementID:(nonnull NSString *)placementID {
     for (YumiMediationVideoAdapterVungle *videoAdapter in self.vungleVideoAdapters) {
         if ([videoAdapter.provider.data.key2 isEqualToString:placementID]) {
-            [videoAdapter.delegate adapter:videoAdapter didCloseVideoAd:nil];
-            if ([info.completedView boolValue]) {
-                [videoAdapter.delegate adapter:videoAdapter videoAd:nil didReward:nil];
+            //click
+            if ([info.didDownload boolValue]) {
+                [videoAdapter.delegate coreAdapter:videoAdapter didClickCoreAd:nil adType:self.adType];
             }
+            // reward
+            if ([info.completedView boolValue]) {
+                [videoAdapter.delegate coreAdapter:videoAdapter coreAd:nil didReward:YES adType:self.adType];
+            }
+            [videoAdapter.delegate coreAdapter:videoAdapter didCloseCoreAd:nil isCompletePlaying:YES adType:self.adType];
         }
     }
     for (YumiMediationInterstitialAdapterVungle *interstitialAdapter in self.vungleInterstitialAdapters) {
         if ([interstitialAdapter.provider.data.key3 isEqualToString:placementID]) {
             if ([info.didDownload boolValue]) {
-                [interstitialAdapter.delegate adapter:interstitialAdapter didClickInterstitialAd:nil];
+                [interstitialAdapter.delegate coreAdapter:interstitialAdapter didClickCoreAd:nil adType:self.adType];
             }
-            [interstitialAdapter.delegate adapter:interstitialAdapter willDismissScreen:nil];
-            self.vungleInterstitialAdapters = nil;
+            [interstitialAdapter.delegate coreAdapter:interstitialAdapter didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
         }
     }
 }
 
 - (void)videoVungleSDKFailedToInitializeWith:(YumiMediationVideoAdapterVungle *)videoAdapter {
-    [videoAdapter.delegate adapter:videoAdapter videoAd:nil didFailToLoad:@"vungleSDKFailedToInitialize" isRetry:YES];
+    [videoAdapter.delegate coreAdapter:videoAdapter coreAd:nil didFailToLoad:@"vungleSDKFailedToInitialize" adType:self.adType];
 }
 
 - (void)interstitialVungleSDKFailedToInitializeWith:(YumiMediationInterstitialAdapterVungle *)interstitialAdapter {
-    [interstitialAdapter.delegate adapter:interstitialAdapter
-                           interstitialAd:nil
-                         didFailToReceive:@"vungleSDKFailedToInitialize"];
+     [interstitialAdapter.delegate coreAdapter:interstitialAdapter coreAd:nil didFailToLoad:@"vungleSDKFailedToInitialize" adType:self.adType];
 }
 
 @end

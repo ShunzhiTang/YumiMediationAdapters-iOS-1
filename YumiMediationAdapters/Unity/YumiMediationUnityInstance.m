@@ -25,39 +25,47 @@
 #pragma mark - UnityAdsDelegate
 - (void)unityAdsReady:(NSString *)placementId {
     if ([self.unityInterstitialAdapter.provider.data.key2 isEqualToString:placementId]) {
-        [self.unityInterstitialAdapter.delegate adapter:self.unityInterstitialAdapter didReceiveInterstitialAd:nil];
+        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter didReceivedCoreAd:nil adType:self.adType];
     } else if ([self.unityVideoAdapter.provider.data.key2 isEqualToString:placementId]) {
-        [self.unityVideoAdapter.delegate adapter:self.unityVideoAdapter didReceiveVideoAd:nil];
+        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter didReceivedCoreAd:nil adType:self.adType];
     }
 }
 
 - (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message {
-    [self.unityInterstitialAdapter.delegate adapter:self.unityInterstitialAdapter
-                                     interstitialAd:nil
-                                   didFailToReceive:message];
+    
+    // show or player ad fail
+    if (error == kUnityAdsErrorShowError || error == kUnityAdsErrorVideoPlayerError) {
+        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter failedToShowAd:nil errorString:message adType:self.adType];
+        
+        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter failedToShowAd:nil errorString:message adType:self.adType];
+        return;
+    }
+    [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter coreAd:nil didFailToLoad:message adType:self.adType];
 
-    [self.unityVideoAdapter.delegate adapter:self.unityVideoAdapter videoAd:nil didFailToLoad:message isRetry:NO];
+    [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter coreAd:nil didFailToLoad:message adType:self.adType];
 }
 
 - (void)unityAdsDidStart:(NSString *)placementId {
     if ([self.unityInterstitialAdapter.provider.data.key2 isEqualToString:placementId]) {
-        [self.unityInterstitialAdapter.delegate adapter:self.unityInterstitialAdapter willPresentScreen:nil];
+        
+        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter didOpenCoreAd:nil adType:self.adType];
+        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter didStartPlayingAd:nil adType:self.adType];
     } else if ([self.unityVideoAdapter.provider.data.key2 isEqualToString:placementId]) {
-        [self.unityVideoAdapter.delegate adapter:self.unityVideoAdapter didOpenVideoAd:nil];
 
-        [self.unityVideoAdapter.delegate adapter:self.unityVideoAdapter didStartPlayingVideoAd:nil];
+        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter didOpenCoreAd:nil adType:self.adType];
+        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter didStartPlayingAd:nil adType:self.adType];
     }
 }
 
 - (void)unityAdsDidFinish:(NSString *)placementId withFinishState:(UnityAdsFinishState)state {
     if ([self.unityInterstitialAdapter.provider.data.key2 isEqualToString:placementId]) {
-        [self.unityInterstitialAdapter.delegate adapter:self.unityInterstitialAdapter willDismissScreen:nil];
+        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
     } else if ([self.unityVideoAdapter.provider.data.key2 isEqualToString:placementId]) {
 
         if (state == kUnityAdsFinishStateCompleted) {
-            [self.unityVideoAdapter.delegate adapter:self.unityVideoAdapter videoAd:nil didReward:nil];
+             [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter coreAd:nil didReward:YES adType:self.adType];
         }
-        [self.unityVideoAdapter.delegate adapter:self.unityVideoAdapter didCloseVideoAd:nil];
+        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter didCloseCoreAd:nil isCompletePlaying:YES adType:self.adType];
     }
 }
 
