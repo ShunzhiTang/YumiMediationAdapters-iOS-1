@@ -12,23 +12,25 @@
 
 @interface YumiMediationVideoAdapterUnity ()
 
+@property (nonatomic, assign) YumiMediationAdType adType;
+
 @end
 
 @implementation YumiMediationVideoAdapterUnity
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
-                                                      forProvider:kYumiMediationAdapterIDUnity
-                                                      requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDUnity requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeVideo];
 }
 
-#pragma mark - YumiMediationVideoAdapter
-- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+#pragma mark - YumiMediationCoreAdapter
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType{
     self = [super init];
 
     self.delegate = delegate;
     self.provider = provider;
+    self.adType = adType;
 
     if (![UnityAds isInitialized]) {
         [UnityAds initialize:provider.data.key1 delegate:[YumiMediationUnityInstance sharedInstance] testMode:NO];
@@ -41,7 +43,7 @@
 - (void)requestAd {
     // NOTE: Unity do not provide any method for requesting ad, it handles the request internally
     if ([UnityAds isReady:self.provider.data.key2]) {
-        [self.delegate adapter:self didReceiveVideoAd:nil];
+        [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
     }
 }
 
