@@ -9,31 +9,33 @@
 #import "YumiMediationInterstitialAdapterIQzone.h"
 #import <IMDInterstitialViewController.h>
 #import <IMDSDK.h>
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationInterstitialAdapterIQzone () <IMDInterstitialViewDelegate>
 
 @property (nonatomic) IMDInterstitialViewController *interstitial;
 @property (nonatomic, assign) BOOL isInterstitialReady;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationInterstitialAdapterIQzone
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDIQzone
-                                                             requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDIQzone requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeInterstitial];
 }
 
-#pragma mark - YumiMediationInterstitialAdapter
-- (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
-                                                delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
+#pragma mark - YumiMediationCoreAdapter
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
-
+    
     self.provider = provider;
     self.delegate = delegate;
+    self.adType = adType;
 
-    self.interstitial = [IMDSDK newInterstitialViewController:[self.delegate rootViewControllerForPresentingModalView]
+    self.interstitial = [IMDSDK newInterstitialViewController:[[YumiTool sharedTool] topMostController]
                                                   placementID:self.provider.data.key1
                                                loadedListener:self
                                                   andMetadata:nil];
@@ -51,9 +53,13 @@
     return self.isInterstitialReady;
 }
 
-- (void)present {
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
 
-    [self.interstitial show:[self.delegate rootViewControllerForPresentingModalView]];
+    BOOL isShow =  [self.interstitial show:rootViewController];
+    if (!isShow) {
+        [self.delegate coreAdapter:self failedToShowAd:self.interstitial errorString:@"IQzone failed to show"
+                            adType:self.adType];
+    }
 }
 
 #pragma mark : -IMDInterstitialViewDelegate
@@ -61,23 +67,24 @@
 - (void)adLoaded {
     self.isInterstitialReady = YES;
 
-    [self.delegate adapter:self didReceiveInterstitialAd:self.interstitial];
+    [self.delegate coreAdapter:self didReceivedCoreAd:self.interstitial adType:self.adType];
 }
 
 - (void)adClicked {
-    [self.delegate adapter:self didClickInterstitialAd:self.interstitial];
+    [self.delegate coreAdapter:self didClickCoreAd:self.interstitial adType:self.adType];
 }
 - (void)adFailedToLoad {
     self.isInterstitialReady = NO;
-    [self.delegate adapter:self interstitialAd:self.interstitial didFailToReceive:@"interstitial load fail"];
+    [self.delegate coreAdapter:self coreAd:self.interstitial didFailToLoad:@"interstitial load fail" adType:self.adType];
 }
 
 - (void)adImpression {
-    [self.delegate adapter:self willPresentScreen:self.interstitial];
+    [self.delegate coreAdapter:self didOpenCoreAd:self.interstitial adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:self.interstitial adType:self.adType];
 }
 
 - (void)adDismissed {
-    [self.delegate adapter:self willDismissScreen:self.interstitial];
+    [self.delegate coreAdapter:self didCloseCoreAd:self.interstitial isCompletePlaying:NO adType:self.adType];
 }
 
 - (void)adExpanded {
