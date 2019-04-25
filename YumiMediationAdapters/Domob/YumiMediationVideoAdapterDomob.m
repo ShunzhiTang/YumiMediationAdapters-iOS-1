@@ -15,6 +15,8 @@
 
 @property (nonatomic) DMAdVideoManager *videoManager;
 @property (nonatomic, assign) BOOL available;
+@property (nonatomic, assign) YumiMediationAdType adType;
+@property (nonatomic, assign) BOOL isReward;
 
 @end
 
@@ -25,18 +27,21 @@
         [[YumiLogger stdLogger] info:@"Domob don't support iOS version below 9.0"];
         return;
     }
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
-                                                      forProvider:kYumiMediationAdapterIDDomob
-                                                      requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                      forProviderID:kYumiMediationAdapterIDDomob
+                                                      requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeVideo];
 }
 
 #pragma mark - YumiMediationVideoAdapter
-- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType{
     self = [super init];
 
     self.delegate = delegate;
     self.provider = provider;
+    self.adType = adType;
 
     self.videoManager = [[DMAdVideoManager alloc] initWithPublisherID:self.provider.data.key1];
     self.videoManager.delegate = self;
@@ -54,27 +59,31 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     [self.videoManager presentADVideoControllerWithViewController:rootViewController];
+    [self.delegate coreAdapter:self didOpenCoreAd:nil adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:nil adType:self.adType];
 }
 
 #pragma mark - IndependentVideoManagerDelegate
 - (void)AdVideoManagerDidFinishLoad:(DMAdVideoManager *_Nonnull)manager {
     self.available = YES;
-    [self.delegate adapter:self didReceiveVideoAd:manager];
+    [self.delegate coreAdapter:self didReceivedCoreAd:manager adType:self.adType];
 }
 
 - (void)AdVideoManager:(DMAdVideoManager *_Nonnull)manager failedLoadWithError:(NSError *__nullable)error {
     self.available = NO;
-    [self.delegate adapter:self videoAd:manager didFailToLoad:[error localizedDescription]];
+    [self.delegate coreAdapter:self coreAd:manager didFailToLoad:[error localizedDescription] adType:self.adType];
 }
 
 - (void)AdVideoManagerPlayVideoComplete:(DMAdVideoManager *_Nonnull)manager {
     self.available = NO;
-    [self.delegate adapter:self videoAd:manager didReward:nil];
+    self.isReward = YES;
+    [self.delegate coreAdapter:self coreAd:manager didReward:YES adType:self.adType];
 }
 
 - (void)AdVideoManagerCloseVideoPlayer:(DMAdVideoManager *_Nonnull)manager {
     self.available = NO;
-    [self.delegate adapter:self didCloseVideoAd:manager];
+    [self.delegate coreAdapter:self didCloseCoreAd:manager isCompletePlaying:self.isReward adType:self.adType];
+    self.isReward = NO;
 }
 
 @end
