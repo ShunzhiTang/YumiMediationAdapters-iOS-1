@@ -55,7 +55,7 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
 
-    BOOL isShow =  [self.interstitial show:rootViewController];
+    BOOL isShow =  [self.interstitial show:[[YumiTool sharedTool] topMostController]];
     if (!isShow) {
         [self.delegate coreAdapter:self failedToShowAd:self.interstitial errorString:@"IQzone failed to show"
                             adType:self.adType];

@@ -57,7 +57,7 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
 
-    BOOL isShow =  [self.rewardedVideo show:rootViewController];
+    BOOL isShow =  [self.rewardedVideo show:[[YumiTool sharedTool] topMostController]];
     if (!isShow) {
         [self.delegate coreAdapter:self failedToShowAd:self.rewardedVideo errorString:@"IQzone failed to show" adType:self.adType];
     }
