@@ -13,25 +13,26 @@
 
 @property (nonatomic) PlayableAds *video;
 @property (nonatomic, assign) BOOL isReward;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationVideoAdapterPlayableAds
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
-                                                      forProvider:kYumiMediationAdapterIDPlayableAds
-                                                      requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDPlayableAds requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeVideo];
 }
 
-#pragma mark - YumiMediationVideoAdapter
-- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+#pragma mark - YumiMediationCoreAdapter
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.delegate = delegate;
     self.provider = provider;
-
+    self.adType = adType;
+    
     self.video = [[PlayableAds alloc] initWithAdUnitID:self.provider.data.key2 appID:self.provider.data.key1];
     self.video.delegate = self;
     self.video.autoLoad = YES;
@@ -59,27 +60,27 @@
 }
 
 - (void)playableAdsDidLoad:(PlayableAds *)ads {
-    [self.delegate adapter:self didReceiveVideoAd:self.video];
+    [self.delegate coreAdapter:self didReceivedCoreAd:ads adType:self.adType];
 }
 
 - (void)playableAds:(PlayableAds *)ads didFailToLoadWithError:(NSError *)error {
-    [self.delegate adapter:self videoAd:self.video didFailToLoad:[error localizedDescription] isRetry:NO];
+     [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:self.adType];
 }
 
 - (void)playableAdsDidStartPlaying:(PlayableAds *)ads {
-    [self.delegate adapter:self didOpenVideoAd:self.video];
-    [self.delegate adapter:self didStartPlayingVideoAd:self.video];
+    [self.delegate coreAdapter:self didOpenCoreAd:ads adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:ads adType:self.adType];
 }
 
 - (void)playableAdsDidDismissScreen:(PlayableAds *)ads {
     if (self.isReward) {
-        [self.delegate adapter:self videoAd:self.video didReward:nil];
-        self.isReward = NO;
+        [self.delegate coreAdapter:self coreAd:ads didReward:YES adType:self.adType];
     }
-    [self.delegate adapter:self didCloseVideoAd:self.video];
+    [self.delegate coreAdapter:self didCloseCoreAd:ads isCompletePlaying:self.isReward adType:self.adType];
+    self.isReward = NO;
 }
 /// Tells the delegate that the ad is clicked
 - (void)playableAdsDidClick:(PlayableAds *)ads {
-    [self.delegate adapter:self didClickVideoAd:self.video];
+    [self.delegate coreAdapter:self didClickCoreAd:ads adType:self.adType];
 }
 @end
