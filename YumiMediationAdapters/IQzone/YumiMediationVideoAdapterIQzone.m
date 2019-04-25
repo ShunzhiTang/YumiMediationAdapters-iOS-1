@@ -23,7 +23,10 @@
 @implementation YumiMediationVideoAdapterIQzone
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDIQzone requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeVideo];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDIQzone
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeVideo];
 }
 
 #pragma mark - YumiMediationCoreAdapter
@@ -31,7 +34,7 @@
                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
                                           adType:(YumiMediationAdType)adType {
     self = [super init];
-    
+
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
@@ -57,9 +60,12 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
 
-    BOOL isShow =  [self.rewardedVideo show:[[YumiTool sharedTool] topMostController]];
+    BOOL isShow = [self.rewardedVideo show:[[YumiTool sharedTool] topMostController]];
     if (!isShow) {
-        [self.delegate coreAdapter:self failedToShowAd:self.rewardedVideo errorString:@"IQzone failed to show" adType:self.adType];
+        [self.delegate coreAdapter:self
+                    failedToShowAd:self.rewardedVideo
+                       errorString:@"IQzone failed to show"
+                            adType:self.adType];
     }
 }
 
@@ -84,7 +90,10 @@
     if (self.isReward) {
         [self.delegate coreAdapter:self coreAd:self.rewardedVideo didReward:YES adType:self.adType];
     }
-    [self.delegate coreAdapter:self didCloseCoreAd:self.rewardedVideo isCompletePlaying:self.isReward adType:self.adType];
+    [self.delegate coreAdapter:self
+                didCloseCoreAd:self.rewardedVideo
+             isCompletePlaying:self.isReward
+                        adType:self.adType];
     self.isReward = NO;
 }
 

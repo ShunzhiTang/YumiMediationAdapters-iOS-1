@@ -22,7 +22,10 @@
 @implementation YumiMediationInterstitialAdapterIQzone
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDIQzone requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeInterstitial];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDIQzone
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark - YumiMediationCoreAdapter
@@ -30,7 +33,7 @@
                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
                                           adType:(YumiMediationAdType)adType {
     self = [super init];
-    
+
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
@@ -55,9 +58,11 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
 
-    BOOL isShow =  [self.interstitial show:[[YumiTool sharedTool] topMostController]];
+    BOOL isShow = [self.interstitial show:[[YumiTool sharedTool] topMostController]];
     if (!isShow) {
-        [self.delegate coreAdapter:self failedToShowAd:self.interstitial errorString:@"IQzone failed to show"
+        [self.delegate coreAdapter:self
+                    failedToShowAd:self.interstitial
+                       errorString:@"IQzone failed to show"
                             adType:self.adType];
     }
 }
@@ -75,7 +80,10 @@
 }
 - (void)adFailedToLoad {
     self.isInterstitialReady = NO;
-    [self.delegate coreAdapter:self coreAd:self.interstitial didFailToLoad:@"interstitial load fail" adType:self.adType];
+    [self.delegate coreAdapter:self
+                        coreAd:self.interstitial
+                 didFailToLoad:@"interstitial load fail"
+                        adType:self.adType];
 }
 
 - (void)adImpression {

@@ -28,15 +28,15 @@
         return;
     }
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
-                                                      forProviderID:kYumiMediationAdapterIDDomob
-                                                      requestType:YumiMediationSDKAdRequest
+                                                   forProviderID:kYumiMediationAdapterIDDomob
+                                                     requestType:YumiMediationSDKAdRequest
                                                           adType:YumiMediationAdTypeVideo];
 }
 
 #pragma mark - YumiMediationVideoAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
-                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                          adType:(YumiMediationAdType)adType{
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.delegate = delegate;

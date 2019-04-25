@@ -24,8 +24,8 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDFacebookNative
-                                                             requestType:YumiMediationSDKAdRequest
+                                                   forProviderID:kYumiMediationAdapterIDFacebookNative
+                                                     requestType:YumiMediationSDKAdRequest
                                                           adType:YumiMediationAdTypeInterstitial];
 }
 
@@ -56,7 +56,6 @@
 
 - (void)closeFacebookIntestitial {
     [[[YumiTool sharedTool] topMostController] dismissViewControllerAnimated:YES completion:nil];
-    
 
     [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
     self.interstitial = nil;
@@ -64,8 +63,8 @@
 
 #pragma mark - YumiMediationInterstitialAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
-                                                delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                          adType:(YumiMediationAdType)adType{
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
@@ -91,13 +90,14 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    __weak __typeof(self)weakSelf = self;
-    [[[YumiTool sharedTool] topMostController] presentViewController:self.interstitial
-                                                                           animated:YES
-                                                                         completion:^{
-                                                                             [weakSelf.delegate coreAdapter:weakSelf didOpenCoreAd:nil adType:weakSelf.adType];
-                                                                             [weakSelf.delegate coreAdapter:weakSelf didStartPlayingAd:nil adType:weakSelf.adType];
-                                                                         }];
+    __weak __typeof(self) weakSelf = self;
+    [[[YumiTool sharedTool] topMostController]
+        presentViewController:self.interstitial
+                     animated:YES
+                   completion:^{
+                       [weakSelf.delegate coreAdapter:weakSelf didOpenCoreAd:nil adType:weakSelf.adType];
+                       [weakSelf.delegate coreAdapter:weakSelf didStartPlayingAd:nil adType:weakSelf.adType];
+                   }];
 }
 
 #pragma mark FBNativeAdDelegate
@@ -137,7 +137,10 @@
 
 - (void)nativeAd:(FBNativeAd *)nativeAd didFailWithError:(NSError *)error {
     self.isAdReady = NO;
-    [self.delegate coreAdapter:self coreAd:self.interstitial didFailToLoad:[error localizedDescription] adType:self.adType];
+    [self.delegate coreAdapter:self
+                        coreAd:self.interstitial
+                 didFailToLoad:[error localizedDescription]
+                        adType:self.adType];
 }
 
 - (void)nativeAdDidFinishHandlingClick:(FBNativeAd *)nativeAd {

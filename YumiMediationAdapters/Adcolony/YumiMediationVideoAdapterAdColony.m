@@ -54,7 +54,7 @@
 - (void)requestAd {
     self.isAdReady = NO;
     self.isReward = NO;
-    
+
     __weak typeof(self) weakSelf = self;
     [AdColony requestInterstitialInZone:self.provider.data.key2
         options:nil
@@ -70,7 +70,10 @@
                 if (weakSelf.isReward) {
                     [weakSelf.delegate coreAdapter:weakSelf coreAd:weakSelf.video didReward:YES adType:weakSelf.adType];
                 }
-                [weakSelf.delegate coreAdapter:weakSelf didCloseCoreAd:weakSelf.video isCompletePlaying:weakSelf.isReward adType:weakSelf.adType];
+                [weakSelf.delegate coreAdapter:weakSelf
+                                didCloseCoreAd:weakSelf.video
+                             isCompletePlaying:weakSelf.isReward
+                                        adType:weakSelf.adType];
                 weakSelf.isAdReady = NO;
                 weakSelf.isReward = NO;
             }];
@@ -80,7 +83,10 @@
         }
         failure:^(AdColonyAdRequestError *_Nonnull error) {
             weakSelf.isAdReady = NO;
-            [weakSelf.delegate coreAdapter:weakSelf coreAd:nil didFailToLoad:[error localizedDescription] adType:weakSelf.adType];
+            [weakSelf.delegate coreAdapter:weakSelf
+                                    coreAd:nil
+                             didFailToLoad:[error localizedDescription]
+                                    adType:weakSelf.adType];
         }];
 }
 

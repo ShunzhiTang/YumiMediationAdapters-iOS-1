@@ -17,7 +17,10 @@
 @implementation YumiMediationInterstitialAdapterIronSource
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDIronsource requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeInterstitial];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDIronsource
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark - YumiMediationCoreAdapter
@@ -32,7 +35,10 @@
 
     [IronSource setISDemandOnlyInterstitialDelegate:self];
     if (self.provider.data.key1.length == 0 || self.provider.data.key2.length == 0) {
-        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"No app id or instance id specified" adType:self.adType];
+        [self.delegate coreAdapter:self
+                            coreAd:nil
+                     didFailToLoad:@"No app id or instance id specified"
+                            adType:self.adType];
         return nil;
     }
     [IronSource initISDemandOnly:self.provider.data.key1 adUnits:@[ IS_INTERSTITIAL ]];
@@ -78,14 +84,13 @@
  Called after an interstitial has been dismissed.
  */
 - (void)interstitialDidClose:(NSString *)instanceId {
-     [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
+    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
 }
 
 /**
  Called after an interstitial has been displayed on the screen.
  */
 - (void)interstitialDidShow:(NSString *)instanceId {
-    
 }
 
 /**
@@ -100,7 +105,7 @@
  Called after an interstitial has been clicked.
  */
 - (void)didClickInterstitial:(NSString *)instanceId {
-   [self.delegate coreAdapter:self didClickCoreAd:nil adType:self.adType];
+    [self.delegate coreAdapter:self didClickCoreAd:nil adType:self.adType];
 }
 
 @end

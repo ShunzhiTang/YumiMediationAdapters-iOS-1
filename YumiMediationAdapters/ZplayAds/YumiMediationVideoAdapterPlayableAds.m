@@ -20,7 +20,10 @@
 @implementation YumiMediationVideoAdapterPlayableAds
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDPlayableAds requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeVideo];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDPlayableAds
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeVideo];
 }
 
 #pragma mark - YumiMediationCoreAdapter
@@ -32,7 +35,7 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-    
+
     self.video = [[PlayableAds alloc] initWithAdUnitID:self.provider.data.key2 appID:self.provider.data.key1];
     self.video.delegate = self;
     self.video.autoLoad = YES;
@@ -64,7 +67,7 @@
 }
 
 - (void)playableAds:(PlayableAds *)ads didFailToLoadWithError:(NSError *)error {
-     [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:self.adType];
+    [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:self.adType];
 }
 
 - (void)playableAdsDidStartPlaying:(PlayableAds *)ads {

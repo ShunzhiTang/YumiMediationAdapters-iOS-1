@@ -19,19 +19,22 @@
 @implementation YumiMediationVideoAdapterInMobi
 
 + (void)load {
-     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDInMobi requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeVideo];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDInMobi
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeVideo];
 }
 
 #pragma mark - YumiMediationCoreAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                          adType:(YumiMediationAdType)adType  {
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-    
+
     [IMSdk initWithAccountID:self.provider.data.key1];
     self.video = [[IMInterstitial alloc] initWithPlacementId:[self.provider.data.key2 longLongValue] delegate:self];
 
@@ -66,7 +69,10 @@
 }
 
 - (void)interstitial:(IMInterstitial *)interstitial didFailToPresentWithError:(IMRequestStatus *)error {
-     [self.delegate coreAdapter:self failedToShowAd:interstitial errorString:error.localizedDescription adType:self.adType];
+    [self.delegate coreAdapter:self
+                failedToShowAd:interstitial
+                   errorString:error.localizedDescription
+                        adType:self.adType];
 }
 
 - (void)interstitialDidDismiss:(IMInterstitial *)interstitial {
@@ -82,8 +88,8 @@
     self.isReward = YES;
 }
 ///  Notifies the delegate that the user will leave application context.
--(void)interstitial:(IMInterstitial*)interstitial didInteractWithParams:(NSDictionary*)params {
-     [self.delegate coreAdapter:self didClickCoreAd:interstitial adType:self.adType];
+- (void)interstitial:(IMInterstitial *)interstitial didInteractWithParams:(NSDictionary *)params {
+    [self.delegate coreAdapter:self didClickCoreAd:interstitial adType:self.adType];
 }
 
 @end
