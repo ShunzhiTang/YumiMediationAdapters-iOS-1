@@ -10,21 +10,23 @@
 #import <FBAudienceNetwork/FBInterstitialAd.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
-@interface YumiMediationFacebookHeaderBiddingAdapterInterstitial () <YumiMediationInterstitialAdapter,
+@interface YumiMediationFacebookHeaderBiddingAdapterInterstitial () <YumiMediationCoreAdapter,
                                                                      FBInterstitialAdDelegate>
 
-@property (nonatomic, weak) id<YumiMediationInterstitialAdapterDelegate> delegate;
-@property (nonatomic) YumiMediationInterstitialProvider *provider;
+@property (nonatomic, weak) id<YumiMediationCoreAdapterDelegate> delegate;
+@property (nonatomic) YumiMediationCoreProvider *provider;
 @property (nonatomic) FBInterstitialAd *interstitial;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationFacebookHeaderBiddingAdapterInterstitial
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
                                                            forProviderID:kYumiMediationAdapterIDFacebookHeaderBidding
-                                                             requestType:YumiMediationSDKAdRequest];
+                                                             requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
     NSString *key =
         [NSString stringWithFormat:@"%@_%lu_%@", kYumiMediationAdapterIDFacebookHeaderBidding,
                                    (unsigned long)YumiMediationAdTypeInterstitial, YumiMediationHeaderBiddingToken];
@@ -32,12 +34,14 @@
 }
 
 #pragma mark - YumiMediationInterstitialAdapter
-- (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
-                                                delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                                delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType{
     self = [super init];
 
     self.provider = provider;
     self.delegate = delegate;
+    self.adType = adType;
 
     self.interstitial = [[FBInterstitialAd alloc] initWithPlacementID:self.provider.data.key1];
     self.interstitial.delegate = self;
@@ -47,7 +51,7 @@
 
 - (void)requestAd {
     if (self.provider.data.payload.length == 0) {
-        [self.delegate adapter:self interstitialAd:nil didFailToReceive:self.provider.data.errMessage];
+        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:self.provider.data.errMessage adType:self.adType];
         return;
     }
     [self.interstitial loadAdWithBidPayload:self.provider.data.payload];
@@ -57,25 +61,35 @@
     return self.interstitial.adValid;
 }
 
-- (void)present {
-    [self.interstitial showAdFromRootViewController:[self.delegate rootViewControllerForPresentingModalView]];
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [self.interstitial showAdFromRootViewController:rootViewController];
 }
 
 #pragma mark - FBInterstitialAdDelegate
 - (void)interstitialAdDidLoad:(FBInterstitialAd *)interstitialAd {
-    [self.delegate adapter:self didReceiveInterstitialAd:interstitialAd];
+    [self.delegate coreAdapter:self didReceivedCoreAd:interstitialAd adType:self.adType];
 }
 
 - (void)interstitialAd:(FBInterstitialAd *)interstitialAd didFailWithError:(NSError *)error {
-    [self.delegate adapter:self interstitialAd:interstitialAd didFailToReceive:[error localizedDescription]];
+    [self.delegate coreAdapter:self coreAd:interstitialAd didFailToLoad:[error localizedDescription] adType:self.adType];
 }
 
 - (void)interstitialAdDidClick:(FBInterstitialAd *)interstitialAd {
-    [self.delegate adapter:self didClickInterstitialAd:interstitialAd];
+    [self.delegate coreAdapter:self didClickCoreAd:interstitialAd adType:self.adType];
 }
 
 - (void)interstitialAdDidClose:(FBInterstitialAd *)interstitialAd {
-    [self.delegate adapter:self willDismissScreen:interstitialAd];
+    [self.delegate coreAdapter:self didCloseCoreAd:interstitialAd isCompletePlaying:NO adType:self.adType];
+}
+
+/**
+ Sent immediately before the impression of an FBInterstitialAd object will be logged.
+ 
+ @param interstitialAd An FBInterstitialAd object sending the message.
+ */
+- (void)interstitialAdWillLogImpression:(FBInterstitialAd *)interstitialAd {
+    [self.delegate coreAdapter:self didOpenCoreAd:interstitialAd adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:interstitialAd adType:self.adType];
 }
 
 @end

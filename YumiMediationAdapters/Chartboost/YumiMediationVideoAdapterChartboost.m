@@ -11,24 +11,28 @@
 
 @interface YumiMediationVideoAdapterChartboost () <ChartboostDelegate>
 @property (nonatomic, assign) BOOL isReward;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationVideoAdapterChartboost
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
-                                                      forProvider:kYumiMediationAdapterIDChartboost
-                                                      requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                      forProviderID:kYumiMediationAdapterIDChartboost
+                                                      requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeVideo];
 }
 
 #pragma mark - YumiMediationVideoAdapter
-- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType{
     self = [super init];
 
     self.delegate = delegate;
     self.provider = provider;
+    self.adType = adType;
 
     [Chartboost startWithAppId:self.provider.data.key1 appSignature:self.provider.data.key2 delegate:self];
     [Chartboost setShouldPrefetchVideoContent:YES];
@@ -51,25 +55,24 @@
 
 #pragma mark - ChartboostDelegate
 - (void)didDisplayRewardedVideo:(CBLocation)location {
-    [self.delegate adapter:self didOpenVideoAd:nil];
-
-    [self.delegate adapter:self didStartPlayingVideoAd:nil];
+    [self.delegate coreAdapter:self didOpenCoreAd:nil adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:nil adType:self.adType];
 }
 
 - (void)didCacheRewardedVideo:(CBLocation)location {
-    [self.delegate adapter:self didReceiveVideoAd:nil];
+    [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
 }
 
 - (void)didFailToLoadRewardedVideo:(CBLocation)location withError:(CBLoadError)error {
-    [self.delegate adapter:self videoAd:nil didFailToLoad:[NSString stringWithFormat:@"error code %@", @(error)]];
+    [self.delegate coreAdapter:self coreAd:nil didFailToLoad:[NSString stringWithFormat:@"error code %@", @(error)] adType:self.adType];
 }
 
 - (void)didDismissRewardedVideo:(CBLocation)location {
     if (self.isReward) {
-        self.isReward = NO;
-        [self.delegate adapter:self videoAd:nil didReward:nil];
+        [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
     }
-    [self.delegate adapter:self didCloseVideoAd:nil];
+    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:self.isReward adType:self.adType];
+    self.isReward = NO;
 }
 
 - (void)didCompleteRewardedVideo:(CBLocation)location withReward:(int)reward {
@@ -77,6 +80,6 @@
 }
 
 - (void)didClickRewardedVideo:(CBLocation)location {
-    [self.delegate adapter:self didClickVideoAd:nil];
+    [self.delegate coreAdapter:self didClickCoreAd:nil adType:self.adType];
 }
 @end

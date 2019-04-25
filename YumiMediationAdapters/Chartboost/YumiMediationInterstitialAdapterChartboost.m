@@ -10,24 +10,28 @@
 #import <Chartboost/Chartboost.h>
 
 @interface YumiMediationInterstitialAdapterChartboost () <ChartboostDelegate>
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationInterstitialAdapterChartboost
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
                                                            forProviderID:kYumiMediationAdapterIDChartboost
-                                                             requestType:YumiMediationSDKAdRequest];
+                                                             requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark - YumiMediationInterstitialAdapter
-- (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
-                                                delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                                delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType{
     self = [super init];
 
     self.provider = provider;
     self.delegate = delegate;
+    self.adType = adType;
 
     [Chartboost startWithAppId:self.provider.data.key1 appSignature:self.provider.data.key2 delegate:self];
     [Chartboost setAutoCacheAds:NO];
@@ -42,19 +46,17 @@
     return [Chartboost hasInterstitial:CBLocationDefault];
 }
 
-- (void)present {
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
     [Chartboost showInterstitial:CBLocationDefault];
 }
 
 #pragma mark - ChartboostDelegate
 - (void)didCacheInterstitial:(CBLocation)location {
-    [self.delegate adapter:self didReceiveInterstitialAd:nil];
+    [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
 }
 
 - (void)didFailToLoadInterstitial:(CBLocation)location withError:(CBLoadError)error {
-    [self.delegate adapter:self
-            interstitialAd:nil
-          didFailToReceive:[NSString stringWithFormat:@"Chartboost error code: %@", @(error)]];
+    [self.delegate coreAdapter:self coreAd:nil didFailToLoad:[NSString stringWithFormat:@"Chartboost error code: %@", @(error)] adType:self.adType];
 }
 
 /*!
@@ -67,15 +69,16 @@
  been displayed on the screen for a given CBLocation.
  */
 - (void)didDisplayInterstitial:(CBLocation)location {
-    [self.delegate adapter:self willPresentScreen:nil];
+    [self.delegate coreAdapter:self didOpenCoreAd:nil adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:nil adType:self.adType];
 }
 
 - (void)didDismissInterstitial:(CBLocation)location {
-    [self.delegate adapter:self willDismissScreen:nil];
+    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
 }
 
 - (void)didClickInterstitial:(CBLocation)location {
-    [self.delegate adapter:self didClickInterstitialAd:nil];
+    [self.delegate coreAdapter:self didClickCoreAd:nil adType:self.adType];
 }
 
 @end

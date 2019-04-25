@@ -34,7 +34,6 @@
     
     YumiMediationVungleInstance *vungleInstance = [YumiMediationVungleInstance sharedInstance];
     [vungleInstance.vungleVideoAdapters addObject:self];
-    vungleInstance.adType = adType;
 
     NSError *error;
     NSString *appID = self.provider.data.key1;
@@ -64,7 +63,7 @@
     NSError *error;
     [[VungleSDK sharedSDK] playAd:rootViewController options:nil placementID:self.provider.data.key2 error:&error];
 
-    if (error) {[self.delegate coreAdapter:self failedToShowAd:nil errorString:[error localizedDescription] adType:self.adType];
+    if (error) {
        [self.delegate coreAdapter:self failedToShowAd:nil errorString:[error localizedDescription] adType:self.adType];
     }
 }
