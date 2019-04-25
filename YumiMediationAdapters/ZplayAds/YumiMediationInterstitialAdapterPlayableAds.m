@@ -19,7 +19,10 @@
 @implementation YumiMediationInterstitialAdapterPlayableAds
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDPlayableAds requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeInterstitial];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDPlayableAds
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark - YumiMediationCoreAdapter
@@ -31,7 +34,7 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-    
+
     return self;
 }
 
@@ -62,7 +65,7 @@
     [self.delegate coreAdapter:self coreAd:ads didFailToLoad:error.localizedDescription adType:self.adType];
 }
 - (void)playableAdsDidDismissScreen:(PlayableAds *)ads {
-     [self.delegate coreAdapter:self didCloseCoreAd:ads isCompletePlaying:NO adType:self.adType];
+    [self.delegate coreAdapter:self didCloseCoreAd:ads isCompletePlaying:NO adType:self.adType];
 }
 
 - (void)playableAdsDidClick:(PlayableAds *)ads {

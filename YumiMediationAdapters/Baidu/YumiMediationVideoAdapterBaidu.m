@@ -23,15 +23,15 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
-                                                      forProviderID:kYumiMediationAdapterIDBaidu
-                                                      requestType:YumiMediationSDKAdRequest
+                                                   forProviderID:kYumiMediationAdapterIDBaidu
+                                                     requestType:YumiMediationSDKAdRequest
                                                           adType:YumiMediationAdTypeVideo];
 }
 
 #pragma mark - YumiMediationVideoAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
-                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                          adType:(YumiMediationAdType)adType{
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
@@ -77,7 +77,10 @@
 - (void)rewardedVideoAdLoadFailed:(BaiduMobAdRewardVideo *)video withError:(BaiduMobFailReason)reason {
     self.isReward = NO;
     self.isPreloadVideo = NO;
-    [self.delegate coreAdapter:self coreAd:video didFailToLoad:[NSString stringWithFormat:@"%u", reason] adType:self.adType];
+    [self.delegate coreAdapter:self
+                        coreAd:video
+                 didFailToLoad:[NSString stringWithFormat:@"%u", reason]
+                        adType:self.adType];
 }
 
 #pragma mark - 视频播放delegate
@@ -96,7 +99,10 @@
 - (void)rewardedVideoAdShowFailed:(BaiduMobAdRewardVideo *)video withError:(BaiduMobFailReason)reason {
     self.isReward = NO;
     self.isPreloadVideo = NO;
-    [self.delegate coreAdapter:self failedToShowAd:video errorString:[NSString stringWithFormat:@"%u", reason] adType:self.adType];
+    [self.delegate coreAdapter:self
+                failedToShowAd:video
+                   errorString:[NSString stringWithFormat:@"%u", reason]
+                        adType:self.adType];
 }
 
 /**

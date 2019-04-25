@@ -25,8 +25,8 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDAdmobNative
-                                                             requestType:YumiMediationSDKAdRequest
+                                                   forProviderID:kYumiMediationAdapterIDAdmobNative
+                                                     requestType:YumiMediationSDKAdRequest
                                                           adType:YumiMediationAdTypeInterstitial];
 }
 
@@ -55,7 +55,7 @@
 
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                          adType:(YumiMediationAdType)adType{
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
@@ -73,11 +73,10 @@
         NSMutableArray *adTypes = [[NSMutableArray alloc] init];
         [adTypes addObject:kGADAdLoaderAdTypeNativeAppInstall];
 
-        weakSelf.adLoader =
-            [[GADAdLoader alloc] initWithAdUnitID:weakSelf.provider.data.key1
-                               rootViewController:[[YumiTool sharedTool] topMostController]
-                                          adTypes:adTypes
-                                          options:@[ option ]];
+        weakSelf.adLoader = [[GADAdLoader alloc] initWithAdUnitID:weakSelf.provider.data.key1
+                                               rootViewController:[[YumiTool sharedTool] topMostController]
+                                                          adTypes:adTypes
+                                                          options:@[ option ]];
 
         GADRequest *request = [GADRequest request];
 

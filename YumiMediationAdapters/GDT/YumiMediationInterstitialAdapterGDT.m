@@ -20,21 +20,21 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDGDT
-                                                             requestType:YumiMediationSDKAdRequest
+                                                   forProviderID:kYumiMediationAdapterIDGDT
+                                                     requestType:YumiMediationSDKAdRequest
                                                           adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark - YumiMediationInterstitialAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
-                                                delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                          adType:(YumiMediationAdType)adType{
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-    
+
     typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         weakSelf.interstitial = [[GDTMobInterstitial alloc] initWithAppId:weakSelf.provider.data.key1 ?: @""

@@ -19,15 +19,15 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
-                                                      forProviderID:kYumiMediationAdapterIDAdMob
-                                                      requestType:YumiMediationSDKAdRequest
+                                                   forProviderID:kYumiMediationAdapterIDAdMob
+                                                     requestType:YumiMediationSDKAdRequest
                                                           adType:YumiMediationAdTypeVideo];
 }
 
 #pragma mark - YumiMediationVideoAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
-                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                           adType:(YumiMediationAdType)adType{
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.delegate = delegate;
@@ -49,7 +49,7 @@
 
 - (void)requestAd {
     [[GADRewardBasedVideoAd sharedInstance] loadRequest:[GADRequest request] withAdUnitID:self.provider.data.key1];
-    
+
     self.isReward = NO;
 }
 
@@ -67,7 +67,10 @@
 }
 
 - (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd didFailToLoadWithError:(NSError *)error {
-    [self.delegate coreAdapter:self coreAd:rewardBasedVideoAd didFailToLoad:[error localizedDescription] adType:self.adType];
+    [self.delegate coreAdapter:self
+                        coreAd:rewardBasedVideoAd
+                 didFailToLoad:[error localizedDescription]
+                        adType:self.adType];
 }
 
 - (void)rewardBasedVideoAdDidReceiveAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
@@ -86,7 +89,10 @@
     if (self.isReward) {
         [self.delegate coreAdapter:self coreAd:rewardBasedVideoAd didReward:YES adType:self.adType];
     }
-    [self.delegate coreAdapter:self didCloseCoreAd:rewardBasedVideoAd isCompletePlaying:self.isReward adType:self.adType];
+    [self.delegate coreAdapter:self
+                didCloseCoreAd:rewardBasedVideoAd
+             isCompletePlaying:self.isReward
+                        adType:self.adType];
     self.isReward = NO;
 }
 /// Tells the delegate that the reward based video ad will leave the application.

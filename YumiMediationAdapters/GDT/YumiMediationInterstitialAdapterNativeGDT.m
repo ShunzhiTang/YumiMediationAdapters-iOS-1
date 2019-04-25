@@ -32,8 +32,8 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDGDTNative
-                                                             requestType:YumiMediationSDKAdRequest
+                                                   forProviderID:kYumiMediationAdapterIDGDTNative
+                                                     requestType:YumiMediationSDKAdRequest
                                                           adType:YumiMediationAdTypeInterstitial];
 }
 
@@ -60,15 +60,15 @@
 
 #pragma mark - YumiMediationInterstitialAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
-                                                delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                          adType:(YumiMediationAdType)adType{
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
     self.delegate = delegate;
     self.isInterstitialReady = NO;
     self.adType = adType;
-    
+
     return self;
 }
 
@@ -98,13 +98,14 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    __weak __typeof(self)weakSelf = self;
-    [[[YumiTool sharedTool] topMostController] presentViewController:self.interstitialVc
-                                                                           animated:YES
-                                                          completion:^{
-                                                              [weakSelf.delegate coreAdapter:weakSelf didOpenCoreAd:nil adType:weakSelf.adType];
-                                                              [weakSelf.delegate coreAdapter:weakSelf didStartPlayingAd:nil adType:weakSelf.adType];
-                                                          }];
+    __weak __typeof(self) weakSelf = self;
+    [[[YumiTool sharedTool] topMostController]
+        presentViewController:self.interstitialVc
+                     animated:YES
+                   completion:^{
+                       [weakSelf.delegate coreAdapter:weakSelf didOpenCoreAd:nil adType:weakSelf.adType];
+                       [weakSelf.delegate coreAdapter:weakSelf didStartPlayingAd:nil adType:weakSelf.adType];
+                   }];
 }
 
 #pragma mark : - GDTNativeExpressAdDelegete
@@ -112,7 +113,10 @@
                                views:(NSArray<__kindof GDTNativeExpressAdView *> *)views {
 
     if (views.count == 0) {
-        [self.delegate coreAdapter:self coreAd:self.interstitialVc didFailToLoad:@"gdt failed to load" adType:self.adType];
+        [self.delegate coreAdapter:self
+                            coreAd:self.interstitialVc
+                     didFailToLoad:@"gdt failed to load"
+                            adType:self.adType];
         return;
     }
 

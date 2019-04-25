@@ -18,9 +18,12 @@
 
 @implementation YumiMediationInterstitialAdapterMintegral
 + (void)load {
-  [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDMobvista requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeInterstitial];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDMobvista
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
-    
+
 #pragma mark - YumiMediationCoreAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
@@ -30,7 +33,7 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-    
+
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [[MTGSDK sharedInstance] setAppID:weakSelf.provider.data.key1 ApiKey:weakSelf.provider.data.key2];
@@ -52,8 +55,7 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     self.available = NO;
-    [_interstitialAdManager showWithDelegate:self
-                    presentingViewController:rootViewController];
+    [_interstitialAdManager showWithDelegate:self presentingViewController:rootViewController];
 }
 
 #pragma mark - Interstitial Delegate Methods

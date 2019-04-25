@@ -19,7 +19,10 @@
 @implementation YumiMediationInterstitialAdapterUnity
 
 + (void)load {
-     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDUnity requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeInterstitial];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDUnity
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark - YumiMediationCoreAdapter
@@ -31,7 +34,7 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-    
+
     if (![UnityAds isInitialized]) {
         [UnityAds initialize:provider.data.key1 delegate:[YumiMediationUnityInstance sharedInstance] testMode:NO];
     }

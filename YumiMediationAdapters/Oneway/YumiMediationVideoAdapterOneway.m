@@ -18,7 +18,10 @@
 @implementation YumiMediationVideoAdapterOneway
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDOneWay requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeVideo];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDOneWay
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeVideo];
 }
 
 #pragma mark - YumiMediationCoreAdapter
@@ -30,7 +33,7 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-    
+
     [OneWaySDK configure:self.provider.data.key1];
 
     return self;
@@ -69,7 +72,7 @@
         return;
     }
 
-     [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
+    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
 }
 
 - (void)oneWaySDKDidError:(OneWaySDKError)error withMessage:(NSString *)message {
@@ -77,7 +80,7 @@
         [self.delegate coreAdapter:self failedToShowAd:nil errorString:message adType:self.adType];
         return;
     }
-     [self.delegate coreAdapter:self coreAd:nil didFailToLoad:message adType:self.adType];
+    [self.delegate coreAdapter:self coreAd:nil didFailToLoad:message adType:self.adType];
 }
 
 - (void)oneWaySDKRewardedAdDidClick:(NSString *)tag {

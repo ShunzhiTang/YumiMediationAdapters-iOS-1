@@ -25,8 +25,8 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
-                                                      forProviderID:kYumiMediationAdapterIDFacebookHeaderBidding
-                                                      requestType:YumiMediationSDKAdRequest
+                                                   forProviderID:kYumiMediationAdapterIDFacebookHeaderBidding
+                                                     requestType:YumiMediationSDKAdRequest
                                                           adType:YumiMediationAdTypeVideo];
     NSString *key =
         [NSString stringWithFormat:@"%@_%lu_%@", kYumiMediationAdapterIDFacebookHeaderBidding,
@@ -40,8 +40,8 @@
 }
 
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
-                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                          adType:(YumiMediationAdType)adType{
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.delegate = delegate;
@@ -72,7 +72,10 @@
 
 #pragma mark :- FBRewardedVideoAdDelegate
 - (void)rewardedVideoAd:(FBRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
-    [self.delegate coreAdapter:self coreAd:rewardedVideoAd didFailToLoad:[error localizedDescription] adType:self.adType];
+    [self.delegate coreAdapter:self
+                        coreAd:rewardedVideoAd
+                 didFailToLoad:[error localizedDescription]
+                        adType:self.adType];
     self.rewardedVideoAd = nil;
 }
 
@@ -87,7 +90,6 @@
 - (void)rewardedVideoAdDidClose:(FBRewardedVideoAd *)rewardedVideoAd {
     if (self.isReward) {
         [self.delegate coreAdapter:self coreAd:rewardedVideoAd didReward:YES adType:self.adType];
-        
     }
     [self.delegate coreAdapter:self didCloseCoreAd:rewardedVideoAd isCompletePlaying:self.isReward adType:self.adType];
     self.rewardedVideoAd = nil;
@@ -101,7 +103,7 @@
 
 /**
  Sent after an ad has been clicked by the person.
- 
+
  @param rewardedVideoAd An FBRewardedVideoAd object sending the message.
  */
 - (void)rewardedVideoAdDidClick:(FBRewardedVideoAd *)rewardedVideoAd {

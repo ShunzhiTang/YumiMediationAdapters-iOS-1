@@ -10,8 +10,7 @@
 #import <FBAudienceNetwork/FBInterstitialAd.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
-@interface YumiMediationFacebookHeaderBiddingAdapterInterstitial () <YumiMediationCoreAdapter,
-                                                                     FBInterstitialAdDelegate>
+@interface YumiMediationFacebookHeaderBiddingAdapterInterstitial () <YumiMediationCoreAdapter, FBInterstitialAdDelegate>
 
 @property (nonatomic, weak) id<YumiMediationCoreAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationCoreProvider *provider;
@@ -24,8 +23,8 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDFacebookHeaderBidding
-                                                             requestType:YumiMediationSDKAdRequest
+                                                   forProviderID:kYumiMediationAdapterIDFacebookHeaderBidding
+                                                     requestType:YumiMediationSDKAdRequest
                                                           adType:YumiMediationAdTypeInterstitial];
     NSString *key =
         [NSString stringWithFormat:@"%@_%lu_%@", kYumiMediationAdapterIDFacebookHeaderBidding,
@@ -35,8 +34,8 @@
 
 #pragma mark - YumiMediationInterstitialAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
-                                                delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                          adType:(YumiMediationAdType)adType{
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
@@ -71,7 +70,10 @@
 }
 
 - (void)interstitialAd:(FBInterstitialAd *)interstitialAd didFailWithError:(NSError *)error {
-    [self.delegate coreAdapter:self coreAd:interstitialAd didFailToLoad:[error localizedDescription] adType:self.adType];
+    [self.delegate coreAdapter:self
+                        coreAd:interstitialAd
+                 didFailToLoad:[error localizedDescription]
+                        adType:self.adType];
 }
 
 - (void)interstitialAdDidClick:(FBInterstitialAd *)interstitialAd {
@@ -84,7 +86,7 @@
 
 /**
  Sent immediately before the impression of an FBInterstitialAd object will be logged.
- 
+
  @param interstitialAd An FBInterstitialAd object sending the message.
  */
 - (void)interstitialAdWillLogImpression:(FBInterstitialAd *)interstitialAd {

@@ -19,7 +19,10 @@
 @implementation YumiMediationVideoAdapterVungle
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDVungle requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeVideo];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDVungle
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeVideo];
 }
 
 #pragma mark - YumiMediationCoreAdapter
@@ -31,7 +34,7 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-    
+
     YumiMediationVungleInstance *vungleInstance = [YumiMediationVungleInstance sharedInstance];
     [vungleInstance.vungleVideoAdapters addObject:self];
 
@@ -64,7 +67,7 @@
     [[VungleSDK sharedSDK] playAd:rootViewController options:nil placementID:self.provider.data.key2 error:&error];
 
     if (error) {
-       [self.delegate coreAdapter:self failedToShowAd:nil errorString:[error localizedDescription] adType:self.adType];
+        [self.delegate coreAdapter:self failedToShowAd:nil errorString:[error localizedDescription] adType:self.adType];
     }
 }
 

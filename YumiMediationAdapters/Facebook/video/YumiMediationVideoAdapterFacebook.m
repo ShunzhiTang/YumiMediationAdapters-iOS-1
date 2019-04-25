@@ -21,15 +21,15 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
-                                                      forProviderID:kYumiMediationAdapterIDFacebook
-                                                      requestType:YumiMediationSDKAdRequest
-                                                           adType:YumiMediationAdTypeVideo];
+                                                   forProviderID:kYumiMediationAdapterIDFacebook
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeVideo];
 }
 
 #pragma mark - YumiMediationVideoAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
-                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                          adType:(YumiMediationAdType)adType{
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.delegate = delegate;
@@ -57,7 +57,10 @@
 #pragma mark :- FBRewardedVideoAdDelegate
 
 - (void)rewardedVideoAd:(FBRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
-    [self.delegate coreAdapter:self coreAd:rewardedVideoAd didFailToLoad:[error localizedDescription] adType:self.adType];
+    [self.delegate coreAdapter:self
+                        coreAd:rewardedVideoAd
+                 didFailToLoad:[error localizedDescription]
+                        adType:self.adType];
     self.rewardedVideoAd = nil;
 }
 

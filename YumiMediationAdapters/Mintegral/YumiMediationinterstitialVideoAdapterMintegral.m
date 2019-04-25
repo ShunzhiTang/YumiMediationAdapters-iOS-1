@@ -18,7 +18,10 @@
 
 @implementation YumiMediationinterstitialVideoAdapterMintegral
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDMobvistaInterstitial requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeInterstitial];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDMobvistaInterstitial
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark - YumiMediationCoreAdapter
@@ -30,7 +33,7 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-    
+
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [[MTGSDK sharedInstance] setAppID:weakSelf.provider.data.key1 ApiKey:weakSelf.provider.data.key2];
@@ -65,7 +68,7 @@
                           adManager:(MTGInterstitialVideoAdManager *_Nonnull)adManager;
 {
     self.available = NO;
-     [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:self.adType];
+    [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:self.adType];
 }
 
 - (void)onInterstitialVideoShowSuccess:(MTGInterstitialVideoAdManager *_Nonnull)adManager {
