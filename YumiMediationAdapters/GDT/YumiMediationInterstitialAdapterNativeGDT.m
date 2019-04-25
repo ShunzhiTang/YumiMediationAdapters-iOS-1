@@ -24,15 +24,17 @@
 
 @property (nonatomic) YumiGDTAdapterInterstitialViewController *interstitialVc;
 @property (nonatomic, assign) BOOL isInterstitialReady;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationInterstitialAdapterNativeGDT
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
                                                            forProviderID:kYumiMediationAdapterIDGDTNative
-                                                             requestType:YumiMediationSDKAdRequest];
+                                                             requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark :  private  method
@@ -50,25 +52,27 @@
     return vc;
 }
 - (void)closeGDTIntestitial {
-    [[self.delegate rootViewControllerForPresentingModalView] dismissViewControllerAnimated:YES completion:nil];
+    [[[YumiTool sharedTool] topMostController] dismissViewControllerAnimated:YES completion:nil];
 
-    [self.delegate adapter:self willDismissScreen:self.interstitialVc];
+    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
     self.interstitialVc = nil;
 }
 
 #pragma mark - YumiMediationInterstitialAdapter
-- (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
-                                                delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                                delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType{
     self = [super init];
 
     self.provider = provider;
     self.delegate = delegate;
     self.isInterstitialReady = NO;
+    self.adType = adType;
+    
     return self;
 }
 
 - (void)requestAd {
-
     YumiTool *tool = [YumiTool sharedTool];
     CGSize adSize = CGSizeMake(ScreenWidth, 300);
     if (![tool isInterfaceOrientationPortrait]) {
@@ -93,10 +97,14 @@
     return self.isInterstitialReady;
 }
 
-- (void)present {
-    [[self.delegate rootViewControllerForPresentingModalView] presentViewController:self.interstitialVc
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    __weak __typeof(self)weakSelf = self;
+    [[[YumiTool sharedTool] topMostController] presentViewController:self.interstitialVc
                                                                            animated:YES
-                                                                         completion:nil];
+                                                          completion:^{
+                                                              [weakSelf.delegate coreAdapter:weakSelf didOpenCoreAd:nil adType:weakSelf.adType];
+                                                              [weakSelf.delegate coreAdapter:weakSelf didStartPlayingAd:nil adType:weakSelf.adType];
+                                                          }];
 }
 
 #pragma mark : - GDTNativeExpressAdDelegete
@@ -104,7 +112,7 @@
                                views:(NSArray<__kindof GDTNativeExpressAdView *> *)views {
 
     if (views.count == 0) {
-        [self.delegate adapter:self interstitialAd:self.interstitialVc didFailToReceive:@"gdt load fail"];
+        [self.delegate coreAdapter:self coreAd:self.interstitialVc didFailToLoad:@"gdt failed to load" adType:self.adType];
         return;
     }
 
@@ -129,18 +137,19 @@
         make.width.mas_equalTo(adSize.width);
     }];
 
-    [self.delegate adapter:self didReceiveInterstitialAd:self.interstitialVc];
+    [self.delegate coreAdapter:self didReceivedCoreAd:self.interstitialVc adType:self.adType];
 }
 
 - (void)nativeExpressAdFailToLoad:(GDTNativeExpressAd *)nativeExpressAd error:(NSError *)error {
     self.isInterstitialReady = NO;
-    [self.delegate adapter:self interstitialAd:self.interstitialVc didFailToReceive:@"gdt load fail"];
+    [self.delegate coreAdapter:self coreAd:self.interstitialVc didFailToLoad:@"gdt failed to load" adType:self.adType];
 }
 - (void)nativeExpressAdViewClicked:(GDTNativeExpressAdView *)nativeExpressAdView {
-    [self.delegate adapter:self didClickInterstitialAd:self.interstitialVc];
+    [self.delegate coreAdapter:self didClickCoreAd:self.interstitialVc adType:self.adType];
 }
 - (void)nativeExpressAdViewExposure:(GDTNativeExpressAdView *)nativeExpressAdView {
-    [self.delegate adapter:self willPresentScreen:self.interstitialVc];
+    [self.delegate coreAdapter:self didOpenCoreAd:self.interstitialVc adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:self.interstitialVc adType:self.adType];
 }
 - (void)nativeExpressAdViewClosed:(GDTNativeExpressAdView *)nativeExpressAdView {
     [self closeGDTIntestitial];

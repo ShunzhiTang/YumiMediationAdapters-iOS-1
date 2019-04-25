@@ -10,10 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface YumiMediationVideoAdapterGDT : NSObject <YumiMediationVideoAdapter>
+@interface YumiMediationVideoAdapterGDT : NSObject <YumiMediationCoreAdapter>
 
-@property (nonatomic, weak) id<YumiMediationVideoAdapterDelegate> delegate;
-@property (nonatomic) YumiMediationVideoProvider *provider;
+@property (nonatomic, weak) id<YumiMediationCoreAdapterDelegate> delegate;
+@property (nonatomic) YumiMediationCoreProvider *provider;
 
 @end
 
