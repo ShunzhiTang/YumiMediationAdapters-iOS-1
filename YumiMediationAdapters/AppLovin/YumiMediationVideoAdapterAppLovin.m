@@ -14,7 +14,7 @@
 
 @property (nonatomic) ALIncentivizedInterstitialAd *video;
 @property (nonatomic, assign) BOOL isReward;
-@property (nonatomic,assign) YumiMediationAdType adType;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
@@ -22,15 +22,15 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
-                                                      forProviderID:kYumiMediationAdapterIDAppLovin
-                                                      requestType:YumiMediationSDKAdRequest
+                                                   forProviderID:kYumiMediationAdapterIDAppLovin
+                                                     requestType:YumiMediationSDKAdRequest
                                                           adType:YumiMediationAdTypeVideo];
 }
 
 #pragma mark - YumiMediationVideoAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
-                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                          adType:(YumiMediationAdType)adType{
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.delegate = delegate;

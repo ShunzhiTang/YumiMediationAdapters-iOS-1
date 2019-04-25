@@ -19,15 +19,15 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
-                                                      forProviderID:kYumiMediationAdapterIDChartboost
-                                                      requestType:YumiMediationSDKAdRequest
+                                                   forProviderID:kYumiMediationAdapterIDChartboost
+                                                     requestType:YumiMediationSDKAdRequest
                                                           adType:YumiMediationAdTypeVideo];
 }
 
 #pragma mark - YumiMediationVideoAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
-                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                          adType:(YumiMediationAdType)adType{
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.delegate = delegate;
@@ -64,7 +64,10 @@
 }
 
 - (void)didFailToLoadRewardedVideo:(CBLocation)location withError:(CBLoadError)error {
-    [self.delegate coreAdapter:self coreAd:nil didFailToLoad:[NSString stringWithFormat:@"error code %@", @(error)] adType:self.adType];
+    [self.delegate coreAdapter:self
+                        coreAd:nil
+                 didFailToLoad:[NSString stringWithFormat:@"error code %@", @(error)]
+                        adType:self.adType];
 }
 
 - (void)didDismissRewardedVideo:(CBLocation)location {

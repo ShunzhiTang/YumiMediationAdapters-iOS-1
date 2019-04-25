@@ -27,8 +27,8 @@
 
 #pragma mark - YumiMediationInterstitialAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
-                                                delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                          adType:(YumiMediationAdType)adType{
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
@@ -75,8 +75,11 @@
     [self.delegate coreAdapter:self didStartPlayingAd:interstitial adType:self.adType];
 }
 
-- (void)interstitialFailPresentScreen:(BaiduMobAdInterstitial *)interstitial withError:(BaiduMobFailReason) reason {
-    [self.delegate coreAdapter:self failedToShowAd:interstitial errorString:@"Baidu ad failed to show" adType:self.adType];
+- (void)interstitialFailPresentScreen:(BaiduMobAdInterstitial *)interstitial withError:(BaiduMobFailReason)reason {
+    [self.delegate coreAdapter:self
+                failedToShowAd:interstitial
+                   errorString:@"Baidu ad failed to show"
+                        adType:self.adType];
 }
 
 - (void)interstitialDidAdClicked:(BaiduMobAdInterstitial *)interstitial {

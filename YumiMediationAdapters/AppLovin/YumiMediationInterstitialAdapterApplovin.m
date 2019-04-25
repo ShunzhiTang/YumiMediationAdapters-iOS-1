@@ -31,7 +31,7 @@
 #pragma mark - YumiMediationInterstitialAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                          adType:(YumiMediationAdType)adType{
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
@@ -71,7 +71,10 @@
 }
 
 - (void)adService:(nonnull ALAdService *)adService didFailToLoadAdWithError:(int)code {
-    [self.delegate coreAdapter:self coreAd:nil didFailToLoad:[NSString stringWithFormat:@"applovin error code:%d", code] adType:self.adType];
+    [self.delegate coreAdapter:self
+                        coreAd:nil
+                 didFailToLoad:[NSString stringWithFormat:@"applovin error code:%d", code]
+                        adType:self.adType];
 }
 
 #pragma mark - Ad Display Delegate

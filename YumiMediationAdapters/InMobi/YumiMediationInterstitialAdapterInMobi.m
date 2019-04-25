@@ -19,7 +19,10 @@
 @implementation YumiMediationInterstitialAdapterInMobi
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDInMobi requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeInterstitial];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDInMobi
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark - YumiMediationCoreAdapter
@@ -31,7 +34,7 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-    
+
     [IMSdk initWithAccountID:self.provider.data.key1];
     [IMSdk setLogLevel:kIMSDKLogLevelNone];
 
@@ -75,7 +78,10 @@
     [self.delegate coreAdapter:self didClickCoreAd:interstitial adType:self.adType];
 }
 
--(void)interstitial:(IMInterstitial*)interstitial didFailToPresentWithError:(IMRequestStatus*)error{
-    [self.delegate coreAdapter:self failedToShowAd:interstitial errorString:error.localizedDescription adType:self.adType];
+- (void)interstitial:(IMInterstitial *)interstitial didFailToPresentWithError:(IMRequestStatus *)error {
+    [self.delegate coreAdapter:self
+                failedToShowAd:interstitial
+                   errorString:error.localizedDescription
+                        adType:self.adType];
 }
 @end

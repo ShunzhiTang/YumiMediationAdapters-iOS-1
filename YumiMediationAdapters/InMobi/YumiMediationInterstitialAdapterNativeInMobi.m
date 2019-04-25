@@ -27,7 +27,10 @@
 @implementation YumiMediationInterstitialAdapterNativeInMobi
 
 + (void)load {
-     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDInMobiNative requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeInterstitial];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDInMobiNative
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark :private method
@@ -61,7 +64,7 @@
 #pragma mark - YumiMediationCoreAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                          adType:(YumiMediationAdType)adType{
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
@@ -103,7 +106,10 @@
 - (void)nativeDidFinishLoading:(IMNative *)native {
 
     if (!native || !native.customAdContent) {
-        [self.delegate coreAdapter:self coreAd:self.interstitial didFailToLoad:@"Inmobi native no ad" adType:self.adType];
+        [self.delegate coreAdapter:self
+                            coreAd:self.interstitial
+                     didFailToLoad:@"Inmobi native no ad"
+                            adType:self.adType];
         return;
     }
 
@@ -113,7 +119,10 @@
         self.imobeDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     }
     if (!self.imobeDict || ![self.imobeDict objectForKey:@"screenshots"]) {
-        [self.delegate coreAdapter:self coreAd:self.interstitial didFailToLoad:@"Inmobi native no ad" adType:self.adType];
+        [self.delegate coreAdapter:self
+                            coreAd:self.interstitial
+                     didFailToLoad:@"Inmobi native no ad"
+                            adType:self.adType];
         return;
     }
 
@@ -123,7 +132,10 @@
     NSString *clickUrl = [self.imobeDict objectForKey:@"landingURL"];
 
     if (!url || url.length == 0 || width == 0 || height == 0 || !clickUrl || clickUrl.length == 0) {
-         [self.delegate coreAdapter:self coreAd:self.interstitial didFailToLoad:@"Inmobi native no ad" adType:self.adType];
+        [self.delegate coreAdapter:self
+                            coreAd:self.interstitial
+                     didFailToLoad:@"Inmobi native no ad"
+                            adType:self.adType];
         return;
     }
 
@@ -140,7 +152,11 @@
 }
 
 - (void)native:(IMNative *)native didFailToLoadWithError:(IMRequestStatus *)error {
-     [self.delegate coreAdapter:self coreAd:self.interstitial didFailToLoad:error.localizedDescription adType:self.adType];;
+    [self.delegate coreAdapter:self
+                        coreAd:self.interstitial
+                 didFailToLoad:error.localizedDescription
+                        adType:self.adType];
+    ;
 }
 
 - (void)nativeWillPresentScreen:(IMNative *)native {
@@ -158,18 +174,30 @@
 
 #pragma mark : YumiAdsWKCustomViewControllerDelegate
 - (void)yumiAdsWKCustomViewControllerDidReceivedAd:(UIViewController *)viewController {
-    [self.delegate coreAdapter:self didReceivedCoreAd:self.interstitial interstitialFrame:CGRectZero withTemplateID:(int)self.currentID adType:self.adType];
+    [self.delegate coreAdapter:self
+             didReceivedCoreAd:self.interstitial
+             interstitialFrame:CGRectZero
+                withTemplateID:(int)self.currentID
+                        adType:self.adType];
 }
 
 - (void)yumiAdsWKCustomViewController:(UIViewController *)viewController didFailToReceiveAdWithError:(NSError *)error {
-     [self.delegate coreAdapter:self coreAd:self.interstitial didFailToLoad:error.localizedDescription adType:self.adType];;
+    [self.delegate coreAdapter:self
+                        coreAd:self.interstitial
+                 didFailToLoad:error.localizedDescription
+                        adType:self.adType];
+    ;
 }
 
 - (void)didClickOnYumiAdsWKCustomViewController:(UIViewController *)viewController point:(CGPoint)point {
     // inmobi
     [self.imnative reportAdClickAndOpenLandingPage];
 
-    [self.delegate coreAdapter:self didClickCoreAd:self.interstitial on:point withTemplateID:(int)self.currentID adType:self.adType];
+    [self.delegate coreAdapter:self
+                didClickCoreAd:self.interstitial
+                            on:point
+                withTemplateID:(int)self.currentID
+                        adType:self.adType];
 }
 
 - (void)yumiAdsWKCustomViewControllerDidPresent:(UIViewController *)viewController {

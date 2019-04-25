@@ -9,7 +9,7 @@
 #import "YumiMediationVungleInstance.h"
 #import <VungleSDK/VungleSDK.h>
 
-@interface YumiMediationInterstitialAdapterVungle()
+@interface YumiMediationInterstitialAdapterVungle ()
 
 @property (nonatomic, assign) YumiMediationAdType adType;
 
@@ -18,7 +18,10 @@
 @implementation YumiMediationInterstitialAdapterVungle
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self forProviderID:kYumiMediationAdapterIDVungle requestType:YumiMediationSDKAdRequest adType:YumiMediationAdTypeInterstitial];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDVungle
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark - YumiMediationCoreAdapter
@@ -30,7 +33,7 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-    
+
     YumiMediationVungleInstance *vungleInstance = [YumiMediationVungleInstance sharedInstance];
     if (!vungleInstance.vungleInterstitialAdapters) {
         vungleInstance.vungleInterstitialAdapters = [NSMutableArray new];
@@ -63,13 +66,10 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     NSError *error;
-    [[VungleSDK sharedSDK] playAd:rootViewController
-                          options:nil
-                      placementID:self.provider.data.key3
-                            error:&error];
+    [[VungleSDK sharedSDK] playAd:rootViewController options:nil placementID:self.provider.data.key3 error:&error];
 
     if (error) {
-       [self.delegate coreAdapter:self failedToShowAd:nil errorString:[error localizedDescription] adType:self.adType];
+        [self.delegate coreAdapter:self failedToShowAd:nil errorString:[error localizedDescription] adType:self.adType];
     }
 }
 

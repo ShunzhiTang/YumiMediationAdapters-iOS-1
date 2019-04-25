@@ -18,15 +18,15 @@
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDChartboost
-                                                             requestType:YumiMediationSDKAdRequest
+                                                   forProviderID:kYumiMediationAdapterIDChartboost
+                                                     requestType:YumiMediationSDKAdRequest
                                                           adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark - YumiMediationInterstitialAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
-                                                delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                          adType:(YumiMediationAdType)adType{
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
@@ -56,7 +56,10 @@
 }
 
 - (void)didFailToLoadInterstitial:(CBLocation)location withError:(CBLoadError)error {
-    [self.delegate coreAdapter:self coreAd:nil didFailToLoad:[NSString stringWithFormat:@"Chartboost error code: %@", @(error)] adType:self.adType];
+    [self.delegate coreAdapter:self
+                        coreAd:nil
+                 didFailToLoad:[NSString stringWithFormat:@"Chartboost error code: %@", @(error)]
+                        adType:self.adType];
 }
 
 /*!
