@@ -11,24 +11,28 @@
 @interface YumiMediationVideoAdapterGDT () <GDTRewardedVideoAdDelegate>
 @property (nonatomic, strong) GDTRewardVideoAd *rewardVideoAd;
 @property (nonatomic, assign) BOOL isReward;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationVideoAdapterGDT
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
-                                                      forProvider:kYumiMediationAdapterIDGDT
-                                                      requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                      forProviderID:kYumiMediationAdapterIDGDT
+                                                      requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeVideo];
 }
 
 #pragma mark - YumiMediationVideoAdapter
-- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType{
     self = [super init];
 
     self.delegate = delegate;
     self.provider = provider;
+    self.adType = adType;
 
     self.rewardVideoAd =
         [[GDTRewardVideoAd alloc] initWithAppId:self.provider.data.key1 placementId:self.provider.data.key2];
@@ -53,7 +57,7 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     if (self.rewardVideoAd.expiredTimestamp <= [[NSDate date] timeIntervalSince1970] || !self.rewardVideoAd.isAdValid) {
-        [self.delegate adapter:self videoAd:nil didFailToLoad:@"GDT video Ad is not valid" isRetry:YES];
+        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"GDT video ad is not valid" adType:self.adType];
         return;
     }
 
@@ -65,26 +69,27 @@
 }
 
 - (void)gdt_rewardVideoAdVideoDidLoad:(GDTRewardVideoAd *)rewardedVideoAd {
-    [self.delegate adapter:self didReceiveVideoAd:rewardedVideoAd];
+    [self.delegate coreAdapter:self didReceivedCoreAd:rewardedVideoAd adType:self.adType];
 }
 
 - (void)gdt_rewardVideoAdWillVisible:(GDTRewardVideoAd *)rewardedVideoAd {
+    [self.delegate coreAdapter:self didOpenCoreAd:rewardedVideoAd adType:self.adType];
 }
 
 - (void)gdt_rewardVideoAdDidExposed:(GDTRewardVideoAd *)rewardedVideoAd {
-    [self.delegate adapter:self didStartPlayingVideoAd:rewardedVideoAd];
+    [self.delegate coreAdapter:self didStartPlayingAd:rewardedVideoAd adType:self.adType];
 }
 
 - (void)gdt_rewardVideoAdDidClose:(GDTRewardVideoAd *)rewardedVideoAd {
     if (self.isReward) {
-        [self.delegate adapter:self videoAd:rewardedVideoAd didReward:nil];
-        self.isReward = NO;
+        [self.delegate coreAdapter:self coreAd:rewardedVideoAd didReward:YES adType:self.adType];
     }
-    [self.delegate adapter:self didCloseVideoAd:rewardedVideoAd];
+    [self.delegate coreAdapter:self didCloseCoreAd:rewardedVideoAd isCompletePlaying:self.isReward adType:self.adType];
+    self.isReward = NO;
 }
 
 - (void)gdt_rewardVideoAd:(GDTRewardVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
-    [self.delegate adapter:self videoAd:rewardedVideoAd didFailToLoad:[error localizedDescription] isRetry:YES];
+    [self.delegate coreAdapter:self coreAd:rewardedVideoAd didFailToLoad:[error localizedDescription] adType:self.adType];
 }
 
 - (void)gdt_rewardVideoAdDidRewardEffective:(GDTRewardVideoAd *)rewardedVideoAd {
@@ -95,6 +100,6 @@
 }
 
 - (void)gdt_rewardVideoAdDidClicked:(GDTRewardVideoAd *)rewardedVideoAd {
-    [self.delegate adapter:self didClickVideoAd:rewardedVideoAd];
+    [self.delegate coreAdapter:self didClickCoreAd:rewardedVideoAd adType:self.adType];
 }
 @end
