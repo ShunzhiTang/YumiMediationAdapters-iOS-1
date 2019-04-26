@@ -38,9 +38,9 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         weakSelf.rewardVideoAd =
         [[GDTRewardVideoAd alloc] initWithAppId:weakSelf.provider.data.key1 placementId:weakSelf.provider.data.key2];
+        weakSelf.rewardVideoAd.delegate = weakSelf;
     });
-    self.rewardVideoAd.delegate = self;
-
+    
     return self;
 }
 
