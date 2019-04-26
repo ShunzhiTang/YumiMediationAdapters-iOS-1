@@ -33,9 +33,12 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-
-    self.rewardVideoAd =
-        [[GDTRewardVideoAd alloc] initWithAppId:self.provider.data.key1 placementId:self.provider.data.key2];
+    
+    __weak __typeof(self)weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.rewardVideoAd =
+        [[GDTRewardVideoAd alloc] initWithAppId:weakSelf.provider.data.key1 placementId:weakSelf.provider.data.key2];
+    });
     self.rewardVideoAd.delegate = self;
 
     return self;
