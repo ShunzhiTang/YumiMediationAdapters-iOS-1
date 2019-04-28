@@ -38,13 +38,16 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-
-    self.rewardedVideo = [IMDSDK newRewardedInterstitialViewController:[[YumiTool sharedTool] topMostController]
-                                                           placementID:self.provider.data.key1
-                                                        loadedListener:self
-                                                           andMetadata:nil];
-    ;
-
+    
+    __weak __typeof(self)weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.rewardedVideo = [IMDSDK newRewardedInterstitialViewController:[[YumiTool sharedTool] topMostController]
+                                                               placementID:weakSelf.provider.data.key1
+                                                            loadedListener:weakSelf
+                                                               andMetadata:nil];
+        ;
+    });
+    
     return self;
 }
 
