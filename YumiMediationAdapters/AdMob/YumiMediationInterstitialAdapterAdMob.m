@@ -23,6 +23,8 @@
                                                    forProviderID:kYumiMediationAdapterIDAdMob
                                                      requestType:YumiMediationSDKAdRequest
                                                           adType:YumiMediationAdTypeInterstitial];
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults removeObjectForKey:YumiMediationAdmobAdapterUUID];
 }
 
 #pragma mark - YumiMediationInterstitialAdapter
