@@ -28,6 +28,8 @@
                                                    forProviderID:kYumiMediationAdapterIDAdmobNative
                                                      requestType:YumiMediationSDKAdRequest
                                                           adType:YumiMediationAdTypeInterstitial];
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults removeObjectForKey:YumiMediationAdmobAdapterUUID];
 }
 
 #pragma mark : - private method
@@ -62,6 +64,14 @@
     self.delegate = delegate;
     self.adType = adType;
 
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    if ([standardUserDefaults objectForKey:YumiMediationAdmobAdapterUUID]) {
+        return self;
+    }
+    [[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *_Nonnull status) {
+        [standardUserDefaults setObject:@"Admob_is_starting" forKey:YumiMediationAdmobAdapterUUID];
+        [standardUserDefaults synchronize];
+    }];
     return self;
 }
 
