@@ -79,7 +79,7 @@
     self.isPreloadVideo = NO;
     [self.delegate coreAdapter:self
                         coreAd:video
-                 didFailToLoad:[NSString stringWithFormat:@"%u", reason]
+                 didFailToLoad:[NSString stringWithFormat:@"error code %u", reason]
                         adType:self.adType];
 }
 
@@ -101,7 +101,7 @@
     self.isPreloadVideo = NO;
     [self.delegate coreAdapter:self
                 failedToShowAd:video
-                   errorString:[NSString stringWithFormat:@"%u", reason]
+                   errorString:[NSString stringWithFormat:@"error code %u", reason]
                         adType:self.adType];
 }
 
