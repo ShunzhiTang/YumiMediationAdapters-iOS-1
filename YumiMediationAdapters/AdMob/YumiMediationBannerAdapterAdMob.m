@@ -28,6 +28,8 @@
     [[YumiMediationAdapterRegistry registry] registerBannerAdapter:self
                                                      forProviderID:kYumiMediationAdapterIDAdMob
                                                        requestType:YumiMediationSDKAdRequest];
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults removeObjectForKey:YumiMediationAdmobAdapterUUID];
 }
 
 - (id<YumiMediationBannerAdapter>)initWithProvider:(YumiMediationBannerProvider *)provider

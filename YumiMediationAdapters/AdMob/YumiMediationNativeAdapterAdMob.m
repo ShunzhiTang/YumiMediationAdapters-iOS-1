@@ -37,6 +37,8 @@ static NSUInteger maxNumberOfAds = 5;
     [[YumiMediationAdapterRegistry registry] registerNativeAdapter:self
                                                      forProviderID:kYumiMediationAdapterIDAdMob
                                                        requestType:YumiMediationSDKAdRequest];
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults removeObjectForKey:YumiMediationAdmobAdapterUUID];
 }
 
 #pragma mark - YumiMediationNativeAdapter
