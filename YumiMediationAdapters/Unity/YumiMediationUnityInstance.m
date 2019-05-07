@@ -82,6 +82,22 @@
 }
 
 - (void)unityAdsDidFinish:(NSString *)placementId withFinishState:(UnityAdsFinishState)state {
+    if(state == kUnityAdsFinishStateError){
+        if ([self.unityInterstitialAdapter.provider.data.key2 isEqualToString:placementId]) {
+            [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
+                                                 failedToShowAd:nil
+                                                    errorString:@"the ad did not successfully display."
+                                                    adType:YumiMediationAdTypeInterstitial];
+        } else if ([self.unityVideoAdapter.provider.data.key2 isEqualToString:placementId]) {
+            [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
+                                          failedToShowAd:nil
+                                             errorString:@"the ad did not successfully display."
+                                                  adType:YumiMediationAdTypeVideo];
+        }
+        
+        return;
+    }
+
     if ([self.unityInterstitialAdapter.provider.data.key2 isEqualToString:placementId]) {
         [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
                                              didCloseCoreAd:nil
@@ -106,5 +122,22 @@
                                               adType:YumiMediationAdTypeVideo];
     }
 }
+
+- (void)unityAdsDidClick:(NSString *)placementId{
+    if ([self.unityInterstitialAdapter.provider.data.key2 isEqualToString:placementId]) {
+        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
+                                          didClickCoreAd:nil
+                                                     adType:YumiMediationAdTypeInterstitial];
+    } else if ([self.unityVideoAdapter.provider.data.key2 isEqualToString:placementId]) {
+        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
+                                   didClickCoreAd:nil
+                                              adType:YumiMediationAdTypeVideo];
+    }
+}
+
+- (void)unityAdsPlacementStateChanged:(nonnull NSString *)placementId oldState:(UnityAdsPlacementState)oldState newState:(UnityAdsPlacementState)newState {
+    
+}
+
 
 @end
