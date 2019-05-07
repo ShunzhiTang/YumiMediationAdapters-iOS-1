@@ -152,8 +152,7 @@
     [self.delegate coreAdapter:self didClickCoreAd:self.interstitialVc adType:self.adType];
 }
 - (void)nativeExpressAdViewExposure:(GDTNativeExpressAdView *)nativeExpressAdView {
-    [self.delegate coreAdapter:self didOpenCoreAd:self.interstitialVc adType:self.adType];
-    [self.delegate coreAdapter:self didStartPlayingAd:self.interstitialVc adType:self.adType];
+    
 }
 - (void)nativeExpressAdViewClosed:(GDTNativeExpressAdView *)nativeExpressAdView {
     [self closeGDTIntestitial];
