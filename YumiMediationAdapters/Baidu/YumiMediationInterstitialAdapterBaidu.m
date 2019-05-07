@@ -13,6 +13,7 @@
 
 @property (nonatomic) BaiduMobAdInterstitial *interstitial;
 @property (nonatomic, assign) YumiMediationAdType adType;
+@property (nonatomic, assign) BOOL interstitialIsReady;
 
 @end
 
@@ -34,6 +35,7 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
+    self.interstitialIsReady = NO;
     
     __weak __typeof(self)weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -53,7 +55,7 @@
 }
 
 - (BOOL)isReady {
-    return [self.interstitial isReady];
+    return self.interstitialIsReady;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
@@ -66,14 +68,17 @@
 }
 
 - (void)interstitialSuccessToLoadAd:(BaiduMobAdInterstitial *)interstitial {
+    self.interstitialIsReady = YES;
     [self.delegate coreAdapter:self didReceivedCoreAd:interstitial adType:self.adType];
 }
 
 - (void)interstitialFailToLoadAd:(BaiduMobAdInterstitial *)interstitial {
+    self.interstitialIsReady = NO;
     [self.delegate coreAdapter:self coreAd:interstitial didFailToLoad:@"Baidu ad load fail" adType:self.adType];
 }
 
 - (void)interstitialWillPresentScreen:(BaiduMobAdInterstitial *)interstitial {
+    self.interstitialIsReady = NO;
     [self.delegate coreAdapter:self didOpenCoreAd:interstitial adType:self.adType];
     [self.delegate coreAdapter:self didStartPlayingAd:interstitial adType:self.adType];
 }
