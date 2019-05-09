@@ -37,20 +37,17 @@
     self.adType = adType;
     self.interstitialIsReady = NO;
     
-    __weak __typeof(self)weakSelf = self;
+    return self;
+}
+
+- (void)requestAd {
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         weakSelf.interstitial = [[BaiduMobAdInterstitial alloc] init];
         weakSelf.interstitial.delegate = weakSelf;
         weakSelf.interstitial.AdUnitTag = weakSelf.provider.data.key2;
         weakSelf.interstitial.interstitialType = BaiduMobAdViewTypeInterstitialOther;
-    });
-    
-    return self;
-}
-
-- (void)requestAd {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.interstitial load];
+        [weakSelf.interstitial load];
     });
 }
 
