@@ -93,6 +93,7 @@
 
 - (void)interstitialDidDismissScreen:(BaiduMobAdInterstitial *)interstitial {
     [self.delegate coreAdapter:self didCloseCoreAd:interstitial isCompletePlaying:NO adType:self.adType];
+    self.interstitial = nil;
 }
 
 - (void)dealloc {
