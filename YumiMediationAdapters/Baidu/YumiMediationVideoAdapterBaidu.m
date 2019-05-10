@@ -58,34 +58,67 @@
     [self.rewardVideo showFromViewController:rootViewController];
 }
 
-#pragma mark :BaiduMobAdRewardVideoDelegate
-- (void)videoPreloadSuccess:(BaiduMobAdRewardVideo *)video {
+#pragma mark - 视频缓存delegate
+/**
+ *  视频加载缓存成功
+ */
+- (void)rewardedVideoAdLoaded:(BaiduMobAdRewardVideo *)video {
     self.isPreloadVideo = YES;
     [self.delegate adapter:self didReceiveVideoAd:video];
 }
 
-- (void)videoPreloadFail:(BaiduMobAdRewardVideo *)video withError:(BaiduMobFailReason)reason {
+/**
+ *  视频加载缓存失败
+ */
+- (void)rewardedVideoAdLoadFailed:(BaiduMobAdRewardVideo *)video withError:(BaiduMobFailReason)reason {
     self.isReward = NO;
     self.isPreloadVideo = NO;
     [self.delegate adapter:self videoAd:video didFailToLoad:[NSString stringWithFormat:@"%u", reason] isRetry:YES];
 }
 
-- (void)videoFailPresentScreen:(BaiduMobAdRewardVideo *)video withError:(BaiduMobFailReason)reason {
+#pragma mark - 视频播放delegate
+
+/**
+ *  视频开始播放
+ */
+- (void)rewardedVideoAdDidStarted:(BaiduMobAdRewardVideo *)video {
+    
+}
+
+/**
+ *  广告展示失败
+ */
+- (void)rewardedVideoAdShowFailed:(BaiduMobAdRewardVideo *)video withError:(BaiduMobFailReason)reason {
     self.isReward = NO;
     self.isPreloadVideo = NO;
     [self.delegate adapter:self videoAd:video didFailToLoad:[NSString stringWithFormat:@"%u", reason] isRetry:YES];
 }
 
-- (void)videoDidFinishPlayingMedia:(BaiduMobAdRewardVideo *)video {
+/**
+ *  广告完成播放
+ */
+- (void)rewardedVideoAdDidPlayFinish:(BaiduMobAdRewardVideo *)video {
     self.isReward = YES;
 }
 
-- (void)userDidSkipPlayingMedia:(BaiduMobAdRewardVideo *)video withPlayingProgress:(CGFloat)progress {
+/**
+ *  用户点击关闭
+ @param progress 当前播放进度 单位百分比 （注意浮点数）
+ */
+- (void)rewardedVideoAdDidClose:(BaiduMobAdRewardVideo *)video withPlayingProgress:(CGFloat)progress {
     if (self.isReward) {
         [self.delegate adapter:self videoAd:video didReward:nil];
         self.isReward = NO;
     }
     [self.delegate adapter:self didCloseVideoAd:video];
+}
+
+/**
+ *  用户点击下载/查看详情
+ @param progress 当前播放进度 单位百分比
+ */
+- (void)rewardedVideoAdDidClick:(BaiduMobAdRewardVideo *)video withPlayingProgress:(CGFloat)progress {
+    
 }
 
 @end
