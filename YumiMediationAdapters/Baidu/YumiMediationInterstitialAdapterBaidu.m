@@ -12,6 +12,7 @@
 @interface YumiMediationInterstitialAdapterBaidu () <BaiduMobAdInterstitialDelegate>
 
 @property (nonatomic) BaiduMobAdInterstitial *interstitial;
+@property (nonatomic, assign) BOOL interstitialIsReady;
 
 @end
 
@@ -30,23 +31,24 @@
 
     self.provider = provider;
     self.delegate = delegate;
-
-    self.interstitial = [[BaiduMobAdInterstitial alloc] init];
-    self.interstitial.delegate = self;
-    self.interstitial.AdUnitTag = self.provider.data.key2;
-    self.interstitial.interstitialType = BaiduMobAdViewTypeInterstitialOther;
+    self.interstitialIsReady = NO;
 
     return self;
 }
 
 - (void)requestAd {
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.interstitial load];
+        weakSelf.interstitial = [[BaiduMobAdInterstitial alloc] init];
+        weakSelf.interstitial.delegate = weakSelf;
+        weakSelf.interstitial.AdUnitTag = weakSelf.provider.data.key2;
+        weakSelf.interstitial.interstitialType = BaiduMobAdViewTypeInterstitialOther;
+        [weakSelf.interstitial load];
     });
 }
 
 - (BOOL)isReady {
-    return [self.interstitial isReady];
+    return self.interstitialIsReady;
 }
 
 - (void)present {
@@ -59,14 +61,17 @@
 }
 
 - (void)interstitialSuccessToLoadAd:(BaiduMobAdInterstitial *)interstitial {
+    self.interstitialIsReady = YES;
     [self.delegate adapter:self didReceiveInterstitialAd:interstitial];
 }
 
 - (void)interstitialFailToLoadAd:(BaiduMobAdInterstitial *)interstitial {
+    self.interstitialIsReady = NO;
     [self.delegate adapter:self interstitialAd:interstitial didFailToReceive:@"Baidu ad load fail"];
 }
 
 - (void)interstitialWillPresentScreen:(BaiduMobAdInterstitial *)interstitial {
+    self.interstitialIsReady = NO;
     [self.delegate adapter:self willPresentScreen:interstitial];
 }
 
@@ -76,6 +81,8 @@
 
 - (void)interstitialDidDismissScreen:(BaiduMobAdInterstitial *)interstitial {
     [self.delegate adapter:self willDismissScreen:interstitial];
+    self.interstitial = nil;
+    self.interstitialIsReady = NO;
 }
 
 - (void)dealloc {
