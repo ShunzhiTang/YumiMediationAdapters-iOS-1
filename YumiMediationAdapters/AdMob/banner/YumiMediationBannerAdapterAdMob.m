@@ -72,6 +72,19 @@
         adSize = kGADAdSizeSmartBannerLandscape;
     }
 
+    // set GDPR
+    NSUserDefaults *standardUserDefault = [NSUserDefaults standardUserDefaults];
+    NSString *consentStatus = [standardUserDefault objectForKey:YumiMediationGDPRCommonStatus];
+    GADRequest *request = [GADRequest request];
+    GADExtras *extras = [[GADExtras alloc] init];
+    if (consentStatus.length && [consentStatus isEqualToString:@"1"]) {
+        extras.additionalParameters = @{@"npa": @"1"};
+    }
+    if (!consentStatus.length || [consentStatus isEqualToString:@"0"]) {
+        extras.additionalParameters = @{@"npa": @"0"};
+    }
+    [request registerAdNetworkExtras:extras];
+    
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -82,8 +95,7 @@
         strongSelf.bannerView.adUnitID = strongSelf.provider.data.key1;
         strongSelf.bannerView.delegate = strongSelf;
         strongSelf.bannerView.rootViewController = [strongSelf.delegate rootViewControllerForPresentingModalView];
-
-        GADRequest *request = [GADRequest request];
+        
         [strongSelf.bannerView loadRequest:request];
     });
 }
