@@ -10,6 +10,7 @@
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiMediationConstants.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationBannerAdapterAdMob () <GADBannerViewDelegate, YumiMediationBannerAdapter>
 
@@ -73,14 +74,13 @@
     }
 
     // set GDPR
-    NSUserDefaults *standardUserDefault = [NSUserDefaults standardUserDefaults];
-    NSString *consentStatus = [standardUserDefault objectForKey:YumiMediationGDPRCommonStatus];
+    BOOL gdprStatus = [[YumiMediationGDPRManager sharedGDPRManager] getConsentStatus];
     GADRequest *request = [GADRequest request];
     GADExtras *extras = [[GADExtras alloc] init];
-    if (consentStatus.length && [consentStatus isEqualToString:@"1"]) {
+    if (gdprStatus) {
         extras.additionalParameters = @{@"npa": @"1"};
     }
-    if (!consentStatus.length || [consentStatus isEqualToString:@"0"]) {
+    if (!gdprStatus) {
         extras.additionalParameters = @{@"npa": @"0"};
     }
     [request registerAdNetworkExtras:extras];
