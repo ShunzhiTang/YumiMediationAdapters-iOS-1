@@ -9,9 +9,9 @@
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <Foundation/Foundation.h>
 
-@interface <%=class_name%> : NSObject <YumiMediationInterstitialAdapter>
+@interface <%=class_name%> : NSObject  <YumiMediationCoreAdapter>
 
-@property (nonatomic, weak) id<YumiMediationInterstitialAdapterDelegate> delegate;
-@property (nonatomic) YumiMediationInterstitialProvider *provider;
+@property (nonatomic, weak) id<YumiMediationCoreAdapterDelegate> delegate;
+@property (nonatomic) YumiMediationCoreProvider *provider;
 
 @end
