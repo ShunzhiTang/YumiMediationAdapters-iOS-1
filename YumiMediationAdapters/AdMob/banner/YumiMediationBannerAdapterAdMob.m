@@ -78,10 +78,10 @@
     GADRequest *request = [GADRequest request];
     GADExtras *extras = [[GADExtras alloc] init];
     if (gdprStatus) {
-        extras.additionalParameters = @{@"npa": @"1"};
+        extras.additionalParameters = @{@"npa": @"0"};
     }
     if (!gdprStatus) {
-        extras.additionalParameters = @{@"npa": @"0"};
+        extras.additionalParameters = @{@"npa": @"1"};
     }
     [request registerAdNetworkExtras:extras];
     
