@@ -10,6 +10,7 @@
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiMediationConstants.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationBannerAdapterAdMob () <GADBannerViewDelegate, YumiMediationBannerAdapter>
 
@@ -72,6 +73,18 @@
         adSize = kGADAdSizeSmartBannerLandscape;
     }
 
+    // set GDPR
+    BOOL gdprStatus = [[YumiMediationGDPRManager sharedGDPRManager] getConsentStatus];
+    GADRequest *request = [GADRequest request];
+    GADExtras *extras = [[GADExtras alloc] init];
+    if (gdprStatus) {
+        extras.additionalParameters = @{@"npa": @"1"};
+    }
+    if (!gdprStatus) {
+        extras.additionalParameters = @{@"npa": @"0"};
+    }
+    [request registerAdNetworkExtras:extras];
+    
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -82,8 +95,7 @@
         strongSelf.bannerView.adUnitID = strongSelf.provider.data.key1;
         strongSelf.bannerView.delegate = strongSelf;
         strongSelf.bannerView.rootViewController = [strongSelf.delegate rootViewControllerForPresentingModalView];
-
-        GADRequest *request = [GADRequest request];
+        
         [strongSelf.bannerView loadRequest:request];
     });
 }
