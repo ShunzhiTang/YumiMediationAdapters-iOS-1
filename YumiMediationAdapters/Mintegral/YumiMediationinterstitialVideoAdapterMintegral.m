@@ -8,6 +8,7 @@
 #import "YumiMediationinterstitialVideoAdapterMintegral.h"
 #import <MTGSDK/MTGSDK.h>
 #import <MTGSDKInterstitialVideo/MTGInterstitialVideoAdManager.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationinterstitialVideoAdapterMintegral () <MTGInterstitialVideoDelegate>
 @property (nonatomic, strong) MTGInterstitialVideoAdManager *ivAdManager;
@@ -34,6 +35,15 @@
     self.delegate = delegate;
     self.adType = adType;
 
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [[MTGSDK sharedInstance] setConsentStatus:YES];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [[MTGSDK sharedInstance] setConsentStatus:NO];
+    }
+    
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [[MTGSDK sharedInstance] setAppID:weakSelf.provider.data.key1 ApiKey:weakSelf.provider.data.key2];
