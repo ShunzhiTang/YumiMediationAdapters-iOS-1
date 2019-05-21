@@ -7,6 +7,7 @@
 
 #import "YumiMediationInterstitialAdapterIronSource.h"
 #import <IronSource/IronSource.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationInterstitialAdapterIronSource () <ISDemandOnlyInterstitialDelegate>
 
@@ -32,7 +33,16 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-
+    
+    // set GDPR
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [IronSource setConsent:YES];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [IronSource setConsent:NO];
+    }
+    
     [IronSource setISDemandOnlyInterstitialDelegate:self];
     if (self.provider.data.key1.length == 0 || self.provider.data.key2.length == 0) {
         [self.delegate coreAdapter:self
