@@ -8,6 +8,7 @@
 
 #import "YumiMediationVideoAdapterAdMob.h"
 #import <GoogleMobileAds/GoogleMobileAds.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationVideoAdapterAdMob () <GADRewardBasedVideoAdDelegate>
 @property (nonatomic, assign) BOOL isReward;
@@ -53,7 +54,21 @@
 }
 
 - (void)requestAd {
-    [[GADRewardBasedVideoAd sharedInstance] loadRequest:[GADRequest request] withAdUnitID:self.provider.data.key1];
+    // set GDPR
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    GADExtras *extras = [[GADExtras alloc] init];
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        extras.additionalParameters = @{@"npa": @"0"};
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        extras.additionalParameters = @{@"npa": @"1"};
+    }
+    
+    GADRequest *request = [GADRequest request];
+    [request registerAdNetworkExtras:extras];
+    
+    [[GADRewardBasedVideoAd sharedInstance] loadRequest:request withAdUnitID:self.provider.data.key1];
 
     self.isReward = NO;
 }
