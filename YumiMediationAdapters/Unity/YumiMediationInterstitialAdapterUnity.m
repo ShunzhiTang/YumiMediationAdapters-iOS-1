@@ -9,6 +9,7 @@
 #import "YumiMediationInterstitialAdapterUnity.h"
 #import "YumiMediationUnityInstance.h"
 #import <UnityAds/UnityAds.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationInterstitialAdapterUnity ()
 
@@ -34,7 +35,20 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-
+    
+    // set GDPR
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    UADSMetaData *gdprConsentMetaData = [[UADSMetaData alloc] init];
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [gdprConsentMetaData set:@"gdpr.consent" value:@YES];
+        [gdprConsentMetaData commit];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [gdprConsentMetaData set:@"gdpr.consent" value:@NO];
+        [gdprConsentMetaData commit];
+    }
+    
     if (![UnityAds isInitialized]) {
         [UnityAds initialize:provider.data.key1 delegate:[YumiMediationUnityInstance sharedInstance] testMode:NO];
     }
