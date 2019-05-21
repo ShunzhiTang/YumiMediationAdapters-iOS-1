@@ -8,6 +8,7 @@
 
 #import "YumiMediationVideoAdapterIronSource.h"
 #import <IronSource/IronSource.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationVideoAdapterIronSource () <ISDemandOnlyRewardedVideoDelegate>
 
@@ -34,6 +35,18 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
+    
+    
+    // set GDPR
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+       [IronSource setConsent:YES];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [IronSource setConsent:NO];
+    }
+    
     [IronSource setISDemandOnlyRewardedVideoDelegate:self];
     [IronSource shouldTrackReachability:YES];
     if (self.provider.data.key1.length == 0 || self.provider.data.key2.length == 0) {
