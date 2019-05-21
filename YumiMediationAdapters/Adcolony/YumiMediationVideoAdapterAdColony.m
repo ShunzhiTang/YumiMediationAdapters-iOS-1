@@ -8,6 +8,7 @@
 
 #import "YumiMediationVideoAdapterAdColony.h"
 #import <AdColony/AdColony.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationVideoAdapterAdColony ()
 
@@ -37,10 +38,23 @@
     self.provider = provider;
     self.adType = adType;
 
+    // set GDPR
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    AdColonyAppOptions *options = [AdColonyAppOptions new];
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        options.gdprRequired = TRUE;
+        options.gdprConsentString = @"1";
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        options.gdprRequired = false;
+        options.gdprConsentString = @"0";
+    }
+    
     __weak typeof(self) weakSelf = self;
     [AdColony configureWithAppID:provider.data.key1
                          zoneIDs:@[ provider.data.key2 ]
-                         options:nil
+                         options:options
                       completion:^(NSArray<AdColonyZone *> *_Nonnull zones) {
                           [[zones firstObject] setReward:^(BOOL success, NSString *_Nonnull name, int amount) {
                               // NOTE: not reward here but in ad close block
