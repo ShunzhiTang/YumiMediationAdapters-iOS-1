@@ -74,13 +74,13 @@
     }
 
     // set GDPR
-    BOOL gdprStatus = [[YumiMediationGDPRManager sharedGDPRManager] getConsentStatus];
+    YumiMediationConsentStatus gdprStatus = [[YumiMediationGDPRManager sharedGDPRManager] getConsentStatus];
     GADRequest *request = [GADRequest request];
     GADExtras *extras = [[GADExtras alloc] init];
-    if (gdprStatus) {
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         extras.additionalParameters = @{@"npa": @"0"};
     }
-    if (!gdprStatus) {
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         extras.additionalParameters = @{@"npa": @"1"};
     }
     [request registerAdNetworkExtras:extras];
