@@ -10,6 +10,7 @@
 #import <GoogleMobileAds/GADNativeAdViewAdOptions.h>
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationInterstitialAdapterNativeAdMob () <GADNativeAppInstallAdLoaderDelegate, GADAdLoaderDelegate,
                                                            GADNativeAdDelegate>
@@ -87,8 +88,20 @@
                                                rootViewController:[[YumiTool sharedTool] topMostController]
                                                           adTypes:adTypes
                                                           options:@[ option ]];
-
+        
+        // set GDPR
+        YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+        
+        GADExtras *extras = [[GADExtras alloc] init];
+        if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+            extras.additionalParameters = @{@"npa": @"0"};
+        }
+        if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+            extras.additionalParameters = @{@"npa": @"1"};
+        }
+        
         GADRequest *request = [GADRequest request];
+        [request registerAdNetworkExtras:extras];
 
         weakSelf.adLoader.delegate = weakSelf;
         [weakSelf.adLoader loadRequest:request];

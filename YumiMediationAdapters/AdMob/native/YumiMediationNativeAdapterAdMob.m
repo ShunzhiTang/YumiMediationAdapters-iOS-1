@@ -12,6 +12,7 @@
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 static NSUInteger maxNumberOfAds = 5;
 
@@ -96,8 +97,19 @@ static NSUInteger maxNumberOfAds = 5;
                                                rootViewController:[[YumiTool sharedTool] topMostController]
                                                           adTypes:adTypes
                                                           options:@[ adViewoption, multipleAdsOptions, imageOptions ]];
-
+        // set GDPR
+        YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+        
+        GADExtras *extras = [[GADExtras alloc] init];
+        if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+            extras.additionalParameters = @{@"npa": @"0"};
+        }
+        if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+            extras.additionalParameters = @{@"npa": @"1"};
+        }
+        
         GADRequest *request = [GADRequest request];
+        [request registerAdNetworkExtras:extras];
 
         weakSelf.adLoader.delegate = weakSelf;
         [weakSelf.adLoader loadRequest:request];
