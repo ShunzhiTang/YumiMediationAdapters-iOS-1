@@ -19,6 +19,7 @@
 @property (nonatomic, strong) IAVideoContentController *videoContentController;
 
 @property (nonatomic, assign)BOOL isVideoReady;
+@property (nonatomic, assign)BOOL isVideoRewarded;
 
 @end
 
@@ -88,6 +89,7 @@
 - (void)requestAd {
     
     self.isVideoReady = NO;
+    self.isVideoRewarded = NO;
     // declare a weak property, because of block:
     __weak typeof(self) weakSelf = self;
     
@@ -124,6 +126,7 @@
 }
 
 - (void)IAVideoContentController:(IAVideoContentController * _Nullable)contentController videoProgressUpdatedWithCurrentTime:(NSTimeInterval)currentTime    totalTime:(NSTimeInterval)totalTime{
+    self.isVideoRewarded = currentTime == totalTime;
 }
 
 #pragma mark: IAUnitDelegate
@@ -145,8 +148,11 @@
 - (void)IAUnitControllerWillDismissFullscreen:(IAUnitController * _Nullable)unitController{
 }
 - (void)IAUnitControllerDidDismissFullscreen:(IAUnitController * _Nullable)unitController{
-   [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
-   [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:YES adType:self.adType];
+    if (self.isVideoRewarded) {
+        [self.delegate coreAdapter:self coreAd:nil didReward:self.isVideoRewarded adType:self.adType];
+    }
+   [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:self.isVideoRewarded adType:self.adType];
+    self.isVideoRewarded = NO;
 }
 
 - (void)IAUnitControllerWillOpenExternalApp:(IAUnitController * _Nullable)unitController{
