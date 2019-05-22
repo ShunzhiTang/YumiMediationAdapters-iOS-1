@@ -56,6 +56,16 @@
 }
 
 - (void)requestAd {
+    // update gdpr
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [[MTGSDK sharedInstance] setConsentStatus:YES];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [[MTGSDK sharedInstance] setConsentStatus:NO];
+    }
+    
     [self.videoAd loadVideo:self.provider.data.key3 delegate:self];
 }
 
