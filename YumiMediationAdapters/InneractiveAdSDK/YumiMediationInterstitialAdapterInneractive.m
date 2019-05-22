@@ -113,7 +113,7 @@
     [self.adSpot fetchAdWithCompletion:^(IAAdSpot * _Nullable adSpot, IAAdModel * _Nullable adModel, NSError * _Nullable error) {
         if (error) {
             weakSelf.isInterstitalReady = NO;
-            [weakSelf.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:weakSelf.adType];
+            [weakSelf.delegate coreAdapter:weakSelf coreAd:nil didFailToLoad:error.localizedDescription adType:weakSelf.adType];
             return ;
         }
         weakSelf.isInterstitalReady = YES;
