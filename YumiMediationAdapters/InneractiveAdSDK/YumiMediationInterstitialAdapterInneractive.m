@@ -11,6 +11,7 @@
 #import <IASDKVideo/IASDKVideo.h>
 #import <IASDKMRAID/IASDKMRAID.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationInterstitialAdapterInneractive ()<IAUnitDelegate, IAVideoContentDelegate, IAMRAIDContentDelegate>
 
@@ -45,6 +46,16 @@
 
     
     __weak typeof(self) weakSelf = self;
+    
+    // set gdpr
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [[IASDKCore sharedInstance] setGDPRConsent:YES];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [[IASDKCore sharedInstance] setGDPRConsent:NO];
+    }
     
     //Initialisation of the SDK
     [[IASDKCore sharedInstance] initWithAppID:provider.data.key1];
@@ -89,6 +100,15 @@
 - (void)requestAd {
     __weak typeof(self) weakSelf = self;
     self.isInterstitalReady = NO;
+    // update gdpr
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [[IASDKCore sharedInstance] setGDPRConsent:YES];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [[IASDKCore sharedInstance] setGDPRConsent:NO];
+    }
     
     [self.adSpot fetchAdWithCompletion:^(IAAdSpot * _Nullable adSpot, IAAdModel * _Nullable adModel, NSError * _Nullable error) {
         if (error) {
