@@ -62,6 +62,15 @@
 
 - (void)requestAd {
     // NOTE: ironsource do not provide any method for requesting ad, it handles the request internally
+    // update GDPR
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [IronSource setConsent:YES];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [IronSource setConsent:NO];
+    }
 }
 
 - (BOOL)isReady {

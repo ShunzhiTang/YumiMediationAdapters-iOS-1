@@ -56,6 +56,16 @@
 }
 
 - (void)requestAd {
+    // update GDPR
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [IronSource setConsent:YES];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [IronSource setConsent:NO];
+    }
+    
     [IronSource loadISDemandOnlyInterstitial:self.provider.data.key2];
 }
 
