@@ -42,6 +42,8 @@
     self.provider = provider;
     self.adType = adType;
     
+    __weak typeof(self) weakSelf = self;
+    
     //Initialisation of the SDK
     [[IASDKCore sharedInstance] initWithAppID:provider.data.key1];
     
@@ -55,33 +57,24 @@
         builder.autoLocationUpdateEnabled = NO;
     }];
     // 5.Initialize your Video Content Controller:
-    IAVideoContentController *videoContentController =
+    self.videoContentController =
     [IAVideoContentController build:
      ^(id<IAVideoContentControllerBuilder>  _Nonnull builder) {
-         builder.videoContentDelegate = self; // a delegate should be passed in order to get video content related callbacks;
+         builder.videoContentDelegate = weakSelf;
      }];
     
-    self.videoContentController = videoContentController;
-    
     //7. Initialize the View Unit Controller
-    IAViewUnitController *viewUnitController =
+    self.viewUnitController =
     [IAViewUnitController build:^(id<IAViewUnitControllerBuilder>  _Nonnull builder) {
-        builder.unitDelegate = self;
-        // all the needed content controllers should be added to the desired unit controller:
-        [builder addSupportedContentController:self.videoContentController];
+        builder.unitDelegate = weakSelf;
+        [builder addSupportedContentController:weakSelf.videoContentController];
     }];
-    
-    self.viewUnitController = viewUnitController; // the View Unit Controller should be retained by a client side;
     
     //9.Initializing your Ad Spot
-    IAAdSpot *adSpot = [IAAdSpot build:^(id<IAAdSpotBuilder>  _Nonnull builder) {
-        builder.adRequest = adRequest; // pass here the ad request object;
-        // all the supported (by a client side) unit controllers,
-        // (in this case - view unit controller) should be added to the desired ad spot:
-        [builder addSupportedUnitController:self.viewUnitController];
+    self.adSpot = [IAAdSpot build:^(id<IAAdSpotBuilder>  _Nonnull builder) {
+        builder.adRequest = adRequest;
+        [builder addSupportedUnitController:weakSelf.viewUnitController];
     }];
-    
-    self.adSpot = adSpot; // the Ad Spot should be retained by a client side;
     
     return self;
 }
@@ -97,7 +90,10 @@
         if (error) {
             weakSelf.isVideoReady = NO;
             [weakSelf.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:weakSelf.adType];
+            return ;
         }
+        weakSelf.isVideoReady = YES;
+        [weakSelf.delegate coreAdapter:weakSelf didReceivedCoreAd:nil adType:weakSelf.adType];
     }];
 }
 
@@ -113,8 +109,7 @@
 
 #pragma mark: IAVideoContentDelegate
 - (void)IAVideoCompleted:(IAVideoContentController * _Nullable)contentController{
-    self.isVideoReady = YES;
-    [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
+   
 }
 
 - (void)IAVideoContentController:(IAVideoContentController * _Nullable)contentController videoInterruptedWithError:(NSError * _Nonnull)error{
@@ -132,7 +127,7 @@
 #pragma mark: IAUnitDelegate
 - (UIViewController * _Nonnull)IAParentViewControllerForUnitController:(IAUnitController * _Nullable)unitController{
     
-    return [[YumiTool sharedTool] topMostController];;
+    return [[YumiTool sharedTool] topMostController];
 }
 
 - (void)IAAdDidReceiveClick:(IAUnitController * _Nullable)unitController{
