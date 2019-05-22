@@ -16,7 +16,7 @@
 
 @property (nonatomic, assign) YumiMediationAdType adType;
 @property (nonatomic, strong) IAAdSpot *adSpot;
-@property (nonatomic, strong) IAViewUnitController *viewUnitController;
+@property (nonatomic, strong) IAFullscreenUnitController *fullscreenUnitController;
 @property (nonatomic, strong) IAVideoContentController *videoContentController;
 
 @property (nonatomic, assign)BOOL isVideoReady;
@@ -63,7 +63,7 @@
     IAAdRequest *adRequest =
     [IAAdRequest build:^(id<IAAdRequestBuilder>  _Nonnull builder) {
         builder.useSecureConnections = NO; //To send secure requests only, please set useSecureConnections to YES
-        builder.spotID = provider.data.key2;
+        builder.spotID = provider.data.key1;
         builder.timeout = provider.data.requestTimeout;
         builder.keywords = nil;
         builder.autoLocationUpdateEnabled = NO;
@@ -76,16 +76,17 @@
      }];
     
     //7. Initialize the View Unit Controller
-    self.viewUnitController =
-    [IAViewUnitController build:^(id<IAViewUnitControllerBuilder>  _Nonnull builder) {
-        builder.unitDelegate = weakSelf;
-        [builder addSupportedContentController:weakSelf.videoContentController];
-    }];
+    self.fullscreenUnitController =
+    [IAFullscreenUnitController build:^(id<IAFullscreenUnitControllerBuilder> _Nonnull builder)
+     {
+         builder.unitDelegate = weakSelf;
+         [builder addSupportedContentController:weakSelf.videoContentController];
+     }];
     
     //9.Initializing your Ad Spot
     self.adSpot = [IAAdSpot build:^(id<IAAdSpotBuilder>  _Nonnull builder) {
         builder.adRequest = adRequest;
-        [builder addSupportedUnitController:weakSelf.viewUnitController];
+        [builder addSupportedUnitController:weakSelf.fullscreenUnitController];
     }];
     
     return self;
@@ -106,7 +107,7 @@
         [[IASDKCore sharedInstance] setGDPRConsent:NO];
     }
     
-    // declare a weak property, because of block:
+    // declare a weak prop-erty, because of block:
     __weak typeof(self) weakSelf = self;
     
     [self.adSpot fetchAdWithCompletion:^(IAAdSpot * _Nullable adSpot, IAAdModel * _Nullable adModel, NSError * _Nullable error) {
@@ -125,8 +126,8 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    if (self.adSpot.activeUnitController == self.viewUnitController) {
-        [self.viewUnitController showAdInParentView:rootViewController.view];
+    if (self.adSpot.activeUnitController == self.fullscreenUnitController) {
+        [self.fullscreenUnitController showAdAnimated:YES completion:nil];
     }
 }
 
