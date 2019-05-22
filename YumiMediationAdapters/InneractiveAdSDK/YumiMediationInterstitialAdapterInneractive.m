@@ -1,36 +1,37 @@
 //
-//  YumiMediationVideoAdapterInneractive.m
+//  YumiMediationInterstitialAdapterInneractive.m
 //  Pods
 //
-//  Created by generator on 17/05/2019.
+//  Created by generator on 22/05/2019.
 //
 //
 
-#import "YumiMediationVideoAdapterInneractive.h"
+#import "YumiMediationInterstitialAdapterInneractive.h"
 #import <IASDKCore/IASDKCore.h>
 #import <IASDKVideo/IASDKVideo.h>
+#import <IASDKMRAID/IASDKMRAID.h>
 #import <YumiMediationSDK/YumiTool.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
-@interface YumiMediationVideoAdapterInneractive ()<IAVideoContentDelegate,IAUnitDelegate>
+@interface YumiMediationInterstitialAdapterInneractive ()<IAUnitDelegate, IAVideoContentDelegate, IAMRAIDContentDelegate>
 
 @property (nonatomic, assign) YumiMediationAdType adType;
-@property (nonatomic, strong) IAAdSpot *adSpot;
+@property (nonatomic, assign)BOOL isInterstitalReady;
+// inneractive
 @property (nonatomic, strong) IAFullscreenUnitController *fullscreenUnitController;
 @property (nonatomic, strong) IAVideoContentController *videoContentController;
-
-@property (nonatomic, assign)BOOL isVideoReady;
-@property (nonatomic, assign)BOOL isVideoRewarded;
+@property (nonatomic, strong, nonnull) IAMRAIDContentController *MRAIDContentController;
+@property (nonatomic, strong) IAAdSpot *adSpot;
 
 @end
 
-@implementation YumiMediationVideoAdapterInneractive
+@implementation YumiMediationInterstitialAdapterInneractive
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
                                                    forProviderID:kYumiMediationAdapterIDInneractive
                                                      requestType:YumiMediationSDKAdRequest
-                                                          adType:YumiMediationAdTypeVideo];
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark - YumiMediationVideoAdapter
@@ -38,10 +39,11 @@
                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
                                           adType:(YumiMediationAdType)adType {
     self = [super init];
-    
+
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
+
     
     __weak typeof(self) weakSelf = self;
     
@@ -55,11 +57,9 @@
         [[IASDKCore sharedInstance] setGDPRConsent:NO];
     }
     
-    
     //Initialisation of the SDK
     [[IASDKCore sharedInstance] initWithAppID:provider.data.key1];
     
-    //4. Next comes the ad request object initialization:
     IAAdRequest *adRequest =
     [IAAdRequest build:^(id<IAAdRequestBuilder>  _Nonnull builder) {
         builder.useSecureConnections = NO; //To send secure requests only, please set useSecureConnections to YES
@@ -75,17 +75,22 @@
          builder.videoContentDelegate = weakSelf;
      }];
     
-    //7. Initialize the View Unit Controller
+    self.MRAIDContentController = [IAMRAIDContentController build:^(id<IAMRAIDContentControllerBuilder>  _Nonnull builder) {
+        builder.MRAIDContentDelegate = weakSelf;
+    }];
+    
+    //7. Initialize thefullscreen Controller
     self.fullscreenUnitController =
     [IAFullscreenUnitController build:^(id<IAFullscreenUnitControllerBuilder> _Nonnull builder)
      {
          builder.unitDelegate = weakSelf;
          [builder addSupportedContentController:weakSelf.videoContentController];
+         [builder addSupportedContentController:weakSelf.MRAIDContentController];
      }];
     
     //9.Initializing your Ad Spot
-    self.adSpot = [IAAdSpot build:^(id<IAAdSpotBuilder>  _Nonnull builder) {
-        builder.adRequest = adRequest;
+     self.adSpot = [IAAdSpot build:^(id<IAAdSpotBuilder>  _Nonnull builder) {
+        builder.adRequest = adRequest; // pass here the ad request object;
         [builder addSupportedUnitController:weakSelf.fullscreenUnitController];
     }];
     
@@ -93,10 +98,8 @@
 }
 
 - (void)requestAd {
-    
-    self.isVideoReady = NO;
-    self.isVideoRewarded = NO;
-    
+    __weak typeof(self) weakSelf = self;
+    self.isInterstitalReady = NO;
     // update gdpr
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
     
@@ -107,22 +110,19 @@
         [[IASDKCore sharedInstance] setGDPRConsent:NO];
     }
     
-    // declare a weak prop-erty, because of block:
-    __weak typeof(self) weakSelf = self;
-    
     [self.adSpot fetchAdWithCompletion:^(IAAdSpot * _Nullable adSpot, IAAdModel * _Nullable adModel, NSError * _Nullable error) {
         if (error) {
-            weakSelf.isVideoReady = NO;
+            weakSelf.isInterstitalReady = NO;
             [weakSelf.delegate coreAdapter:weakSelf coreAd:nil didFailToLoad:error.localizedDescription adType:weakSelf.adType];
             return ;
         }
-        weakSelf.isVideoReady = YES;
+        weakSelf.isInterstitalReady = YES;
         [weakSelf.delegate coreAdapter:weakSelf didReceivedCoreAd:nil adType:weakSelf.adType];
     }];
 }
 
 - (BOOL)isReady {
-    return self.isVideoReady;
+    return self.isInterstitalReady;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
@@ -130,51 +130,63 @@
         [self.fullscreenUnitController showAdAnimated:YES completion:nil];
     }
 }
+#pragma mark - IAUnitDelegate
 
-#pragma mark: IAVideoContentDelegate
-- (void)IAVideoCompleted:(IAVideoContentController * _Nullable)contentController{
-   
-}
-
-- (void)IAVideoContentController:(IAVideoContentController * _Nullable)contentController videoInterruptedWithError:(NSError * _Nonnull)error{
-    self.isVideoReady = NO;
-    [self.delegate coreAdapter:self failedToShowAd:nil errorString:error.localizedDescription adType:self.adType];
-}
-
-- (void)IAVideoContentController:(IAVideoContentController * _Nullable)contentController videoDurationUpdated:(NSTimeInterval)videoDuration{
-}
-
-- (void)IAVideoContentController:(IAVideoContentController * _Nullable)contentController videoProgressUpdatedWithCurrentTime:(NSTimeInterval)currentTime    totalTime:(NSTimeInterval)totalTime{
-    self.isVideoRewarded = currentTime == totalTime;
-}
-
-#pragma mark: IAUnitDelegate
-- (UIViewController * _Nonnull)IAParentViewControllerForUnitController:(IAUnitController * _Nullable)unitController{
+- (UIViewController * _Nonnull)IAParentViewControllerForUnitController:(IAUnitController * _Nullable)unitController {
     
     return [[YumiTool sharedTool] topMostController];
 }
 
-- (void)IAAdDidReceiveClick:(IAUnitController * _Nullable)unitController{
+- (void)IAAdDidReceiveClick:(IAUnitController * _Nullable)unitController {
     [self.delegate coreAdapter:self didClickCoreAd:nil adType:self.adType];
 }
-- (void)IAAdWillLogImpression:(IAUnitController * _Nullable)unitController{
-}
-
-- (void)IAUnitControllerDidPresentFullscreen:(IAUnitController * _Nullable)unitControllerP{
+- (void)IAUnitControllerDidPresentFullscreen:(IAUnitController * _Nullable)unitController {
     [self.delegate coreAdapter:self didOpenCoreAd:nil adType:self.adType];
     [self.delegate coreAdapter:self didStartPlayingAd:nil adType:self.adType];
 }
-- (void)IAUnitControllerWillDismissFullscreen:(IAUnitController * _Nullable)unitController{
-}
-- (void)IAUnitControllerDidDismissFullscreen:(IAUnitController * _Nullable)unitController{
-    if (self.isVideoRewarded) {
-        [self.delegate coreAdapter:self coreAd:nil didReward:self.isVideoRewarded adType:self.adType];
-    }
-   [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:self.isVideoRewarded adType:self.adType];
-    self.isVideoRewarded = NO;
+- (void)IAUnitControllerDidDismissFullscreen:(IAUnitController * _Nullable)unitController {
+    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:YES adType:self.adType];
 }
 
-- (void)IAUnitControllerWillOpenExternalApp:(IAUnitController * _Nullable)unitController{
+#pragma mark - IAVideoContentDelegate
+
+- (void)IAVideoCompleted:(IAVideoContentController * _Nullable)contentController {
+}
+
+- (void)IAVideoContentController:(IAVideoContentController * _Nullable)contentController videoInterruptedWithError:(NSError *)error {
+    self.isInterstitalReady = NO;
+    [self.delegate coreAdapter:self failedToShowAd:nil errorString:error.localizedDescription adType:self.adType];
+}
+
+- (void)IAVideoContentController:(IAVideoContentController * _Nullable)contentController videoDurationUpdated:(NSTimeInterval)videoDuration {
+}
+
+- (void)IAVideoContentController:(IAVideoContentController * _Nullable)contentController videoProgressUpdatedWithCurrentTime:(NSTimeInterval)currentTime totalTime:(NSTimeInterval)totalTime {
+}
+
+#pragma mark - IAMRAIDContentDelegate
+
+- (void)IAMRAIDContentController:(IAMRAIDContentController * _Nullable)contentController MRAIDAdWillResizeToFrame:(CGRect)frame {
+}
+
+- (void)IAMRAIDContentController:(IAMRAIDContentController * _Nullable)contentController MRAIDAdDidResizeToFrame:(CGRect)frame {
+}
+
+- (void)IAMRAIDContentController:(IAMRAIDContentController * _Nullable)contentController MRAIDAdWillExpandToFrame:(CGRect)frame {
+}
+
+- (void)IAMRAIDContentController:(IAMRAIDContentController * _Nullable)contentController MRAIDAdDidExpandToFrame:(CGRect)frame {
+}
+
+- (void)IAMRAIDContentControllerMRAIDAdWillCollapse:(IAMRAIDContentController * _Nullable)contentController {
+}
+
+- (void)IAMRAIDContentControllerMRAIDAdDidCollapse:(IAMRAIDContentController * _Nullable)contentController {
+}
+
+- (void)IAMRAIDContentController:(IAMRAIDContentController * _Nullable)contentController videoInterruptedWithError:(NSError * _Nonnull)error {
+    self.isInterstitalReady = NO;
+    [self.delegate coreAdapter:self failedToShowAd:nil errorString:error.localizedDescription adType:self.adType];
 }
 
 @end
