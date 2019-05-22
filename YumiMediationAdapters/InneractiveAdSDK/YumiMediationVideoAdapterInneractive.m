@@ -10,6 +10,7 @@
 #import <IASDKCore/IASDKCore.h>
 #import <IASDKVideo/IASDKVideo.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationVideoAdapterInneractive ()<IAVideoContentDelegate,IAUnitDelegate>
 
@@ -43,6 +44,17 @@
     self.adType = adType;
     
     __weak typeof(self) weakSelf = self;
+    
+    // set gdpr
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [[IASDKCore sharedInstance] setGDPRConsent:YES];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [[IASDKCore sharedInstance] setGDPRConsent:NO];
+    }
+    
     
     //Initialisation of the SDK
     [[IASDKCore sharedInstance] initWithAppID:provider.data.key1];
@@ -83,6 +95,17 @@
     
     self.isVideoReady = NO;
     self.isVideoRewarded = NO;
+    
+    // update gdpr
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [[IASDKCore sharedInstance] setGDPRConsent:YES];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [[IASDKCore sharedInstance] setGDPRConsent:NO];
+    }
+    
     // declare a weak property, because of block:
     __weak typeof(self) weakSelf = self;
     
