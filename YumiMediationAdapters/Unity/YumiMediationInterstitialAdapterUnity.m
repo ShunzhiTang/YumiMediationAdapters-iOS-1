@@ -59,6 +59,19 @@
 
 - (void)requestAd {
     // NOTE: Unity do not provide any method for requesting ad, it handles the request internally
+    // update GDPR
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    UADSMetaData *gdprConsentMetaData = [[UADSMetaData alloc] init];
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [gdprConsentMetaData set:@"gdpr.consent" value:@YES];
+        [gdprConsentMetaData commit];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [gdprConsentMetaData set:@"gdpr.consent" value:@NO];
+        [gdprConsentMetaData commit];
+    }
+    
     if ([UnityAds isReady:self.provider.data.key2]) {
         [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
     }
