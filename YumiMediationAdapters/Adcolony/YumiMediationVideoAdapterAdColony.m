@@ -70,6 +70,20 @@
     self.isReward = NO;
 
     __weak typeof(self) weakSelf = self;
+    // update adcolony gdpr
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    AdColonyAppOptions *options = [AdColonyAppOptions new];
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        options.gdprRequired = TRUE;
+        options.gdprConsentString = @"1";
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        options.gdprRequired = false;
+        options.gdprConsentString = @"0";
+    }
+    
+    [AdColony setAppOptions:options];
+    
     [AdColony requestInterstitialInZone:self.provider.data.key2
         options:nil
         success:^(AdColonyInterstitial *_Nonnull ad) {
