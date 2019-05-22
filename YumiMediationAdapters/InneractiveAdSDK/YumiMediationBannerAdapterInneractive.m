@@ -104,6 +104,13 @@
 
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     
+    if (self.bannerSize != kYumiMediationAdViewBanner320x50 ||
+        self.bannerSize != kYumiMediationAdViewBanner728x90) {
+        [self.delegate adapter:self
+            didFailToReceiveAd:@"Inneractive only support kYumiMediationAdViewBanner320x50 or kYumiMediationAdViewBanner728x90 "];
+        return;
+    }
+    
     __weak typeof(self) weakSelf = self;
     
     // update gdpr
