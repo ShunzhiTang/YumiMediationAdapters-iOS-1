@@ -55,7 +55,7 @@
 }
 
 #pragma mark - IMInterstitialDelegate
-- (void)interstitialDidReceiveAd:(IMInterstitial *)interstitial {
+- (void)interstitialDidFinishLoading:(IMInterstitial *)interstitial {
     [self.delegate coreAdapter:self didReceivedCoreAd:interstitial adType:self.adType];
 }
 
