@@ -63,7 +63,7 @@
     IAAdRequest *adRequest =
     [IAAdRequest build:^(id<IAAdRequestBuilder>  _Nonnull builder) {
         builder.useSecureConnections = NO; //To send secure requests only, please set useSecureConnections to YES
-        builder.spotID = provider.data.key1;
+        builder.spotID = provider.data.key2;
         builder.timeout = provider.data.requestTimeout;
         builder.keywords = nil;
         builder.autoLocationUpdateEnabled = NO;
@@ -113,7 +113,7 @@
     [self.adSpot fetchAdWithCompletion:^(IAAdSpot * _Nullable adSpot, IAAdModel * _Nullable adModel, NSError * _Nullable error) {
         if (error) {
             weakSelf.isVideoReady = NO;
-            [weakSelf.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:weakSelf.adType];
+            [weakSelf.delegate coreAdapter:weakSelf coreAd:nil didFailToLoad:error.localizedDescription adType:weakSelf.adType];
             return ;
         }
         weakSelf.isVideoReady = YES;
