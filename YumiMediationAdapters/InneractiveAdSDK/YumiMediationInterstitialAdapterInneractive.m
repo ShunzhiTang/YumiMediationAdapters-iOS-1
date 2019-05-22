@@ -75,7 +75,7 @@
          builder.videoContentDelegate = weakSelf;
      }];
     
-    _MRAIDContentController = [IAMRAIDContentController build:^(id<IAMRAIDContentControllerBuilder>  _Nonnull builder) {
+    self.MRAIDContentController = [IAMRAIDContentController build:^(id<IAMRAIDContentControllerBuilder>  _Nonnull builder) {
         builder.MRAIDContentDelegate = weakSelf;
     }];
     
@@ -89,7 +89,7 @@
      }];
     
     //9.Initializing your Ad Spot
-     self.adSpot= [IAAdSpot build:^(id<IAAdSpotBuilder>  _Nonnull builder) {
+     self.adSpot = [IAAdSpot build:^(id<IAAdSpotBuilder>  _Nonnull builder) {
         builder.adRequest = adRequest; // pass here the ad request object;
         [builder addSupportedUnitController:weakSelf.fullscreenUnitController];
     }];
