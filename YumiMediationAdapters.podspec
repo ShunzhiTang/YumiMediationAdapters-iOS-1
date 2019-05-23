@@ -37,6 +37,7 @@ Pod::Spec.new do |s|
     { :name => "Atmosplay",:version => "3.0.0"},
     # { :name => "IQzone",:version => "3.0.2141"},
     { :name => "InneractiveAdSDK",:version => "7.2.3"},
+    { :name => "BytedanceAds",:version => "2.0.1.1"},
 
   ]
 
