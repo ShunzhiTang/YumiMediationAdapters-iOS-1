@@ -38,12 +38,14 @@
 
     [BUAdSDKManager setAppID:self.provider.data.key1];
     
+    self.interstitialAd = [[BUInterstitialAd alloc] initWithSlotID:self.provider.data.key2 size:[BUSize sizeBy:BUProposalSize_Interstitial600_600]];
+    self.interstitialAd.delegate = self;
+    
     return self;
 }
 
 - (void)requestAd {
-    self.interstitialAd = [[BUInterstitialAd alloc] initWithSlotID:self.provider.data.key2 size:[BUSize sizeBy:BUProposalSize_Interstitial600_600]];
-    self.interstitialAd.delegate = self;
+   
     [self.interstitialAd loadAdData];
 }
 
