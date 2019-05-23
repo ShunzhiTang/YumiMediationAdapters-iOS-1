@@ -123,6 +123,7 @@
 #pragma mark : YumiMediationNativeAdapterConnectorMedia
 /// Play the video. Doesn't do anything if the video is already playing.
 - (void)play {
+    //TODO BytedanceAds no methods of control play or pause
 }
 
 /// Pause the video. Doesn't do anything if the video is already paused.
