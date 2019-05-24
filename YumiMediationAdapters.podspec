@@ -23,19 +23,19 @@ Pod::Spec.new do |s|
     { :name => "AdColony", :version => "3.3.6" },
     { :name => "AdMob", :version => "7.30.0", :has_resource_bundle => true },
     { :name => "AppLovin", :version => "5.0.2" },
-    { :name => "Baidu", :version => "4.6.0" },
+    { :name => "Baidu", :version => "4.6.4" },
     { :name => "Chartboost", :version => "7.3.0" },
     { :name => "Facebook", :version => "5.1.0", :has_resource_bundle => true },
     { :name => "Domob", :version => "3.8.0" },
-    { :name => "GDT", :version => "4.8.1" ,:has_resource_bundle => true},
+    { :name => "GDT", :version => "4.8.1.0" ,:has_resource_bundle => true},
     { :name => "InMobi", :version => "7.2.1" },
     { :name => "IronSource", :version => "6.8.1.0" },
     { :name => "Unity", :version => "2.3.0" },
     { :name => "Vungle", :version => "6.2.0" },
-    { :name => "Mintegral", :version => "4.9.4"},
+    { :name => "Mintegral", :version => "5.3.1"},
     { :name => "OneWay",:version => "2.1.0"},
     { :name => "ZplayAds",:version => "2.4.2"},
-    { :name => "IQzone",:version => "3.0.2134"},
+    { :name => "IQzone",:version => "3.0.2141"},
     
   ]
 
