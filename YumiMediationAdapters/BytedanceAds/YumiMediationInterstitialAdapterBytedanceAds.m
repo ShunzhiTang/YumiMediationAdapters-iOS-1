@@ -20,21 +20,18 @@
 @implementation YumiMediationInterstitialAdapterBytedanceAds
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
-                                                   forProviderID:kYumiMediationAdapterIDBytedanceAds
-                                                     requestType:YumiMediationSDKAdRequest
-                                                          adType:YumiMediationAdTypeInterstitial];
+    [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
+                                                           forProviderID:kYumiMediationAdapterIDBytedanceAds
+                                                             requestType:YumiMediationSDKAdRequest];
 }
 
-#pragma mark - YumiMediationVideoAdapter
-- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
-                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                          adType:(YumiMediationAdType)adType {
+#pragma mark - YumiMediationInterstitialAdapter
+- (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
+                                                delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
     self = [super init];
 
     self.delegate = delegate;
     self.provider = provider;
-    self.adType = adType;
 
     [BUAdSDKManager setAppID:self.provider.data.key1];
     
@@ -54,30 +51,29 @@
     return self.interstitialAd.isAdValid;
 }
 
-- (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [self.interstitialAd showAdFromRootViewController:rootViewController];
+- (void)present {
+    [self.interstitialAd showAdFromRootViewController:[self.delegate rootViewControllerForPresentingModalView]];
 }
 
 #pragma mark: BUInterstitialAdDelegate
 - (void)interstitialAdDidLoad:(BUInterstitialAd *)interstitialAd{
-    [self.delegate coreAdapter:self didReceivedCoreAd:interstitialAd adType:self.adType];
+    [self.delegate adapter:self didReceiveInterstitialAd:interstitialAd];
 }
 
 - (void)interstitialAd:(BUInterstitialAd *)interstitialAd didFailWithError:(NSError *)error{
-    [self.delegate coreAdapter:self coreAd:interstitialAd didFailToLoad:error.localizedDescription adType:self.adType];
+   [self.delegate adapter:self interstitialAd:interstitialAd didFailToReceive:[error localizedDescription]];
 }
 
 - (void)interstitialAdWillVisible:(BUInterstitialAd *)interstitialAd{
-    [self.delegate coreAdapter:self didOpenCoreAd:interstitialAd adType:self.adType];
-    [self.delegate coreAdapter:self didStartPlayingAd:interstitialAd adType:self.adType];
+
 }
 
 - (void)interstitialAdDidClick:(BUInterstitialAd *)interstitialAd{
-    [self.delegate coreAdapter:self didClickCoreAd:interstitialAd adType:self.adType];
+    [self.delegate adapter:self didClickInterstitialAd:interstitialAd];
 }
 
 - (void)interstitialAdDidClose:(BUInterstitialAd *)interstitialAd{
-    [self.delegate coreAdapter:self didCloseCoreAd:interstitialAd isCompletePlaying:NO adType:self.adType];
+   [self.delegate adapter:self willDismissScreen:interstitialAd];
 }
 
 @end
