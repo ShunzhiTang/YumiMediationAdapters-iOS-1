@@ -12,7 +12,6 @@
 
 @interface YumiMediationVideoAdapterBytedanceAds ()<BURewardedVideoAdDelegate>
 
-@property (nonatomic, assign) YumiMediationAdType adType;
 @property (nonatomic, strong) BURewardedVideoAd *rewardedVideoAd;
 @property (nonatomic , assign) BOOL isRewarded;
 
@@ -21,21 +20,18 @@
 @implementation YumiMediationVideoAdapterBytedanceAds
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
-                                                   forProviderID:kYumiMediationAdapterIDBytedanceAds
-                                                     requestType:YumiMediationSDKAdRequest
-                                                          adType:YumiMediationAdTypeVideo];
+    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
+                                                      forProvider:kYumiMediationAdapterIDBytedanceAds
+                                                      requestType:YumiMediationSDKAdRequest];
 }
 
 #pragma mark - YumiMediationVideoAdapter
-- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
-                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
-                                          adType:(YumiMediationAdType)adType {
+- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
+                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
     self = [super init];
 
     self.delegate = delegate;
     self.provider = provider;
-    self.adType = adType;
 
     [BUAdSDKManager setAppID:self.provider.data.key1];
 
@@ -62,31 +58,32 @@
 #pragma mark: BURewardedVideoAdDelegate
 //This method is called when video ad material loaded successfully.
 - (void)rewardedVideoAdDidLoad:(BURewardedVideoAd *)rewardedVideoAd{
-    [self.delegate coreAdapter:self didReceivedCoreAd:rewardedVideoAd adType:self.adType];
+    [self.delegate adapter:self didReceiveVideoAd:rewardedVideoAd];
 }
 
 - (void)rewardedVideoAd:(BURewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error{
-     [self.delegate coreAdapter:self coreAd:rewardedVideoAd didFailToLoad:error.localizedDescription adType:self.adType];
+     [self.delegate adapter:self videoAd:rewardedVideoAd didFailToLoad:[error localizedDescription]];
 }
 //This method is called when cached successfully.
 - (void)rewardedVideoAdVideoDidLoad:(BURewardedVideoAd *)rewardedVideoAd{
-    [self.delegate coreAdapter:self didReceivedCoreAd:rewardedVideoAd adType:self.adType];
+    [self.delegate adapter:self didReceiveVideoAd:rewardedVideoAd];
 }
 
 - (void)rewardedVideoAdDidVisible:(BURewardedVideoAd *)rewardedVideoAd{
-    [self.delegate coreAdapter:self didOpenCoreAd:rewardedVideoAd adType:self.adType];
-    [self.delegate coreAdapter:self didStartPlayingAd:rewardedVideoAd adType:self.adType];
+   [self.delegate adapter:self didOpenVideoAd:rewardedVideoAd];
+    [self.delegate adapter:self didStartPlayingVideoAd:rewardedVideoAd];
 }
 
 - (void)rewardedVideoAdDidClick:(BURewardedVideoAd *)rewardedVideoAd{
-    [self.delegate coreAdapter:self didClickCoreAd:rewardedVideoAd adType:self.adType];
+   
 }
 
 - (void)rewardedVideoAdDidClose:(BURewardedVideoAd *)rewardedVideoAd{
     if (self.isRewarded) {
-        [self.delegate coreAdapter:self coreAd:rewardedVideoAd didReward:YES adType:self.adType];
+        [self.delegate adapter:self videoAd:rewardedVideoAd didReward:nil];
     }
-    [self.delegate coreAdapter:self didCloseCoreAd:rewardedVideoAd isCompletePlaying:self.isRewarded adType:self.adType];
+    [self.delegate adapter:self didCloseVideoAd:rewardedVideoAd];
+    
     self.isRewarded = NO;
     self.rewardedVideoAd = nil;
 }
