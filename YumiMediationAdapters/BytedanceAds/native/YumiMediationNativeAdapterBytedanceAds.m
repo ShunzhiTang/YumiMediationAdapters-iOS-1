@@ -7,16 +7,17 @@
 //
 
 #import "YumiMediationNativeAdapterBytedanceAds.h"
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
-#import <BUAdSDK/BUAdSDK.h>
 #import "YumiMediationNativeAdapterBytedanceAdsConnector.h"
+#import <BUAdSDK/BUAdSDK.h>
+#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
-@interface YumiMediationNativeAdapterBytedanceAds () <YumiMediationNativeAdapter,BUNativeAdsManagerDelegate,YumiMediationNativeAdapterConnectorDelegate,BUNativeAdDelegate>
+@interface YumiMediationNativeAdapterBytedanceAds () <YumiMediationNativeAdapter, BUNativeAdsManagerDelegate,
+                                                      YumiMediationNativeAdapterConnectorDelegate, BUNativeAdDelegate>
 
 @property (nonatomic, weak) id<YumiMediationNativeAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationNativeProvider *provider;
 @property (nonatomic, strong) BUNativeAdsManager *buNativeManager;
-@property (nonatomic) NSArray<BUNativeAd *>  *buNativeAdDataArray;
+@property (nonatomic) NSArray<BUNativeAd *> *buNativeAdDataArray;
 // mapping data
 @property (nonatomic) NSMutableArray *mappingData;
 
@@ -46,9 +47,9 @@
 }
 
 - (void)requestAd:(NSUInteger)adCount {
-    
+
     [self clearNativeData];
-    
+
     self.buNativeManager = [[BUNativeAdsManager alloc] init];
     BUAdSlot *slot1 = [[BUAdSlot alloc] init];
     slot1.ID = self.provider.data.key2;
@@ -56,10 +57,10 @@
     slot1.position = BUAdSlotPositionTop;
     slot1.imgSize = [BUSize sizeBy:BUProposalSize_Feed690_388];
     slot1.isSupportDeepLink = YES;
-    
+
     self.buNativeManager.adslot = slot1;
     self.buNativeManager.delegate = self;
-    
+
     [self.buNativeManager loadAdDataWithCount:adCount];
 }
 - (void)registerViewForNativeAdapterWith:(UIView *)view
@@ -67,35 +68,35 @@
                          (NSDictionary<YumiMediationUnifiedNativeAssetIdentifier, UIView *> *)clickableAssetViews
                       withViewController:(UIViewController *)viewController
                                 nativeAd:(YumiMediationNativeModel *)nativeAd {
-    
+
     BUNativeAd *buNativeData = nativeAd.data;
-    
+
     [buNativeData unregisterView];
-    
+
     NSMutableArray *clickViews = [NSMutableArray array];
-    
+
     if (clickableAssetViews[YumiMediationUnifiedNativeTitleAsset]) {
         [clickViews addObject:clickableAssetViews[YumiMediationUnifiedNativeTitleAsset]];
     }
     if (clickableAssetViews[YumiMediationUnifiedNativeDescAsset]) {
-         [clickViews addObject:clickableAssetViews[YumiMediationUnifiedNativeDescAsset]];
+        [clickViews addObject:clickableAssetViews[YumiMediationUnifiedNativeDescAsset]];
     }
-    
+
     if (clickableAssetViews[YumiMediationUnifiedNativeIconAsset]) {
-         [clickViews addObject:clickableAssetViews[YumiMediationUnifiedNativeIconAsset]];
+        [clickViews addObject:clickableAssetViews[YumiMediationUnifiedNativeIconAsset]];
     }
     if (clickableAssetViews[YumiMediationUnifiedNativeCoverImageAsset]) {
         [clickViews addObject:clickableAssetViews[YumiMediationUnifiedNativeCoverImageAsset]];
     }
     if (clickableAssetViews[YumiMediationUnifiedNativeCallToActionAsset]) {
-         [clickViews addObject:clickableAssetViews[YumiMediationUnifiedNativeCallToActionAsset]];
+        [clickViews addObject:clickableAssetViews[YumiMediationUnifiedNativeCallToActionAsset]];
     }
     if (clickableAssetViews[YumiMediationUnifiedNativeAppPriceAsset]) {
-         [clickViews addObject:clickableAssetViews[YumiMediationUnifiedNativeAppPriceAsset]];
+        [clickViews addObject:clickableAssetViews[YumiMediationUnifiedNativeAppPriceAsset]];
     }
-    
+
     if (clickableAssetViews[YumiMediationUnifiedNativeStoreAsset]) {
-         [clickViews addObject:clickableAssetViews[YumiMediationUnifiedNativeStoreAsset]];
+        [clickViews addObject:clickableAssetViews[YumiMediationUnifiedNativeStoreAsset]];
     }
     if (clickableAssetViews[YumiMediationUnifiedNativeAppRatingAsset]) {
         [clickViews addObject:clickableAssetViews[YumiMediationUnifiedNativeAppRatingAsset]];
@@ -103,7 +104,7 @@
     if (clickableAssetViews[YumiMediationUnifiedNativeAdvertiserAsset]) {
         [clickViews addObject:clickableAssetViews[YumiMediationUnifiedNativeAdvertiserAsset]];
     }
-    
+
     if (nativeAd.hasVideoContent) {
         UIView *mediaSuperView = clickableAssetViews[YumiMediationUnifiedNativeCoverImageAsset];
         // have media view
@@ -112,60 +113,58 @@
         }
         BUNativeAdRelatedView *nativeAdRelatedView = [[BUNativeAdRelatedView alloc] init];
         nativeAdRelatedView.videoAdView.frame = mediaSuperView.bounds;
-        
+
         [mediaSuperView addSubview:nativeAdRelatedView.videoAdView];
         [nativeAdRelatedView refreshData:buNativeData];
-        
+
         // set BUNativeAdRelatedView view
-        ((YumiMediationNativeAdapterBytedanceAdsConnector *)nativeAd.extraAssets[adapterConnectorKey]).nativeAdRelatedView = nativeAdRelatedView;
+        ((YumiMediationNativeAdapterBytedanceAdsConnector *)nativeAd.extraAssets[adapterConnectorKey])
+            .nativeAdRelatedView = nativeAdRelatedView;
     }
-    
+
     [buNativeData registerContainer:view withClickableViews:[clickViews copy]];
-    
+
     buNativeData.delegate = self;
 }
 
 /// report impression when display the native ad.
 - (void)reportImpressionForNativeAdapter:(YumiMediationNativeModel *)nativeAd view:(UIView *)view {
-    
 }
 - (void)clickAd:(YumiMediationNativeModel *)nativeAd {
-    
 }
 
-#pragma mark: BUNativeAdDelegate
-- (void)nativeAdDidClick:(BUNativeAd *)nativeAd withView:(UIView *_Nullable)view{
+#pragma mark : BUNativeAdDelegate
+- (void)nativeAdDidClick:(BUNativeAd *)nativeAd withView:(UIView *_Nullable)view {
     [self.delegate adapter:self didClick:nil];
 }
 
-#pragma mark: BUNativeAdsManagerDelegate
-- (void)nativeAdsManagerSuccessToLoad:(BUNativeAdsManager *)adsManager nativeAds:(NSArray<BUNativeAd *> *_Nullable)nativeAdDataArray{
+#pragma mark : BUNativeAdsManagerDelegate
+- (void)nativeAdsManagerSuccessToLoad:(BUNativeAdsManager *)adsManager
+                            nativeAds:(NSArray<BUNativeAd *> *_Nullable)nativeAdDataArray {
     self.buNativeAdDataArray = nativeAdDataArray;
     __weak typeof(self) weakSelf = self;
-    [nativeAdDataArray
-     enumerateObjectsUsingBlock:^(BUNativeAd *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
-         [[[YumiMediationNativeAdapterBytedanceAdsConnector alloc] init]
-          convertWithNativeData:obj
-          withAdapter:weakSelf
-          disableImageLoading:weakSelf.nativeConfig.disableImageLoading
-          connectorDelegate:weakSelf];
-     }];
+    [nativeAdDataArray enumerateObjectsUsingBlock:^(BUNativeAd *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
+        [[[YumiMediationNativeAdapterBytedanceAdsConnector alloc] init]
+            convertWithNativeData:obj
+                      withAdapter:weakSelf
+              disableImageLoading:weakSelf.nativeConfig.disableImageLoading
+                connectorDelegate:weakSelf];
+    }];
 }
 
-- (void)nativeAdsManager:(BUNativeAdsManager *)adsManager didFailWithError:(NSError *_Nullable)error{
+- (void)nativeAdsManager:(BUNativeAdsManager *)adsManager didFailWithError:(NSError *_Nullable)error {
     [self handleNativeError:error];
 }
-
 
 #pragma mark : -YumiMediationNativeAdapterConnectorDelegate
 - (void)yumiMediationNativeAdSuccessful:(YumiMediationNativeModel *)nativeModel {
     [self.mappingData addObject:nativeModel];
-    
+
     [self connectorDidFinishConvert];
 }
 
 - (void)yumiMediationNativeAdFailed {
-    
+
     [self.mappingData addObject:@"error"];
     [self connectorDidFinishConvert];
 }
@@ -178,13 +177,15 @@
                 [results addObject:obj];
             }
         }];
-        
+
         if (results.count > 0) {
             [self.delegate adapter:self didReceiveAd:[results copy]];
             return;
         }
         NSError *error =
-        [NSError errorWithDomain:@"" code:501 userInfo:@{@"error reason" : @"connector yumiAds all data error"}];
+            [NSError errorWithDomain:@"" code:501 userInfo:@{
+                @"error reason" : @"connector yumiAds all data error"
+            }];
         [self handleNativeError:error];
     }
 }
