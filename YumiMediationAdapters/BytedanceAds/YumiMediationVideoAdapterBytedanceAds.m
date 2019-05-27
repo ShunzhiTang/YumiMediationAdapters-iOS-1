@@ -68,10 +68,6 @@
 - (void)rewardedVideoAd:(BURewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error{
      [self.delegate coreAdapter:self coreAd:rewardedVideoAd didFailToLoad:error.localizedDescription adType:self.adType];
 }
-//This method is called when cached successfully.
-- (void)rewardedVideoAdVideoDidLoad:(BURewardedVideoAd *)rewardedVideoAd{
-    [self.delegate coreAdapter:self didReceivedCoreAd:rewardedVideoAd adType:self.adType];
-}
 
 - (void)rewardedVideoAdDidVisible:(BURewardedVideoAd *)rewardedVideoAd{
     [self.delegate coreAdapter:self didOpenCoreAd:rewardedVideoAd adType:self.adType];
