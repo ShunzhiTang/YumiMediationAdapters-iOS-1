@@ -36,7 +36,7 @@ Pod::Spec.new do |s|
     { :name => "OneWay",:version => "2.1.0"},
     { :name => "ZplayAds",:version => "2.4.2"},
     { :name => "IQzone",:version => "3.0.2141"},
-    
+    { :name => "BytedanceAds",:version => "2.0.1.1"},
   ]
 
   subspecs.each do |spec|
