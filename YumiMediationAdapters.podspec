@@ -46,7 +46,7 @@ Pod::Spec.new do |s|
     has_resource_bundle = spec[:has_resource_bundle]
 
     s.subspec name do |sp|
-      if name != "Atmosplay"
+      if name != "ZplayAds"
         sp.dependency "Yumi#{name}", version
       end
       sp.source_files = "YumiMediationAdapters/#{name}/**/*.{h,m}"
