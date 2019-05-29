@@ -46,11 +46,15 @@
 
 - (void)requestAdAndShowInWindow:(nonnull UIWindow *)keyWindow withBottomView:(nonnull UIView *)bottomView {
     
-    self.splash = [[BaiduMobAdSplash alloc] init];
-    self.splash.AdUnitTag = self.provider.data.key2;
-    self.splash.canSplashClick = YES;
-    
-    [self.splash loadAndDisplayUsingKeyWindow:keyWindow];
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.splash = [[BaiduMobAdSplash alloc] init];
+        weakSelf.splash.AdUnitTag = weakSelf.provider.data.key2;
+        weakSelf.splash.canSplashClick = YES;
+        weakSelf.splash.delegate = weakSelf;
+        [weakSelf.splash loadAndDisplayUsingKeyWindow:keyWindow];
+    });
+   
 }
 
 - (void)setFetchTime:(NSUInteger)fetchTime {
@@ -78,19 +82,12 @@
 }
 
 - (void)splashDidDismissScreen:(BaiduMobAdSplash *)splash{
-    
-}
-
-/**
- *  广告详情页消失
- */
-- (void)splashDidDismissLp:(BaiduMobAdSplash *)splash{
     [self.delegate adapter:self didClose:splash];
 }
-
 - (void)splashDidReady:(BaiduMobAdSplash *)splash
              AndAdType:(NSString *)adType
          VideoDuration:(NSInteger)videoDuration{
     [self.delegate adapter:self adLifeTime:videoDuration];
 }
+
 @end
