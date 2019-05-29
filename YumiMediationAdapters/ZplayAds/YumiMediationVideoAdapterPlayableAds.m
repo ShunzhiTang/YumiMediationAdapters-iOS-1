@@ -7,11 +7,11 @@
 //
 
 #import "YumiMediationVideoAdapterPlayableAds.h"
-#import <YumiMediationSDK/AtmosplayAds.h>
+#import <YumiMediationSDK/PlayableAds.h>
 
-@interface YumiMediationVideoAdapterPlayableAds () <AtmosplayAdsDelegate>
+@interface YumiMediationVideoAdapterPlayableAds () <PlayableAdsDelegate>
 
-@property (nonatomic) AtmosplayAds *video;
+@property (nonatomic) PlayableAds *video;
 @property (nonatomic, assign) BOOL isReward;
 @property (nonatomic, assign) YumiMediationAdType adType;
 
@@ -36,7 +36,7 @@
     self.provider = provider;
     self.adType = adType;
 
-    self.video = [[AtmosplayAds alloc] initWithAdUnitID:self.provider.data.key2 appID:self.provider.data.key1];
+    self.video = [[PlayableAds alloc] initWithAdUnitID:self.provider.data.key2 appID:self.provider.data.key1];
     self.video.delegate = self;
     self.video.autoLoad = YES;
     [self.video loadAd];
@@ -56,26 +56,26 @@
     [self.video present];
 }
 
-#pragma mark - AtmosplayAdsDelegate
+#pragma mark - PlayableAdsDelegate
 
-- (void)atmosplayAdsDidRewardUser:(AtmosplayAds *)ads {
+- (void)playableAdsDidRewardUser:(PlayableAds *)ads {
     self.isReward = YES;
 }
 
-- (void)atmosplayAdsDidLoad:(AtmosplayAds *)ads {
+- (void)playableAdsDidLoad:(PlayableAds *)ads {
     [self.delegate coreAdapter:self didReceivedCoreAd:ads adType:self.adType];
 }
 
-- (void)atmosplayAds:(AtmosplayAds *)ads didFailToLoadWithError:(NSError *)error {
+- (void)playableAds:(PlayableAds *)ads didFailToLoadWithError:(NSError *)error {
     [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:self.adType];
 }
 
-- (void)atmosplayAdsDidStartPlaying:(AtmosplayAds *)ads {
+- (void)playableAdsDidStartPlaying:(PlayableAds *)ads {
     [self.delegate coreAdapter:self didOpenCoreAd:ads adType:self.adType];
     [self.delegate coreAdapter:self didStartPlayingAd:ads adType:self.adType];
 }
 
-- (void)atmosplayAdsDidDismissScreen:(AtmosplayAds *)ads {
+- (void)playableAdsDidDismissScreen:(PlayableAds *)ads {
     if (self.isReward) {
         [self.delegate coreAdapter:self coreAd:ads didReward:YES adType:self.adType];
     }
@@ -83,7 +83,7 @@
     self.isReward = NO;
 }
 /// Tells the delegate that the ad is clicked
-- (void)atmosplayAdsDidClick:(AtmosplayAds *)ads {
+- (void)playableAdsDidClick:(PlayableAds *)ads {
     [self.delegate coreAdapter:self didClickCoreAd:ads adType:self.adType];
 }
 @end

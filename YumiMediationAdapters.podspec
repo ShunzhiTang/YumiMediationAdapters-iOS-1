@@ -34,11 +34,10 @@ Pod::Spec.new do |s|
     { :name => "Vungle", :version => "6.4.1" },
     { :name => "Mintegral", :version => "5.3.3"},
     { :name => "OneWay",:version => "2.1.0"},
-    { :name => "Atmosplay",:version => "3.0.0"},
-    # { :name => "IQzone",:version => "3.0.2141"},
     { :name => "InneractiveAdSDK",:version => "7.2.3"},
     { :name => "BytedanceAds",:version => "2.0.1.1"},
-
+    { :name => "ZplayAds",:version => "3.0.0"},
+    { :name => "IQzone",:version => "3.0.2141"},
   ]
 
   subspecs.each do |spec|
@@ -47,7 +46,7 @@ Pod::Spec.new do |s|
     has_resource_bundle = spec[:has_resource_bundle]
 
     s.subspec name do |sp|
-      if name != "Atmosplay"
+      if name != "ZplayAds"
         sp.dependency "Yumi#{name}", version
       end
       sp.source_files = "YumiMediationAdapters/#{name}/**/*.{h,m}"

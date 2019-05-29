@@ -7,11 +7,11 @@
 //
 
 #import "YumiMediationInterstitialAdapterPlayableAds.h"
-#import <YumiMediationSDK/AtmosplayAds.h>
+#import <YumiMediationSDK/PlayableAds.h>
 
-@interface YumiMediationInterstitialAdapterPlayableAds () <AtmosplayAdsDelegate>
+@interface YumiMediationInterstitialAdapterPlayableAds () <PlayableAdsDelegate>
 
-@property (nonatomic) AtmosplayAds *interstitial;
+@property (nonatomic) PlayableAds *interstitial;
 @property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
@@ -40,7 +40,7 @@
 
 - (void)requestAd {
     // TODO: request ad
-    self.interstitial = [[AtmosplayAds alloc] initWithAdUnitID:self.provider.data.key2 appID:self.provider.data.key1];
+    self.interstitial = [[PlayableAds alloc] initWithAdUnitID:self.provider.data.key2 appID:self.provider.data.key1];
     self.interstitial.autoLoad = NO;
     self.interstitial.delegate = self;
     [self.interstitial loadAd];
@@ -55,24 +55,24 @@
     [self.interstitial present];
 }
 
-#pragma mark : -- AtmosplayAdsDelegate
-- (void)atmosplayAdsDidRewardUser:(AtmosplayAds *)ads {
+#pragma mark : -- PlayableAdsDelegate
+- (void)playableAdsDidRewardUser:(PlayableAds *)ads {
 }
-- (void)atmosplayAdsDidLoad:(AtmosplayAds *)ads {
+- (void)playableAdsDidLoad:(PlayableAds *)ads {
     [self.delegate coreAdapter:self didReceivedCoreAd:ads adType:self.adType];
 }
-- (void)atmosplayAds:(AtmosplayAds *)ads didFailToLoadWithError:(NSError *)error {
+- (void)playableAds:(PlayableAds *)ads didFailToLoadWithError:(NSError *)error {
     [self.delegate coreAdapter:self coreAd:ads didFailToLoad:error.localizedDescription adType:self.adType];
 }
-- (void)atmosplayAdsDidDismissScreen:(AtmosplayAds *)ads {
+- (void)playableAdsDidDismissScreen:(PlayableAds *)ads {
     [self.delegate coreAdapter:self didCloseCoreAd:ads isCompletePlaying:NO adType:self.adType];
 }
 
-- (void)atmosplayAdsDidClick:(AtmosplayAds *)ads {
+- (void)playableAdsDidClick:(PlayableAds *)ads {
     [self.delegate coreAdapter:self didClickCoreAd:ads adType:self.adType];
 }
 
-- (void)atmosplayAdsDidStartPlaying:(AtmosplayAds *)ads {
+- (void)playableAdsDidStartPlaying:(PlayableAds *)ads {
     [self.delegate coreAdapter:self didOpenCoreAd:ads adType:self.adType];
     [self.delegate coreAdapter:self didStartPlayingAd:ads adType:self.adType];
 }
