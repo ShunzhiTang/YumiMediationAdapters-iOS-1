@@ -80,10 +80,19 @@
 
 - (void)splashAdDidLoad:(BUSplashAdView *)splashAd {
     
-    [self.keyWindow addSubview:self.splashView];
-    [self.keyWindow addSubview:self.bottomView];
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.keyWindow addSubview:weakSelf.splashView];
+        if (weakSelf.bottomView) {
+            weakSelf.bottomView.frame = CGRectMake(0,weakSelf.keyWindow.frame.size.height - weakSelf.bottomView.bounds.size.height , weakSelf.bottomView.bounds.size.width, weakSelf.bottomView.bounds.size.height);
+            
+            [weakSelf.keyWindow addSubview:weakSelf.bottomView];
+        }
+        
+        [weakSelf.delegate adapter:weakSelf successToShow:splashAd];
+    });
     
-    [self.delegate adapter:self successToShow:splashAd];
+   
 }
 
 - (void)splashAd:(BUSplashAdView *)splashAd didFailWithError:(NSError *)error {
@@ -99,14 +108,19 @@
 }
 
 - (void)splashAdDidClose:(BUSplashAdView *)splashAd {
-    if (self.splashView) {
-        [self.splashView removeFromSuperview];
-    }
-    if (self.bottomView) {
-        [self.bottomView removeFromSuperview];
-    }
+    __weak typeof(self) weakSelf = self;
     
-    [self.delegate adapter:self didClose:splashAd];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (weakSelf.splashView) {
+            [weakSelf.splashView removeFromSuperview];
+        }
+        if (weakSelf.bottomView) {
+            [weakSelf.bottomView removeFromSuperview];
+        }
+        
+        [weakSelf.delegate adapter:weakSelf didClose:splashAd];
+    });
+    
     
 }
 
