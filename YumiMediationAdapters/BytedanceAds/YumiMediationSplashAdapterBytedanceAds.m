@@ -13,8 +13,6 @@
 
 @property (nonatomic, weak) id<YumiMediationSplashAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationSplashProvider *provider;
-
-@property (nonatomic) UIImage *launchImage;
 @property (nonatomic, assign) NSUInteger fetchTime;
 
 @property (nonatomic) BUSplashAdView *splashView;
@@ -70,10 +68,6 @@
 
 - (void)setFetchTime:(NSUInteger)fetchTime {
     _fetchTime = fetchTime;
-}
-
-- (void)setLaunchImage:(nonnull UIImage *)launchImage {
-    _launchImage = launchImage;
 }
 
 #pragma mark:BUSplashAdDelegate
