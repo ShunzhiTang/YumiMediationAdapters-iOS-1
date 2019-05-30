@@ -17,9 +17,10 @@
 @property (nonatomic, weak) id<YumiMediationSplashAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationSplashProvider *provider;
 
-@property (nonatomic) UIImage *launchImage;
 @property (nonatomic, assign) NSUInteger fetchTime;
 @property (nonatomic, strong) BaiduMobAdSplash *splash;
+@property (nonatomic) UIWindow  *keyWindow;
+@property (nonatomic) UIView  *bottomView;
 
 @end
 
@@ -52,7 +53,16 @@
         weakSelf.splash.AdUnitTag = weakSelf.provider.data.key2;
         weakSelf.splash.canSplashClick = YES;
         weakSelf.splash.delegate = weakSelf;
-        [weakSelf.splash loadAndDisplayUsingKeyWindow:keyWindow];
+        if (!bottomView) {
+            [weakSelf.splash loadAndDisplayUsingKeyWindow:keyWindow];
+            return ;
+        }
+        weakSelf.keyWindow = keyWindow;
+        weakSelf.bottomView = bottomView;
+        UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, keyWindow.bounds.size.width, keyWindow.bounds.size.height - bottomView.bounds.size.height)];
+        
+        [weakSelf.keyWindow addSubview:containerView];
+        [weakSelf.splash loadAndDisplayUsingContainerView:containerView];
     });
    
 }
@@ -61,16 +71,22 @@
     _fetchTime = fetchTime;
 }
 
-- (void)setLaunchImage:(nonnull UIImage *)launchImage {
-    _launchImage = launchImage;
-}
-
 #pragma mark: BaiduMobAdSplashDelegate
 - (NSString *)publisherId{
     return self.provider.data.key1;
 }
 - (void)splashSuccessPresentScreen:(BaiduMobAdSplash *)splash{
-    [self.delegate adapter:self successToShow:splash];
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (weakSelf.bottomView) {
+            weakSelf.bottomView.frame = CGRectMake(0,weakSelf.keyWindow.frame.size.height - weakSelf.bottomView.bounds.size.height , weakSelf.bottomView.bounds.size.width, weakSelf.bottomView.bounds.size.height);
+            
+            [weakSelf.keyWindow addSubview:weakSelf.bottomView];
+        }
+        [weakSelf.delegate adapter:weakSelf successToShow:splash];
+    });
+    
+   
 }
 
 - (void)splashlFailPresentScreen:(BaiduMobAdSplash *)splash withError:(BaiduMobFailReason) reason{
@@ -82,7 +98,14 @@
 }
 
 - (void)splashDidDismissScreen:(BaiduMobAdSplash *)splash{
-    [self.delegate adapter:self didClose:splash];
+    
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.bottomView removeFromSuperview];
+        [weakSelf.delegate adapter:weakSelf didClose:splash];
+    });
+    
+   
 }
 - (void)splashDidReady:(BaiduMobAdSplash *)splash
              AndAdType:(NSString *)adType
