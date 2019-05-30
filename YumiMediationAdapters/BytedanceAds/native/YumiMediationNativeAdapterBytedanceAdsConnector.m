@@ -9,7 +9,7 @@
 #import <YumiMediationSDK/YumiTime.h>
 #import <YumiMediationSDK/YumiTool.h>
 
-@interface YumiMediationNativeAdapterBytedanceAdsConnector ()<BUVideoAdViewDelegate>
+@interface YumiMediationNativeAdapterBytedanceAdsConnector () <BUVideoAdViewDelegate>
 
 @property (nonatomic) BUNativeAd *buNativeAdData;
 @property (nonatomic) YumiMediationNativeAdImage *icon;
@@ -35,7 +35,7 @@
     NSString *iconUrl = self.buNativeAdData.data.icon.imageURL;
     NSString *coverImageUrl = nil;
     if (self.buNativeAdData.data.imageAry.count > 0) {
-         coverImageUrl = self.buNativeAdData.data.imageAry[0].imageURL;
+        coverImageUrl = self.buNativeAdData.data.imageAry[0].imageURL;
     }
     [self downloadIcon:iconUrl
                  coverImage:coverImageUrl
@@ -123,7 +123,7 @@
 #pragma mark : YumiMediationNativeAdapterConnectorMedia
 /// Play the video. Doesn't do anything if the video is already playing.
 - (void)play {
-    //TODO BytedanceAds no methods of control play or pause
+    // TODO BytedanceAds no methods of control play or pause
 }
 
 /// Pause the video. Doesn't do anything if the video is already paused.
@@ -139,19 +139,18 @@
     self.mediaDelegate = mediaDelegate;
 }
 
-#pragma mark: BUVideoAdViewDelegate
+#pragma mark : BUVideoAdViewDelegate
 
-- (void)setNativeAdRelatedView:(BUNativeAdRelatedView *)nativeAdRelatedView{
+- (void)setNativeAdRelatedView:(BUNativeAdRelatedView *)nativeAdRelatedView {
     _nativeAdRelatedView = nativeAdRelatedView;
     _nativeAdRelatedView.videoAdView.delegate = self;
     _nativeAdRelatedView.videoAdView.drawVideoClickEnable = YES;
 }
 
-- (void)videoAdView:(BUVideoAdView *)videoAdView didLoadFailWithError:(NSError *_Nullable)error{
-    
+- (void)videoAdView:(BUVideoAdView *)videoAdView didLoadFailWithError:(NSError *_Nullable)error {
 }
 
-- (void)videoAdView:(BUVideoAdView *)videoAdView stateDidChanged:(BUPlayerPlayState)playerState{
+- (void)videoAdView:(BUVideoAdView *)videoAdView stateDidChanged:(BUPlayerPlayState)playerState {
     if (playerState == BUPlayerStatePlaying) {
         if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidPlayVideo:)]) {
             [self.mediaDelegate adapterConnectorVideoDidPlayVideo:self];
@@ -164,7 +163,7 @@
     }
 }
 
-- (void)playerDidPlayFinish:(BUVideoAdView *)videoAdView{
+- (void)playerDidPlayFinish:(BUVideoAdView *)videoAdView {
     if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidEndVideoPlayback:)]) {
         [self.mediaDelegate adapterConnectorVideoDidEndVideoPlayback:self];
     }
@@ -191,7 +190,7 @@
     return nil;
 }
 - (NSString *)appRating {
-    return [NSString stringWithFormat:@"%ld",self.buNativeAdData.data.score];
+    return [NSString stringWithFormat:@"%ld", self.buNativeAdData.data.score];
 }
 - (NSString *)other {
     return nil;
@@ -209,7 +208,8 @@
     return @{adapterConnectorKey : self};
 }
 - (BOOL)hasVideoContent {
-    return self.buNativeAdData.data.imageMode == BUFeedVideoAdModeImage || self.buNativeAdData.data.imageMode == BUFeedVideoAdModePortrait;
+    return self.buNativeAdData.data.imageMode == BUFeedVideoAdModeImage ||
+           self.buNativeAdData.data.imageMode == BUFeedVideoAdModePortrait;
 }
 - (YumiMediationNativeVideoController *)videoController {
     if (!_videoController) {

@@ -10,11 +10,11 @@
 #import <BUAdSDK/BUAdSDK.h>
 #import <YumiMediationSDK/YumiTool.h>
 
-@interface YumiMediationVideoAdapterBytedanceAds ()<BURewardedVideoAdDelegate>
+@interface YumiMediationVideoAdapterBytedanceAds () <BURewardedVideoAdDelegate>
 
 @property (nonatomic, assign) YumiMediationAdType adType;
 @property (nonatomic, strong) BURewardedVideoAd *rewardedVideoAd;
-@property (nonatomic , assign) BOOL isRewarded;
+@property (nonatomic, assign) BOOL isRewarded;
 
 @end
 
@@ -45,7 +45,7 @@
 - (void)requestAd {
     BURewardedVideoModel *model = [[BURewardedVideoModel alloc] init];
     model.isShowDownloadBar = YES;
-    
+
     self.rewardedVideoAd = [[BURewardedVideoAd alloc] initWithSlotID:self.provider.data.key2 rewardedVideoModel:model];
     self.rewardedVideoAd.delegate = self;
     [self.rewardedVideoAd loadAdData];
@@ -59,34 +59,37 @@
     [self.rewardedVideoAd showAdFromRootViewController:rootViewController];
 }
 
-#pragma mark: BURewardedVideoAdDelegate
-//This method is called when video ad material loaded successfully.
-- (void)rewardedVideoAdDidLoad:(BURewardedVideoAd *)rewardedVideoAd{
+#pragma mark : BURewardedVideoAdDelegate
+// This method is called when video ad material loaded successfully.
+- (void)rewardedVideoAdDidLoad:(BURewardedVideoAd *)rewardedVideoAd {
     [self.delegate coreAdapter:self didReceivedCoreAd:rewardedVideoAd adType:self.adType];
 }
 
-- (void)rewardedVideoAd:(BURewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error{
-     [self.delegate coreAdapter:self coreAd:rewardedVideoAd didFailToLoad:error.localizedDescription adType:self.adType];
+- (void)rewardedVideoAd:(BURewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
+    [self.delegate coreAdapter:self coreAd:rewardedVideoAd didFailToLoad:error.localizedDescription adType:self.adType];
 }
 
-- (void)rewardedVideoAdDidVisible:(BURewardedVideoAd *)rewardedVideoAd{
+- (void)rewardedVideoAdDidVisible:(BURewardedVideoAd *)rewardedVideoAd {
     [self.delegate coreAdapter:self didOpenCoreAd:rewardedVideoAd adType:self.adType];
     [self.delegate coreAdapter:self didStartPlayingAd:rewardedVideoAd adType:self.adType];
 }
 
-- (void)rewardedVideoAdDidClick:(BURewardedVideoAd *)rewardedVideoAd{
+- (void)rewardedVideoAdDidClick:(BURewardedVideoAd *)rewardedVideoAd {
     [self.delegate coreAdapter:self didClickCoreAd:rewardedVideoAd adType:self.adType];
 }
 
-- (void)rewardedVideoAdDidClose:(BURewardedVideoAd *)rewardedVideoAd{
+- (void)rewardedVideoAdDidClose:(BURewardedVideoAd *)rewardedVideoAd {
     if (self.isRewarded) {
         [self.delegate coreAdapter:self coreAd:rewardedVideoAd didReward:YES adType:self.adType];
     }
-    [self.delegate coreAdapter:self didCloseCoreAd:rewardedVideoAd isCompletePlaying:self.isRewarded adType:self.adType];
+    [self.delegate coreAdapter:self
+                didCloseCoreAd:rewardedVideoAd
+             isCompletePlaying:self.isRewarded
+                        adType:self.adType];
     self.isRewarded = NO;
     self.rewardedVideoAd = nil;
 }
-- (void)rewardedVideoAdDidPlayFinish:(BURewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error{
+- (void)rewardedVideoAdDidPlayFinish:(BURewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
     if (error) {
         self.isRewarded = NO;
         return;
@@ -98,7 +101,7 @@
  Server verification which is requested asynchronously is succeeded.
  @param verify :return YES when return value is 2000.
  */
-- (void)rewardedVideoAdServerRewardDidSucceed:(BURewardedVideoAd *)rewardedVideoAd verify:(BOOL)verify{
+- (void)rewardedVideoAdServerRewardDidSucceed:(BURewardedVideoAd *)rewardedVideoAd verify:(BOOL)verify {
     self.isRewarded = verify;
 }
 
@@ -106,11 +109,11 @@
  Server verification which is requested asynchronously is failed.
  Return value is not 2000.
  */
-- (void)rewardedVideoAdServerRewardDidFail:(BURewardedVideoAd *)rewardedVideoAd{
+- (void)rewardedVideoAdServerRewardDidFail:(BURewardedVideoAd *)rewardedVideoAd {
     self.isRewarded = NO;
 }
 
-- (void)rewardedVideoAdDidClickSkip:(BURewardedVideoAd *)rewardedVideoAd{
+- (void)rewardedVideoAdDidClickSkip:(BURewardedVideoAd *)rewardedVideoAd {
     self.isRewarded = NO;
 }
 
