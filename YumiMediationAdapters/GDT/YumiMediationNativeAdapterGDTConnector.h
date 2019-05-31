@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
           disableImageLoading:(BOOL)disableImageLoading
             connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate;
 
-@property (nonatomic) GDTUnifiedNativeAdView  *gdtNativeView;
+@property (nonatomic) GDTUnifiedNativeAdView *gdtNativeView;
 
 @end
 

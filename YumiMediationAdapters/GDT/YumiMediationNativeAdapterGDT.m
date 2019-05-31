@@ -59,10 +59,10 @@
     });
 }
 - (void)loadNativeAdsWith:(NSUInteger)adCount {
-    self.nativeAd =
-        [[GDTUnifiedNativeAd alloc] initWithAppId:self.provider.data.key1 ?: @"" placementId:self.provider.data.key2 ?: @""];
+    self.nativeAd = [[GDTUnifiedNativeAd alloc] initWithAppId:self.provider.data.key1 ?: @""
+                                                  placementId:self.provider.data.key2 ?: @""];
     self.nativeAd.delegate = self;
-    
+
     [self.nativeAd loadAdWithAdCount:(int)adCount];
 }
 
@@ -73,11 +73,11 @@
                                 nativeAd:(YumiMediationNativeModel *)nativeAd {
     NSMutableArray<UIView *> *clickables = [NSMutableArray array];
     GDTUnifiedNativeAdView *gdtView = [[GDTUnifiedNativeAdView alloc] initWithFrame:view.bounds];
-    
-    [view addSubview: gdtView];
-    
+
+    [view addSubview:gdtView];
+
     GDTLogoView *logoView = [[GDTLogoView alloc] init];
-    
+
     [gdtView addSubview:logoView];
     CGFloat margin = 0;
     [logoView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
@@ -86,48 +86,53 @@
         make.bottom.equalTo(gdtView.mas_bottom).offset(-margin);
         make.right.equalTo(gdtView.mas_right).offset(-margin);
     }];
-    
+
     GDTUnifiedNativeAdDataObject *gdtData = (GDTUnifiedNativeAdDataObject *)nativeAd.data;
     ((YumiMediationNativeAdapterGDTConnector *)nativeAd.extraAssets[adapterConnectorKey]).gdtNativeView = gdtView;
-    
+
     [clickables addObject:gdtView];
     [clickables addObject:logoView];
-    
+
     // media view
     if (clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset]) {
         UIView *mediaSuperView = clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset];
         GDTMediaView *mediaView = [[GDTMediaView alloc] initWithFrame:mediaSuperView.bounds];
         [mediaSuperView addSubview:mediaView];
-        
-         [gdtView registerDataObject:gdtData mediaView:mediaView logoView:logoView viewController:[[YumiTool sharedTool] topMostController]  clickableViews:[clickables copy]];
+
+        [gdtView registerDataObject:gdtData
+                          mediaView:mediaView
+                           logoView:logoView
+                     viewController:[[YumiTool sharedTool] topMostController]
+                     clickableViews:[clickables copy]];
         return;
     }
-    
-    [gdtView registerDataObject:gdtData logoView:logoView viewController:[[YumiTool sharedTool] topMostController] clickableViews:[clickables copy]];
-   
+
+    [gdtView registerDataObject:gdtData
+                       logoView:logoView
+                 viewController:[[YumiTool sharedTool] topMostController]
+                 clickableViews:[clickables copy]];
 }
 
 - (void)reportImpressionForNativeAdapter:(YumiMediationNativeModel *)nativeAd view:(nonnull UIView *)view {
-   
 }
 
 - (void)clickAd:(YumiMediationNativeModel *)nativeAd {
-    
 }
 
 #pragma mark - GDTUnifiedNativeAdDelete
-- (void)gdt_unifiedNativeAdLoaded:(NSArray<GDTUnifiedNativeAdDataObject *> * _Nullable)unifiedNativeAdDataObjects error:(NSError * _Nullable)error {
+- (void)gdt_unifiedNativeAdLoaded:(NSArray<GDTUnifiedNativeAdDataObject *> *_Nullable)unifiedNativeAdDataObjects
+                            error:(NSError *_Nullable)error {
     self.gdtNativeData = unifiedNativeAdDataObjects;
-    
+
     __weak typeof(self) weakSelf = self;
     [unifiedNativeAdDataObjects
-     enumerateObjectsUsingBlock:^(GDTUnifiedNativeAdDataObject *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
-         [[[YumiMediationNativeAdapterGDTConnector alloc] init]
-          convertWithNativeData:obj
-          withAdapter:weakSelf
-          disableImageLoading:weakSelf.nativeConfig.disableImageLoading
-          connectorDelegate:weakSelf];
-     }];
+        enumerateObjectsUsingBlock:^(GDTUnifiedNativeAdDataObject *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
+            [[[YumiMediationNativeAdapterGDTConnector alloc] init]
+                convertWithNativeData:obj
+                          withAdapter:weakSelf
+                  disableImageLoading:weakSelf.nativeConfig.disableImageLoading
+                    connectorDelegate:weakSelf];
+        }];
 }
 
 - (void)nativeAdFailToLoad:(NSError *)error {
@@ -176,7 +181,9 @@
             return;
         }
         NSError *error =
-            [NSError errorWithDomain:@"" code:501 userInfo:@{@"error reason" : @"connector yumiAds all data error"}];
+            [NSError errorWithDomain:@"" code:501 userInfo:@{
+                @"error reason" : @"connector yumiAds all data error"
+            }];
         [self handleNativeError:error];
     }
 }

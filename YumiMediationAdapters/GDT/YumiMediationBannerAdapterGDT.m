@@ -6,7 +6,7 @@
 //
 //
 #import "YumiMediationBannerAdapterGDT.h"
- #import "GDTUnifiedBannerView.h"
+#import "GDTUnifiedBannerView.h"
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiTool.h>
 
@@ -15,7 +15,6 @@
 @property (nonatomic, weak) id<YumiMediationBannerAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationBannerProvider *provider;
 @property (nonatomic) GDTUnifiedBannerView *unifiedBannerView;
-
 
 @property (nonatomic, assign) YumiMediationAdViewBannerSize bannerSize;
 @property (nonatomic, assign) BOOL isSmartBanner;
@@ -63,37 +62,41 @@
     if (self.isSmartBanner) {
         adSize = [[YumiTool sharedTool] fetchBannerAdSizeWith:self.bannerSize smartBanner:self.isSmartBanner];
     }
-    
+
     CGRect adframe = CGRectMake(0, 0, adSize.width, adSize.height);
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.unifiedBannerView = [[GDTUnifiedBannerView alloc] initWithFrame:adframe appId:weakSelf.provider.data.key1 ?: @"" placementId:weakSelf.provider.data.key2  ?: @"" viewController:[weakSelf.delegate rootViewControllerForPresentingModalView]];
+        weakSelf.unifiedBannerView =
+            [[GDTUnifiedBannerView alloc] initWithFrame:adframe
+                                                  appId:weakSelf.provider.data.key1 ?: @""
+                                            placementId:weakSelf.provider.data.key2 ?: @""
+                                         viewController:[weakSelf.delegate rootViewControllerForPresentingModalView]];
         weakSelf.unifiedBannerView.animated = NO;
         weakSelf.unifiedBannerView.autoSwitchInterval = NO;
         weakSelf.unifiedBannerView.delegate = weakSelf;
-        
+
         [weakSelf.unifiedBannerView loadAdAndShow];
     });
 }
 
 #pragma mark - GDTUnifiedBannerViewDelegate
-- (void)unifiedBannerViewDidLoad:(GDTUnifiedBannerView *)unifiedBannerView{
+- (void)unifiedBannerViewDidLoad:(GDTUnifiedBannerView *)unifiedBannerView {
     [self.delegate adapter:self didReceiveAd:self.unifiedBannerView];
 }
 
-- (void)unifiedBannerViewFailedToLoad:(GDTUnifiedBannerView *)unifiedBannerView error:(NSError *)error{
+- (void)unifiedBannerViewFailedToLoad:(GDTUnifiedBannerView *)unifiedBannerView error:(NSError *)error {
     [self.delegate adapter:self didFailToReceiveAd:error.localizedDescription];
 }
 
-- (void)unifiedBannerViewClicked:(GDTUnifiedBannerView *)unifiedBannerView{
+- (void)unifiedBannerViewClicked:(GDTUnifiedBannerView *)unifiedBannerView {
     [self.delegate adapter:self didClick:self.unifiedBannerView];
 }
 
-- (void)unifiedBannerViewDidPresentFullScreenModal:(GDTUnifiedBannerView *)unifiedBannerView{
+- (void)unifiedBannerViewDidPresentFullScreenModal:(GDTUnifiedBannerView *)unifiedBannerView {
     [self.delegate adapter:self didPresentInternalBrowser:self.unifiedBannerView];
 }
 
-- (void)unifiedBannerViewDidDismissFullScreenModal:(GDTUnifiedBannerView *)unifiedBannerView{
+- (void)unifiedBannerViewDidDismissFullScreenModal:(GDTUnifiedBannerView *)unifiedBannerView {
     [self.delegate adapter:self didDissmissInternalBrowser:self.unifiedBannerView];
 }
 
