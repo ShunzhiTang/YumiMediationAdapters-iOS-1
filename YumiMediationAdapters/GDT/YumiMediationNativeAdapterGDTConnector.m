@@ -9,7 +9,7 @@
 #import <YumiMediationSDK/YumiTime.h>
 #import <YumiMediationSDK/YumiTool.h>
 
-@interface YumiMediationNativeAdapterGDTConnector ()<GDTUnifiedNativeAdViewDelegate>
+@interface YumiMediationNativeAdapterGDTConnector () <GDTUnifiedNativeAdViewDelegate>
 
 @property (nonatomic) GDTUnifiedNativeAdDataObject *gdtNativeAdData;
 @property (nonatomic) YumiMediationNativeAdImage *icon;
@@ -40,10 +40,9 @@
                   }];
 }
 
-- (void)setGdtNativeView:(GDTUnifiedNativeAdView *)gdtNativeView{
+- (void)setGdtNativeView:(GDTUnifiedNativeAdView *)gdtNativeView {
     _gdtNativeView = gdtNativeView;
     _gdtNativeView.delegate = self;
-    
 }
 
 #pragma mark : handle download images
@@ -138,29 +137,26 @@
 - (void)setConnectorMediaDelegate:(id<YumiMediationNativeAdapterConnectorMediaDelegate>)mediaDelegate {
 }
 
-#pragma mark: - GDTUnifiedNativeAdViewDelegate
+#pragma mark : - GDTUnifiedNativeAdViewDelegate
 
-- (void)gdt_unifiedNativeAdViewWillExpose:(GDTUnifiedNativeAdView *)unifiedNativeAdView{
-    
+- (void)gdt_unifiedNativeAdViewWillExpose:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
 }
 
-- (void)gdt_unifiedNativeAdViewDidClick:(GDTUnifiedNativeAdView *)unifiedNativeAdView{
+- (void)gdt_unifiedNativeAdViewDidClick:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
     [self.connectorDelegate yumiMediationNativeAdDidClick:nil];
 }
 
-- (void)gdt_unifiedNativeAdDetailViewClosed:(GDTUnifiedNativeAdView *)unifiedNativeAdView{
-    
+- (void)gdt_unifiedNativeAdDetailViewClosed:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
 }
 
-- (void)gdt_unifiedNativeAdViewApplicationWillEnterBackground:(GDTUnifiedNativeAdView *)unifiedNativeAdView{
-    
+- (void)gdt_unifiedNativeAdViewApplicationWillEnterBackground:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
 }
-- (void)gdt_unifiedNativeAdDetailViewWillPresentScreen:(GDTUnifiedNativeAdView *)unifiedNativeAdView{
-    
+- (void)gdt_unifiedNativeAdDetailViewWillPresentScreen:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
 }
 
-- (void)gdt_unifiedNativeAdView:(GDTUnifiedNativeAdView *)unifiedNativeAdView playerStatusChanged:(GDTMediaPlayerStatus)status userInfo:(NSDictionary *)userInfo{
-    
+- (void)gdt_unifiedNativeAdView:(GDTUnifiedNativeAdView *)unifiedNativeAdView
+            playerStatusChanged:(GDTMediaPlayerStatus)status
+                       userInfo:(NSDictionary *)userInfo {
 }
 
 #pragma mark : YumiMediationUnifiedNativeAd
@@ -172,21 +168,21 @@
 }
 
 - (NSString *)callToAction {
-    
+
     if (self.gdtNativeAdData.isVideoAd) {
         if ([[YumiTool sharedTool] iSSimplifiedChinese]) {
             return @"点击下载";
         }
         return @"Download";
     }
-    
+
     if ([[YumiTool sharedTool] iSSimplifiedChinese]) {
         return @"查看详情";
     }
     return @"Learn More";
 }
 - (NSString *)appPrice {
-    return [NSString stringWithFormat:@"%@",self.gdtNativeAdData.appPrice];
+    return [NSString stringWithFormat:@"%@", self.gdtNativeAdData.appPrice];
 }
 - (NSString *)advertiser {
     return nil;
@@ -195,7 +191,7 @@
     return nil;
 }
 - (NSString *)appRating {
-    return [NSString stringWithFormat:@"%lf",self.gdtNativeAdData.appRating];
+    return [NSString stringWithFormat:@"%lf", self.gdtNativeAdData.appRating];
 }
 - (NSString *)other {
     return nil;

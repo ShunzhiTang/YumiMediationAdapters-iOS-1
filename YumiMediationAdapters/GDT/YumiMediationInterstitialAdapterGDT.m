@@ -43,7 +43,7 @@
         self.interstitial.delegate = nil;
     }
     self.interstitial = [[GDTUnifiedInterstitialAd alloc] initWithAppId:self.provider.data.key1 ?: @""
-                                                                placementId:self.provider.data.key2 ?: @""];
+                                                            placementId:self.provider.data.key2 ?: @""];
     self.interstitial.delegate = self;
     [self.interstitial loadAd];
 }
@@ -58,24 +58,27 @@
 
 #pragma mark - GDTUnifiedInterstitialAdDelegate
 
-- (void)unifiedInterstitialSuccessToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial{
+- (void)unifiedInterstitialSuccessToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
     [self.delegate coreAdapter:self didReceivedCoreAd:unifiedInterstitial adType:self.adType];
 }
 
-- (void)unifiedInterstitialFailToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial error:(NSError *)error{
-    [self.delegate coreAdapter:self coreAd:unifiedInterstitial didFailToLoad:[error localizedDescription] adType:self.adType];
+- (void)unifiedInterstitialFailToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial error:(NSError *)error {
+    [self.delegate coreAdapter:self
+                        coreAd:unifiedInterstitial
+                 didFailToLoad:[error localizedDescription]
+                        adType:self.adType];
 }
 
-- (void)unifiedInterstitialDidPresentScreen:(GDTUnifiedInterstitialAd *)unifiedInterstitial{
+- (void)unifiedInterstitialDidPresentScreen:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
     [self.delegate coreAdapter:self didOpenCoreAd:unifiedInterstitial adType:self.adType];
     [self.delegate coreAdapter:self didStartPlayingAd:unifiedInterstitial adType:self.adType];
 }
 
-- (void)unifiedInterstitialClicked:(GDTUnifiedInterstitialAd *)unifiedInterstitial{
-     [self.delegate coreAdapter:self didClickCoreAd:unifiedInterstitial adType:self.adType];
+- (void)unifiedInterstitialClicked:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
+    [self.delegate coreAdapter:self didClickCoreAd:unifiedInterstitial adType:self.adType];
 }
 
-- (void)unifiedInterstitialDidDismissScreen:(GDTUnifiedInterstitialAd *)unifiedInterstitial{
+- (void)unifiedInterstitialDidDismissScreen:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
     [self.delegate coreAdapter:self didCloseCoreAd:unifiedInterstitial isCompletePlaying:NO adType:self.adType];
 }
 
