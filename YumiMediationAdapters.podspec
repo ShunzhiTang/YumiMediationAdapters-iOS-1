@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
     { :name => "Chartboost", :version => "7.5.0" },
     { :name => "Facebook", :version => "5.3.2", :has_resource_bundle => true },
     { :name => "Domob", :version => "3.8.0" },
-    { :name => "GDT", :version => "4.10.1" ,:has_resource_bundle => true},
+    { :name => "GDT", :version => "4.10.2" ,:has_resource_bundle => true},
     { :name => "InMobi", :version => "8.1.0" },
     { :name => "IronSource", :version => "6.8.3" },
     { :name => "Unity", :version => "3.1.0" },
