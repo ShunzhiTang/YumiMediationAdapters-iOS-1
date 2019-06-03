@@ -17,7 +17,6 @@
 @property (nonatomic, weak) id<YumiMediationSplashAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationSplashProvider *provider;
 
-@property (nonatomic, assign) NSUInteger fetchTime;
 @property (nonatomic, strong) BaiduMobAdSplash *splash;
 @property (nonatomic) UIWindow *keyWindow;
 @property (nonatomic) UIView *bottomView;
@@ -66,10 +65,6 @@
         [weakSelf.keyWindow addSubview:containerView];
         [weakSelf.splash loadAndDisplayUsingContainerView:containerView];
     });
-}
-
-- (void)setFetchTime:(NSUInteger)fetchTime {
-    _fetchTime = fetchTime;
 }
 
 #pragma mark : BaiduMobAdSplashDelegate

@@ -13,7 +13,6 @@
 
 @property (nonatomic, weak) id<YumiMediationSplashAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationSplashProvider *provider;
-@property (nonatomic, assign) NSUInteger fetchTime;
 
 @property (nonatomic) BUSplashAdView *splashView;
 @property (nonatomic) UIWindow *keyWindow;
@@ -55,16 +54,12 @@
 
         weakSelf.splashView = [[BUSplashAdView alloc] initWithSlotID:weakSelf.provider.data.key2 frame:frame];
 
-        weakSelf.splashView.tolerateTimeout = weakSelf.fetchTime;
+        weakSelf.splashView.tolerateTimeout = weakSelf.provider.data.requestTimeout;
         weakSelf.splashView.delegate = weakSelf;
         weakSelf.splashView.rootViewController = keyWindow.rootViewController;
 
         [weakSelf.splashView loadAdData];
     });
-}
-
-- (void)setFetchTime:(NSUInteger)fetchTime {
-    _fetchTime = fetchTime;
 }
 
 #pragma mark :BUSplashAdDelegate

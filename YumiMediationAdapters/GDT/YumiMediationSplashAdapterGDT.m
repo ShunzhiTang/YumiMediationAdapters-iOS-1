@@ -15,7 +15,6 @@
 @property (nonatomic, weak) id<YumiMediationSplashAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationSplashProvider *provider;
 
-@property (nonatomic, assign) NSUInteger fetchTime;
 @property (nonatomic) GDTSplashAd *splash;
 
 @end
@@ -46,14 +45,10 @@
         weakSelf.splash =
             [[GDTSplashAd alloc] initWithAppId:weakSelf.provider.data.key1 placementId:weakSelf.provider.data.key2];
         weakSelf.splash.delegate = weakSelf;
-        weakSelf.splash.fetchDelay = weakSelf.fetchTime;
+        weakSelf.splash.fetchDelay = weakSelf.provider.data.requestTimeout;
 
         [weakSelf.splash loadAdAndShowInWindow:keyWindow withBottomView:bottomView];
     });
-}
-
-- (void)setFetchTime:(NSUInteger)fetchTime {
-    _fetchTime = fetchTime;
 }
 
 #pragma mark :GDTSplashAdDelegate
