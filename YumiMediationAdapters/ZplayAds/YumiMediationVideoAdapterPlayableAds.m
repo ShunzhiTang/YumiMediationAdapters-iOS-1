@@ -8,6 +8,8 @@
 
 #import "YumiMediationVideoAdapterPlayableAds.h"
 #import <YumiMediationSDK/PlayableAds.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
+#import <YumiMediationSDK/PlayableAdsGDPR.h>
 
 @interface YumiMediationVideoAdapterPlayableAds () <PlayableAdsDelegate>
 
@@ -35,7 +37,17 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-
+    
+    // set GDPR
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [[PlayableAdsGDPR sharedGDPRManager] updatePlayableAdsConsentStatus:PlayableAdsConsentStatusPersonalized];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [[PlayableAdsGDPR sharedGDPRManager] updatePlayableAdsConsentStatus:PlayableAdsConsentStatusNonPersonalized];
+    }
+    
     self.video = [[PlayableAds alloc] initWithAdUnitID:self.provider.data.key2 appID:self.provider.data.key1];
     self.video.delegate = self;
     self.video.autoLoad = YES;
@@ -46,6 +58,16 @@
 
 - (void)requestAd {
     // playableads auto load
+    
+    // update GDPR
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [[PlayableAdsGDPR sharedGDPRManager] updatePlayableAdsConsentStatus:PlayableAdsConsentStatusPersonalized];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [[PlayableAdsGDPR sharedGDPRManager] updatePlayableAdsConsentStatus:PlayableAdsConsentStatusNonPersonalized];
+    }
 }
 
 - (BOOL)isReady {
