@@ -10,6 +10,7 @@
 #import <YumiMediationSDK/YumiAdsWKCustomViewController.h>
 #import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationInterstitialAdapterNativeInMobi () <IMNativeDelegate, YumiAdsWKCustomViewControllerDelegate>
 
@@ -72,7 +73,18 @@
     self.adType = adType;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        [IMSdk initWithAccountID:self.provider.data.key1];
+        // set gdpr
+        YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+        NSDictionary *consentDict = nil;
+        if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+            consentDict = @{IM_GDPR_CONSENT_AVAILABLE : @(YES)};
+        }
+        if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+            consentDict = @{IM_GDPR_CONSENT_AVAILABLE : @(NO)};
+        }
+        
+        // Initialize InMobi SDK with your account ID
+        [IMSdk initWithAccountID:provider.data.key1 consentDictionary:consentDict];
         [IMSdk setLogLevel:kIMSDKLogLevelNone];
     });
     return self;
@@ -82,6 +94,16 @@
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        // update gdpr
+        YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+        
+        if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+            [IMSdk updateGDPRConsent:@{IM_GDPR_CONSENT_AVAILABLE : @(YES)}];
+        }
+        if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+            [IMSdk updateGDPRConsent:@{IM_GDPR_CONSENT_AVAILABLE : @(NO)}];
+        }
+        
         weakSelf.imnative = [[IMNative alloc] initWithPlacementId:[self.provider.data.key2 longLongValue]];
         weakSelf.imnative.delegate = self;
         [weakSelf.imnative load];
