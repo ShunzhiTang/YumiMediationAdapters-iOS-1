@@ -8,6 +8,7 @@
 
 #import "YumiMediationVideoAdapterInMobi.h"
 #import <InMobiSDK/InMobiSDK.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationVideoAdapterInMobi () <IMInterstitialDelegate>
 
@@ -35,13 +36,35 @@
     self.provider = provider;
     self.adType = adType;
 
-    [IMSdk initWithAccountID:self.provider.data.key1];
+    // set gdpr
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    NSDictionary *consentDict = nil;
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        consentDict = @{IM_GDPR_CONSENT_AVAILABLE : @(YES)};
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        consentDict = @{IM_GDPR_CONSENT_AVAILABLE : @(NO)};
+    }
+    
+    // Initialize InMobi SDK with your account ID
+    [IMSdk initWithAccountID:provider.data.key1 consentDictionary:consentDict];
+    
     self.video = [[IMInterstitial alloc] initWithPlacementId:[self.provider.data.key2 longLongValue] delegate:self];
 
     return self;
 }
 
 - (void)requestAd {
+    // update gdpr
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [IMSdk updateGDPRConsent:@{IM_GDPR_CONSENT_AVAILABLE : @(YES)}];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [IMSdk updateGDPRConsent:@{IM_GDPR_CONSENT_AVAILABLE : @(NO)}];
+    }
+    
     [self.video load];
     self.isReward = NO;
 }
