@@ -7,7 +7,8 @@
 //
 
 #import "YumiMediationInterstitialAdapterApplovin.h"
-#import <AppLovinSDK/ALInterstitialAd.h>
+#import <AppLovinSDK/AppLovinSDK.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationInterstitialAdapterApplovin () <ALAdLoadDelegate, ALAdDisplayDelegate>
 
@@ -47,6 +48,16 @@
 }
 
 - (void)requestAd {
+    // set GDPR
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [ALPrivacySettings setHasUserConsent:YES];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [ALPrivacySettings setHasUserConsent:NO];
+    }
+    
     if (self.provider.data.key2.length == 0) {
         [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"No zone identifier specified" adType:self.adType];
         return;

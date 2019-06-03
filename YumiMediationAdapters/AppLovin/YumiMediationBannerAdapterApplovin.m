@@ -11,6 +11,7 @@
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiMediationConstants.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationBannerAdapterApplovin () <YumiMediationBannerAdapter, ALAdLoadDelegate, ALAdDisplayDelegate>
 
@@ -72,6 +73,17 @@
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        
+        // set GDPR
+        YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+        
+        if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+            [ALPrivacySettings setHasUserConsent:YES];
+        }
+        if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+            [ALPrivacySettings setHasUserConsent:NO];
+        }
+        
         weakSelf.sdk = [ALSdk sharedWithKey:weakSelf.provider.data.key1];
         weakSelf.bannerView = [[ALAdView alloc] initWithFrame:adframe size:[ALAdSize sizeBanner] sdk:weakSelf.sdk];
         weakSelf.bannerView.adLoadDelegate = weakSelf;

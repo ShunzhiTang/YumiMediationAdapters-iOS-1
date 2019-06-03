@@ -7,7 +7,8 @@
 //
 
 #import "YumiMediationVideoAdapterAppLovin.h"
-#import <AppLovinSDK/ALIncentivizedInterstitialAd.h>
+#import <AppLovinSDK/AppLovinSDK.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationVideoAdapterAppLovin () <ALAdDisplayDelegate, ALAdVideoPlaybackDelegate, ALAdLoadDelegate,
                                                  ALAdRewardDelegate>
@@ -46,6 +47,16 @@
 }
 
 - (void)requestAd {
+    // set GDPR
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [ALPrivacySettings setHasUserConsent:YES];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [ALPrivacySettings setHasUserConsent:NO];
+    }
+    
     [self.video preloadAndNotify:self];
 }
 
