@@ -10,6 +10,7 @@
 #import <InMobiSDK/InMobiSDK.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationBannerAdapterInMobi () <IMBannerDelegate, YumiMediationBannerAdapter>
 
@@ -36,8 +37,18 @@
 
     self.provider = provider;
     self.delegate = delegate;
-
-    [IMSdk initWithAccountID:provider.data.key1];
+    
+    // set gdpr
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    NSDictionary *consentDict = nil;
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        consentDict = @{IM_GDPR_CONSENT_AVAILABLE : @(YES)};
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        consentDict = @{IM_GDPR_CONSENT_AVAILABLE : @(NO)};
+    }
+    
+    [IMSdk initWithAccountID:provider.data.key1 consentDictionary:consentDict];
     [IMSdk setLogLevel:kIMSDKLogLevelNone];
 
     return self;
@@ -50,6 +61,16 @@
 
 #pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
+    // update gdpr
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [IMSdk updateGDPRConsent:@{IM_GDPR_CONSENT_AVAILABLE : @(YES)}];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [IMSdk updateGDPRConsent:@{IM_GDPR_CONSENT_AVAILABLE : @(NO)}];
+    }
+    
     if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait ||
         self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
         [self.delegate adapter:self
