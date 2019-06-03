@@ -10,6 +10,7 @@
 #import <IMDInterstitialViewController.h>
 #import <IMDSDK.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationVideoAdapterIQzone () <IMDRewardedViewDelegate>
 
@@ -52,6 +53,16 @@
 }
 
 - (void)requestAd {
+    // set GDPR
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [self.rewardedVideo setGDPRApplies:IMDGDPR_Applies withConsent:IMDGDPR_Consented];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [self.rewardedVideo setGDPRApplies:IMDGDPR_Applies withConsent:IMDGDPR_NotConsented];
+    }
+    
     self.isVideoReady = NO;
     [self.rewardedVideo load];
 }

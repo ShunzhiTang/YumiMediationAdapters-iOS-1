@@ -10,6 +10,7 @@
 #import <IMDInterstitialViewController.h>
 #import <IMDSDK.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationInterstitialAdapterIQzone () <IMDInterstitialViewDelegate>
 
@@ -50,6 +51,15 @@
 }
 
 - (void)requestAd {
+    // set GDPR
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [self.interstitial setGDPRApplies:IMDGDPR_Applies withConsent:IMDGDPR_Consented];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [self.interstitial setGDPRApplies:IMDGDPR_Applies withConsent:IMDGDPR_NotConsented];
+    }
     self.isInterstitialReady = NO;
     [self.interstitial load];
 }
