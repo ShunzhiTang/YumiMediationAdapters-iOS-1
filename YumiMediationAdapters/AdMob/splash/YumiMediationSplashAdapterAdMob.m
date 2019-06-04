@@ -11,18 +11,15 @@
 #import <YumiMediationSDK/YumiMediationConstants.h>
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import "YumiAppOpenViewController.h"
 
 @interface YumiMediationSplashAdapterAdMob () <YumiMediationSplashAdapter>
 
 @property (nonatomic, weak) id<YumiMediationSplashAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationSplashProvider *provider;
 
-@property(nonatomic) GADAppOpenAd* appOpenAd;
-@property(strong, nonatomic) GADAppOpenAdView* appOpenAdView;
-@property (nonatomic) UIWindow *keyWindow;
+@property(nonatomic) GADAppOpenAd *appOpenAd;
 @property (nonatomic) UIView *bottomView;
-@property (nonatomic) UIViewController *adViewController;
-@property (nonatomic) UIView  *superView;
 
 @end
 
@@ -56,11 +53,9 @@
 
 - (void)requestAdAndShowInWindow:(nonnull UIWindow *)keyWindow withBottomView:(nonnull UIView *)bottomView {
     
-    self.keyWindow = keyWindow;
     self.bottomView = bottomView;
     
     self.appOpenAd = nil;
-    self.appOpenAdView = nil;
     __weak typeof(self) weakSelf = self;
     [GADAppOpenAd loadWithAdUnitID:self.provider.data.key1
                            request:[GADRequest request]
@@ -81,66 +76,50 @@
     
     __weak typeof(self) weakSelf = self;
     
-    GADAppOpenAdCloseHandler adCloseHandler = ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.bottomView removeFromSuperview];
-            [weakSelf.appOpenAdView removeFromSuperview];
-            [weakSelf.superView removeFromSuperview];
-            
-            [weakSelf.delegate adapter:weakSelf didClose:weakSelf.appOpenAdView];
-        });
+    YumiTool *tool = [YumiTool sharedTool];
+    NSBundle *YumiMediationAdmob = [tool resourcesBundleWithBundleName:@"YumiMediationAdMob"];
+    
+    YumiAppOpenViewController *viewController = [[YumiAppOpenViewController alloc] initWithNibName:@"YumiAppOpenViewController" bundle:YumiMediationAdmob];
+    
+    // Don't forget to set the ad on the view controller.
+    viewController.appOpenAd = self.appOpenAd;
+    // Set a block to request a new ad.
+    viewController.onViewControllerClosed = ^{
+        [weakSelf.delegate adapter:weakSelf didClose:weakSelf.appOpenAd];
     };
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        // add superview for background
-        [weakSelf.keyWindow addSubview:weakSelf.superView];
-        
-        CGFloat height = [UIScreen mainScreen].bounds.size.height;
-        
-        CGFloat marginTop = 0;
-        if ([[YumiTool sharedTool] isiPhoneX]) {
-            height = kIPHONEXHEIGHT - kIPHONEXSTATUSBAR - kIPHONEXHOMEINDICATOR;
-            marginTop = kIPHONEXSTATUSBAR;
-        }
-        if ([[YumiTool sharedTool] isiPhoneXR]) {
-            height = kIPHONEXRHEIGHT - kIPHONEXRSTATUSBAR - kIPHONEXRHOMEINDICATOR;
-            marginTop = kIPHONEXSTATUSBAR;
-        }
-        
-        CGFloat defaultHeight = height * 0.85 ;
-        
-        CGFloat adHeight =  height - weakSelf.bottomView.bounds.size.height > defaultHeight ? height - weakSelf.bottomView.bounds.size.height : defaultHeight;
-        
-        CGRect frame =
-        CGRectMake(0, marginTop, weakSelf.keyWindow.frame.size.width, adHeight);
-        
-        if (weakSelf.bottomView) {
-            weakSelf.bottomView.frame =
-            CGRectMake(0, adHeight + marginTop,
-                       weakSelf.bottomView.bounds.size.width, weakSelf.bottomView.bounds.size.height);
-            
-            [weakSelf.superView addSubview:weakSelf.bottomView];
-        }
-        
-         weakSelf.appOpenAdView = [[GADAppOpenAdView alloc] initWithFrame:frame];
-        
-        [weakSelf.superView addSubview:weakSelf.appOpenAdView];
-        
-        // Make sure to set the `GADAppOpenAdCloseHandler` and the `GADAppOpenAd` on your `GADAppOpenAdView`.
-        weakSelf.appOpenAdView.adCloseHandler = adCloseHandler;
-        weakSelf.appOpenAdView.appOpenAd = weakSelf.appOpenAd;
-        
-        [weakSelf.delegate adapter:weakSelf successToShow:weakSelf.appOpenAdView];
-    });
+   [[[YumiTool sharedTool] topMostController] presentViewController:viewController
+                                                                animated:NO
+                                                              completion:^{
+                                                                  dispatch_async(dispatch_get_main_queue(), ^{
+                                                                      [weakSelf layoutViewIn:viewController];                     });
+                                                              }];
+    
 }
 
-- (UIView *)superView{
-    if (!_superView) {
-        _superView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        _superView.backgroundColor = [UIColor blackColor];
+- (void)layoutViewIn:(YumiAppOpenViewController *)openVc {
+ 
+    CGFloat height = [UIScreen mainScreen].bounds.size.height;
+    YumiTool *tool =  [YumiTool sharedTool];
+    if (([tool isiPhoneX] || [tool isiPhoneXR]) && [tool isInterfaceOrientationPortrait]) {
+        height = kIPHONEXHEIGHT - kIPHONEXSTATUSBAR - kIPHONEXHOMEINDICATOR;
     }
-    return _superView;
+    
+    CGFloat defaultHeight = height * 0.85 ;
+    
+    CGFloat adHeight =  height - self.bottomView.bounds.size.height > defaultHeight ? height - self.bottomView.bounds.size.height : defaultHeight;
+    
+    if (self.bottomView) {
+        self.bottomView.frame =
+        CGRectMake(0, 0,
+                   self.bottomView.bounds.size.width, self.bottomView.bounds.size.height);
+        
+        [openVc.bottomView addSubview:self.bottomView];
+    }
+     openVc.adViewHeightConstraint.constant = adHeight;
+    
+    [self.delegate adapter:self successToShow:self.appOpenAd];
+    
 }
 
 @end
