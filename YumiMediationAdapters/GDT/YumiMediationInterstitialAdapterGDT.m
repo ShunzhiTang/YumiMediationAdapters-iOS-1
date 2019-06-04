@@ -7,11 +7,11 @@
 //
 
 #import "YumiMediationInterstitialAdapterGDT.h"
-#import "GDTMobInterstitial.h"
+#import "GDTUnifiedInterstitialAd.h"
 
-@interface YumiMediationInterstitialAdapterGDT () <GDTMobInterstitialDelegate>
+@interface YumiMediationInterstitialAdapterGDT () <GDTUnifiedInterstitialAdDelegate>
 
-@property (nonatomic) GDTMobInterstitial *interstitial;
+@property (nonatomic) GDTUnifiedInterstitialAd *interstitial;
 
 @end
 
@@ -30,47 +30,49 @@
 
     self.provider = provider;
     self.delegate = delegate;
-    typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.interstitial = [[GDTMobInterstitial alloc] initWithAppId:weakSelf.provider.data.key1 ?: @""
-                                                              placementId:weakSelf.provider.data.key2 ?: @""];
-        weakSelf.interstitial.delegate = weakSelf;
-    });
 
     return self;
 }
 
 - (void)requestAd {
+    if (self.interstitial) {
+        self.interstitial.delegate = nil;
+    }
+    self.interstitial = [[GDTUnifiedInterstitialAd alloc] initWithAppId:self.provider.data.key1 ?: @""
+                                                            placementId:self.provider.data.key2 ?: @""];
+    self.interstitial.delegate = self;
+    
     [self.interstitial loadAd];
 }
 
 - (BOOL)isReady {
-    return [self.interstitial isReady];
+    return [self.interstitial isAdValid];
 }
 
 - (void)present {
-    [self.interstitial presentFromRootViewController:[self.delegate rootViewControllerForPresentingModalView]];
+    [self.interstitial presentAdFromRootViewController:[self.delegate rootViewControllerForPresentingModalView]];
 }
 
-#pragma mark - GDTMobInterstitialDelegate
-- (void)interstitialSuccessToLoadAd:(GDTMobInterstitial *)interstitial {
-    [self.delegate adapter:self didReceiveInterstitialAd:interstitial];
+#pragma mark - GDTUnifiedInterstitialAdDelegate
+- (void)unifiedInterstitialSuccessToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
+    [self.delegate adapter:self didReceiveInterstitialAd:unifiedInterstitial];
 }
 
-- (void)interstitialFailToLoadAd:(GDTMobInterstitial *)interstitial error:(NSError *)error {
-    [self.delegate adapter:self interstitialAd:interstitial didFailToReceive:[error localizedDescription]];
+- (void)unifiedInterstitialFailToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial error:(NSError *)error {
+   [self.delegate adapter:self interstitialAd:unifiedInterstitial didFailToReceive:[error localizedDescription]];
 }
 
-- (void)interstitialWillPresentScreen:(GDTMobInterstitial *)interstitial {
-    [self.delegate adapter:self willPresentScreen:interstitial];
+- (void)unifiedInterstitialWillPresentScreen:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
+   [self.delegate adapter:self willPresentScreen:unifiedInterstitial];
 }
 
-- (void)interstitialDidDismissScreen:(GDTMobInterstitial *)interstitial {
-    [self.delegate adapter:self willDismissScreen:interstitial];
+- (void)unifiedInterstitialClicked:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
+   [self.delegate adapter:self didClickInterstitialAd:unifiedInterstitial];
 }
 
-- (void)interstitialClicked:(GDTMobInterstitial *)interstitial {
-    [self.delegate adapter:self didClickInterstitialAd:interstitial];
+- (void)unifiedInterstitialDidDismissScreen:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
+    [self.delegate adapter:self willDismissScreen:unifiedInterstitial];
 }
+
 
 @end
