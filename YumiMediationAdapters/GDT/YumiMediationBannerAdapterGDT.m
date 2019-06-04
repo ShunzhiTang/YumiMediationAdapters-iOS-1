@@ -72,7 +72,7 @@
                                             placementId:weakSelf.provider.data.key2 ?: @""
                                          viewController:[weakSelf.delegate rootViewControllerForPresentingModalView]];
         weakSelf.unifiedBannerView.animated = NO;
-        weakSelf.unifiedBannerView.autoSwitchInterval = NO;
+        weakSelf.unifiedBannerView.autoSwitchInterval = 0;
         weakSelf.unifiedBannerView.delegate = weakSelf;
 
         [weakSelf.unifiedBannerView loadAdAndShow];
@@ -90,14 +90,6 @@
 
 - (void)unifiedBannerViewClicked:(GDTUnifiedBannerView *)unifiedBannerView {
     [self.delegate adapter:self didClick:self.unifiedBannerView];
-}
-
-- (void)unifiedBannerViewDidPresentFullScreenModal:(GDTUnifiedBannerView *)unifiedBannerView {
-    [self.delegate adapter:self didPresentInternalBrowser:self.unifiedBannerView];
-}
-
-- (void)unifiedBannerViewDidDismissFullScreenModal:(GDTUnifiedBannerView *)unifiedBannerView {
-    [self.delegate adapter:self didDissmissInternalBrowser:self.unifiedBannerView];
 }
 
 @end
