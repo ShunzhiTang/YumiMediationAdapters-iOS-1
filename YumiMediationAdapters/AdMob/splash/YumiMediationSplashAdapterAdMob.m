@@ -100,9 +100,15 @@
 - (void)layoutViewIn:(YumiAppOpenViewController *)openVc {
  
     CGFloat height = [UIScreen mainScreen].bounds.size.height;
+    CGFloat marginTop = 0;
     YumiTool *tool =  [YumiTool sharedTool];
-    if (([tool isiPhoneX] || [tool isiPhoneXR]) && [tool isInterfaceOrientationPortrait]) {
+    if ([tool isiPhoneX] && [tool isInterfaceOrientationPortrait] && self.bottomView) {
         height = kIPHONEXHEIGHT - kIPHONEXSTATUSBAR - kIPHONEXHOMEINDICATOR;
+        marginTop = kIPHONEXSTATUSBAR;
+    }
+    if ([tool isiPhoneXR] && [tool isInterfaceOrientationPortrait] && self.bottomView ) {
+        height = kIPHONEXRHEIGHT - kIPHONEXRSTATUSBAR - kIPHONEXRHOMEINDICATOR;
+        marginTop = kIPHONEXSTATUSBAR;
     }
     
     CGFloat defaultHeight = height * 0.85 ;
@@ -116,7 +122,8 @@
         
         [openVc.bottomView addSubview:self.bottomView];
     }
-     openVc.adViewHeightConstraint.constant = adHeight;
+    openVc.adViewHeightConstraint.constant = adHeight;
+    openVc.adViewTopConstraint.constant = marginTop;
     
     [self.delegate adapter:self successToShow:self.appOpenAd];
     

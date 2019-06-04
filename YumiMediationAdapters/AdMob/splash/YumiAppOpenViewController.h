@@ -19,6 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (unsafe_unretained, nonatomic) IBOutlet UIView *bottomView;
 @property (unsafe_unretained, nonatomic) IBOutlet NSLayoutConstraint *adViewHeightConstraint;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *adViewTopConstraint;
+
+
 @end
 
 NS_ASSUME_NONNULL_END
