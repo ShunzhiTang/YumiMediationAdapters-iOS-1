@@ -92,12 +92,4 @@
     [self.delegate adapter:self didClick:self.unifiedBannerView];
 }
 
-- (void)unifiedBannerViewDidPresentFullScreenModal:(GDTUnifiedBannerView *)unifiedBannerView {
-    [self.delegate adapter:self didPresentInternalBrowser:self.unifiedBannerView];
-}
-
-- (void)unifiedBannerViewDidDismissFullScreenModal:(GDTUnifiedBannerView *)unifiedBannerView {
-    [self.delegate adapter:self didDissmissInternalBrowser:self.unifiedBannerView];
-}
-
 @end
