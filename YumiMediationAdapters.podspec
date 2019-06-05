@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.author           = { 'zplay sdk team' => 'ad-client@zplay.cn' }
   s.source           = { :git => 'git@github.com:yumimobi/YumiMediationAdapters-iOS.git',:tag => s.version.to_s }
   s.ios.deployment_target = '8.0'
-  s.dependency 'YumiMediationSDK', '~> 4.0.0'
+  s.dependency 'YumiMediationSDK', '~> 4.1.0'
   s.frameworks = 'Foundation', 'UIKit'
 
   subspecs = [
