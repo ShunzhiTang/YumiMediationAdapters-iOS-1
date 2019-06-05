@@ -76,13 +76,11 @@
     
     __weak typeof(self) weakSelf = self;
     
-    YumiTool *tool = [YumiTool sharedTool];
-    NSBundle *YumiMediationAdmob = [tool resourcesBundleWithBundleName:@"YumiMediationAdMob"];
-    
-    YumiAppOpenViewController *viewController = [[YumiAppOpenViewController alloc] initWithNibName:@"YumiAppOpenViewController" bundle:YumiMediationAdmob];
+    YumiAppOpenViewController *viewController = [[YumiAppOpenViewController alloc] init];
     
     // Don't forget to set the ad on the view controller.
     viewController.appOpenAd = self.appOpenAd;
+    viewController.bottomView = self.bottomView;
     // Set a block to request a new ad.
     viewController.onViewControllerClosed = ^{
         [weakSelf.delegate adapter:weakSelf didClose:weakSelf.appOpenAd];
@@ -90,42 +88,9 @@
     
    [[[YumiTool sharedTool] topMostController] presentViewController:viewController
                                                                 animated:NO
-                                                              completion:^{
-                                                                  dispatch_async(dispatch_get_main_queue(), ^{
-                                                                      [weakSelf layoutViewIn:viewController];                     });
-                                                              }];
-    
-}
-
-- (void)layoutViewIn:(YumiAppOpenViewController *)openVc {
- 
-    CGFloat height = [UIScreen mainScreen].bounds.size.height;
-    CGFloat marginTop = 0;
-    YumiTool *tool =  [YumiTool sharedTool];
-    if ([tool isiPhoneX] && [tool isInterfaceOrientationPortrait] && self.bottomView) {
-        height = kIPHONEXHEIGHT - kIPHONEXSTATUSBAR - kIPHONEXHOMEINDICATOR;
-        marginTop = kIPHONEXSTATUSBAR;
-    }
-    if ([tool isiPhoneXR] && [tool isInterfaceOrientationPortrait] && self.bottomView ) {
-        height = kIPHONEXRHEIGHT - kIPHONEXRSTATUSBAR - kIPHONEXRHOMEINDICATOR;
-        marginTop = kIPHONEXSTATUSBAR;
-    }
-    
-    CGFloat defaultHeight = height * 0.85 ;
-    
-    CGFloat adHeight =  height - self.bottomView.bounds.size.height > defaultHeight ? height - self.bottomView.bounds.size.height : defaultHeight;
-    
-    if (self.bottomView) {
-        self.bottomView.frame =
-        CGRectMake(0, 0,
-                   self.bottomView.bounds.size.width, self.bottomView.bounds.size.height);
-        
-        [openVc.bottomView addSubview:self.bottomView];
-    }
-    openVc.adViewHeightConstraint.constant = adHeight;
-    openVc.adViewTopConstraint.constant = marginTop;
-    
-    [self.delegate adapter:self successToShow:self.appOpenAd];
+                                                         completion:^{
+                                                             [weakSelf.delegate adapter:weakSelf successToShow:weakSelf.appOpenAd];
+                                                         }];
     
 }
 
