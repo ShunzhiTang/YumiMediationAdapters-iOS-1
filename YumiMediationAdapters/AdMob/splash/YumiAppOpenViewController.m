@@ -6,6 +6,7 @@
 //
 
 #import "YumiAppOpenViewController.h"
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiAppOpenViewController ()
 
@@ -15,24 +16,52 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    YumiAppOpenViewController *__weak weakSelf = self;
+     __weak typeof(self) weakSelf = self;
     GADAppOpenAdCloseHandler adCloseHandler = ^{
-        // This block gets called when the ad is finished displaying,
-        // or when the user explicitly closes the ad.
-        YumiAppOpenViewController *strongSelf = weakSelf;
-        if (!strongSelf) {
-            return;
-        }
+
         // This is set by the AppDelegate
-        strongSelf.onViewControllerClosed();
+        weakSelf.onViewControllerClosed();
         // Close this view controller.
-        [strongSelf dismissViewControllerAnimated:YES completion:nil];
+        [weakSelf dismissViewControllerAnimated:YES completion:nil];
     };
-    
-    // Make sure to set the `GADAppOpenAdCloseHandler` and the `GADAppOpenAd`
-    // on your `GADAppOpenAdView`.
+    self.appOpenAdView = [[GADAppOpenAdView alloc] init];
+    // Make sure to set the `GADAppOpenAdCloseHandler` and the `GADAppOpenAd` on your `GADAppOpenAdView`.
     self.appOpenAdView.adCloseHandler = adCloseHandler;
     self.appOpenAdView.appOpenAd = self.appOpenAd;
+    
+    [self layoutViews];
+}
+
+- (void)layoutViews {
+    
+    CGFloat height = [UIScreen mainScreen].bounds.size.height;
+    CGFloat marginTop = 0;
+    YumiTool *tool =  [YumiTool sharedTool];
+    
+    if ([tool isiPhoneX] && [tool isInterfaceOrientationPortrait] && self.bottomView) {
+        height = kIPHONEXHEIGHT - kIPHONEXSTATUSBAR - kIPHONEXHOMEINDICATOR;
+        marginTop = kIPHONEXSTATUSBAR;
+    }
+    if ([tool isiPhoneXR] && [tool isInterfaceOrientationPortrait] && self.bottomView ) {
+        height = kIPHONEXRHEIGHT - kIPHONEXRSTATUSBAR - kIPHONEXRHOMEINDICATOR;
+        marginTop = kIPHONEXRSTATUSBAR;
+    }
+    
+    CGFloat defaultHeight = height * 0.85 ;
+    
+    CGFloat adHeight =  height - self.bottomView.bounds.size.height > defaultHeight ? height - self.bottomView.bounds.size.height : defaultHeight;
+    
+    if (self.bottomView) {
+        self.bottomView.frame =
+        CGRectMake(0, marginTop + adHeight,
+                   self.bottomView.bounds.size.width, self.bottomView.bounds.size.height);
+        
+        [self.view addSubview:self.bottomView];
+    }
+    
+    self.appOpenAdView.frame = CGRectMake(0, marginTop, [UIScreen mainScreen].bounds.size.width, adHeight);
+    [self.view addSubview:self.appOpenAdView];
+    
 }
 
 - (BOOL)prefersStatusBarHidden {
