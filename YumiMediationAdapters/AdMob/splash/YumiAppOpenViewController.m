@@ -16,6 +16,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // set backgroundColor
+    self.view.backgroundColor = [UIColor blackColor];
+    
      __weak typeof(self) weakSelf = self;
     GADAppOpenAdCloseHandler adCloseHandler = ^{
 
