@@ -12,6 +12,7 @@
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <YumiMediationSDK/YumiTool.h>
 #import "YumiAppOpenViewController.h"
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationSplashAdapterAdMob () <YumiMediationSplashAdapter>
 
@@ -57,12 +58,26 @@
 }
 - (void)requestAdAndShowInWindow:(nonnull UIWindow *)keyWindow withBottomView:(nonnull UIView *)bottomView {
     
+    // set GDPR
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    GADExtras *extras = [[GADExtras alloc] init];
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        extras.additionalParameters = @{@"npa": @"0"};
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        extras.additionalParameters = @{@"npa": @"1"};
+    }
+    
+    GADRequest *request = [GADRequest request];
+    [request registerAdNetworkExtras:extras];
+    
     self.bottomView = bottomView;
     
     self.appOpenAd = nil;
     __weak typeof(self) weakSelf = self;
     [GADAppOpenAd loadWithAdUnitID:self.provider.data.key1
-                           request:[GADRequest request]
+                           request:request
                        orientation:self.interfaceOrientation
                  completionHandler:^(GADAppOpenAd *_Nullable appOpenAd, NSError *_Nullable error) {
                      if (error) {
@@ -87,6 +102,7 @@
     viewController.bottomView = self.bottomView;
     // Set a block to request a new ad.
     viewController.onViewControllerClosed = ^{
+        weakSelf.appOpenAd = nil;
         [weakSelf.delegate adapter:weakSelf didClose:weakSelf.appOpenAd];
     };
     
