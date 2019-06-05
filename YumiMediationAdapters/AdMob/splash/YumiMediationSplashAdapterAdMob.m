@@ -20,6 +20,7 @@
 
 @property(nonatomic) GADAppOpenAd *appOpenAd;
 @property (nonatomic) UIView *bottomView;
+@property (nonatomic, assign) UIInterfaceOrientation interfaceOrientation;
 
 @end
 
@@ -51,6 +52,9 @@
     return self;
 }
 
+- (void)setInterfaceOrientation:(UIInterfaceOrientation)orientation {
+    _interfaceOrientation = orientation;
+}
 - (void)requestAdAndShowInWindow:(nonnull UIWindow *)keyWindow withBottomView:(nonnull UIView *)bottomView {
     
     self.bottomView = bottomView;
@@ -59,7 +63,7 @@
     __weak typeof(self) weakSelf = self;
     [GADAppOpenAd loadWithAdUnitID:self.provider.data.key1
                            request:[GADRequest request]
-                       orientation:UIInterfaceOrientationPortrait
+                       orientation:self.interfaceOrientation
                  completionHandler:^(GADAppOpenAd *_Nullable appOpenAd, NSError *_Nullable error) {
                      if (error) {
                          NSLog(@"Failed to load app open ad: %@", error);
