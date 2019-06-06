@@ -19,7 +19,7 @@
 
 @property (nonatomic) FBNativeAd *fbNativeAd;
 @property (nonatomic) FBMediaView *mediaView;
-@property (nonatomic) FBAdIconView *iconView;
+@property (nonatomic) FBMediaView *iconView;
 
 @end
 
