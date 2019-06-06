@@ -70,17 +70,17 @@
 #pragma mark : YumiMediationNativeAdapterConnectorMedia
 /// Play the video. Doesn't do anything if the video is already playing.
 - (void)play {
-    [self.gadNativeAd.videoController play];
+    [self.gadNativeAd.mediaContent.videoController play];
 }
 
 /// Pause the video. Doesn't do anything if the video is already paused.
 - (void)pause {
-    [self.gadNativeAd.videoController pause];
+    [self.gadNativeAd.mediaContent.videoController pause];
 }
 
 /// Returns the video's aspect ratio (width/height) or 0 if no video is present.
 - (double)aspectRatio {
-    return [self.gadNativeAd.videoController aspectRatio];
+    return [self.gadNativeAd.mediaContent aspectRatio];
 }
 
 - (void)setConnectorMediaDelegate:(id<YumiMediationNativeAdapterConnectorMediaDelegate>)mediaDelegate {
@@ -144,7 +144,7 @@
 }
 
 - (BOOL)hasVideoContent {
-    return self.gadNativeAd.videoController.hasVideoContent;
+    return self.gadNativeAd.mediaContent.hasVideoContent;
 }
 - (YumiMediationNativeVideoController *)videoController {
     if (!_videoController) {
