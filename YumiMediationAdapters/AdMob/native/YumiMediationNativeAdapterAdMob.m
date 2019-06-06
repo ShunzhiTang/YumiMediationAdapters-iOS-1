@@ -156,7 +156,7 @@ static NSUInteger maxNumberOfAds = 5;
     }
 
     // media view
-    if (clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset]) {
+    if (clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset] && nativeAd.hasVideoContent) {
         UIView *mediaSuperView = clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset];
         GADMediaView *mediaView = [[GADMediaView alloc] initWithFrame:mediaSuperView.bounds];
         [mediaSuperView addSubview:mediaView];
