@@ -94,7 +94,7 @@
     [clickables addObject:logoView];
 
     // media view
-    if (clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset]) {
+    if (clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset] && nativeAd.hasVideoContent) {
         UIView *mediaSuperView = clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset];
         GDTMediaView *mediaView = [[GDTMediaView alloc] initWithFrame:mediaSuperView.bounds];
         [mediaSuperView addSubview:mediaView];
