@@ -19,7 +19,7 @@
 
 @property (nonatomic) FBNativeAd *fbNativeAd;
 @property (nonatomic) FBMediaView *mediaView;
-@property (nonatomic) FBAdIconView *iconView;
+@property (nonatomic) FBMediaView *iconView;
 
 @end
 
@@ -62,7 +62,7 @@
 
     if (clickableAssetViews[YumiMediationUnifiedNativeIconAsset]) {
         UIView *icon = clickableAssetViews[YumiMediationUnifiedNativeIconAsset];
-        self.iconView = [[FBAdIconView alloc] initWithFrame:icon.bounds];
+        self.iconView = [[FBMediaView alloc] initWithFrame:icon.bounds];
         [icon addSubview:self.iconView];
     }
     if (clickableAssetViews[YumiMediationUnifiedNativeCoverImageAsset]) {
