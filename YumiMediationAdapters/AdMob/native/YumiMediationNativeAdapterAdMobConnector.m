@@ -31,7 +31,7 @@
     self.adapter = adapter;
     self.connectorDelegate = connectorDelegate;
     self.gadNativeAd.delegate = self;
-    self.gadNativeAd.videoController.delegate = self;
+    self.gadNativeAd.mediaContent.videoController.delegate = self;
     [self notifyMediatedNativeAdSuccessful];
 }
 
