@@ -49,7 +49,7 @@
     if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait ||
         self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
         [self.delegate adapter:self
-            didFailToReceiveAd:@"baidu not support kYumiMediationAdViewSmartBannerPortrait or "
+            didFailToReceiveAd:@"gdt not support kYumiMediationAdViewSmartBannerPortrait or "
                                @"kYumiMediationAdViewSmartBannerLandscape"];
         return;
     }
