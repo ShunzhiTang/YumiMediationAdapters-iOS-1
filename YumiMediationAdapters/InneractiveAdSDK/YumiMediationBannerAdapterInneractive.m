@@ -104,10 +104,15 @@
 
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
 
-    if (self.bannerSize != kYumiMediationAdViewBanner320x50 || self.bannerSize != kYumiMediationAdViewBanner728x90) {
+    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait ||
+        self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
         [self.delegate adapter:self
-            didFailToReceiveAd:
-                @"Inneractive only support kYumiMediationAdViewBanner320x50 or kYumiMediationAdViewBanner728x90 "];
+            didFailToReceiveAd:@"Inneractive not support kYumiMediationAdViewSmartBannerPortrait or "
+         @"kYumiMediationAdViewSmartBannerLandscape"];
+        return;
+    }
+    if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
+        [self.delegate adapter:self didFailToReceiveAd:@"Inneractive not support kYumiMediationAdViewBanner300x250"];
         return;
     }
 
