@@ -31,6 +31,10 @@
                                                        requestType:YumiMediationSDKAdRequest];
 }
 
+- (void)dealloc{
+    [self clearSplash];
+}
+
 #pragma mark - YumiMediationSplashAdapter
 - (nonnull id<YumiMediationSplashAdapter>)initWithProvider:(nonnull YumiMediationSplashProvider *)provider
                                                   delegate:(nonnull id<YumiMediationSplashAdapterDelegate>)delegate {
@@ -67,6 +71,19 @@
     });
 }
 
+- (void)clearSplash {
+    if (self.splash) {
+        self.splash.delegate = nil;
+        self.splash = nil;
+    }
+    if (self.bottomView) {
+        self.bottomView = nil;
+    }
+    if (self.keyWindow) {
+        self.keyWindow = nil;
+    }
+}
+
 #pragma mark : BaiduMobAdSplashDelegate
 - (NSString *)publisherId {
     return self.provider.data.key1;
@@ -87,6 +104,7 @@
 
 - (void)splashlFailPresentScreen:(BaiduMobAdSplash *)splash withError:(BaiduMobFailReason)reason {
     [self.delegate adapter:self failToShow:[NSString stringWithFormat:@"baidu error reason %d", reason]];
+    [self clearSplash];
 }
 
 - (void)splashDidClicked:(BaiduMobAdSplash *)splash {
@@ -99,6 +117,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [weakSelf.bottomView removeFromSuperview];
         [weakSelf.delegate adapter:weakSelf didClose:splash];
+        [weakSelf clearSplash];
     });
 }
 - (void)splashDidReady:(BaiduMobAdSplash *)splash AndAdType:(NSString *)adType VideoDuration:(NSInteger)videoDuration {

@@ -28,6 +28,13 @@
                                                           adType:YumiMediationAdTypeVideo];
 }
 
+- (void)dealloc {
+    if (self.rewardVideo) {
+        self.rewardVideo.delegate = nil;
+        self.rewardVideo = nil;
+    }
+}
+
 #pragma mark - YumiMediationVideoAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
