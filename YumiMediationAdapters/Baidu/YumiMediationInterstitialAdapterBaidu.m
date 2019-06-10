@@ -26,6 +26,10 @@
                                                           adType:YumiMediationAdTypeInterstitial];
 }
 
+- (void)dealloc {
+    [self clearInterstitial];
+}
+
 #pragma mark - YumiMediationInterstitialAdapter
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
@@ -72,6 +76,8 @@
 - (void)interstitialFailToLoadAd:(BaiduMobAdInterstitial *)interstitial {
     self.interstitialIsReady = NO;
     [self.delegate coreAdapter:self coreAd:interstitial didFailToLoad:@"Baidu ad load fail" adType:self.adType];
+    
+    [self clearInterstitial];
 }
 
 - (void)interstitialWillPresentScreen:(BaiduMobAdInterstitial *)interstitial {
@@ -93,11 +99,15 @@
 
 - (void)interstitialDidDismissScreen:(BaiduMobAdInterstitial *)interstitial {
     [self.delegate coreAdapter:self didCloseCoreAd:interstitial isCompletePlaying:NO adType:self.adType];
-    self.interstitial = nil;
+    
+    [self clearInterstitial];
 }
 
-- (void)dealloc {
-    self.interstitial.delegate = nil;
+- (void)clearInterstitial {
+    if (self.interstitial) {
+        self.interstitial.delegate = nil;
+        self.interstitial = nil;
+    }
 }
 
 @end

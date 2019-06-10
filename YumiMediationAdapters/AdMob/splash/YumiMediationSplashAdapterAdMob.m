@@ -23,6 +23,9 @@
 @property (nonatomic) UIView *bottomView;
 @property (nonatomic, assign) UIInterfaceOrientation interfaceOrientation;
 
+@property (nonatomic, assign)BOOL isTimeout;
+@property (nonatomic) dispatch_block_t timeoutBlock;
+
 @end
 
 @implementation YumiMediationSplashAdapterAdMob
@@ -58,6 +61,10 @@
 }
 - (void)requestAdAndShowInWindow:(nonnull UIWindow *)keyWindow withBottomView:(nonnull UIView *)bottomView {
     
+    self.isTimeout = NO;
+    if (self.timeoutBlock) {
+        dispatch_block_cancel(self.timeoutBlock);
+    }
     // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
     
@@ -81,17 +88,26 @@
                        orientation:self.interfaceOrientation
                  completionHandler:^(GADAppOpenAd *_Nullable appOpenAd, NSError *_Nullable error) {
                      if (error) {
-                         NSLog(@"Failed to load app open ad: %@", error);
                          [weakSelf.delegate adapter:weakSelf failToShow:error.localizedDescription];
                          return;
                      }
                      weakSelf.appOpenAd = appOpenAd;
                      [weakSelf showSplash];
                  }];
-    
+    // timeout
+    self.timeoutBlock = dispatch_block_create(0, ^{
+         weakSelf.isTimeout = YES;
+    });
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.provider.data.requestTimeout * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),self.timeoutBlock);
 }
 
 - (void)showSplash{
+    
+    if (self.isTimeout) {
+        self.isTimeout = NO;
+        [self.delegate adapter:self failToShow:@"admob splash time out"];
+        return;
+    }
     
     __weak typeof(self) weakSelf = self;
     
