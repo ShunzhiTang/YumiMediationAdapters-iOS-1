@@ -30,6 +30,13 @@
                                                        requestType:YumiMediationSDKAdRequest];
 }
 
+- (void)dealloc {
+    if (self.bannerView) {
+        self.bannerView.delegate = nil;
+        self.bannerView = nil;
+    }
+}
+
 - (id<YumiMediationBannerAdapter>)initWithProvider:(YumiMediationBannerProvider *)provider
                                           delegate:(id<YumiMediationBannerAdapterDelegate>)delegate {
     self = [super init];
@@ -107,10 +114,6 @@
 }
 
 - (void)didDismissLandingPage {
-}
-
-- (void)dealloc {
-    self.bannerView.delegate = nil;
 }
 
 @end

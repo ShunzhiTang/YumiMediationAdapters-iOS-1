@@ -40,6 +40,11 @@
                                                        requestType:YumiMediationSDKAdRequest];
 }
 
+- (void)dealloc
+{
+    [self clearNativeData];
+}
+
 #pragma mark - YumiMediationNativeAdapter
 - (id<YumiMediationNativeAdapter>)initWithProvider:(YumiMediationNativeProvider *)provider
                                           delegate:(id<YumiMediationNativeAdapterDelegate>)delegate {
@@ -199,6 +204,10 @@
 }
 
 - (void)clearNativeData {
+    if (self.native) {
+        self.native.delegate = nil;
+        self.native = nil;
+    }
     self.bdNativeData = nil;
     [self.mappingData removeAllObjects];
 }
