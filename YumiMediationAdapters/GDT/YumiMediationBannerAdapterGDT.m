@@ -72,9 +72,9 @@
                                             placementId:weakSelf.provider.data.key2 ?: @""
                                          viewController:[weakSelf.delegate rootViewControllerForPresentingModalView]];
         weakSelf.unifiedBannerView.animated = NO;
-        weakSelf.unifiedBannerView.autoSwitchInterval = NO;
+        weakSelf.unifiedBannerView.autoSwitchInterval = weakSelf.provider.data.autoRefreshInterval;
         weakSelf.unifiedBannerView.delegate = weakSelf;
-
+        
         [weakSelf.unifiedBannerView loadAdAndShow];
     });
 }
