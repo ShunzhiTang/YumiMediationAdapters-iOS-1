@@ -95,7 +95,14 @@
             return;
         }
         strongSelf.bannerView = [[IMBanner alloc] initWithFrame:adFrame placementId:placementId delegate:strongSelf];
-
+        // set refresh state
+        if (strongSelf.provider.data.autoRefreshInterval == 0) {
+            [strongSelf.bannerView shouldAutoRefresh:NO];
+        }else{
+            [strongSelf.bannerView shouldAutoRefresh:YES];
+            [strongSelf.bannerView setRefreshInterval:strongSelf.provider.data.autoRefreshInterval];
+        }
+        
         [strongSelf.bannerView load];
     });
 }
