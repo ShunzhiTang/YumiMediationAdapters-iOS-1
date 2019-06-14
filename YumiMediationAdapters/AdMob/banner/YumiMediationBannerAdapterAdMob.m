@@ -97,6 +97,12 @@
         strongSelf.bannerView.adUnitID = strongSelf.provider.data.key1;
         strongSelf.bannerView.delegate = strongSelf;
         strongSelf.bannerView.rootViewController = [strongSelf.delegate rootViewControllerForPresentingModalView];
+        // set refresh state
+        if (strongSelf.provider.data.autoRefreshInterval == 0) {
+            strongSelf.bannerView.autoloadEnabled = NO;
+        }else{
+            strongSelf.bannerView.autoloadEnabled = YES;
+        }
         
         [strongSelf.bannerView loadRequest:request];
     });

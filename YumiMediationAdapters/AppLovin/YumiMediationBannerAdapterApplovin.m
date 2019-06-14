@@ -88,7 +88,12 @@
         weakSelf.bannerView = [[ALAdView alloc] initWithFrame:adframe size:[ALAdSize sizeBanner] sdk:weakSelf.sdk];
         weakSelf.bannerView.adLoadDelegate = weakSelf;
         weakSelf.bannerView.adDisplayDelegate = weakSelf;
-        weakSelf.bannerView.autoload = NO;
+        // set refresh state
+        if (weakSelf.provider.data.autoRefreshInterval == 0) {
+             weakSelf.bannerView.autoload = NO;
+        }else{
+              weakSelf.bannerView.autoload = YES;
+        }
 
         [weakSelf.sdk.adService loadNextAdForZoneIdentifier:weakSelf.provider.data.key2 andNotify:self];
     });
