@@ -127,9 +127,14 @@
 #pragma mark - GDTUnifiedNativeAdDelete
 - (void)gdt_unifiedNativeAdLoaded:(NSArray<GDTUnifiedNativeAdDataObject *> *_Nullable)unifiedNativeAdDataObjects
                             error:(NSError *_Nullable)error {
+    if (unifiedNativeAdDataObjects.count == 0 && error) {
+        [self handleNativeError:error];
+        return;
+    }
     self.gdtNativeData = unifiedNativeAdDataObjects;
 
     __weak typeof(self) weakSelf = self;
+    
     [unifiedNativeAdDataObjects
         enumerateObjectsUsingBlock:^(GDTUnifiedNativeAdDataObject *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
             [[[YumiMediationNativeAdapterGDTConnector alloc] init]
@@ -138,21 +143,6 @@
                   disableImageLoading:weakSelf.nativeConfig.disableImageLoading
                     connectorDelegate:weakSelf];
         }];
-}
-
-- (void)nativeAdFailToLoad:(NSError *)error {
-    [self handleNativeError:error];
-}
-
-- (void)nativeAdWillPresentScreen {
-    [self.delegate adapter:self didClick:nil];
-}
-
-- (void)nativeAdApplicationWillEnterBackground {
-    [self.delegate adapter:self didClick:nil];
-}
-
-- (void)nativeAdClosed {
 }
 
 #pragma mark : -YumiMediationNativeAdapterConnectorDelegate
