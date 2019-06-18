@@ -95,7 +95,7 @@
               weakSelf.bannerView.autoload = YES;
         }
 
-        [weakSelf.sdk.adService loadNextAdForZoneIdentifier:weakSelf.provider.data.key2 andNotify:self];
+        [weakSelf.sdk.adService loadNextAdForZoneIdentifier:weakSelf.provider.data.key2 andNotify:weakSelf];
     });
 }
 #pragma mark - Ad Load Delegate
