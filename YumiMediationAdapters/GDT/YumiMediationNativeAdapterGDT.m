@@ -102,6 +102,8 @@
         }
         
         GDTMediaView *mediaView = [[GDTMediaView alloc] initWithFrame:mediaSuperView.bounds];
+        mediaView.videoMuted = YES;
+        
         [mediaSuperView addSubview:mediaView];
 
         [gdtView registerDataObject:gdtData
