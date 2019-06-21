@@ -97,8 +97,10 @@
     if (clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset]) {
         UIView *mediaSuperView = clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset];
         GDTMediaView *mediaView = [[GDTMediaView alloc] initWithFrame:mediaSuperView.bounds];
+        mediaView.videoMuted = YES;
+        
         [mediaSuperView addSubview:mediaView];
-
+        
         [gdtView registerDataObject:gdtData
                           mediaView:mediaView
                            logoView:logoView
