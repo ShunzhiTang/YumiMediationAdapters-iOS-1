@@ -36,17 +36,18 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-
+    
+    [GADRewardBasedVideoAd sharedInstance].delegate = self;
+    
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     if ([standardUserDefaults objectForKey:YumiMediationAdmobAdapterUUID]) {
         [GADRewardBasedVideoAd sharedInstance].delegate = self;
         return self;
     }
-    __weak __typeof(self)weakSelf = self;
+    
     [[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *_Nonnull status) {
         [standardUserDefaults setObject:@"Admob_is_starting" forKey:YumiMediationAdmobAdapterUUID];
         [standardUserDefaults synchronize];
-        [GADRewardBasedVideoAd sharedInstance].delegate = weakSelf;
     }];
 
     
