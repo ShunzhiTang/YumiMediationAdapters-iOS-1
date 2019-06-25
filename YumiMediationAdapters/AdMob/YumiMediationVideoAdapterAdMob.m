@@ -9,6 +9,8 @@
 #import "YumiMediationVideoAdapterAdMob.h"
 #import <GoogleMobileAds/GoogleMobileAds.h>
 
+static NSString *YumiMediationAdmobAdapterUUID = @"YumiMediation_AdmobAdapter_UUID";
+
 @interface YumiMediationVideoAdapterAdMob () <GADRewardBasedVideoAdDelegate>
 @property (nonatomic, assign) BOOL isReward;
 
@@ -29,14 +31,27 @@
 
     self.delegate = delegate;
     self.provider = provider;
-
+    
     [GADRewardBasedVideoAd sharedInstance].delegate = self;
-
+    
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    if ([standardUserDefaults objectForKey:YumiMediationAdmobAdapterUUID]) {
+        return self;
+    }
+    [[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *_Nonnull status) {
+        [standardUserDefaults setObject:@"Admob_is_starting" forKey:YumiMediationAdmobAdapterUUID];
+        [standardUserDefaults synchronize];
+       
+    }];
+    
     return self;
 }
 
 - (void)requestAd {
+    
     [[GADRewardBasedVideoAd sharedInstance] loadRequest:[GADRequest request] withAdUnitID:self.provider.data.key1];
+    
+    self.isReward = NO;
 }
 
 - (BOOL)isReady {

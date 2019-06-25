@@ -13,6 +13,8 @@
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiTool.h>
 
+static NSString *YumiMediationAdmobAdapterUUID = @"YumiMediation_AdmobAdapter_UUID";
+
 static NSUInteger maxNumberOfAds = 5;
 
 @interface YumiMediationNativeAdapterAdMob () <YumiMediationNativeAdapter, GADAdLoaderDelegate,
@@ -46,7 +48,17 @@ static NSUInteger maxNumberOfAds = 5;
 
     self.delegate = delegate;
     self.provider = provider;
-
+    
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    if ([standardUserDefaults objectForKey:YumiMediationAdmobAdapterUUID]) {
+        return self;
+    }
+    [[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *_Nonnull status) {
+        [standardUserDefaults setObject:@"Admob_is_starting" forKey:YumiMediationAdmobAdapterUUID];
+        [standardUserDefaults synchronize];
+    }];
+    
+    
     return self;
 }
 
@@ -133,10 +145,16 @@ static NSUInteger maxNumberOfAds = 5;
     }
     
     // media view
-    if (clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset]) {
-        UIView *mediaSuperView = clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset];
+    if (nativeAd.hasVideoContent) {
+        UIView *mediaSuperView = clickableAssetViews[YumiMediationUnifiedNativeCoverImageAsset];
+        // have media view
+        if (clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset]) {
+            mediaSuperView = clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset];
+        }
+        
         GADMediaView *mediaView = [[GADMediaView alloc] initWithFrame:mediaSuperView.bounds];
         [mediaSuperView addSubview:mediaView];
+        
         gadView.mediaView = mediaView;
     }
 

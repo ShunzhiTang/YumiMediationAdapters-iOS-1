@@ -11,6 +11,8 @@
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <YumiMediationSDK/YumiTool.h>
 
+static NSString *YumiMediationAdmobAdapterUUID = @"YumiMediation_AdmobAdapter_UUID";
+
 @interface YumiMediationInterstitialAdapterNativeAdMob () <GADNativeAppInstallAdLoaderDelegate, GADAdLoaderDelegate,
                                                            GADNativeAdDelegate>
 
@@ -57,7 +59,16 @@
 
     self.provider = provider;
     self.delegate = delegate;
-
+    
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    if ([standardUserDefaults objectForKey:YumiMediationAdmobAdapterUUID]) {
+        return self;
+    }
+    [[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *_Nonnull status) {
+        [standardUserDefaults setObject:@"Admob_is_starting" forKey:YumiMediationAdmobAdapterUUID];
+        [standardUserDefaults synchronize];
+    }];
+    
     return self;
 }
 
