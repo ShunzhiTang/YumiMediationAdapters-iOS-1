@@ -9,6 +9,8 @@
 #import "YumiMediationInterstitialAdapterAdMob.h"
 #import <GoogleMobileAds/GoogleMobileAds.h>
 
+static NSString *YumiMediationAdmobAdapterUUID = @"YumiMediation_AdmobAdapter_UUID";
+
 @interface YumiMediationInterstitialAdapterAdMob () <GADInterstitialDelegate>
 
 @property (nonatomic) GADInterstitial *interstitial;
@@ -33,7 +35,16 @@
 
     self.interstitial = [[GADInterstitial alloc] initWithAdUnitID:self.provider.data.key1];
     self.interstitial.delegate = self;
-
+    
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    if ([standardUserDefaults objectForKey:YumiMediationAdmobAdapterUUID]) {
+        return self;
+    }
+    [[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *_Nonnull status) {
+        [standardUserDefaults setObject:@"Admob_is_starting" forKey:YumiMediationAdmobAdapterUUID];
+        [standardUserDefaults synchronize];
+    }];
+    
     return self;
 }
 
