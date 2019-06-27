@@ -10,6 +10,7 @@
 #import <YumiMediationSDK/YumiAdsWKCustomViewController.h>
 #import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationInterstitialAdapterNativeInMobi () <IMNativeDelegate, YumiAdsWKCustomViewControllerDelegate>
 
@@ -20,15 +21,17 @@
 @property (nonatomic) YumiMediationTemplateModel *templateModel;
 @property (nonatomic, assign) NSInteger currentID;
 @property (nonatomic) YumiBannerViewTemplateManager *templateManager;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationInterstitialAdapterNativeInMobi
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDInMobiNative
-                                                             requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDInMobiNative
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark :private method
@@ -59,16 +62,29 @@
     self.interstitial.isNativeInterstitialGDT = NO;
 }
 
-#pragma mark - YumiMediationInterstitialAdapter
-- (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
-                                                delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
+#pragma mark - YumiMediationCoreAdapter
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
     self.delegate = delegate;
+    self.adType = adType;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        [IMSdk initWithAccountID:self.provider.data.key1];
+        // set gdpr
+        YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+        NSDictionary *consentDict = nil;
+        if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+            consentDict = @{IM_GDPR_CONSENT_AVAILABLE : @(YES)};
+        }
+        if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+            consentDict = @{IM_GDPR_CONSENT_AVAILABLE : @(NO)};
+        }
+        
+        // Initialize InMobi SDK with your account ID
+        [IMSdk initWithAccountID:provider.data.key1 consentDictionary:consentDict];
         [IMSdk setLogLevel:kIMSDKLogLevelNone];
     });
     return self;
@@ -78,6 +94,16 @@
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        // update gdpr
+        YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+        
+        if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+            [IMSdk updateGDPRConsent:@{IM_GDPR_CONSENT_AVAILABLE : @(YES)}];
+        }
+        if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+            [IMSdk updateGDPRConsent:@{IM_GDPR_CONSENT_AVAILABLE : @(NO)}];
+        }
+        
         weakSelf.imnative = [[IMNative alloc] initWithPlacementId:[self.provider.data.key2 longLongValue]];
         weakSelf.imnative.delegate = self;
         [weakSelf.imnative load];
@@ -90,8 +116,8 @@
     return self.interstitial.isReady;
 }
 
-- (void)present {
-    [self.interstitial presentFromRootViewController:[self.delegate rootViewControllerForPresentingModalView]];
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [self.interstitial presentFromRootViewController:rootViewController];
 
     // inmobi present
     [self.imnative recyclePrimaryView];
@@ -102,7 +128,10 @@
 - (void)nativeDidFinishLoading:(IMNative *)native {
 
     if (!native || !native.customAdContent) {
-        [self.delegate adapter:self interstitialAd:self.interstitial didFailToReceive:@"Inmobi native no ad"];
+        [self.delegate coreAdapter:self
+                            coreAd:self.interstitial
+                     didFailToLoad:@"Inmobi native no ad"
+                            adType:self.adType];
         return;
     }
 
@@ -112,7 +141,10 @@
         self.imobeDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     }
     if (!self.imobeDict || ![self.imobeDict objectForKey:@"screenshots"]) {
-        [self.delegate adapter:self interstitialAd:self.interstitial didFailToReceive:@"Inmobi native no ad"];
+        [self.delegate coreAdapter:self
+                            coreAd:self.interstitial
+                     didFailToLoad:@"Inmobi native no ad"
+                            adType:self.adType];
         return;
     }
 
@@ -122,7 +154,10 @@
     NSString *clickUrl = [self.imobeDict objectForKey:@"landingURL"];
 
     if (!url || url.length == 0 || width == 0 || height == 0 || !clickUrl || clickUrl.length == 0) {
-        [self.delegate adapter:self interstitialAd:self.interstitial didFailToReceive:@"Inmobi native no ad"];
+        [self.delegate coreAdapter:self
+                            coreAd:self.interstitial
+                     didFailToLoad:@"Inmobi native no ad"
+                            adType:self.adType];
         return;
     }
 
@@ -139,7 +174,11 @@
 }
 
 - (void)native:(IMNative *)native didFailToLoadWithError:(IMRequestStatus *)error {
-    [self.delegate adapter:self interstitialAd:self.interstitial didFailToReceive:[error localizedDescription]];
+    [self.delegate coreAdapter:self
+                        coreAd:self.interstitial
+                 didFailToLoad:error.localizedDescription
+                        adType:self.adType];
+    ;
 }
 
 - (void)nativeWillPresentScreen:(IMNative *)native {
@@ -157,31 +196,40 @@
 
 #pragma mark : YumiAdsWKCustomViewControllerDelegate
 - (void)yumiAdsWKCustomViewControllerDidReceivedAd:(UIViewController *)viewController {
-
-    [self.delegate adapter:self
-        didReceiveInterstitialAd:self.interstitial
-               interstitialFrame:CGRectZero
-                  withTemplateID:(int)self.currentID];
+    [self.delegate coreAdapter:self
+             didReceivedCoreAd:self.interstitial
+             interstitialFrame:CGRectZero
+                withTemplateID:(int)self.currentID
+                        adType:self.adType];
 }
 
 - (void)yumiAdsWKCustomViewController:(UIViewController *)viewController didFailToReceiveAdWithError:(NSError *)error {
-    [self.delegate adapter:self interstitialAd:self.interstitial didFailToReceive:[error localizedDescription]];
+    [self.delegate coreAdapter:self
+                        coreAd:self.interstitial
+                 didFailToLoad:error.localizedDescription
+                        adType:self.adType];
+    ;
 }
 
 - (void)didClickOnYumiAdsWKCustomViewController:(UIViewController *)viewController point:(CGPoint)point {
     // inmobi
     [self.imnative reportAdClickAndOpenLandingPage];
 
-    [self.delegate adapter:self didClickInterstitialAd:self.interstitial on:point withTemplateID:(int)self.currentID];
+    [self.delegate coreAdapter:self
+                didClickCoreAd:self.interstitial
+                            on:point
+                withTemplateID:(int)self.currentID
+                        adType:self.adType];
 }
 
 - (void)yumiAdsWKCustomViewControllerDidPresent:(UIViewController *)viewController {
 
-    [self.delegate adapter:self willPresentScreen:self.interstitial];
+    [self.delegate coreAdapter:self didOpenCoreAd:self.interstitial adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:self.interstitial adType:self.adType];
 }
 
 - (void)yumiAdsWKCustomViewControllerDidClosed:(UIViewController *)viewController {
-    [self.delegate adapter:self willDismissScreen:self.interstitial];
+    [self.delegate coreAdapter:self didCloseCoreAd:self.interstitial isCompletePlaying:NO adType:self.adType];
 }
 
 @end

@@ -10,33 +10,32 @@
 
 @interface <%=class_name%> ()
 
+@property (nonatomic, assign) YumiMediationAdType adType;
+
 @end
 
 @implementation <%=class_name%>
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:[self sharedInstance]
-                                                      forProvider:kYumiMediationAdapterID<%=name%>
-                                                      requestType:YumiMediationSDKAdRequest];
-}
-
-+ (id<YumiMediationVideoAdapter>)sharedInstance {
-    static id<YumiMediationVideoAdapter> sharedInstance;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] init];
-    });
-
-    return sharedInstance;
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterID<%=name%>
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeVideo];
 }
 
 #pragma mark - YumiMediationVideoAdapter
-- (void)setupWithProvider:(YumiMediationVideoProvider *)provider
-                 delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
+    self = [super init];
+    
     self.delegate = delegate;
     self.provider = provider;
+    self.adType = adType;
+    
+    // TODO: set code 
 
-	// TODO: setup code
+    return self;
 }
 
 - (void)requestAd {

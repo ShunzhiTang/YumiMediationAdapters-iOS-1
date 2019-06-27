@@ -12,45 +12,55 @@
 @interface YumiMediationInterstitialAdapterBaidu () <BaiduMobAdInterstitialDelegate>
 
 @property (nonatomic) BaiduMobAdInterstitial *interstitial;
+@property (nonatomic, assign) YumiMediationAdType adType;
+@property (nonatomic, assign) BOOL interstitialIsReady;
 
 @end
 
 @implementation YumiMediationInterstitialAdapterBaidu
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDBaidu
-                                                             requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDBaidu
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
+}
+
+- (void)dealloc {
+    [self clearInterstitial];
 }
 
 #pragma mark - YumiMediationInterstitialAdapter
-- (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
-                                                delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
     self.delegate = delegate;
-
-    self.interstitial = [[BaiduMobAdInterstitial alloc] init];
-    self.interstitial.delegate = self;
-    self.interstitial.AdUnitTag = self.provider.data.key2;
-    self.interstitial.interstitialType = BaiduMobAdViewTypeInterstitialOther;
-
+    self.adType = adType;
+    self.interstitialIsReady = NO;
+    
     return self;
 }
 
 - (void)requestAd {
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.interstitial load];
+        weakSelf.interstitial = [[BaiduMobAdInterstitial alloc] init];
+        weakSelf.interstitial.delegate = weakSelf;
+        weakSelf.interstitial.AdUnitTag = weakSelf.provider.data.key2;
+        weakSelf.interstitial.interstitialType = BaiduMobAdViewTypeInterstitialOther;
+        [weakSelf.interstitial load];
     });
 }
 
 - (BOOL)isReady {
-    return [self.interstitial isReady];
+    return self.interstitialIsReady;
 }
 
-- (void)present {
-    [self.interstitial presentFromRootViewController:[self.delegate rootViewControllerForPresentingModalView]];
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [self.interstitial presentFromRootViewController:rootViewController];
 }
 
 #pragma mark - BaiduMobAdInterstitialDelegate
@@ -59,27 +69,45 @@
 }
 
 - (void)interstitialSuccessToLoadAd:(BaiduMobAdInterstitial *)interstitial {
-    [self.delegate adapter:self didReceiveInterstitialAd:interstitial];
+    self.interstitialIsReady = YES;
+    [self.delegate coreAdapter:self didReceivedCoreAd:interstitial adType:self.adType];
 }
 
 - (void)interstitialFailToLoadAd:(BaiduMobAdInterstitial *)interstitial {
-    [self.delegate adapter:self interstitialAd:interstitial didFailToReceive:@"Baidu ad load fail"];
+    self.interstitialIsReady = NO;
+    [self.delegate coreAdapter:self coreAd:interstitial didFailToLoad:@"Baidu ad load fail" adType:self.adType];
+    
+    [self clearInterstitial];
 }
 
 - (void)interstitialWillPresentScreen:(BaiduMobAdInterstitial *)interstitial {
-    [self.delegate adapter:self willPresentScreen:interstitial];
+    self.interstitialIsReady = NO;
+    [self.delegate coreAdapter:self didOpenCoreAd:interstitial adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:interstitial adType:self.adType];
+}
+
+- (void)interstitialFailPresentScreen:(BaiduMobAdInterstitial *)interstitial withError:(BaiduMobFailReason)reason {
+    [self.delegate coreAdapter:self
+                failedToShowAd:interstitial
+                   errorString:@"Baidu ad failed to show"
+                        adType:self.adType];
 }
 
 - (void)interstitialDidAdClicked:(BaiduMobAdInterstitial *)interstitial {
-    [self.delegate adapter:self didClickInterstitialAd:interstitial];
+    [self.delegate coreAdapter:self didClickCoreAd:interstitial adType:self.adType];
 }
 
 - (void)interstitialDidDismissScreen:(BaiduMobAdInterstitial *)interstitial {
-    [self.delegate adapter:self willDismissScreen:interstitial];
+    [self.delegate coreAdapter:self didCloseCoreAd:interstitial isCompletePlaying:NO adType:self.adType];
+    
+    [self clearInterstitial];
 }
 
-- (void)dealloc {
-    self.interstitial.delegate = nil;
+- (void)clearInterstitial {
+    if (self.interstitial) {
+        self.interstitial.delegate = nil;
+        self.interstitial = nil;
+    }
 }
 
 @end

@@ -11,7 +11,7 @@
 
 @interface YumiFacebookAdapterInterstitialVc : UIViewController
 
-@property (weak, nonatomic) IBOutlet FBAdIconView *adIconImageView;
+@property (weak, nonatomic) IBOutlet FBMediaView *adIconImageView;
 @property (weak, nonatomic) IBOutlet FBMediaView *adCoverMediaView;
 @property (strong, nonatomic) IBOutlet UILabel *adTitleLabel;
 @property (strong, nonatomic) IBOutlet UILabel *adBodyLabel;

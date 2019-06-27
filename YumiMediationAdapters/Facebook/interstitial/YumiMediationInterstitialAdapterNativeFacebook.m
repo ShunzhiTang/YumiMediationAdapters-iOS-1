@@ -9,21 +9,24 @@
 #import "YumiMediationInterstitialAdapterNativeFacebook.h"
 #import "YumiFacebookAdapterInterstitialVc.h"
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationInterstitialAdapterNativeFacebook () <FBNativeAdDelegate, FBMediaViewDelegate>
 
 @property (nonatomic) FBNativeAd *nativeAd;
 @property (nonatomic) YumiFacebookAdapterInterstitialVc *interstitial;
 @property (nonatomic, assign) BOOL isAdReady;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationInterstitialAdapterNativeFacebook
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDFacebookNative
-                                                             requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDFacebookNative
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
 #pragma mark :  private  method
@@ -52,19 +55,21 @@
 }
 
 - (void)closeFacebookIntestitial {
-    [[self.delegate rootViewControllerForPresentingModalView] dismissViewControllerAnimated:YES completion:nil];
+    [[[YumiTool sharedTool] topMostController] dismissViewControllerAnimated:YES completion:nil];
 
-    [self.delegate adapter:self willDismissScreen:self.interstitial];
+    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
     self.interstitial = nil;
 }
 
 #pragma mark - YumiMediationInterstitialAdapter
-- (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
-                                                delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
     self.delegate = delegate;
+    self.adType = adType;
 
     return self;
 }
@@ -84,18 +89,20 @@
     return self.isAdReady;
 }
 
-- (void)present {
-
-    [[self.delegate rootViewControllerForPresentingModalView] presentViewController:self.interstitial
-                                                                           animated:YES
-                                                                         completion:^{
-                                                                         }];
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    __weak __typeof(self) weakSelf = self;
+    [[[YumiTool sharedTool] topMostController]
+        presentViewController:self.interstitial
+                     animated:YES
+                   completion:^{
+                       [weakSelf.delegate coreAdapter:weakSelf didOpenCoreAd:nil adType:weakSelf.adType];
+                       [weakSelf.delegate coreAdapter:weakSelf didStartPlayingAd:nil adType:weakSelf.adType];
+                   }];
 }
 
 #pragma mark FBNativeAdDelegate
 
 - (void)nativeAdDidLoad:(FBNativeAd *)nativeAd {
-
     if (self.nativeAd) {
         [self.nativeAd unregisterView];
     }
@@ -117,7 +124,7 @@
     [self.nativeAd registerViewForInteraction:self.interstitial.adUIView
                                     mediaView:self.interstitial.adCoverMediaView
                                      iconView:self.interstitial.adIconImageView
-                               viewController:[self.delegate rootViewControllerForPresentingModalView]];
+                               viewController:[[YumiTool sharedTool] topMostController]];
 
     // Update AdChoices view
     self.interstitial.adChoicesView.nativeAd = nativeAd;
@@ -125,17 +132,19 @@
     self.interstitial.adChoicesView.hidden = NO;
 
     self.isAdReady = YES;
-    [self.delegate adapter:self didReceiveInterstitialAd:self.interstitial];
+    [self.delegate coreAdapter:self didReceivedCoreAd:self.interstitial adType:self.adType];
 }
 
 - (void)nativeAd:(FBNativeAd *)nativeAd didFailWithError:(NSError *)error {
     self.isAdReady = NO;
-    [self.delegate adapter:self interstitialAd:self.interstitial didFailToReceive:[error localizedDescription]];
+    [self.delegate coreAdapter:self
+                        coreAd:self.interstitial
+                 didFailToLoad:[error localizedDescription]
+                        adType:self.adType];
 }
 
 - (void)nativeAdDidFinishHandlingClick:(FBNativeAd *)nativeAd {
-
-    [self.delegate adapter:self didClickInterstitialAd:self.interstitial on:CGPointZero];
+    [self.delegate coreAdapter:self didClickCoreAd:self.interstitial adType:self.adType];
 
     [self closeFacebookIntestitial];
 }

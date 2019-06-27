@@ -10,6 +10,7 @@
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiMediationConstants.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationBannerAdapterAdMob () <GADBannerViewDelegate, YumiMediationBannerAdapter>
 
@@ -28,6 +29,8 @@
     [[YumiMediationAdapterRegistry registry] registerBannerAdapter:self
                                                      forProviderID:kYumiMediationAdapterIDAdMob
                                                        requestType:YumiMediationSDKAdRequest];
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults removeObjectForKey:YumiMediationAdmobAdapterUUID];
 }
 
 - (id<YumiMediationBannerAdapter>)initWithProvider:(YumiMediationBannerProvider *)provider
@@ -37,6 +40,14 @@
     self.provider = provider;
     self.delegate = delegate;
 
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    if ([standardUserDefaults objectForKey:YumiMediationAdmobAdapterUUID]) {
+        return self;
+    }
+    [[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *_Nonnull status) {
+        [standardUserDefaults setObject:@"Admob_is_starting" forKey:YumiMediationAdmobAdapterUUID];
+        [standardUserDefaults synchronize];
+    }];
     return self;
 }
 
@@ -62,6 +73,20 @@
         adSize = kGADAdSizeSmartBannerLandscape;
     }
 
+    // set GDPR
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    GADExtras *extras = [[GADExtras alloc] init];
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        extras.additionalParameters = @{@"npa": @"0"};
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        extras.additionalParameters = @{@"npa": @"1"};
+    }
+    
+    GADRequest *request = [GADRequest request];
+    [request registerAdNetworkExtras:extras];
+    
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -72,8 +97,13 @@
         strongSelf.bannerView.adUnitID = strongSelf.provider.data.key1;
         strongSelf.bannerView.delegate = strongSelf;
         strongSelf.bannerView.rootViewController = [strongSelf.delegate rootViewControllerForPresentingModalView];
-
-        GADRequest *request = [GADRequest request];
+        // set refresh state
+        if (strongSelf.provider.data.autoRefreshInterval == 0) {
+            strongSelf.bannerView.autoloadEnabled = NO;
+        }else{
+            strongSelf.bannerView.autoloadEnabled = YES;
+        }
+        
         [strongSelf.bannerView loadRequest:request];
     });
 }

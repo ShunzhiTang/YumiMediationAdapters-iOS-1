@@ -10,22 +10,24 @@
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 
-@interface YumiMediationFacebookHeaderBiddingAdapterVideo () <YumiMediationVideoAdapter, FBRewardedVideoAdDelegate>
+@interface YumiMediationFacebookHeaderBiddingAdapterVideo () <YumiMediationCoreAdapter, FBRewardedVideoAdDelegate>
 
-@property (nonatomic, weak) id<YumiMediationVideoAdapterDelegate> delegate;
-@property (nonatomic) YumiMediationVideoProvider *provider;
+@property (nonatomic, weak) id<YumiMediationCoreAdapterDelegate> delegate;
+@property (nonatomic) YumiMediationCoreProvider *provider;
 @property (nonatomic) FBRewardedVideoAd *rewardedVideoAd;
 @property (nonatomic, assign) BOOL isReward;
 @property (nonatomic) NSString *bidPayloadFromServer;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationFacebookHeaderBiddingAdapterVideo
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
-                                                      forProvider:kYumiMediationAdapterIDFacebookHeaderBidding
-                                                      requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDFacebookHeaderBidding
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeVideo];
     NSString *key =
         [NSString stringWithFormat:@"%@_%lu_%@", kYumiMediationAdapterIDFacebookHeaderBidding,
                                    (unsigned long)YumiMediationAdTypeVideo, YumiMediationHeaderBiddingToken];
@@ -37,19 +39,21 @@
     self.bidPayloadFromServer = bidPayload;
 }
 
-- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.delegate = delegate;
     self.provider = provider;
+    self.adType = adType;
 
     return self;
 }
 
 - (void)requestAd {
     if (self.provider.data.payload.length == 0) {
-        [self.delegate adapter:self videoAd:nil didFailToLoad:self.provider.data.errMessage isRetry:NO];
+        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:self.provider.data.errMessage adType:self.adType];
         return;
     }
     // FBRewardedVideoAd loadAd can only be called once
@@ -67,14 +71,16 @@
 }
 
 #pragma mark :- FBRewardedVideoAdDelegate
-
 - (void)rewardedVideoAd:(FBRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
-    [self.delegate adapter:self videoAd:rewardedVideoAd didFailToLoad:[error localizedDescription] isRetry:NO];
+    [self.delegate coreAdapter:self
+                        coreAd:rewardedVideoAd
+                 didFailToLoad:[error localizedDescription]
+                        adType:self.adType];
     self.rewardedVideoAd = nil;
 }
 
 - (void)rewardedVideoAdDidLoad:(FBRewardedVideoAd *)rewardedVideoAd {
-    [self.delegate adapter:self didReceiveVideoAd:rewardedVideoAd];
+    [self.delegate coreAdapter:self didReceivedCoreAd:rewardedVideoAd adType:self.adType];
 }
 
 - (void)rewardedVideoAdVideoComplete:(FBRewardedVideoAd *)rewardedVideoAd {
@@ -83,16 +89,25 @@
 
 - (void)rewardedVideoAdDidClose:(FBRewardedVideoAd *)rewardedVideoAd {
     if (self.isReward) {
-        [self.delegate adapter:self videoAd:rewardedVideoAd didReward:nil];
-        self.isReward = NO;
+        [self.delegate coreAdapter:self coreAd:rewardedVideoAd didReward:YES adType:self.adType];
     }
-    [self.delegate adapter:self didCloseVideoAd:rewardedVideoAd];
+    [self.delegate coreAdapter:self didCloseCoreAd:rewardedVideoAd isCompletePlaying:self.isReward adType:self.adType];
     self.rewardedVideoAd = nil;
+    self.isReward = NO;
 }
 
 - (void)rewardedVideoAdWillLogImpression:(FBRewardedVideoAd *)rewardedVideoAd {
-    [self.delegate adapter:self didOpenVideoAd:rewardedVideoAd];
-    [self.delegate adapter:self didStartPlayingVideoAd:rewardedVideoAd];
+    [self.delegate coreAdapter:self didOpenCoreAd:rewardedVideoAd adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:rewardedVideoAd adType:self.adType];
+}
+
+/**
+ Sent after an ad has been clicked by the person.
+
+ @param rewardedVideoAd An FBRewardedVideoAd object sending the message.
+ */
+- (void)rewardedVideoAdDidClick:(FBRewardedVideoAd *)rewardedVideoAd {
+    [self.delegate coreAdapter:self didClickCoreAd:rewardedVideoAd adType:self.adType];
 }
 
 @end

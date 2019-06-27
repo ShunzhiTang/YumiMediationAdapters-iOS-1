@@ -30,6 +30,13 @@
                                                        requestType:YumiMediationSDKAdRequest];
 }
 
+- (void)dealloc {
+    if (self.bannerView) {
+        self.bannerView.delegate = nil;
+        self.bannerView = nil;
+    }
+}
+
 - (id<YumiMediationBannerAdapter>)initWithProvider:(YumiMediationBannerProvider *)provider
                                           delegate:(id<YumiMediationBannerAdapterDelegate>)delegate {
     self = [super init];
@@ -51,8 +58,11 @@
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
         adSize = CGSizeMake(300, 250);
     }
-    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait || self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
-        [self.delegate adapter:self didFailToReceiveAd:@"baidu not support kYumiMediationAdViewSmartBannerPortrait or kYumiMediationAdViewSmartBannerLandscape"];
+    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait ||
+        self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
+        [self.delegate adapter:self
+            didFailToReceiveAd:@"baidu not support kYumiMediationAdViewSmartBannerPortrait or "
+                               @"kYumiMediationAdViewSmartBannerLandscape"];
         return;
     }
 
@@ -104,10 +114,6 @@
 }
 
 - (void)didDismissLandingPage {
-}
-
-- (void)dealloc {
-    self.bannerView.delegate = nil;
 }
 
 @end

@@ -9,26 +9,32 @@
 #import "YumiMediationVideoAdapterVungle.h"
 #import "YumiMediationVungleInstance.h"
 #import <VungleSDK/VungleSDK.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationVideoAdapterVungle ()
+
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationVideoAdapterVungle
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
-                                                      forProvider:kYumiMediationAdapterIDVungle
-                                                      requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDVungle
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeVideo];
 }
 
-#pragma mark - YumiMediationVideoAdapter
-- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+#pragma mark - YumiMediationCoreAdapter
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.delegate = delegate;
     self.provider = provider;
+    self.adType = adType;
 
     YumiMediationVungleInstance *vungleInstance = [YumiMediationVungleInstance sharedInstance];
     [vungleInstance.vungleVideoAdapters addObject:self];
@@ -38,6 +44,15 @@
     VungleSDK *sdk = [VungleSDK sharedSDK];
     sdk.delegate = vungleInstance;
     [sdk setLoggingEnabled:NO];
+    // set gdpr
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [sdk updateConsentStatus:VungleConsentAccepted consentMessageVersion:@"1"];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [sdk updateConsentStatus:VungleConsentDenied consentMessageVersion:@"1"];
+    }
     [sdk startWithAppId:appID error:&error];
 
     return self;
@@ -46,6 +61,17 @@
 - (void)requestAd {
     NSError *error;
     VungleSDK *sdk = [VungleSDK sharedSDK];
+    
+    // update gdpr
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [sdk updateConsentStatus:VungleConsentAccepted consentMessageVersion:@"1"];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [sdk updateConsentStatus:VungleConsentDenied consentMessageVersion:@"1"];
+    }
+    
     if (sdk.isInitialized) {
         [sdk loadPlacementWithID:self.provider.data.key2 error:&error];
     } else {
@@ -62,7 +88,7 @@
     [[VungleSDK sharedSDK] playAd:rootViewController options:nil placementID:self.provider.data.key2 error:&error];
 
     if (error) {
-        [self.delegate adapter:self videoAd:nil didFailToLoad:[error localizedDescription] isRetry:NO];
+        [self.delegate coreAdapter:self failedToShowAd:nil errorString:[error localizedDescription] adType:self.adType];
     }
 }
 

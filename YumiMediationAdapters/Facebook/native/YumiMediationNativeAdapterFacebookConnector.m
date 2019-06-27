@@ -8,14 +8,14 @@
 #import "YumiMediationNativeAdapterFacebookConnector.h"
 #import <YumiMediationSDK/YumiTime.h>
 
-@interface YumiMediationNativeAdapterFacebookConnector ()<FBMediaViewDelegate>
+@interface YumiMediationNativeAdapterFacebookConnector () <FBMediaViewDelegate>
 
 @property (nonatomic) id<YumiMediationNativeAdapter> adapter;
 @property (nonatomic, weak) id<YumiMediationNativeAdapterConnectorDelegate> connectorDelegate;
 @property (nonatomic) FBNativeAd *fbNativeAd;
 /// media view
 @property (nonatomic) id<YumiMediationNativeAdapterConnectorMediaDelegate> mediaDelegate;
-@property(nonatomic) YumiMediationNativeVideoController *videoController;
+@property (nonatomic) YumiMediationNativeVideoController *videoController;
 
 @end
 
@@ -36,30 +36,30 @@
     YumiMediationNativeModel *nativeModel = [[YumiMediationNativeModel alloc] init];
     [nativeModel setValue:self forKey:@"unifiedNativeAd"];
     [nativeModel setValue:@([[YumiTime timestamp] doubleValue]) forKey:@"timestamp"];
-    
+
     if ([self.connectorDelegate respondsToSelector:@selector(yumiMediationNativeAdSuccessful:)]) {
         [self.connectorDelegate yumiMediationNativeAdSuccessful:nativeModel];
     }
 }
-#pragma mark: YumiMediationNativeAdapterConnectorMedia
+#pragma mark : YumiMediationNativeAdapterConnectorMedia
 /// Play the video. Doesn't do anything if the video is already playing.
-///this unavailable
-- (void)play{
+/// this unavailable
+- (void)play {
     [self.mediaView.videoRenderer playVideo];
 }
 
 /// Pause the video. Doesn't do anything if the video is already paused.
-///this unavailable
-- (void)pause{
+/// this unavailable
+- (void)pause {
     [self.mediaView.videoRenderer pauseVideo];
 }
 
 /// Returns the video's aspect ratio (width/height) or 0 if no video is present.
-- (double)aspectRatio{
+- (double)aspectRatio {
     return self.mediaView.aspectRatio;
 }
 
-- (void)setConnectorMediaDelegate:(id<YumiMediationNativeAdapterConnectorMediaDelegate>)mediaDelegate{
+- (void)setConnectorMediaDelegate:(id<YumiMediationNativeAdapterConnectorMediaDelegate>)mediaDelegate {
     self.mediaDelegate = mediaDelegate;
 }
 
@@ -86,7 +86,7 @@
     return coverImage;
 }
 - (NSString *)title {
-   // sdk version above 4.99 ,must dispaly advertiserName
+    // sdk version above 4.99 ,must dispaly advertiserName
     return self.fbNativeAd.advertiserName;
 }
 - (NSString *)desc {
@@ -119,42 +119,40 @@
 - (NSDictionary<NSString *, id> *)extraAssets {
     return nil;
 }
-- (BOOL)hasVideoContent{
+- (BOOL)hasVideoContent {
     return self.fbNativeAd.adFormatType == FBAdFormatTypeVideo;
 }
-- (YumiMediationNativeVideoController *)videoController{
+- (YumiMediationNativeVideoController *)videoController {
     if (!_videoController) {
         _videoController = [[YumiMediationNativeVideoController alloc] init];
         // set value to connector
         [_videoController setValue:self forKey:@"connector"];
-        
     }
-    
+
     return _videoController;
 }
 
-- (void)setMediaView:(FBMediaView *)mediaView{
+- (void)setMediaView:(FBMediaView *)mediaView {
     _mediaView = mediaView;
-    
+
     _mediaView.delegate = self;
-    
 }
 
-#pragma mark: FBMediaViewDelegate
+#pragma mark : FBMediaViewDelegate
 
-- (void)mediaViewVideoDidPlay:(FBMediaView *)mediaView{
-    if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidPlayVideo:)]   ) {
+- (void)mediaViewVideoDidPlay:(FBMediaView *)mediaView {
+    if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidPlayVideo:)]) {
         [self.mediaDelegate adapterConnectorVideoDidPlayVideo:self];
     }
 }
-- (void)mediaViewVideoDidPause:(FBMediaView *)mediaView{
-    if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidPauseVideo:)]   ) {
+- (void)mediaViewVideoDidPause:(FBMediaView *)mediaView {
+    if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidPauseVideo:)]) {
         [self.mediaDelegate adapterConnectorVideoDidPauseVideo:self];
     }
 }
 
-- (void)mediaViewVideoDidComplete:(FBMediaView *)mediaView{
-    if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidEndVideoPlayback:)]   ) {
+- (void)mediaViewVideoDidComplete:(FBMediaView *)mediaView {
+    if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidEndVideoPlayback:)]) {
         [self.mediaDelegate adapterConnectorVideoDidEndVideoPlayback:self];
     }
 }

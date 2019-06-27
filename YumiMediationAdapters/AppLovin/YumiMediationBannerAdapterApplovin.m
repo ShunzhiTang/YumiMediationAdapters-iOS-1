@@ -11,6 +11,7 @@
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiMediationConstants.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationBannerAdapterApplovin () <YumiMediationBannerAdapter, ALAdLoadDelegate, ALAdDisplayDelegate>
 
@@ -62,20 +63,39 @@
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
         adframe = CGRectMake(0, 0, 300, 250);
     }
-    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait || self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
-        [self.delegate adapter:self didFailToReceiveAd:@"applovin not support kYumiMediationAdViewSmartBannerPortrait or kYumiMediationAdViewSmartBannerLandscape"];
+    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait ||
+        self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
+        [self.delegate adapter:self
+            didFailToReceiveAd:@"applovin not support kYumiMediationAdViewSmartBannerPortrait or "
+                               @"kYumiMediationAdViewSmartBannerLandscape"];
         return;
     }
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        
+        // set GDPR
+        YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+        
+        if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+            [ALPrivacySettings setHasUserConsent:YES];
+        }
+        if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+            [ALPrivacySettings setHasUserConsent:NO];
+        }
+        
         weakSelf.sdk = [ALSdk sharedWithKey:weakSelf.provider.data.key1];
         weakSelf.bannerView = [[ALAdView alloc] initWithFrame:adframe size:[ALAdSize sizeBanner] sdk:weakSelf.sdk];
         weakSelf.bannerView.adLoadDelegate = weakSelf;
         weakSelf.bannerView.adDisplayDelegate = weakSelf;
-        weakSelf.bannerView.autoload = NO;
+        // set refresh state
+        if (weakSelf.provider.data.autoRefreshInterval == 0) {
+             weakSelf.bannerView.autoload = NO;
+        }else{
+              weakSelf.bannerView.autoload = YES;
+        }
 
-        [weakSelf.sdk.adService loadNextAdForZoneIdentifier:weakSelf.provider.data.key2 andNotify:self];
+        [weakSelf.sdk.adService loadNextAdForZoneIdentifier:weakSelf.provider.data.key2 andNotify:weakSelf];
     });
 }
 #pragma mark - Ad Load Delegate

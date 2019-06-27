@@ -10,41 +10,45 @@
 
 @interface <%=class_name%> ()
 
+@property (nonatomic, assign) YumiMediationAdType adType;
+
 @end
 
 @implementation <%=class_name%>
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
-                                                           forProviderID:kYumiMediationAdapterID<%=name%>
-                                                             requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterID<%=name%>
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
-#pragma mark - YumiMediationInterstitialAdapter
-- (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
-                                                delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
+#pragma mark - YumiMediationVideoAdapter
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
-
-    self.provider = provider;
+    
     self.delegate = delegate;
-
-    // TODO: setup code
+    self.provider = provider;
+    self.adType = adType;
+    
+    // TODO: set code 
 
     return self;
 }
 
 - (void)requestAd {
-	// TODO: request ad
+  // TODO: request ad
 }
 
 - (BOOL)isReady {
-	// TODO: check if ready
-	return YES;
+  // TODO: check if ready
+  return YES;
 }
 
-- (void)present {
-  UIViewController *rootViewController = [self.delegate rootViewControllerForPresentingModalView];
-	// TODO: present interstitial ad with rootViewController
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
+  // TODO: present video ad
 }
 
 // TODO: implement third party sdk delegate and delegate to mediation sdk

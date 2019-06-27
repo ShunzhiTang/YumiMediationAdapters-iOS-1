@@ -8,38 +8,65 @@
 
 #import "YumiMediationVideoAdapterInMobi.h"
 #import <InMobiSDK/InMobiSDK.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationVideoAdapterInMobi () <IMInterstitialDelegate>
 
 @property (nonatomic) IMInterstitial *video;
 @property (nonatomic, assign) BOOL isReward;
-
+@property (nonatomic, assign) YumiMediationAdType adType;
 @end
 
 @implementation YumiMediationVideoAdapterInMobi
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
-                                                      forProvider:kYumiMediationAdapterIDInMobi
-                                                      requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDInMobi
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeVideo];
 }
 
-#pragma mark - YumiMediationVideoAdapter
-- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+#pragma mark - YumiMediationCoreAdapter
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.delegate = delegate;
     self.provider = provider;
+    self.adType = adType;
 
-    [IMSdk initWithAccountID:self.provider.data.key1];
+    // set gdpr
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    NSDictionary *consentDict = nil;
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        consentDict = @{IM_GDPR_CONSENT_AVAILABLE : @(YES)};
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        consentDict = @{IM_GDPR_CONSENT_AVAILABLE : @(NO)};
+    }
+    
+    // Initialize InMobi SDK with your account ID
+    [IMSdk initWithAccountID:provider.data.key1 consentDictionary:consentDict];
+    
     self.video = [[IMInterstitial alloc] initWithPlacementId:[self.provider.data.key2 longLongValue] delegate:self];
 
     return self;
 }
 
 - (void)requestAd {
+    // update gdpr
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [IMSdk updateGDPRConsent:@{IM_GDPR_CONSENT_AVAILABLE : @(YES)}];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [IMSdk updateGDPRConsent:@{IM_GDPR_CONSENT_AVAILABLE : @(NO)}];
+    }
+    
     [self.video load];
+    self.isReward = NO;
 }
 
 - (BOOL)isReady {
@@ -51,35 +78,41 @@
 }
 
 #pragma mark - IMInterstitialDelegate
-- (void)interstitialDidReceiveAd:(IMInterstitial *)interstitial {
-    [self.delegate adapter:self didReceiveVideoAd:interstitial];
+- (void)interstitialDidFinishLoading:(IMInterstitial *)interstitial {
+    [self.delegate coreAdapter:self didReceivedCoreAd:interstitial adType:self.adType];
 }
 
 - (void)interstitial:(IMInterstitial *)interstitial didFailToLoadWithError:(IMRequestStatus *)error {
-    [self.delegate adapter:self videoAd:interstitial didFailToLoad:[error localizedDescription]];
+    [self.delegate coreAdapter:self coreAd:interstitial didFailToLoad:error.localizedDescription adType:self.adType];
 }
 
 - (void)interstitialDidPresent:(IMInterstitial *)interstitial {
-    [self.delegate adapter:self didOpenVideoAd:interstitial];
-
-    [self.delegate adapter:self didStartPlayingVideoAd:interstitial];
+    [self.delegate coreAdapter:self didOpenCoreAd:interstitial adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:interstitial adType:self.adType];
 }
 
 - (void)interstitial:(IMInterstitial *)interstitial didFailToPresentWithError:(IMRequestStatus *)error {
-    [self.provider.logger debug:@"InMobi video fail to present" extras:@{@"error" : error}];
+    [self.delegate coreAdapter:self
+                failedToShowAd:interstitial
+                   errorString:error.localizedDescription
+                        adType:self.adType];
 }
 
 - (void)interstitialDidDismiss:(IMInterstitial *)interstitial {
 
     if (self.isReward) {
-        [self.delegate adapter:self videoAd:interstitial didReward:nil];
-        self.isReward = NO;
+        [self.delegate coreAdapter:self coreAd:interstitial didReward:YES adType:self.adType];
     }
-    [self.delegate adapter:self didCloseVideoAd:interstitial];
+    [self.delegate coreAdapter:self didCloseCoreAd:interstitial isCompletePlaying:self.isReward adType:self.adType];
+    self.isReward = NO;
 }
 
 - (void)interstitial:(IMInterstitial *)interstitial rewardActionCompletedWithRewards:(NSDictionary *)rewards {
     self.isReward = YES;
+}
+///  Notifies the delegate that the user will leave application context.
+- (void)interstitial:(IMInterstitial *)interstitial didInteractWithParams:(NSDictionary *)params {
+    [self.delegate coreAdapter:self didClickCoreAd:interstitial adType:self.adType];
 }
 
 @end

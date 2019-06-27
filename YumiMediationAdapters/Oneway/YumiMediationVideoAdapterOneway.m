@@ -11,23 +11,28 @@
 
 @interface YumiMediationVideoAdapterOneway () <oneWaySDKRewardedAdDelegate>
 
+@property (nonatomic, assign) YumiMediationAdType adType;
+
 @end
 
 @implementation YumiMediationVideoAdapterOneway
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
-                                                      forProvider:kYumiMediationAdapterIDOneWay
-                                                      requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDOneWay
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeVideo];
 }
 
-#pragma mark - YumiMediationVideoAdapter
-- (id<YumiMediationVideoAdapter>)initWithProvider:(YumiMediationVideoProvider *)provider
-                                         delegate:(id<YumiMediationVideoAdapterDelegate>)delegate {
+#pragma mark - YumiMediationCoreAdapter
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.delegate = delegate;
     self.provider = provider;
+    self.adType = adType;
 
     [OneWaySDK configure:self.provider.data.key1];
 
@@ -38,7 +43,7 @@
     if ([OneWaySDK isConfigured]) {
         [OWRewardedAd initWithDelegate:self];
     } else {
-        [self.delegate adapter:self videoAd:nil didFailToLoad:@"OneWaySDK no configured" isRetry:NO];
+        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"OneWaySDK no configured" adType:self.adType];
     }
 }
 
@@ -52,26 +57,34 @@
 
 #pragma mark : oneWaySDKRewardedAdDelegate
 - (void)oneWaySDKRewardedAdReady {
-    [self.delegate adapter:self didReceiveVideoAd:nil];
+    [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
 }
 
 - (void)oneWaySDKRewardedAdDidShow:(NSString *)tag {
-    [self.delegate adapter:self didStartPlayingVideoAd:nil];
-    [self.delegate adapter:self didOpenVideoAd:nil];
+    [self.delegate coreAdapter:self didOpenCoreAd:nil adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:nil adType:self.adType];
 }
 
 - (void)oneWaySDKRewardedAdDidClose:(NSString *)tag withState:(NSNumber *)state {
     if ([state integerValue] == kOneWaySDKFinishStateCompleted) {
-        [self.delegate adapter:self videoAd:nil didReward:nil];
+        [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
+        [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:YES adType:self.adType];
+        return;
     }
 
-    [self.delegate adapter:self didCloseVideoAd:nil];
+    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
+}
+
+- (void)oneWaySDKDidError:(OneWaySDKError)error withMessage:(NSString *)message {
+    if (error == kOneWaySDKErrorShowError || error == kOneWaySDKErrorVideoPlayerError) {
+        [self.delegate coreAdapter:self failedToShowAd:nil errorString:message adType:self.adType];
+        return;
+    }
+    [self.delegate coreAdapter:self coreAd:nil didFailToLoad:message adType:self.adType];
 }
 
 - (void)oneWaySDKRewardedAdDidClick:(NSString *)tag {
-}
-- (void)oneWaySDKDidError:(OneWaySDKError)error withMessage:(NSString *)message {
-    [self.delegate adapter:self videoAd:nil didFailToLoad:message isRetry:NO];
+    [self.delegate coreAdapter:self didClickCoreAd:nil adType:self.adType];
 }
 
 @end

@@ -16,27 +16,28 @@ Pod::Spec.new do |s|
   s.author           = { 'zplay sdk team' => 'ad-client@zplay.cn' }
   s.source           = { :git => 'git@github.com:yumimobi/YumiMediationAdapters-iOS.git',:tag => s.version.to_s }
   s.ios.deployment_target = '8.0'
-  s.dependency 'YumiMediationSDK', '~> 3.6.0'
+  s.dependency 'YumiMediationSDK', '~> 4.1.0'
   s.frameworks = 'Foundation', 'UIKit'
 
   subspecs = [
-    { :name => "AdColony", :version => "3.3.6" },
-    { :name => "AdMob", :version => "7.30.0", :has_resource_bundle => true },
+    { :name => "AdColony", :version => "3.3.7" },
+    { :name => "AdMob", :version => "7.44.0", :has_resource_bundle => true },
     { :name => "AppLovin", :version => "5.0.2" },
-    { :name => "Baidu", :version => "4.6.0" },
-    { :name => "Chartboost", :version => "7.3.0" },
-    { :name => "Facebook", :version => "5.1.0", :has_resource_bundle => true },
+    { :name => "Baidu", :version => "4.6.4" },
+    { :name => "Chartboost", :version => "7.5.0" },
+    { :name => "Facebook", :version => "5.3.2", :has_resource_bundle => true },
     { :name => "Domob", :version => "3.8.0" },
-    { :name => "GDT", :version => "4.8.1" ,:has_resource_bundle => true},
-    { :name => "InMobi", :version => "7.2.1" },
-    { :name => "IronSource", :version => "6.8.1.0" },
-    { :name => "Unity", :version => "2.3.0" },
-    { :name => "Vungle", :version => "6.2.0" },
-    { :name => "Mintegral", :version => "4.9.4"},
+    { :name => "GDT", :version => "4.10.3" ,:has_resource_bundle => true},
+    { :name => "InMobi", :version => "8.1.0" },
+    { :name => "IronSource", :version => "6.8.3" },
+    { :name => "Unity", :version => "3.1.0" },
+    { :name => "Vungle", :version => "6.4.1" },
+    { :name => "Mintegral", :version => "5.3.3"},
     { :name => "OneWay",:version => "2.1.0"},
+    { :name => "InneractiveAdSDK",:version => "7.2.3"},
+    { :name => "BytedanceAds",:version => "2.0.1.1"},
     { :name => "ZplayAds",:version => "2.4.2"},
-    { :name => "IQzone",:version => "3.0.2134"},
-    
+    { :name => "IQzone",:version => "3.0.2141"},
   ]
 
   subspecs.each do |spec|

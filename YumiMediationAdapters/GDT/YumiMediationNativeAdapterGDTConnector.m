@@ -6,23 +6,23 @@
 //
 
 #import "YumiMediationNativeAdapterGDTConnector.h"
-#import <YumiMediationSDK/YumiTool.h>
 #import <YumiMediationSDK/YumiTime.h>
+#import <YumiMediationSDK/YumiTool.h>
 
-@interface YumiMediationNativeAdapterGDTConnector ()
+@interface YumiMediationNativeAdapterGDTConnector () <GDTUnifiedNativeAdViewDelegate>
 
-@property (nonatomic) GDTNativeAdData *gdtNativeAdData;
+@property (nonatomic) GDTUnifiedNativeAdDataObject *gdtNativeAdData;
 @property (nonatomic) YumiMediationNativeAdImage *icon;
 @property (nonatomic) YumiMediationNativeAdImage *coverImage;
 @property (nonatomic) id<YumiMediationNativeAdapter> adapter;
 @property (nonatomic, weak) id<YumiMediationNativeAdapterConnectorDelegate> connectorDelegate;
-@property(nonatomic) YumiMediationNativeVideoController *videoController;
+@property (nonatomic) YumiMediationNativeVideoController *videoController;
 
 @end
 
 @implementation YumiMediationNativeAdapterGDTConnector
 
-- (void)convertWithNativeData:(nullable GDTNativeAdData *)gdtNativeAdData
+- (void)convertWithNativeData:(nullable GDTUnifiedNativeAdDataObject *)gdtNativeAdData
                   withAdapter:(id<YumiMediationNativeAdapter>)adapter
           disableImageLoading:(BOOL)disableImageLoading
             connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate {
@@ -30,14 +30,19 @@
     self.gdtNativeAdData = gdtNativeAdData;
     self.connectorDelegate = connectorDelegate;
 
-    NSString *iconUrl = gdtNativeAdData.properties[GDTNativeAdDataKeyIconUrl];
-    NSString *coverImageUrl = gdtNativeAdData.properties[GDTNativeAdDataKeyImgUrl];
+    NSString *iconUrl = gdtNativeAdData.iconUrl;
+    NSString *coverImageUrl = gdtNativeAdData.imageUrl;
     [self downloadIcon:iconUrl
                  coverImage:coverImageUrl
         disableImageLoading:disableImageLoading
                   completed:^(BOOL isSuccessed) {
                       [self notifyCompletionWithResult:isSuccessed];
                   }];
+}
+
+- (void)setGdtNativeView:(GDTUnifiedNativeAdView *)gdtNativeView {
+    _gdtNativeView = gdtNativeView;
+    _gdtNativeView.delegate = self;
 }
 
 #pragma mark : handle download images
@@ -103,7 +108,7 @@
     YumiMediationNativeModel *nativeModel = [[YumiMediationNativeModel alloc] init];
     [nativeModel setValue:self forKey:@"unifiedNativeAd"];
     [nativeModel setValue:@([[YumiTime timestamp] doubleValue]) forKey:@"timestamp"];
-    
+
     if ([self.connectorDelegate respondsToSelector:@selector(yumiMediationNativeAdSuccessful:)]) {
         [self.connectorDelegate yumiMediationNativeAdSuccessful:nativeModel];
     }
@@ -115,41 +120,69 @@
     }
 }
 
-#pragma mark: YumiMediationNativeAdapterConnectorMedia
+#pragma mark : YumiMediationNativeAdapterConnectorMedia
 /// Play the video. Doesn't do anything if the video is already playing.
-- (void)play{
-    
+- (void)play {
 }
 
 /// Pause the video. Doesn't do anything if the video is already paused.
-- (void)pause{
-    
+- (void)pause {
 }
 
 /// Returns the video's aspect ratio (width/height) or 0 if no video is present.
-- (double)aspectRatio{
+- (double)aspectRatio {
     return 0;
 }
 
-- (void)setConnectorMediaDelegate:(id<YumiMediationNativeAdapterConnectorMediaDelegate>)mediaDelegate{
-    
+- (void)setConnectorMediaDelegate:(id<YumiMediationNativeAdapterConnectorMediaDelegate>)mediaDelegate {
 }
+
+#pragma mark : - GDTUnifiedNativeAdViewDelegate
+
+- (void)gdt_unifiedNativeAdViewWillExpose:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
+}
+
+- (void)gdt_unifiedNativeAdViewDidClick:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
+    [self.connectorDelegate yumiMediationNativeAdDidClick:nil];
+}
+
+- (void)gdt_unifiedNativeAdDetailViewClosed:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
+}
+
+- (void)gdt_unifiedNativeAdViewApplicationWillEnterBackground:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
+}
+- (void)gdt_unifiedNativeAdDetailViewWillPresentScreen:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
+}
+
+- (void)gdt_unifiedNativeAdView:(GDTUnifiedNativeAdView *)unifiedNativeAdView
+            playerStatusChanged:(GDTMediaPlayerStatus)status
+                       userInfo:(NSDictionary *)userInfo {
+}
+
 #pragma mark : YumiMediationUnifiedNativeAd
 - (NSString *)title {
-    return self.gdtNativeAdData.properties[GDTNativeAdDataKeyTitle];
+    return self.gdtNativeAdData.title;
 }
 - (NSString *)desc {
-    return self.gdtNativeAdData.properties[GDTNativeAdDataKeyDesc];
+    return self.gdtNativeAdData.desc;
 }
 
 - (NSString *)callToAction {
+
+    if (self.gdtNativeAdData.isVideoAd) {
+        if ([[YumiTool sharedTool] iSSimplifiedChinese]) {
+            return @"点击下载";
+        }
+        return @"Download";
+    }
+
     if ([[YumiTool sharedTool] iSSimplifiedChinese]) {
         return @"查看详情";
     }
     return @"Learn More";
 }
 - (NSString *)appPrice {
-    return self.gdtNativeAdData.properties[GDTNativeAdDataKeyAppPrice];
+    return [NSString stringWithFormat:@"%@", self.gdtNativeAdData.appPrice];
 }
 - (NSString *)advertiser {
     return nil;
@@ -158,8 +191,7 @@
     return nil;
 }
 - (NSString *)appRating {
-    return self.gdtNativeAdData.properties[GDTNativeAdDataKeyAppRating];
-    ;
+    return [NSString stringWithFormat:@"%lf", self.gdtNativeAdData.appRating];
 }
 - (NSString *)other {
     return nil;
@@ -174,19 +206,18 @@
 }
 
 - (NSDictionary<NSString *, id> *)extraAssets {
-    return nil;
+    return @{adapterConnectorKey : self};
 }
-- (BOOL)hasVideoContent{
-    return NO;
+- (BOOL)hasVideoContent {
+    return self.gdtNativeAdData.isVideoAd;
 }
-- (YumiMediationNativeVideoController *)videoController{
+- (YumiMediationNativeVideoController *)videoController {
     if (!_videoController) {
         _videoController = [[YumiMediationNativeVideoController alloc] init];
         // set value to connector
         [_videoController setValue:self forKey:@"connector"];
-        
     }
-    
+
     return _videoController;
 }
 @end

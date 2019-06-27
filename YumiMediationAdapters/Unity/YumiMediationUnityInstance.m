@@ -25,40 +25,119 @@
 #pragma mark - UnityAdsDelegate
 - (void)unityAdsReady:(NSString *)placementId {
     if ([self.unityInterstitialAdapter.provider.data.key2 isEqualToString:placementId]) {
-        [self.unityInterstitialAdapter.delegate adapter:self.unityInterstitialAdapter didReceiveInterstitialAd:nil];
+        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
+                                          didReceivedCoreAd:nil
+                                                     adType:YumiMediationAdTypeInterstitial];
     } else if ([self.unityVideoAdapter.provider.data.key2 isEqualToString:placementId]) {
-        [self.unityVideoAdapter.delegate adapter:self.unityVideoAdapter didReceiveVideoAd:nil];
+        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
+                                   didReceivedCoreAd:nil
+                                              adType:YumiMediationAdTypeVideo];
     }
 }
 
 - (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message {
-    [self.unityInterstitialAdapter.delegate adapter:self.unityInterstitialAdapter
-                                     interstitialAd:nil
-                                   didFailToReceive:message];
 
-    [self.unityVideoAdapter.delegate adapter:self.unityVideoAdapter videoAd:nil didFailToLoad:message isRetry:NO];
+    // show or player ad fail
+    if (error == kUnityAdsErrorShowError || error == kUnityAdsErrorVideoPlayerError) {
+        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
+                                             failedToShowAd:nil
+                                                errorString:message
+                                                     adType:YumiMediationAdTypeInterstitial];
+
+        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
+                                      failedToShowAd:nil
+                                         errorString:message
+                                              adType:YumiMediationAdTypeVideo];
+        return;
+    }
+    [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
+                                                 coreAd:nil
+                                          didFailToLoad:message
+                                                 adType:YumiMediationAdTypeInterstitial];
+
+    [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
+                                          coreAd:nil
+                                   didFailToLoad:message
+                                          adType:YumiMediationAdTypeVideo];
 }
 
 - (void)unityAdsDidStart:(NSString *)placementId {
     if ([self.unityInterstitialAdapter.provider.data.key2 isEqualToString:placementId]) {
-        [self.unityInterstitialAdapter.delegate adapter:self.unityInterstitialAdapter willPresentScreen:nil];
-    } else if ([self.unityVideoAdapter.provider.data.key2 isEqualToString:placementId]) {
-        [self.unityVideoAdapter.delegate adapter:self.unityVideoAdapter didOpenVideoAd:nil];
 
-        [self.unityVideoAdapter.delegate adapter:self.unityVideoAdapter didStartPlayingVideoAd:nil];
+        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
+                                              didOpenCoreAd:nil
+                                                     adType:YumiMediationAdTypeInterstitial];
+        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
+                                          didStartPlayingAd:nil
+                                                     adType:YumiMediationAdTypeInterstitial];
+    } else if ([self.unityVideoAdapter.provider.data.key2 isEqualToString:placementId]) {
+
+        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
+                                       didOpenCoreAd:nil
+                                              adType:YumiMediationAdTypeVideo];
+        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
+                                   didStartPlayingAd:nil
+                                              adType:YumiMediationAdTypeVideo];
     }
 }
 
 - (void)unityAdsDidFinish:(NSString *)placementId withFinishState:(UnityAdsFinishState)state {
+    if(state == kUnityAdsFinishStateError){
+        if ([self.unityInterstitialAdapter.provider.data.key2 isEqualToString:placementId]) {
+            [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
+                                                 failedToShowAd:nil
+                                                    errorString:@"the ad did not successfully display."
+                                                    adType:YumiMediationAdTypeInterstitial];
+        } else if ([self.unityVideoAdapter.provider.data.key2 isEqualToString:placementId]) {
+            [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
+                                          failedToShowAd:nil
+                                             errorString:@"the ad did not successfully display."
+                                                  adType:YumiMediationAdTypeVideo];
+        }
+        
+        return;
+    }
+
     if ([self.unityInterstitialAdapter.provider.data.key2 isEqualToString:placementId]) {
-        [self.unityInterstitialAdapter.delegate adapter:self.unityInterstitialAdapter willDismissScreen:nil];
+        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
+                                             didCloseCoreAd:nil
+                                          isCompletePlaying:NO
+                                                     adType:YumiMediationAdTypeInterstitial];
     } else if ([self.unityVideoAdapter.provider.data.key2 isEqualToString:placementId]) {
 
         if (state == kUnityAdsFinishStateCompleted) {
-            [self.unityVideoAdapter.delegate adapter:self.unityVideoAdapter videoAd:nil didReward:nil];
+            [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
+                                                  coreAd:nil
+                                               didReward:YES
+                                                  adType:YumiMediationAdTypeVideo];
+            [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
+                                          didCloseCoreAd:nil
+                                       isCompletePlaying:YES
+                                                  adType:YumiMediationAdTypeVideo];
+            return;
         }
-        [self.unityVideoAdapter.delegate adapter:self.unityVideoAdapter didCloseVideoAd:nil];
+        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
+                                      didCloseCoreAd:nil
+                                   isCompletePlaying:NO
+                                              adType:YumiMediationAdTypeVideo];
     }
 }
+
+- (void)unityAdsDidClick:(NSString *)placementId{
+    if ([self.unityInterstitialAdapter.provider.data.key2 isEqualToString:placementId]) {
+        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
+                                          didClickCoreAd:nil
+                                                     adType:YumiMediationAdTypeInterstitial];
+    } else if ([self.unityVideoAdapter.provider.data.key2 isEqualToString:placementId]) {
+        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
+                                   didClickCoreAd:nil
+                                              adType:YumiMediationAdTypeVideo];
+    }
+}
+
+- (void)unityAdsPlacementStateChanged:(nonnull NSString *)placementId oldState:(UnityAdsPlacementState)oldState newState:(UnityAdsPlacementState)newState {
+    
+}
+
 
 @end

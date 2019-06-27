@@ -6,10 +6,10 @@
 //
 
 #import "YumiMediationNativeAdapterAdMobConnector.h"
-#import <YumiMediationSDK/YumiTime.h>
 #import <YumiMediationSDK/YumiMediationNativeVideoController.h>
+#import <YumiMediationSDK/YumiTime.h>
 
-@interface YumiMediationNativeAdapterAdMobConnector () <GADUnifiedNativeAdDelegate,GADVideoControllerDelegate>
+@interface YumiMediationNativeAdapterAdMobConnector () <GADUnifiedNativeAdDelegate, GADVideoControllerDelegate>
 
 @property (nonatomic) id<YumiMediationNativeAdapter> adapter;
 @property (nonatomic, weak) id<YumiMediationNativeAdapterConnectorDelegate> connectorDelegate;
@@ -17,7 +17,7 @@
 @property (nonatomic) YumiMediationNativeModel *nativeModel;
 /// media view
 @property (nonatomic) id<YumiMediationNativeAdapterConnectorMediaDelegate> mediaDelegate;
-@property(nonatomic) YumiMediationNativeVideoController *videoController;
+@property (nonatomic) YumiMediationNativeVideoController *videoController;
 
 @end
 
@@ -31,7 +31,7 @@
     self.adapter = adapter;
     self.connectorDelegate = connectorDelegate;
     self.gadNativeAd.delegate = self;
-    self.gadNativeAd.videoController.delegate = self;
+    self.gadNativeAd.mediaContent.videoController.delegate = self;
     [self notifyMediatedNativeAdSuccessful];
 }
 
@@ -39,7 +39,7 @@
     self.nativeModel = [[YumiMediationNativeModel alloc] init];
     [self.nativeModel setValue:self forKey:@"unifiedNativeAd"];
     [self.nativeModel setValue:@([[YumiTime timestamp] doubleValue]) forKey:@"timestamp"];
-    
+
     if ([self.connectorDelegate respondsToSelector:@selector(yumiMediationNativeAdSuccessful:)]) {
         [self.connectorDelegate yumiMediationNativeAdSuccessful:self.nativeModel];
     }
@@ -67,23 +67,23 @@
 - (void)nativeAdDidDismissScreen:(GADUnifiedNativeAd *)nativeAd {
 }
 
-#pragma mark: YumiMediationNativeAdapterConnectorMedia
+#pragma mark : YumiMediationNativeAdapterConnectorMedia
 /// Play the video. Doesn't do anything if the video is already playing.
-- (void)play{
-    [self.gadNativeAd.videoController play];
+- (void)play {
+    [self.gadNativeAd.mediaContent.videoController play];
 }
 
 /// Pause the video. Doesn't do anything if the video is already paused.
-- (void)pause{
-    [self.gadNativeAd.videoController pause];
+- (void)pause {
+    [self.gadNativeAd.mediaContent.videoController pause];
 }
 
 /// Returns the video's aspect ratio (width/height) or 0 if no video is present.
-- (double)aspectRatio{
-    return  [self.gadNativeAd.videoController aspectRatio];
+- (double)aspectRatio {
+    return [self.gadNativeAd.mediaContent aspectRatio];
 }
 
-- (void)setConnectorMediaDelegate:(id<YumiMediationNativeAdapterConnectorMediaDelegate>)mediaDelegate{
+- (void)setConnectorMediaDelegate:(id<YumiMediationNativeAdapterConnectorMediaDelegate>)mediaDelegate {
     self.mediaDelegate = mediaDelegate;
 }
 #pragma mark : YumiMediationUnifiedNativeAd
@@ -143,37 +143,37 @@
     return nil;
 }
 
-- (BOOL)hasVideoContent{
-    return self.gadNativeAd.videoController.hasVideoContent;
+- (BOOL)hasVideoContent {
+    return self.gadNativeAd.mediaContent.hasVideoContent;
 }
-- (YumiMediationNativeVideoController *)videoController{
+- (YumiMediationNativeVideoController *)videoController {
     if (!_videoController) {
         _videoController = [[YumiMediationNativeVideoController alloc] init];
         // set value to connector
         [_videoController setValue:self forKey:@"connector"];
     }
-    
+
     return _videoController;
 }
 
-#pragma mark: GADVideoControllerDelegate
+#pragma mark : GADVideoControllerDelegate
 /// Tells the delegate that the video controller has began or resumed playing a video.
-- (void)videoControllerDidPlayVideo:(GADVideoController *)videoController{
-    if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidPlayVideo:)]   ) {
+- (void)videoControllerDidPlayVideo:(GADVideoController *)videoController {
+    if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidPlayVideo:)]) {
         [self.mediaDelegate adapterConnectorVideoDidPlayVideo:self];
     }
 }
 
 /// Tells the delegate that the video controller has paused video.
-- (void)videoControllerDidPauseVideo:(GADVideoController *)videoController{
-    if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidPauseVideo:)]   ) {
+- (void)videoControllerDidPauseVideo:(GADVideoController *)videoController {
+    if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidPauseVideo:)]) {
         [self.mediaDelegate adapterConnectorVideoDidPauseVideo:self];
     }
 }
 
 /// Tells the delegate that the video controller's video playback has ended.
-- (void)videoControllerDidEndVideoPlayback:(GADVideoController *)videoController{
-    if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidEndVideoPlayback:)]   ) {
+- (void)videoControllerDidEndVideoPlayback:(GADVideoController *)videoController {
+    if ([self.mediaDelegate respondsToSelector:@selector(adapterConnectorVideoDidEndVideoPlayback:)]) {
         [self.mediaDelegate adapterConnectorVideoDidEndVideoPlayback:self];
     }
 }

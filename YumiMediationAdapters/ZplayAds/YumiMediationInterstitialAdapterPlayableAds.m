@@ -8,28 +8,33 @@
 
 #import "YumiMediationInterstitialAdapterPlayableAds.h"
 #import <YumiMediationSDK/PlayableAds.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationInterstitialAdapterPlayableAds () <PlayableAdsDelegate>
 
 @property (nonatomic) PlayableAds *interstitial;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationInterstitialAdapterPlayableAds
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerInterstitialAdapter:self
-                                                           forProviderID:kYumiMediationAdapterIDPlayableAds
-                                                             requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDPlayableAds
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeInterstitial];
 }
 
-#pragma mark - YumiMediationInterstitialAdapter
-- (id<YumiMediationInterstitialAdapter>)initWithProvider:(YumiMediationInterstitialProvider *)provider
-                                                delegate:(id<YumiMediationInterstitialAdapterDelegate>)delegate {
+#pragma mark - YumiMediationCoreAdapter
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
     self.delegate = delegate;
+    self.adType = adType;
 
     return self;
 }
@@ -47,7 +52,7 @@
     return [self.interstitial isReady];
 }
 
-- (void)present {
+- (void)presentFromRootViewController:(UIViewController *)rootViewController {
     [self.interstitial present];
 }
 
@@ -55,21 +60,22 @@
 - (void)playableAdsDidRewardUser:(PlayableAds *)ads {
 }
 - (void)playableAdsDidLoad:(PlayableAds *)ads {
-    [self.delegate adapter:self didReceiveInterstitialAd:ads];
+    [self.delegate coreAdapter:self didReceivedCoreAd:ads adType:self.adType];
 }
 - (void)playableAds:(PlayableAds *)ads didFailToLoadWithError:(NSError *)error {
-    [self.delegate adapter:self interstitialAd:ads didFailToReceive:[error localizedDescription]];
+    [self.delegate coreAdapter:self coreAd:ads didFailToLoad:error.localizedDescription adType:self.adType];
 }
 - (void)playableAdsDidDismissScreen:(PlayableAds *)ads {
-    [self.delegate adapter:self willDismissScreen:ads];
+    [self.delegate coreAdapter:self didCloseCoreAd:ads isCompletePlaying:NO adType:self.adType];
 }
 
 - (void)playableAdsDidClick:(PlayableAds *)ads {
-    [self.delegate adapter:self didClickInterstitialAd:ads];
+    [self.delegate coreAdapter:self didClickCoreAd:ads adType:self.adType];
 }
 
 - (void)playableAdsDidStartPlaying:(PlayableAds *)ads {
-    [self.delegate adapter:self willPresentScreen:ads];
+    [self.delegate coreAdapter:self didOpenCoreAd:ads adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:ads adType:self.adType];
 }
 
 @end

@@ -10,42 +10,59 @@
 #import <IMDInterstitialViewController.h>
 #import <IMDSDK.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationVideoAdapterIQzone () <IMDRewardedViewDelegate>
 
 @property (nonatomic) IMDInterstitialViewController *rewardedVideo;
 @property (nonatomic, assign) BOOL isVideoReady;
 @property (nonatomic, assign) BOOL isReward;
+@property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationVideoAdapterIQzone
 
 + (void)load {
-    [[YumiMediationAdapterRegistry registry] registerVideoAdapter:self
-                                                      forProvider:kYumiMediationAdapterIDIQzone
-                                                      requestType:YumiMediationSDKAdRequest];
+    [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
+                                                   forProviderID:kYumiMediationAdapterIDIQzone
+                                                     requestType:YumiMediationSDKAdRequest
+                                                          adType:YumiMediationAdTypeVideo];
 }
 
-#pragma mark - YumiMediationVideoAdapter
-
-- (nonnull id<YumiMediationVideoAdapter>)initWithProvider:(nonnull YumiMediationVideoProvider *)provider
-                                                 delegate:(nonnull id<YumiMediationVideoAdapterDelegate>)delegate {
+#pragma mark - YumiMediationCoreAdapter
+- (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
+                                        delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
+                                          adType:(YumiMediationAdType)adType {
     self = [super init];
 
     self.provider = provider;
     self.delegate = delegate;
-
-    self.rewardedVideo = [IMDSDK newRewardedInterstitialViewController:[[YumiTool sharedTool] topMostController]
-                                                           placementID:self.provider.data.key1
-                                                        loadedListener:self
-                                                           andMetadata:nil];
-    ;
-
+    self.adType = adType;
+    
+    __weak __typeof(self)weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.rewardedVideo = [IMDSDK newRewardedInterstitialViewController:[[YumiTool sharedTool] topMostController]
+                                                               placementID:weakSelf.provider.data.key1
+                                                            loadedListener:weakSelf
+                                                               andMetadata:nil];
+        ;
+    });
+    
     return self;
 }
 
 - (void)requestAd {
+    // set GDPR
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [self.rewardedVideo setGDPRApplies:IMDGDPR_Applies withConsent:IMDGDPR_Consented];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [self.rewardedVideo setGDPRApplies:IMDGDPR_Applies withConsent:IMDGDPR_NotConsented];
+    }
+    
     self.isVideoReady = NO;
     [self.rewardedVideo load];
 }
@@ -57,7 +74,13 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
 
-    [self.rewardedVideo show:rootViewController];
+    BOOL isShow = [self.rewardedVideo show:[[YumiTool sharedTool] topMostController]];
+    if (!isShow) {
+        [self.delegate coreAdapter:self
+                    failedToShowAd:self.rewardedVideo
+                       errorString:@"IQzone failed to show"
+                            adType:self.adType];
+    }
 }
 
 #pragma mark :IMDRewardedViewDelegate
@@ -65,28 +88,27 @@
 - (void)adLoaded {
     self.isVideoReady = YES;
 
-    [self.delegate adapter:self didReceiveVideoAd:self.rewardedVideo];
+    [self.delegate coreAdapter:self didReceivedCoreAd:self.rewardedVideo adType:self.adType];
 }
 
 - (void)adFailedToLoad {
     self.isVideoReady = NO;
-    [self.delegate adapter:self videoAd:self.rewardedVideo didFailToLoad:@"video load failed"];
+    [self.delegate coreAdapter:self coreAd:self.rewardedVideo didFailToLoad:@"video load failed" adType:self.adType];
 }
 
 - (void)adImpression {
-
-    [self.delegate adapter:self didOpenVideoAd:self.rewardedVideo];
-}
-
-- (void)adClicked {
+    [self.delegate coreAdapter:self didOpenCoreAd:self.rewardedVideo adType:self.adType];
 }
 
 - (void)adDismissed {
     if (self.isReward) {
-        [self.delegate adapter:self videoAd:self.rewardedVideo didReward:nil];
-        self.isReward = NO;
+        [self.delegate coreAdapter:self coreAd:self.rewardedVideo didReward:YES adType:self.adType];
     }
-    [self.delegate adapter:self didCloseVideoAd:self.rewardedVideo];
+    [self.delegate coreAdapter:self
+                didCloseCoreAd:self.rewardedVideo
+             isCompletePlaying:self.isReward
+                        adType:self.adType];
+    self.isReward = NO;
 }
 
 - (void)adExpanded {
@@ -101,10 +123,14 @@
 }
 
 - (void)videoStarted {
-    [self.delegate adapter:self didStartPlayingVideoAd:self.rewardedVideo];
+    [self.delegate coreAdapter:self didStartPlayingAd:self.rewardedVideo adType:self.adType];
 }
 
 - (void)videoTrackerFired {
+}
+
+- (void)adClicked {
+    [self.delegate coreAdapter:self didClickCoreAd:self.rewardedVideo adType:self.adType];
 }
 
 @end

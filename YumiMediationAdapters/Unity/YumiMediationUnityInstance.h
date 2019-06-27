@@ -10,10 +10,11 @@
 #import <Foundation/Foundation.h>
 #import <UnityAds/UnityAds.h>
 
-@interface YumiMediationUnityInstance : NSObject <UnityAdsDelegate>
+@interface YumiMediationUnityInstance : NSObject <UnityAdsExtendedDelegate>
 
 @property (nonatomic) YumiMediationInterstitialAdapterUnity *unityInterstitialAdapter;
 @property (nonatomic) YumiMediationVideoAdapterUnity *unityVideoAdapter;
+
 + (YumiMediationUnityInstance *)sharedInstance;
 
 @end

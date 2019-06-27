@@ -10,6 +10,7 @@
 #import <IMDAdView.h>
 #import <IMDSDK.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationBannerAdapterIQzone () <YumiMediationBannerAdapter, IMDAdViewDelegate>
 
@@ -49,8 +50,11 @@
 }
 
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
-    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait || self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
-        [self.delegate adapter:self didFailToReceiveAd:@"IQzone not support kYumiMediationAdViewSmartBannerPortrait or kYumiMediationAdViewSmartBannerLandscape"];
+    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait ||
+        self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
+        [self.delegate adapter:self
+            didFailToReceiveAd:@"IQzone not support kYumiMediationAdViewSmartBannerPortrait or "
+                               @"kYumiMediationAdViewSmartBannerLandscape"];
         return;
     }
 
@@ -64,7 +68,16 @@
         weakSelf.bannerView =
             [IMDSDK newBannerAd:weakSelf.provider.data.key1 withSize:adSize andDelegate:weakSelf andMetadata:nil];
         [weakSelf.bannerView setGDPRApplies:IMDGDPR_DoesNotApply withConsent:IMDGDPR_NotConsented];
-
+        // set GDPR
+        YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+        
+        if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+            [weakSelf.bannerView setGDPRApplies:IMDGDPR_Applies withConsent:IMDGDPR_Consented];
+        }
+        if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+            [weakSelf.bannerView setGDPRApplies:IMDGDPR_Applies withConsent:IMDGDPR_NotConsented];
+        }
+        
         [weakSelf.bannerView loadAd];
     });
 }
