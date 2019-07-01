@@ -9,7 +9,7 @@
 #import "YumiMediationVideoAdapterTapjoySDK.h"
 #import <Tapjoy/Tapjoy.h>
 
-@interface YumiMediationVideoAdapterTapjoySDK ()<TJPlacementDelegate>
+@interface YumiMediationVideoAdapterTapjoySDK ()<TJPlacementDelegate,TJPlacementVideoDelegate>
 
 @property (nonatomic, assign) YumiMediationAdType adType;
 @property (strong, nonatomic) TJPlacement *videoPlacement;
@@ -21,7 +21,7 @@
 
 - (void)dealloc {
     self.videoPlacement.delegate = nil;
-//    self.videoPlacement.videoDelegate = nil;
+    self.videoPlacement.videoDelegate = nil;
 }
 
 + (void)load {
@@ -60,7 +60,7 @@
     self.isRewarded = NO;
     self.videoPlacement = [TJPlacement placementWithName:self.provider.data.key2 delegate:self];
     // Set video delegate TJPlacementVideoDelegate
-//    self.videoPlacement.videoDelegate = self;
+    self.videoPlacement.videoDelegate = self;
     [self.videoPlacement requestContent];
 }
 
@@ -77,12 +77,17 @@
 {
     // Remove observer after it's notified once
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name: TJC_CONNECT_SUCCESS
+                                                    name:TJC_CONNECT_SUCCESS
                                                   object:nil];
 }
 
 - (void)tjcConnectFail:(NSNotification*)notifyObj
 {
+    // Remove observer after it's notified once
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:TJC_CONNECT_FAILED
+                                                  object:nil];
+    
     [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"Tapjoy connect fail" adType:self.adType];
 }
 

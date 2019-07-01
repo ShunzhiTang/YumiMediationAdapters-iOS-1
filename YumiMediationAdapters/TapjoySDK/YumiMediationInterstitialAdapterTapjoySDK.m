@@ -9,7 +9,7 @@
 #import "YumiMediationInterstitialAdapterTapjoySDK.h"
 #import <Tapjoy/Tapjoy.h>
 
-@interface YumiMediationInterstitialAdapterTapjoySDK ()<TJPlacementDelegate>
+@interface YumiMediationInterstitialAdapterTapjoySDK ()<TJPlacementDelegate,TJPlacementVideoDelegate>
 
 @property (nonatomic, assign) YumiMediationAdType adType;
 @property (strong, nonatomic) TJPlacement *interstitialPlacement;
@@ -20,7 +20,7 @@
 
 - (void)dealloc {
     self.interstitialPlacement.delegate = nil;
-    //    self.interstitialPlacement.videoDelegate = nil;
+    self.interstitialPlacement.videoDelegate = nil;
 }
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
@@ -58,7 +58,7 @@
     
     self.interstitialPlacement = [TJPlacement placementWithName:self.provider.data.key2 delegate:self];
     // Set video delegate TJPlacementVideoDelegate
-    //    self.interstitialPlacement.videoDelegate = self;
+    self.interstitialPlacement.videoDelegate = self;
     [self.interstitialPlacement requestContent];
 }
 
@@ -75,12 +75,17 @@
 {
     // Remove observer after it's notified once
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name: TJC_CONNECT_SUCCESS
+                                                    name:TJC_CONNECT_SUCCESS
                                                   object:nil];
 }
 
 - (void)tjcConnectFail:(NSNotification*)notifyObj
 {
+    // Remove observer after it's notified once
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:TJC_CONNECT_FAILED
+                                                  object:nil];
+    
     [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"Tapjoy connect fail" adType:self.adType];
 }
 
