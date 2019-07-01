@@ -8,6 +8,7 @@
 
 #import "YumiMediationInterstitialAdapterTapjoySDK.h"
 #import <Tapjoy/Tapjoy.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationInterstitialAdapterTapjoySDK ()<TJPlacementDelegate,TJPlacementVideoDelegate>
 
@@ -49,12 +50,35 @@
                                                  name:TJC_CONNECT_FAILED
                                                object:nil];
     
+    // set gdpr
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [Tapjoy subjectToGDPR:YES];   // 用户遵守GDPR规则
+        [Tapjoy setUserConsent:@"1"]; // 用户同意
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [Tapjoy subjectToGDPR:YES];
+        [Tapjoy setUserConsent:@"0"];
+    }
+    
     [Tapjoy connect:self.provider.data.key1 options:@{ TJC_OPTION_ENABLE_LOGGING : @(YES)}];
     
     return self;
 }
 
 - (void)requestAd {
+    // update gdpr
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+    
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [Tapjoy subjectToGDPR:YES];
+        [Tapjoy setUserConsent:@"1"];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+        [Tapjoy subjectToGDPR:YES];
+        [Tapjoy setUserConsent:@"0"];
+    }
     
     self.interstitialPlacement = [TJPlacement placementWithName:self.provider.data.key2 delegate:self];
     // Set video delegate TJPlacementVideoDelegate
