@@ -90,7 +90,7 @@
 }
 
 - (BOOL)isReady {
-    return self.videoPlacement.isContentAvailable;
+    return self.videoPlacement.isContentAvailable && self.videoPlacement.isContentReady;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
