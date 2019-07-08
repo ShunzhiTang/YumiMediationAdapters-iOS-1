@@ -52,7 +52,10 @@
     if (![UnityAds isInitialized]) {
         [UnityAds initialize:provider.data.key1 delegate:[YumiMediationUnityInstance sharedInstance] testMode:NO];
     }
-    [YumiMediationUnityInstance sharedInstance].unityVideoAdapter = self;
+    
+    YumiMediationUnityInstance *unityInstance =  [YumiMediationUnityInstance sharedInstance];
+    NSString *key = [unityInstance getAdapterKeyWith:self.provider.data.key2 adType:self.adType];
+    [unityInstance.adaptersDict setValue:self forKey:key];
 
     return self;
 }
