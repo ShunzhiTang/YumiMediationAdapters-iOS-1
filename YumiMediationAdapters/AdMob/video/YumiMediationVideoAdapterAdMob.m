@@ -10,9 +10,10 @@
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
-@interface YumiMediationVideoAdapterAdMob () <GADRewardBasedVideoAdDelegate>
+@interface YumiMediationVideoAdapterAdMob () <GADRewardedAdDelegate>
 @property (nonatomic, assign) BOOL isReward;
 @property (nonatomic, assign) YumiMediationAdType adType;
+@property(nonatomic, strong) GADRewardedAd *rewardedAd;
 
 @end
 
@@ -36,12 +37,12 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-    
-    [GADRewardBasedVideoAd sharedInstance].delegate = self;
+
+    self.rewardedAd = [[GADRewardedAd alloc]
+                       initWithAdUnitID:self.provider.data.key1];
     
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     if ([standardUserDefaults objectForKey:YumiMediationAdmobAdapterUUID]) {
-        [GADRewardBasedVideoAd sharedInstance].delegate = self;
         return self;
     }
     
@@ -50,11 +51,12 @@
         [standardUserDefaults synchronize];
     }];
 
-    
     return self;
 }
 
 - (void)requestAd {
+    
+    self.isReward = NO;
     // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
     
@@ -69,55 +71,60 @@
     GADRequest *request = [GADRequest request];
     [request registerAdNetworkExtras:extras];
     
-    [[GADRewardBasedVideoAd sharedInstance] loadRequest:request withAdUnitID:self.provider.data.key1];
-
-    self.isReward = NO;
+    __weak typeof(self) weakSelf = self;
+    
+    [self.rewardedAd loadRequest:request completionHandler:^(GADRequestError * _Nullable error) {
+        if (error) {
+            [weakSelf.delegate coreAdapter:weakSelf
+                                coreAd:weakSelf.rewardedAd
+                         didFailToLoad:[error localizedDescription]
+                                adType:weakSelf.adType];
+            return ;
+        }
+        //  Ad successfully loaded.
+        [weakSelf.delegate coreAdapter:weakSelf didReceivedCoreAd:weakSelf.rewardedAd adType:weakSelf.adType];
+        
+    }];
+    
 }
 
 - (BOOL)isReady {
-    return [GADRewardBasedVideoAd sharedInstance].isReady;
+    return self.rewardedAd.isReady;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [[GADRewardBasedVideoAd sharedInstance] presentFromRootViewController:rootViewController];
+    [self.rewardedAd presentFromRootViewController:rootViewController delegate:self];
 }
 
-#pragma mark - GADRewardBasedVideoAdDelegate
-- (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd didRewardUserWithReward:(GADAdReward *)reward {
+#pragma mark - GADRewardedAdDelegate
+/// Tells the delegate that the user earned a reward.
+- (void)rewardedAd:(nonnull GADRewardedAd *)rewardedAd
+ userDidEarnReward:(nonnull GADAdReward *)reward {
     self.isReward = YES;
 }
 
-- (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd didFailToLoadWithError:(NSError *)error {
-    [self.delegate coreAdapter:self
-                        coreAd:rewardBasedVideoAd
-                 didFailToLoad:[error localizedDescription]
-                        adType:self.adType];
+/// Tells the delegate that the rewarded ad failed to present.
+- (void)rewardedAd:(nonnull GADRewardedAd *)rewardedAd
+didFailToPresentWithError:(nonnull NSError *)error {
+    [self.delegate coreAdapter:self failedToShowAd:self.rewardedAd errorString:[error localizedDescription] adType:self.adType];
 }
 
-- (void)rewardBasedVideoAdDidReceiveAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
-    [self.delegate coreAdapter:self didReceivedCoreAd:rewardBasedVideoAd adType:self.adType];
+/// Tells the delegate that the rewarded ad was presented.
+- (void)rewardedAdDidPresent:(nonnull GADRewardedAd *)rewardedAd {
+    [self.delegate coreAdapter:self didOpenCoreAd:self.rewardedAd adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:self.rewardedAd adType:self.adType];
 }
 
-- (void)rewardBasedVideoAdDidOpen:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
-    [self.delegate coreAdapter:self didOpenCoreAd:rewardBasedVideoAd adType:self.adType];
-}
-
-- (void)rewardBasedVideoAdDidStartPlaying:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
-    [self.delegate coreAdapter:self didStartPlayingAd:rewardBasedVideoAd adType:self.adType];
-}
-
-- (void)rewardBasedVideoAdDidClose:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+/// Tells the delegate that the rewarded ad was dismissed.
+- (void)rewardedAdDidDismiss:(nonnull GADRewardedAd *)rewardedAd {
     if (self.isReward) {
-        [self.delegate coreAdapter:self coreAd:rewardBasedVideoAd didReward:YES adType:self.adType];
+        [self.delegate coreAdapter:self coreAd:self.rewardedAd didReward:YES adType:self.adType];
     }
     [self.delegate coreAdapter:self
-                didCloseCoreAd:rewardBasedVideoAd
+                didCloseCoreAd:self.rewardedAd
              isCompletePlaying:self.isReward
                         adType:self.adType];
     self.isReward = NO;
 }
-/// Tells the delegate that the reward based video ad will leave the application.
-- (void)rewardBasedVideoAdWillLeaveApplication:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
-    [self.delegate coreAdapter:self didClickCoreAd:rewardBasedVideoAd adType:self.adType];
-}
+
 @end
