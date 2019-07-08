@@ -12,9 +12,13 @@
 
 @interface YumiMediationUnityInstance : NSObject <UnityAdsExtendedDelegate>
 
-@property (nonatomic) YumiMediationInterstitialAdapterUnity *unityInterstitialAdapter;
-@property (nonatomic) YumiMediationVideoAdapterUnity *unityVideoAdapter;
+//@property (nonatomic) YumiMediationInterstitialAdapterUnity *unityInterstitialAdapter;
+//@property (nonatomic) YumiMediationVideoAdapterUnity *unityVideoAdapter;
 
 + (YumiMediationUnityInstance *)sharedInstance;
+
+@property (nonatomic) NSMutableDictionary<NSString *,id<YumiMediationCoreAdapter>>  *adaptersDict;
+
+- (NSString *)getAdapterKeyWith:(NSString *)placementId adType:(YumiMediationAdType)adType;
 
 @end
