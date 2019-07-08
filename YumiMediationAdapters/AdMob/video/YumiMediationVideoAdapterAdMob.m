@@ -37,9 +37,6 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-
-    self.rewardedAd = [[GADRewardedAd alloc]
-                       initWithAdUnitID:self.provider.data.key1];
     
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     if ([standardUserDefaults objectForKey:YumiMediationAdmobAdapterUUID]) {
@@ -72,6 +69,8 @@
     [request registerAdNetworkExtras:extras];
     
     __weak typeof(self) weakSelf = self;
+    
+    self.rewardedAd = [[GADRewardedAd alloc] initWithAdUnitID:self.provider.data.key1];
     
     [self.rewardedAd loadRequest:request completionHandler:^(GADRequestError * _Nullable error) {
         if (error) {
