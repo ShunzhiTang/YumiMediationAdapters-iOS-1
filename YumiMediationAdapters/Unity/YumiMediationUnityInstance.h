@@ -17,7 +17,7 @@
 
 + (YumiMediationUnityInstance *)sharedInstance;
 
-@property (nonatomic) NSMutableDictionary<NSString *,id<YumiMediationCoreAdapter>>  *adaptersDict;
+@property (nonatomic) NSMutableDictionary<NSString *, id<YumiMediationCoreAdapter>> *adaptersDict;
 
 - (NSString *)getAdapterKeyWith:(NSString *)placementId adType:(YumiMediationAdType)adType;
 
