@@ -7,9 +7,7 @@
 
 #import "YumiMediationUnityInstance.h"
 
-@interface YumiMediationUnityInstance ()
-
-@end
+static NSString *separatedString = @"|||";
 
 @implementation YumiMediationUnityInstance
 
@@ -24,7 +22,7 @@
 
 #pragma mark : - private method
 - (NSString *)getAdapterKeyWith:(NSString *)placementId adType:(YumiMediationAdType)adType {
-    return [NSString stringWithFormat:@"%@_%ld", placementId, adType];
+    return [NSString stringWithFormat:@"%@%@%ld", placementId,separatedString, adType];
 }
 
 - (NSString *)adapterKey:(NSString *)placementId {
@@ -45,7 +43,7 @@
 - (NSUInteger)adapterAdType:(NSString *)placementId {
     NSString *adapterKey = [self adapterKey:placementId];
 
-    NSArray *components = [adapterKey componentsSeparatedByString:@"_"];
+    NSArray *components = [adapterKey componentsSeparatedByString:separatedString];
 
     if (components.count == 2) {
         return [components.lastObject integerValue];
@@ -60,7 +58,7 @@
         enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, id<YumiMediationCoreAdapter> _Nonnull coreAdapter,
                                             BOOL *_Nonnull stop) {
 
-            NSArray *components = [key componentsSeparatedByString:@"_"];
+            NSArray *components = [key componentsSeparatedByString:separatedString];
             if (components.count != 2) {
                 return;
             }
