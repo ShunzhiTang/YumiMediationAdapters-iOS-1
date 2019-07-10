@@ -71,7 +71,7 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [self.interstitial showOver:[UIApplication sharedApplication].keyWindow andRender:self.ad];
+    [self.interstitial showAd:self.ad];
 }
 
 #pragma mark - Ad Load Delegate
