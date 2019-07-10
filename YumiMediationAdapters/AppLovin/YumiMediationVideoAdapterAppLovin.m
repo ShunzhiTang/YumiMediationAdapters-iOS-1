@@ -123,8 +123,4 @@
     self.isReward = NO;
 }
 
-- (void)userDeclinedToViewAd:(ALAd *)ad {
-    self.isReward = NO;
-}
-
 @end
