@@ -9,20 +9,26 @@
 #import "YumiMediationNativeAdapterGDT.h"
 #import "GDTUnifiedNativeAd.h"
 #import "GDTUnifiedNativeAdView.h"
+#import "GDTNativeExpressAd.h"
+#import "GDTNativeExpressAdView.h"
 #import "YumiMediationNativeAdapterGDTConnector.h"
 #import <YumiMediationSDK/YumiMasonry.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationNativeAdapterGDT () <YumiMediationNativeAdapter, GDTUnifiedNativeAdDelegate,
-                                             YumiMediationNativeAdapterConnectorDelegate>
+                                             YumiMediationNativeAdapterConnectorDelegate,GDTNativeExpressAdDelegete>
 
 @property (nonatomic, weak) id<YumiMediationNativeAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationNativeProvider *provider;
+
+/// native ad
 @property (nonatomic) GDTUnifiedNativeAd *nativeAd;
+// native  express ad
+@property (nonatomic) GDTNativeExpressAd *nativeExpressAd;
 
 // origin gdt ads data
-@property (nonatomic) NSArray<GDTUnifiedNativeAdDataObject *> *gdtNativeData;
+@property (nonatomic) NSArray *gdtNativeData;
 // mapping data
 @property (nonatomic) NSMutableArray *mappingData;
 
@@ -59,10 +65,23 @@
     });
 }
 - (void)loadNativeAdsWith:(NSUInteger)adCount {
+    
+    // need to request expressAd
+    if([self.provider.data.extra[YumiProviderExtraGDT] integerValue] == 0 ) {
+        
+        self.nativeExpressAd = [[GDTNativeExpressAd alloc] initWithAppId:self.provider.data.key1 ?: @"" placementId:self.provider.data.key2 ?: @"" adSize:self.nativeConfig.expressAdSize];
+        
+        self.nativeExpressAd.delegate = self;
+        self.nativeExpressAd.videoMuted = NO;
+        
+        [self.nativeExpressAd loadAd:adCount];
+        return;
+    }
+    // native ad
     self.nativeAd = [[GDTUnifiedNativeAd alloc] initWithAppId:self.provider.data.key1 ?: @""
                                                   placementId:self.provider.data.key2 ?: @""];
     self.nativeAd.delegate = self;
-
+    
     [self.nativeAd loadAdWithAdCount:(int)adCount];
 }
 
@@ -71,6 +90,17 @@
                          (NSDictionary<YumiMediationUnifiedNativeAssetIdentifier, UIView *> *)clickableAssetViews
                       withViewController:(UIViewController *)viewController
                                 nativeAd:(YumiMediationNativeModel *)nativeAd {
+    
+    if (nativeAd.isExpressAdView) {
+        GDTNativeExpressAdView *expressView = (GDTNativeExpressAdView *)nativeAd.expressAdView;
+        
+        expressView.controller = viewController;
+        
+        [expressView render];
+        
+        return;
+    }
+    
     NSMutableArray<UIView *> *clickables = [NSMutableArray array];
     GDTUnifiedNativeAdView *gdtView = [[GDTUnifiedNativeAdView alloc] initWithFrame:view.bounds];
 
@@ -145,6 +175,38 @@
                   disableImageLoading:weakSelf.nativeConfig.disableImageLoading
                     connectorDelegate:weakSelf];
         }];
+}
+
+#pragma mark: GDTNativeExpressAdDelegete
+- (void)nativeExpressAdSuccessToLoad:(GDTNativeExpressAd *)nativeExpressAd views:(NSArray<__kindof GDTNativeExpressAdView *> *)views {
+    
+    self.gdtNativeData = views;
+    
+    __weak typeof(self) weakSelf = self;
+    [views enumerateObjectsUsingBlock:^(__kindof GDTNativeExpressAdView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [[[YumiMediationNativeAdapterGDTConnector alloc] init]
+         convertWithNativeData:obj
+         withAdapter:weakSelf
+         disableImageLoading:weakSelf.nativeConfig.disableImageLoading
+         connectorDelegate:weakSelf];
+    }];
+    
+}
+
+- (void)nativeExpressAdFailToLoad:(GDTNativeExpressAd *)nativeExpressAd error:(NSError *)error {
+    [self handleNativeError:error];
+}
+
+- (void)nativeExpressAdViewRenderSuccess:(GDTNativeExpressAdView *)nativeExpressAdView {
+    
+}
+
+- (void)nativeExpressAdViewRenderFail:(GDTNativeExpressAdView *)nativeExpressAdView {
+    [self handleNativeError:[NSError errorWithDomain:@"" code:500 userInfo:@{@"fail reason" : @"gdt express ad view render fail"}]];
+}
+
+- (void)nativeExpressAdViewClicked:(GDTNativeExpressAdView *)nativeExpressAdView {
+    [self.delegate adapter:self didClick:nil];
 }
 
 #pragma mark : -YumiMediationNativeAdapterConnectorDelegate
