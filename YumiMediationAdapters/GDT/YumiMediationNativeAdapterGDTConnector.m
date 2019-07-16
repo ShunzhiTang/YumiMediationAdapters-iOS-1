@@ -8,6 +8,7 @@
 #import "YumiMediationNativeAdapterGDTConnector.h"
 #import <YumiMediationSDK/YumiTime.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import "GDTNativeExpressAdView.h"
 
 @interface YumiMediationNativeAdapterGDTConnector () <GDTUnifiedNativeAdViewDelegate>
 
@@ -18,20 +19,29 @@
 @property (nonatomic, weak) id<YumiMediationNativeAdapterConnectorDelegate> connectorDelegate;
 @property (nonatomic) YumiMediationNativeVideoController *videoController;
 
+@property (nonatomic) GDTNativeExpressAdView  *currentExpressAdView;
+
 @end
 
 @implementation YumiMediationNativeAdapterGDTConnector
 
-- (void)convertWithNativeData:(nullable GDTUnifiedNativeAdDataObject *)gdtNativeAdData
+- (void)convertWithNativeData:(id)gdtAdData
                   withAdapter:(id<YumiMediationNativeAdapter>)adapter
           disableImageLoading:(BOOL)disableImageLoading
             connectorDelegate:(id<YumiMediationNativeAdapterConnectorDelegate>)connectorDelegate {
     self.adapter = adapter;
-    self.gdtNativeAdData = gdtNativeAdData;
     self.connectorDelegate = connectorDelegate;
+    
+    if ([gdtAdData isKindOfClass:[GDTNativeExpressAdView class]]) {
+        self.currentExpressAdView = gdtAdData;
+        [self notifyCompletionWithResult:YES];
+        return;
+    }
+    
+    self.gdtNativeAdData = gdtAdData;
 
-    NSString *iconUrl = gdtNativeAdData.iconUrl;
-    NSString *coverImageUrl = gdtNativeAdData.imageUrl;
+    NSString *iconUrl = ((GDTUnifiedNativeAdDataObject *)gdtAdData).iconUrl;
+    NSString *coverImageUrl = ((GDTUnifiedNativeAdDataObject *)gdtAdData).imageUrl;
     [self downloadIcon:iconUrl
                  coverImage:coverImageUrl
         disableImageLoading:disableImageLoading
@@ -168,8 +178,10 @@
 }
 
 - (NSString *)callToAction {
-
-    if (self.gdtNativeAdData.isVideoAd) {
+    if (self.currentExpressAdView) {
+        return nil;
+    }
+    if (self.gdtNativeAdData.isAppAd) {
         if ([[YumiTool sharedTool] iSSimplifiedChinese]) {
             return @"点击下载";
         }
@@ -198,6 +210,9 @@
 }
 
 - (id)data {
+    if (self.currentExpressAdView) {
+        return self.currentExpressAdView;
+    }
     return self.gdtNativeAdData;
 }
 
@@ -209,6 +224,10 @@
     return @{adapterConnectorKey : self};
 }
 - (BOOL)hasVideoContent {
+    if (self.currentExpressAdView) {
+        
+        return self.currentExpressAdView.isVideoAd;
+    }
     return self.gdtNativeAdData.isVideoAd;
 }
 - (YumiMediationNativeVideoController *)videoController {
@@ -220,4 +239,18 @@
 
     return _videoController;
 }
+
+- (UIView *)expressAdView {
+    return self.currentExpressAdView;
+}
+
+- (BOOL)isExpressAdView {
+    
+    return self.currentExpressAdView != nil;
+}
+
+- (NSString *)specifiedProvider{
+    return kYumiMediationAdapterIDGDT;
+}
+
 @end
