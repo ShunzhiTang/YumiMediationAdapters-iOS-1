@@ -56,16 +56,18 @@
         weakSelf.interstitial = [[BaiduMobAdInterstitial alloc] init];
         weakSelf.interstitial.delegate = weakSelf;
         weakSelf.interstitial.AdUnitTag = weakSelf.provider.data.key2;
-        weakSelf.interstitial.interstitialType = BaiduMobAdViewTypeInterstitialBeforeVideo;
         
         //aspectRatio = width : height
         float aspectRatio = [self.provider.data.extra[YumiProviderExtraBaidu] floatValue];
         
         if (aspectRatio == 0) {
+            weakSelf.interstitial.interstitialType = BaiduMobAdViewTypeInterstitialOther;
             [weakSelf.interstitial load];
             return ;
         }
        
+        weakSelf.interstitial.interstitialType = BaiduMobAdViewTypeInterstitialPauseVideo;
+        
         float width = MIN(kSCREEN_WIDTH, kSCREEN_HEIGHT);
         float height = width / aspectRatio;
         
