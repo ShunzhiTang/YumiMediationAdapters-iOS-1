@@ -66,9 +66,17 @@
 }
 - (void)loadNativeAdsWith:(NSUInteger)adCount {
     
+    // 0： 模版形式 ，1：自渲染 ，默认是0
+    int renderMode = 0;
+    
+    if (![self.provider.data.extra[YumiProviderExtraGDT] isKindOfClass:[NSNumber class]]) {
+        renderMode = 0;
+    }else {
+        renderMode = [self.provider.data.extra[YumiProviderExtraGDT] intValue];
+    }
+    
     // need to request expressAd
-    if([self.provider.data.extra[YumiProviderExtraGDT] integerValue] == 0 ) {
-        
+    if(renderMode == 0 ) {
         self.nativeExpressAd = [[GDTNativeExpressAd alloc] initWithAppId:self.provider.data.key1 ?: @"" placementId:self.provider.data.key2 ?: @"" adSize:self.nativeConfig.expressAdSize];
         
         self.nativeExpressAd.delegate = self;
