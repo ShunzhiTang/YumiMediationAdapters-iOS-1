@@ -20,6 +20,7 @@
 
 @property (nonatomic) YumiMediationInterstitialBaiduViewController *presentAdVc;
 @property (nonatomic, assign) CGSize adSize;
+@property (nonatomic, assign)float aspectRatio;
 
 @end
 
@@ -59,8 +60,13 @@
         weakSelf.interstitial.AdUnitTag = weakSelf.provider.data.key2;
         
         //aspectRatio = width : height
-        float aspectRatio = [self.provider.data.extra[YumiProviderExtraBaidu] floatValue];
-        if (aspectRatio == 0) {
+        if (![self.provider.data.extra[YumiProviderExtraBaidu] isKindOfClass:[NSNumber class]]) {
+            self.aspectRatio = 0;
+        }else {
+            self.aspectRatio = [self.provider.data.extra[YumiProviderExtraBaidu] floatValue];
+        }
+        
+        if (self.aspectRatio == 0) {
             weakSelf.interstitial.interstitialType = BaiduMobAdViewTypeInterstitialOther;
             [weakSelf.interstitial load];
             return ;
@@ -69,7 +75,7 @@
         weakSelf.interstitial.interstitialType = BaiduMobAdViewTypeInterstitialPauseVideo;
         
         float width = MIN(kSCREEN_WIDTH, kSCREEN_HEIGHT);
-        float height = width / aspectRatio;
+        float height = width / self.aspectRatio;
         
         self.adSize = CGSizeMake(width, height);
         
@@ -83,8 +89,7 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     
-    float aspectRatio = [self.provider.data.extra[YumiProviderExtraBaidu] floatValue];
-    if (aspectRatio == 0) {
+    if (self.aspectRatio == 0) {
         [self.interstitial presentFromRootViewController:rootViewController];
         return ;
     }
