@@ -10,6 +10,7 @@
 #import <BaiduMobAdSDK/BaiduMobAdInterstitial.h>
 #import <YumiMediationSDK/YumiTool.h>
 #import <YumiMediationSDK/YumiMasonry.h>
+#import "YumiMediationInterstitialBaiduViewController.h"
 
 @interface YumiMediationInterstitialAdapterBaidu () <BaiduMobAdInterstitialDelegate>
 
@@ -17,8 +18,9 @@
 @property (nonatomic, assign) YumiMediationAdType adType;
 @property (nonatomic, assign) BOOL interstitialIsReady;
 
-@property (nonatomic) UIView *customInterView;
+@property (nonatomic) YumiMediationInterstitialBaiduViewController *presentAdVc;
 @property (nonatomic, assign) CGSize adSize;
+@property (nonatomic, assign)float aspectRatio;
 
 @end
 
@@ -58,9 +60,13 @@
         weakSelf.interstitial.AdUnitTag = weakSelf.provider.data.key2;
         
         //aspectRatio = width : height
-        float aspectRatio = [self.provider.data.extra[YumiProviderExtraBaidu] floatValue];
+        if (![self.provider.data.extra[YumiProviderExtraBaidu] isKindOfClass:[NSNumber class]]) {
+            self.aspectRatio = 0;
+        }else {
+            self.aspectRatio = [self.provider.data.extra[YumiProviderExtraBaidu] floatValue];
+        }
         
-        if (aspectRatio == 0) {
+        if (self.aspectRatio == 0) {
             weakSelf.interstitial.interstitialType = BaiduMobAdViewTypeInterstitialOther;
             [weakSelf.interstitial load];
             return ;
@@ -69,7 +75,7 @@
         weakSelf.interstitial.interstitialType = BaiduMobAdViewTypeInterstitialPauseVideo;
         
         float width = MIN(kSCREEN_WIDTH, kSCREEN_HEIGHT);
-        float height = width / aspectRatio;
+        float height = width / self.aspectRatio;
         
         self.adSize = CGSizeMake(width, height);
         
@@ -83,24 +89,20 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     
-    float aspectRatio = [self.provider.data.extra[YumiProviderExtraBaidu] floatValue];
-    
-    if (aspectRatio == 0) {
+    if (self.aspectRatio == 0) {
         [self.interstitial presentFromRootViewController:rootViewController];
         return ;
     }
     
-    self.customInterView = [[UIView alloc] init];;
-    [rootViewController.view addSubview:self.customInterView];
+    YumiMediationInterstitialBaiduViewController *vc = [[YumiMediationInterstitialBaiduViewController alloc] init];
     
-    [self.customInterView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
-        make.center.equalTo(rootViewController.view);
-        make.height.mas_equalTo(self.adSize.height);
-        make.width.mas_equalTo(self.adSize.width);
+    self.presentAdVc = vc;
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [[[YumiTool sharedTool] topMostController] presentViewController:self.presentAdVc animated:NO completion:^{
+        [weakSelf.presentAdVc presentBaiduInterstitial:weakSelf.interstitial adSize:weakSelf.adSize];
     }];
-    [rootViewController.view layoutIfNeeded];
-    
-    [self.interstitial presentFromView:self.customInterView];
     
 }
 
@@ -140,16 +142,19 @@
 }
 
 - (void)interstitialDidDismissScreen:(BaiduMobAdInterstitial *)interstitial {
-    [self.delegate coreAdapter:self didCloseCoreAd:interstitial isCompletePlaying:NO adType:self.adType];
+    __weak typeof(self) weakSelf = self;
+    [self.presentAdVc dismissViewControllerAnimated:NO completion:^{
+        [weakSelf.delegate coreAdapter:weakSelf didCloseCoreAd:interstitial isCompletePlaying:NO adType:weakSelf.adType];
+        
+        [weakSelf clearInterstitial];
+    }];
     
-    [self clearInterstitial];
 }
 
 - (void)clearInterstitial {
     
-    if (self.customInterView) {
-        [self.customInterView removeFromSuperview];
-        self.customInterView = nil;
+    if (self.presentAdVc) {
+        self.presentAdVc = nil;
     }
     
     if (self.interstitial) {
