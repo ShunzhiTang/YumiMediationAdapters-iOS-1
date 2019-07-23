@@ -87,7 +87,8 @@
 }
 
 - (BOOL)isReady {
-    return self.interstitialPlacement.isContentAvailable && self.interstitialPlacement.isContentReady; ;
+    return self.interstitialPlacement.isContentAvailable && self.interstitialPlacement.isContentReady;
+    ;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {

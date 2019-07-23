@@ -33,7 +33,7 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-    
+
     // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
 
@@ -43,7 +43,7 @@
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [Chartboost setPIDataUseConsent:NoBehavioral];
     }
-    
+
     [Chartboost startWithAppId:self.provider.data.key1 appSignature:self.provider.data.key2 delegate:self];
     [Chartboost setAutoCacheAds:NO];
     return self;
@@ -52,14 +52,14 @@
 - (void)requestAd {
     // update GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [Chartboost setPIDataUseConsent:YesBehavioral];
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [Chartboost setPIDataUseConsent:NoBehavioral];
     }
-    
+
     [Chartboost cacheInterstitial:CBLocationDefault];
 }
 

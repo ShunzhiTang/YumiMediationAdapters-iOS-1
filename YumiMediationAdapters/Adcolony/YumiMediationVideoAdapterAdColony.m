@@ -40,7 +40,7 @@
 
     // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     AdColonyAppOptions *options = [AdColonyAppOptions new];
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         options.gdprRequired = TRUE;
@@ -50,7 +50,7 @@
         options.gdprRequired = false;
         options.gdprConsentString = @"0";
     }
-    
+
     __weak typeof(self) weakSelf = self;
     [AdColony configureWithAppID:provider.data.key1
                          zoneIDs:@[ provider.data.key2 ]
@@ -81,9 +81,9 @@
         options.gdprRequired = false;
         options.gdprConsentString = @"0";
     }
-    
+
     [AdColony setAppOptions:options];
-    
+
     [AdColony requestInterstitialInZone:self.provider.data.key2
         options:nil
         success:^(AdColonyInterstitial *_Nonnull ad) {

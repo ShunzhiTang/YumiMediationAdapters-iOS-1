@@ -10,8 +10,8 @@
 #import <AppLovinSDK/AppLovinSDK.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiMediationConstants.h>
-#import <YumiMediationSDK/YumiTool.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationBannerAdapterApplovin () <YumiMediationBannerAdapter, ALAdLoadDelegate, ALAdDisplayDelegate>
 
@@ -73,26 +73,26 @@
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        
+
         // set GDPR
         YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-        
+
         if (gdprStatus == YumiMediationConsentStatusPersonalized) {
             [ALPrivacySettings setHasUserConsent:YES];
         }
         if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
             [ALPrivacySettings setHasUserConsent:NO];
         }
-        
+
         weakSelf.sdk = [ALSdk sharedWithKey:weakSelf.provider.data.key1];
         weakSelf.bannerView = [[ALAdView alloc] initWithFrame:adframe size:[ALAdSize sizeBanner] sdk:weakSelf.sdk];
         weakSelf.bannerView.adLoadDelegate = weakSelf;
         weakSelf.bannerView.adDisplayDelegate = weakSelf;
         // set refresh state
         if (weakSelf.provider.data.autoRefreshInterval == 0) {
-             weakSelf.bannerView.autoload = NO;
-        }else{
-              weakSelf.bannerView.autoload = YES;
+            weakSelf.bannerView.autoload = NO;
+        } else {
+            weakSelf.bannerView.autoload = YES;
         }
 
         [weakSelf.sdk.adService loadNextAdForZoneIdentifier:weakSelf.provider.data.key2 andNotify:weakSelf];

@@ -49,14 +49,14 @@
 - (void)requestAd {
     // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [ALPrivacySettings setHasUserConsent:YES];
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [ALPrivacySettings setHasUserConsent:NO];
     }
-    
+
     [self.video preloadAndNotify:self];
 }
 

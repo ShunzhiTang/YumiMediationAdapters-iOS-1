@@ -74,7 +74,7 @@
         weakSelf.unifiedBannerView.animated = NO;
         weakSelf.unifiedBannerView.autoSwitchInterval = (int)weakSelf.provider.data.autoRefreshInterval;
         weakSelf.unifiedBannerView.delegate = weakSelf;
-        
+
         [weakSelf.unifiedBannerView loadAdAndShow];
     });
 }

@@ -46,38 +46,37 @@
     VungleSDK *sdk = [VungleSDK sharedSDK];
     sdk.delegate = vungleInstance;
     [sdk setLoggingEnabled:NO];
-    
+
     // set gdpr
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [sdk updateConsentStatus:VungleConsentAccepted consentMessageVersion:@"1"];
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [sdk updateConsentStatus:VungleConsentDenied consentMessageVersion:@"1"];
     }
-    
+
     [sdk startWithAppId:appID error:&error];
 
     return self;
 }
 
 - (void)requestAd {
-    
+
     NSError *error;
     VungleSDK *sdk = [VungleSDK sharedSDK];
-    
+
     // update gdpr
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [sdk updateConsentStatus:VungleConsentAccepted consentMessageVersion:@"1"];
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [sdk updateConsentStatus:VungleConsentDenied consentMessageVersion:@"1"];
     }
-    
-   
+
     if (sdk.isInitialized) {
         [sdk loadPlacementWithID:self.provider.data.key3 error:&error];
     } else {

@@ -33,7 +33,7 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-    
+
     // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
@@ -42,7 +42,7 @@
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [IronSource setConsent:NO];
     }
-    
+
     [IronSource setISDemandOnlyInterstitialDelegate:self];
     if (self.provider.data.key1.length == 0 || self.provider.data.key2.length == 0) {
         [self.delegate coreAdapter:self
@@ -58,14 +58,14 @@
 - (void)requestAd {
     // update GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [IronSource setConsent:YES];
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [IronSource setConsent:NO];
     }
-    
+
     [IronSource loadISDemandOnlyInterstitial:self.provider.data.key2];
 }
 

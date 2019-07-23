@@ -36,7 +36,7 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-    
+
     self.video = [[PlayableAds alloc] initWithAdUnitID:self.provider.data.key2 appID:self.provider.data.key1];
     self.video.delegate = self;
     self.video.autoLoad = YES;
