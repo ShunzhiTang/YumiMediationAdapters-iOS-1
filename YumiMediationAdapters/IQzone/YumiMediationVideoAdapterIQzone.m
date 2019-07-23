@@ -9,8 +9,8 @@
 #import "YumiMediationVideoAdapterIQzone.h"
 #import <IMDInterstitialViewController.h>
 #import <IMDSDK.h>
-#import <YumiMediationSDK/YumiTool.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationVideoAdapterIQzone () <IMDRewardedViewDelegate>
 
@@ -39,30 +39,30 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-    
-    __weak __typeof(self)weakSelf = self;
+
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         weakSelf.rewardedVideo = [IMDSDK newRewardedInterstitialViewController:[[YumiTool sharedTool] topMostController]
-                                                               placementID:weakSelf.provider.data.key1
-                                                            loadedListener:weakSelf
-                                                               andMetadata:nil];
+                                                                   placementID:weakSelf.provider.data.key1
+                                                                loadedListener:weakSelf
+                                                                   andMetadata:nil];
         ;
     });
-    
+
     return self;
 }
 
 - (void)requestAd {
     // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [self.rewardedVideo setGDPRApplies:IMDGDPR_Applies withConsent:IMDGDPR_Consented];
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [self.rewardedVideo setGDPRApplies:IMDGDPR_Applies withConsent:IMDGDPR_NotConsented];
     }
-    
+
     self.isVideoReady = NO;
     [self.rewardedVideo load];
 }

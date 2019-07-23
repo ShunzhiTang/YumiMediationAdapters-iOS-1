@@ -183,9 +183,7 @@
             return;
         }
         NSError *error =
-            [NSError errorWithDomain:@"" code:501 userInfo:@{
-                @"error reason" : @"connector yumiAds all data error"
-            }];
+            [NSError errorWithDomain:@"" code:501 userInfo:@{@"error reason" : @"connector yumiAds all data error"}];
         [self handleNativeError:error];
     }
 }

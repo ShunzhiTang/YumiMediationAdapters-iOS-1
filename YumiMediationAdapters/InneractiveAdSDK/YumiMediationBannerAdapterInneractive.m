@@ -108,7 +108,7 @@
         self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
         [self.delegate adapter:self
             didFailToReceiveAd:@"Inneractive not support kYumiMediationAdViewSmartBannerPortrait or "
-         @"kYumiMediationAdViewSmartBannerLandscape"];
+                               @"kYumiMediationAdViewSmartBannerLandscape"];
         return;
     }
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {

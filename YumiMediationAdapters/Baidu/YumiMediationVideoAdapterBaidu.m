@@ -40,7 +40,7 @@
                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
                                           adType:(YumiMediationAdType)adType {
     self = [super init];
-    
+
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;

@@ -75,18 +75,18 @@
 
     // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     GADExtras *extras = [[GADExtras alloc] init];
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
-        extras.additionalParameters = @{@"npa": @"0"};
+        extras.additionalParameters = @{@"npa" : @"0"};
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
-        extras.additionalParameters = @{@"npa": @"1"};
+        extras.additionalParameters = @{@"npa" : @"1"};
     }
-    
+
     GADRequest *request = [GADRequest request];
     [request registerAdNetworkExtras:extras];
-    
+
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -100,10 +100,10 @@
         // set refresh state
         if (strongSelf.provider.data.autoRefreshInterval == 0) {
             strongSelf.bannerView.autoloadEnabled = NO;
-        }else{
+        } else {
             strongSelf.bannerView.autoloadEnabled = YES;
         }
-        
+
         [strongSelf.bannerView loadRequest:request];
     });
 }

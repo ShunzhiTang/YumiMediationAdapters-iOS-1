@@ -152,7 +152,6 @@
     [self.delegate coreAdapter:self didClickCoreAd:self.interstitialVc adType:self.adType];
 }
 - (void)nativeExpressAdViewExposure:(GDTNativeExpressAdView *)nativeExpressAdView {
-    
 }
 - (void)nativeExpressAdViewClosed:(GDTNativeExpressAdView *)nativeExpressAdView {
     [self closeGDTIntestitial];

@@ -53,21 +53,21 @@
     //  Only one interstitial request is allowed at a time.
     self.interstitial = [[GADInterstitial alloc] initWithAdUnitID:self.provider.data.key1];
     self.interstitial.delegate = self;
-    
+
     // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     GADExtras *extras = [[GADExtras alloc] init];
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
-        extras.additionalParameters = @{@"npa": @"0"};
+        extras.additionalParameters = @{@"npa" : @"0"};
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
-        extras.additionalParameters = @{@"npa": @"1"};
+        extras.additionalParameters = @{@"npa" : @"1"};
     }
-    
+
     GADRequest *request = [GADRequest request];
     [request registerAdNetworkExtras:extras];
-    
+
     [self.interstitial loadRequest:request];
 }
 
