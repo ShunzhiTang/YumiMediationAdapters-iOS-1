@@ -9,10 +9,11 @@
 #import "YumiMediationInterstitialAdapterNativeAdMob.h"
 #import <GoogleMobileAds/GADNativeAdViewAdOptions.h>
 #import <GoogleMobileAds/GoogleMobileAds.h>
-#import <YumiMediationSDK/YumiTool.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
+#import <YumiMediationSDK/YumiTool.h>
 
-@interface YumiMediationInterstitialAdapterNativeAdMob () <GADUnifiedNativeAdLoaderDelegate, GADAdLoaderDelegate,GADUnifiedNativeAdDelegate>
+@interface YumiMediationInterstitialAdapterNativeAdMob () <GADUnifiedNativeAdLoaderDelegate, GADAdLoaderDelegate,
+                                                           GADUnifiedNativeAdDelegate>
 
 @property (nonatomic) GADAdLoader *adLoader;
 @property (nonatomic) GADUnifiedNativeAdView *appInstallAdView;
@@ -87,18 +88,18 @@
                                                rootViewController:[[YumiTool sharedTool] topMostController]
                                                           adTypes:adTypes
                                                           options:@[ option ]];
-        
+
         // set GDPR
         YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-        
+
         GADExtras *extras = [[GADExtras alloc] init];
         if (gdprStatus == YumiMediationConsentStatusPersonalized) {
-            extras.additionalParameters = @{@"npa": @"0"};
+            extras.additionalParameters = @{@"npa" : @"0"};
         }
         if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
-            extras.additionalParameters = @{@"npa": @"1"};
+            extras.additionalParameters = @{@"npa" : @"1"};
         }
-        
+
         GADRequest *request = [GADRequest request];
         [request registerAdNetworkExtras:extras];
 
@@ -162,8 +163,7 @@
     [((UIButton *)self.appInstallAdView.callToActionView) setTitle:@"" forState:UIControlStateNormal];
 
     if (nativeAd.starRating) {
-        ((UIImageView *)self.appInstallAdView.starRatingView).image =
-            [self imageForStars:nativeAd.starRating];
+        ((UIImageView *)self.appInstallAdView.starRatingView).image = [self imageForStars:nativeAd.starRating];
         self.appInstallAdView.starRatingView.hidden = NO;
     } else {
         self.appInstallAdView.starRatingView.hidden = YES;
@@ -189,7 +189,7 @@
 - (void)nativeAdDidRecordClick:(GADNativeAd *)nativeAd {
     [self.delegate coreAdapter:self didClickCoreAd:self.appInstallAdView adType:self.adType];
 }
-- (void)nativeAdWillLeaveApplication:(GADUnifiedNativeAd *)nativeAd{
+- (void)nativeAdWillLeaveApplication:(GADUnifiedNativeAd *)nativeAd {
     [self closeIntersitital];
 }
 

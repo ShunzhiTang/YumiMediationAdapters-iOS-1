@@ -35,18 +35,17 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-    
-    
+
     // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
-       [IronSource setConsent:YES];
+        [IronSource setConsent:YES];
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [IronSource setConsent:NO];
     }
-    
+
     [IronSource setISDemandOnlyRewardedVideoDelegate:self];
     [IronSource shouldTrackReachability:YES];
     if (self.provider.data.key1.length == 0 || self.provider.data.key2.length == 0) {
@@ -64,7 +63,7 @@
     // NOTE: ironsource do not provide any method for requesting ad, it handles the request internally
     // update GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [IronSource setConsent:YES];
     }

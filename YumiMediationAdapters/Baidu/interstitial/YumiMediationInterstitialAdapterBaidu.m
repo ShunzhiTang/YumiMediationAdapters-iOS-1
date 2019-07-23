@@ -7,10 +7,10 @@
 //
 
 #import "YumiMediationInterstitialAdapterBaidu.h"
-#import <BaiduMobAdSDK/BaiduMobAdInterstitial.h>
-#import <YumiMediationSDK/YumiTool.h>
-#import <YumiMediationSDK/YumiMasonry.h>
 #import "YumiMediationInterstitialBaiduViewController.h"
+#import <BaiduMobAdSDK/BaiduMobAdInterstitial.h>
+#import <YumiMediationSDK/YumiMasonry.h>
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationInterstitialAdapterBaidu () <BaiduMobAdInterstitialDelegate>
 
@@ -20,7 +20,7 @@
 
 @property (nonatomic) YumiMediationInterstitialBaiduViewController *presentAdVc;
 @property (nonatomic, assign) CGSize adSize;
-@property (nonatomic, assign)float aspectRatio;
+@property (nonatomic, assign) float aspectRatio;
 
 @end
 
@@ -47,38 +47,38 @@
     self.delegate = delegate;
     self.adType = adType;
     self.interstitialIsReady = NO;
-    
+
     return self;
 }
 
 - (void)requestAd {
-    
+
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         weakSelf.interstitial = [[BaiduMobAdInterstitial alloc] init];
         weakSelf.interstitial.delegate = weakSelf;
         weakSelf.interstitial.AdUnitTag = weakSelf.provider.data.key2;
-        
-        //aspectRatio = width : height
+
+        // aspectRatio = width : height
         if (![self.provider.data.extra[YumiProviderExtraBaidu] isKindOfClass:[NSNumber class]]) {
             self.aspectRatio = 0;
-        }else {
+        } else {
             self.aspectRatio = [self.provider.data.extra[YumiProviderExtraBaidu] floatValue];
         }
-        
+
         if (self.aspectRatio == 0) {
             weakSelf.interstitial.interstitialType = BaiduMobAdViewTypeInterstitialOther;
             [weakSelf.interstitial load];
-            return ;
+            return;
         }
-       
+
         weakSelf.interstitial.interstitialType = BaiduMobAdViewTypeInterstitialPauseVideo;
-        
+
         float width = MIN(kSCREEN_WIDTH, kSCREEN_HEIGHT);
         float height = width / self.aspectRatio;
-        
+
         self.adSize = CGSizeMake(width, height);
-        
+
         [weakSelf.interstitial loadUsingSize:CGRectMake(0, 0, width, height)];
     });
 }
@@ -88,22 +88,24 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    
+
     if (self.aspectRatio == 0) {
         [self.interstitial presentFromRootViewController:rootViewController];
-        return ;
+        return;
     }
-    
+
     YumiMediationInterstitialBaiduViewController *vc = [[YumiMediationInterstitialBaiduViewController alloc] init];
-    
+
     self.presentAdVc = vc;
-    
+
     __weak typeof(self) weakSelf = self;
-    
-    [[[YumiTool sharedTool] topMostController] presentViewController:self.presentAdVc animated:NO completion:^{
-        [weakSelf.presentAdVc presentBaiduInterstitial:weakSelf.interstitial adSize:weakSelf.adSize];
-    }];
-    
+
+    [[[YumiTool sharedTool] topMostController]
+        presentViewController:self.presentAdVc
+                     animated:NO
+                   completion:^{
+                       [weakSelf.presentAdVc presentBaiduInterstitial:weakSelf.interstitial adSize:weakSelf.adSize];
+                   }];
 }
 
 #pragma mark - BaiduMobAdInterstitialDelegate
@@ -119,7 +121,7 @@
 - (void)interstitialFailToLoadAd:(BaiduMobAdInterstitial *)interstitial {
     self.interstitialIsReady = NO;
     [self.delegate coreAdapter:self coreAd:interstitial didFailToLoad:@"Baidu ad load fail" adType:self.adType];
-    
+
     [self clearInterstitial];
 }
 
@@ -143,20 +145,23 @@
 
 - (void)interstitialDidDismissScreen:(BaiduMobAdInterstitial *)interstitial {
     __weak typeof(self) weakSelf = self;
-    [self.presentAdVc dismissViewControllerAnimated:NO completion:^{
-        [weakSelf.delegate coreAdapter:weakSelf didCloseCoreAd:interstitial isCompletePlaying:NO adType:weakSelf.adType];
-        
-        [weakSelf clearInterstitial];
-    }];
-    
+    [self.presentAdVc dismissViewControllerAnimated:NO
+                                         completion:^{
+                                             [weakSelf.delegate coreAdapter:weakSelf
+                                                             didCloseCoreAd:interstitial
+                                                          isCompletePlaying:NO
+                                                                     adType:weakSelf.adType];
+
+                                             [weakSelf clearInterstitial];
+                                         }];
 }
 
 - (void)clearInterstitial {
-    
+
     if (self.presentAdVc) {
         self.presentAdVc = nil;
     }
-    
+
     if (self.interstitial) {
         self.interstitial.delegate = nil;
         self.interstitial = nil;

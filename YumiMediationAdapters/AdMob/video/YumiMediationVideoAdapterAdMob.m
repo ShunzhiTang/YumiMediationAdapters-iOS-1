@@ -59,10 +59,10 @@
 
     GADExtras *extras = [[GADExtras alloc] init];
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
-        extras.additionalParameters = @{ @"npa" : @"0" };
+        extras.additionalParameters = @{@"npa" : @"0"};
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
-        extras.additionalParameters = @{ @"npa" : @"1" };
+        extras.additionalParameters = @{@"npa" : @"1"};
     }
 
     GADRequest *request = [GADRequest request];

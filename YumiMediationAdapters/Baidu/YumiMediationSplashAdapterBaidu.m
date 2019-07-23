@@ -31,7 +31,7 @@
                                                        requestType:YumiMediationSDKAdRequest];
 }
 
-- (void)dealloc{
+- (void)dealloc {
     [self clearSplash];
 }
 

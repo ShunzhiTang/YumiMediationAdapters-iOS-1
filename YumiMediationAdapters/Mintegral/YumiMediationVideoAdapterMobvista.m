@@ -36,16 +36,16 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-    
+
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [[MTGSDK sharedInstance] setConsentStatus:YES];
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [[MTGSDK sharedInstance] setConsentStatus:NO];
     }
-    
+
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [[MTGSDK sharedInstance] setAppID:weakSelf.provider.data.key1 ApiKey:weakSelf.provider.data.key2];
@@ -58,14 +58,14 @@
 - (void)requestAd {
     // update gdpr
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [[MTGSDK sharedInstance] setConsentStatus:YES];
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [[MTGSDK sharedInstance] setConsentStatus:NO];
     }
-    
+
     [self.videoAd loadVideo:self.provider.data.key3 delegate:self];
 }
 

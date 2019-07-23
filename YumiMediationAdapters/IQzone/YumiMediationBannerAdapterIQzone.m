@@ -70,14 +70,14 @@
         [weakSelf.bannerView setGDPRApplies:IMDGDPR_DoesNotApply withConsent:IMDGDPR_NotConsented];
         // set GDPR
         YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-        
+
         if (gdprStatus == YumiMediationConsentStatusPersonalized) {
             [weakSelf.bannerView setGDPRApplies:IMDGDPR_Applies withConsent:IMDGDPR_Consented];
         }
         if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
             [weakSelf.bannerView setGDPRApplies:IMDGDPR_Applies withConsent:IMDGDPR_NotConsented];
         }
-        
+
         [weakSelf.bannerView loadAd];
     });
 }

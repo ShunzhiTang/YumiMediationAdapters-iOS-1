@@ -9,8 +9,8 @@
 #import "YumiMediationBannerAdapterInMobi.h"
 #import <InMobiSDK/InMobiSDK.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
-#import <YumiMediationSDK/YumiTool.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationBannerAdapterInMobi () <IMBannerDelegate, YumiMediationBannerAdapter>
 
@@ -37,17 +37,17 @@
 
     self.provider = provider;
     self.delegate = delegate;
-    
+
     // set gdpr
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
     NSDictionary *consentDict = nil;
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
-        consentDict = @{IM_GDPR_CONSENT_AVAILABLE : @(YES)};
+        consentDict = @{ IM_GDPR_CONSENT_AVAILABLE : @(YES) };
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
-        consentDict = @{IM_GDPR_CONSENT_AVAILABLE : @(NO)};
+        consentDict = @{ IM_GDPR_CONSENT_AVAILABLE : @(NO) };
     }
-    
+
     [IMSdk initWithAccountID:provider.data.key1 consentDictionary:consentDict];
     [IMSdk setLogLevel:kIMSDKLogLevelNone];
 
@@ -63,14 +63,14 @@
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     // update gdpr
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
-        [IMSdk updateGDPRConsent:@{IM_GDPR_CONSENT_AVAILABLE : @(YES)}];
+        [IMSdk updateGDPRConsent:@{ IM_GDPR_CONSENT_AVAILABLE : @(YES) }];
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
-        [IMSdk updateGDPRConsent:@{IM_GDPR_CONSENT_AVAILABLE : @(NO)}];
+        [IMSdk updateGDPRConsent:@{ IM_GDPR_CONSENT_AVAILABLE : @(NO) }];
     }
-    
+
     if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait ||
         self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
         [self.delegate adapter:self
@@ -98,11 +98,11 @@
         // set refresh state
         if (strongSelf.provider.data.autoRefreshInterval == 0) {
             [strongSelf.bannerView shouldAutoRefresh:NO];
-        }else{
+        } else {
             [strongSelf.bannerView shouldAutoRefresh:YES];
             [strongSelf.bannerView setRefreshInterval:strongSelf.provider.data.autoRefreshInterval];
         }
-        
+
         [strongSelf.bannerView load];
     });
 }

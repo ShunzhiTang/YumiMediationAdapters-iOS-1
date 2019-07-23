@@ -22,7 +22,7 @@ static NSString *separatedString = @"|||";
 
 #pragma mark : - private method
 - (NSString *)getAdapterKeyWith:(NSString *)placementId adType:(YumiMediationAdType)adType {
-    return [NSString stringWithFormat:@"%@%@%ld", placementId,separatedString, adType];
+    return [NSString stringWithFormat:@"%@%@%ld", placementId, separatedString, adType];
 }
 
 - (NSString *)adapterKey:(NSString *)placementId {
