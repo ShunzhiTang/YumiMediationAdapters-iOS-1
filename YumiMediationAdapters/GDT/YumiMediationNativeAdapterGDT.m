@@ -166,6 +166,21 @@
 - (void)clickAd:(YumiMediationNativeModel *)nativeAd {
 }
 
+#pragma mark: - private method
+- (YumiMediationNativeModel *)getNativeModelWith:(GDTNativeExpressAdView *)nativeExpressAdView {
+    __block YumiMediationNativeModel *nativeModel = nil;
+    [self.mappingData enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
+        if ([obj isKindOfClass:[YumiMediationNativeModel class]]) {
+            if ([((YumiMediationNativeModel *)obj).expressAdView isEqual:nativeExpressAdView]) {
+                nativeModel = obj;
+                *stop = YES;
+            }
+        }
+    }];
+    
+    return nativeModel;
+}
+
 #pragma mark - GDTUnifiedNativeAdDelete
 - (void)gdt_unifiedNativeAdLoaded:(NSArray<GDTUnifiedNativeAdDataObject *> *_Nullable)unifiedNativeAdDataObjects
                             error:(NSError *_Nullable)error {
@@ -209,12 +224,18 @@
 }
 
 - (void)nativeExpressAdViewRenderSuccess:(GDTNativeExpressAdView *)nativeExpressAdView {
+    
+    [self.delegate adapter:self nativeExpressAdViewRenderSuccess:[self getNativeModelWith:nativeExpressAdView]];
+    
 }
 
 - (void)nativeExpressAdViewRenderFail:(GDTNativeExpressAdView *)nativeExpressAdView {
-    [self handleNativeError:[NSError errorWithDomain:@""
-                                                code:500
-                                            userInfo:@{@"fail reason" : @"gdt express ad view render fail"}]];
+    
+    [self.delegate adapter:self nativeExpressAd:[self getNativeModelWith:nativeExpressAdView] didRenderFail:@"gdt express ad view render fail"];
+}
+
+- (void)nativeExpressAdViewClosed:(GDTNativeExpressAdView *)nativeExpressAdView {
+    [self.delegate adapter:self nativeExpressAdDidClose:[self getNativeModelWith:nativeExpressAdView]];
 }
 
 - (void)nativeExpressAdViewClicked:(GDTNativeExpressAdView *)nativeExpressAdView {
