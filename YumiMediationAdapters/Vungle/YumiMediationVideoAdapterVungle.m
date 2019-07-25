@@ -58,6 +58,10 @@
     return self;
 }
 
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
+}
+
 - (void)requestAd {
     NSError *error;
     VungleSDK *sdk = [VungleSDK sharedSDK];

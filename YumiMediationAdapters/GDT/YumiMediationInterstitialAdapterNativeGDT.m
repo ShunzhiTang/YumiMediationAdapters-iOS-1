@@ -72,6 +72,10 @@
     return self;
 }
 
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
+}
+
 - (void)requestAd {
     YumiTool *tool = [YumiTool sharedTool];
     CGSize adSize = CGSizeMake(ScreenWidth, 300);

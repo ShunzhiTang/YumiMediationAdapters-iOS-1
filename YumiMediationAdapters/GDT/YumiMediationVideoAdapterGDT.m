@@ -44,6 +44,10 @@
     return self;
 }
 
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
+}
+
 - (void)requestAd {
     [self.rewardVideoAd loadAd];
 }

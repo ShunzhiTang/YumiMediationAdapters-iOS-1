@@ -90,6 +90,10 @@
     return self;
 }
 
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
+}
+
 - (void)requestAd {
 
     __weak typeof(self) weakSelf = self;

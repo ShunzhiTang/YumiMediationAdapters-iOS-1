@@ -86,6 +86,10 @@
     [self.interstitialPlacement requestContent];
 }
 
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
+}
+
 - (BOOL)isReady {
     return self.interstitialPlacement.isContentAvailable && self.interstitialPlacement.isContentReady;
     ;

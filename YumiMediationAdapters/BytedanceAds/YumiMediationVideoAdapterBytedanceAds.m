@@ -42,6 +42,10 @@
     return self;
 }
 
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
+}
+
 - (void)requestAd {
     BURewardedVideoModel *model = [[BURewardedVideoModel alloc] init];
     model.isShowDownloadBar = YES;
