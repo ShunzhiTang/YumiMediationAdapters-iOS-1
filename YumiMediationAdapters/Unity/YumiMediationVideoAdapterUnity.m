@@ -60,6 +60,10 @@
     return self;
 }
 
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
+}
+
 - (void)requestAd {
     // NOTE: Unity do not provide any method for requesting ad, it handles the request internally
     // update GDPR

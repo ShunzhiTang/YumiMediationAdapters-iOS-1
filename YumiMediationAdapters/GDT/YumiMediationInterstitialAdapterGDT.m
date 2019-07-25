@@ -38,6 +38,10 @@
     return self;
 }
 
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
+}
+
 - (void)requestAd {
     if (self.interstitial) {
         self.interstitial.delegate = nil;

@@ -39,6 +39,10 @@
     return self;
 }
 
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
+}
+
 - (void)requestAd {
     if ([OneWaySDK isConfigured]) {
         [OWRewardedAd initWithDelegate:self];
