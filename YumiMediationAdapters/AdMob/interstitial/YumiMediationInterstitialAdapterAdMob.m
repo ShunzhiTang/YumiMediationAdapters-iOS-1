@@ -49,6 +49,10 @@
     return self;
 }
 
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
+}
+
 - (void)requestAd {
     //  Only one interstitial request is allowed at a time.
     self.interstitial = [[GADInterstitial alloc] initWithAdUnitID:self.provider.data.key1];
