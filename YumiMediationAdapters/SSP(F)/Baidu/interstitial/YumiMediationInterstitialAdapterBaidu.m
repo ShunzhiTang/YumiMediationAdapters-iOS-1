@@ -9,8 +9,8 @@
 #import "YumiMediationInterstitialAdapterBaidu.h"
 #import "YumiMediationInterstitialBaiduViewController.h"
 #import <BaiduMobAdSDK/BaiduMobAdInterstitial.h>
-#import <YumiMediationSDK/YumiMasonry.h>
-#import <YumiMediationSDK/YumiTool.h>
+#import <YumiAdSDK/YumiMasonry.h>
+#import <YumiAdSDK/YumiTool.h>
 
 @interface YumiMediationInterstitialAdapterBaidu () <BaiduMobAdInterstitialDelegate>
 

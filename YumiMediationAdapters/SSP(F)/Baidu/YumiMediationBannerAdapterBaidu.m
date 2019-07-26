@@ -9,7 +9,7 @@
 #import "YumiMediationBannerAdapterBaidu.h"
 #import <BaiduMobAdSDK/BaiduMobAdSetting.h>
 #import <BaiduMobAdSDK/BaiduMobAdView.h>
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
+#import <YumiAdSDK/YumiMediationAdapterRegistry.h>
 
 @interface YumiMediationBannerAdapterBaidu () <BaiduMobAdViewDelegate, YumiMediationBannerAdapter>
 

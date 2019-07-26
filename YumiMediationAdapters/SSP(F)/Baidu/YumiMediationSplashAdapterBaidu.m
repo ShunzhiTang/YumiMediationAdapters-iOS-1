@@ -10,7 +10,7 @@
 #import <BaiduMobAdSDK/BaiduMobAdSetting.h>
 #import <BaiduMobAdSDK/BaiduMobAdSplash.h>
 #import <BaiduMobAdSDK/BaiduMobAdSplashDelegate.h>
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
+#import <YumiAdSDK/YumiMediationAdapterRegistry.h>
 
 @interface YumiMediationSplashAdapterBaidu () <YumiMediationSplashAdapter, BaiduMobAdSplashDelegate>
 

@@ -6,8 +6,8 @@
 //
 
 #import "YumiMediationNativeAdapterBaiduConnector.h"
-#import <YumiMediationSDK/YumiTime.h>
-#import <YumiMediationSDK/YumiTool.h>
+#import <YumiAdSDK/YumiTime.h>
+#import <YumiAdSDK/YumiTool.h>
 
 @interface YumiMediationNativeAdapterBaiduConnector ()
 

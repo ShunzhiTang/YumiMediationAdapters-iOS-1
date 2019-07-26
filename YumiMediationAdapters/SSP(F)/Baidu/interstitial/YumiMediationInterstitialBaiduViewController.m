@@ -6,7 +6,7 @@
 //
 
 #import "YumiMediationInterstitialBaiduViewController.h"
-#import <YumiMediationSDK/YumiMasonry.h>
+#import <YumiAdSDK/YumiMasonry.h>
 
 @interface YumiMediationInterstitialBaiduViewController ()
 
