@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
+#import <YumiAdSDK/YumiMediationAdapterRegistry.h>
 
 @interface YumiMediationVideoAdapterBaidu : NSObject <YumiMediationCoreAdapter>
 

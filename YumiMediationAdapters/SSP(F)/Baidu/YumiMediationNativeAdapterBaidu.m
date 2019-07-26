@@ -13,8 +13,8 @@
 #import <BaiduMobAdSDK/BaiduMobAdNativeAdObject.h>
 #import <BaiduMobAdSDK/BaiduMobAdNativeAdView.h>
 #import <BaiduMobAdSDK/BaiduMobAdNativeVideoView.h>
-#import <YumiMediationSDK/YumiMasonry.h>
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
+#import <YumiAdSDK/YumiMasonry.h>
+#import <YumiAdSDK/YumiMediationAdapterRegistry.h>
 
 @interface YumiMediationNativeAdapterBaidu () <YumiMediationNativeAdapter, BaiduMobAdNativeAdDelegate,
                                                YumiMediationNativeAdapterConnectorDelegate>
