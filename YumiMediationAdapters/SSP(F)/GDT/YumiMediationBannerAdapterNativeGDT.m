@@ -8,10 +8,10 @@
 
 #import "YumiMediationBannerAdapterNativeGDT.h"
 #import "GDTNativeAd.h"
-#import <YumiMediationSDK/YumiAdsWKCustomView.h>
-#import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
-#import <YumiMediationSDK/YumiTool.h>
+#import <YumiAdSDK/YumiAdsWKCustomView.h>
+#import <YumiAdSDK/YumiBannerViewTemplateManager.h>
+#import <YumiAdSDK/YumiMediationAdapterRegistry.h>
+#import <YumiAdSDK/YumiTool.h>
 
 @interface YumiMediationBannerAdapterNativeGDT () <YumiMediationBannerAdapter, GDTNativeAdDelegate,
                                                    YumiAdsWKCustomViewDelegate>

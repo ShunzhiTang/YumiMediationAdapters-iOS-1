@@ -7,8 +7,8 @@
 
 #import "YumiMediationNativeAdapterGDTConnector.h"
 #import "GDTNativeExpressAdView.h"
-#import <YumiMediationSDK/YumiTime.h>
-#import <YumiMediationSDK/YumiTool.h>
+#import <YumiAdSDK/YumiTime.h>
+#import <YumiAdSDK/YumiTool.h>
 
 @interface YumiMediationNativeAdapterGDTConnector () <GDTUnifiedNativeAdViewDelegate>
 
