@@ -8,7 +8,7 @@
 
 #import "YumiMediationSplashAdapterGDT.h"
 #import <YumiGDT/GDTSplashAd.h>
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
+#import <YumiAdSDK/YumiMediationAdapterRegistry.h>
 
 @interface YumiMediationSplashAdapterGDT () <YumiMediationSplashAdapter, GDTSplashAdDelegate>
 

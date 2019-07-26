@@ -12,9 +12,9 @@
 #import "GDTUnifiedNativeAd.h"
 #import "GDTUnifiedNativeAdView.h"
 #import "YumiMediationNativeAdapterGDTConnector.h"
-#import <YumiMediationSDK/YumiMasonry.h>
-#import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
-#import <YumiMediationSDK/YumiTool.h>
+#import <YumiAdSDK/YumiMasonry.h>
+#import <YumiAdSDK/YumiMediationAdapterRegistry.h>
+#import <YumiAdSDK/YumiTool.h>
 
 @interface YumiMediationNativeAdapterGDT () <YumiMediationNativeAdapter, GDTUnifiedNativeAdDelegate,
                                              YumiMediationNativeAdapterConnectorDelegate, GDTNativeExpressAdDelegete>

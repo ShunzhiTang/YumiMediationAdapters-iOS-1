@@ -11,10 +11,10 @@
 #import "GDTNativeExpressAd.h"
 #import "GDTNativeExpressAdView.h"
 #import "YumiGDTAdapterInterstitialViewController.h"
-#import <YumiMediationSDK/YumiAdsWKCustomViewController.h>
-#import <YumiMediationSDK/YumiBannerViewTemplateManager.h>
-#import <YumiMediationSDK/YumiMasonry.h>
-#import <YumiMediationSDK/YumiTool.h>
+#import <YumiAdSDK/YumiAdsWKCustomViewController.h>
+#import <YumiAdSDK/YumiBannerViewTemplateManager.h>
+#import <YumiAdSDK/YumiMasonry.h>
+#import <YumiAdSDK/YumiTool.h>
 
 @interface YumiMediationInterstitialAdapterNativeGDT () <GDTNativeExpressAdDelegete>
 
