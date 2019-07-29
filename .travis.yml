@@ -12,6 +12,9 @@ before_install:
   - gem update --system
   - gem install bundler
   - brew install clang-format
+  - brew install git-lfs
+  - git lfs install
+  - git lfs pull
 install:
   - bundle update
   - pod repo add Specs git@github.com:yumimobi/Specs.git
