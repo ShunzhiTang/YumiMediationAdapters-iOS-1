@@ -165,7 +165,8 @@ static NSUInteger maxNumberOfAds = 5;
 
         GADMediaView *mediaView = [[GADMediaView alloc] initWithFrame:mediaSuperView.bounds];
         [mediaSuperView addSubview:mediaView];
-
+       
+        mediaView.mediaContent = gadNativeAd.mediaContent;
         gadView.mediaView = mediaView;
     }
 
