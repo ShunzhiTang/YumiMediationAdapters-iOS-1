@@ -74,6 +74,7 @@
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [IronSource setConsent:NO];
     }
+    self.isReward = NO;
 }
 
 - (BOOL)isReady {
@@ -99,6 +100,7 @@
 //@param placementInfo An object that contains the placement's reward name and amount.
 - (void)didReceiveRewardForPlacement:(ISPlacementInfo *)placementInfo instanceId:(NSString *)instanceId {
     self.isReward = YES;
+    [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
 }
 
 // Called after a rewarded video has attempted to show but failed.
@@ -115,11 +117,8 @@
 
 // Called after a rewarded video has been dismissed.
 - (void)rewardedVideoDidClose:(NSString *)instanceId {
-    if (self.isReward) { // ironsource 确保无中途关闭并且奖励回调始终在关闭之前
-        [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
-        self.isReward = NO;
-    }
     [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:self.isReward adType:self.adType];
+    self.isReward = NO;
 }
 
 // Invoked when the end user clicked on the RewardedVideo ad

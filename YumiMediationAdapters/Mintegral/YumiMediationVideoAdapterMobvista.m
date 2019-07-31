@@ -108,8 +108,10 @@
             withRewardInfo:(MTGRewardAdInfo *)rewardInfo {
     if (rewardInfo) {
         [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
+        [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:YES adType:self.adType];
+        return;
     }
-    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:YES adType:self.adType];
+    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
 }
 ///  Called when the ad is clicked
 - (void)onVideoAdClicked:(nullable NSString *)unitId {
