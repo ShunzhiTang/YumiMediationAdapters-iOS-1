@@ -12,6 +12,7 @@
 
 @interface YumiMediationVideoAdapterIronSource () <ISDemandOnlyRewardedVideoDelegate>
 
+@property (nonatomic, assign) BOOL isReward;
 @property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
@@ -73,6 +74,7 @@
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [IronSource setConsent:NO];
     }
+    self.isReward = NO;
 }
 
 - (BOOL)isReady {
@@ -97,7 +99,7 @@
 // Called after a rewarded video has been viewed completely and the user is eligible for reward.
 //@param placementInfo An object that contains the placement's reward name and amount.
 - (void)didReceiveRewardForPlacement:(ISPlacementInfo *)placementInfo instanceId:(NSString *)instanceId {
-    
+    self.isReward = YES;
     [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
 }
 
@@ -115,7 +117,8 @@
 
 // Called after a rewarded video has been dismissed.
 - (void)rewardedVideoDidClose:(NSString *)instanceId {
-    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:YES adType:self.adType];
+    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:self.isReward adType:self.adType];
+    self.isReward = NO;
 }
 
 // Invoked when the end user clicked on the RewardedVideo ad
