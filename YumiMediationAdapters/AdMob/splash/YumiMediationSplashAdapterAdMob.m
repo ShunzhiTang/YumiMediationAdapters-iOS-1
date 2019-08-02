@@ -25,7 +25,7 @@
 
 @property (nonatomic, assign) BOOL isTimeout;
 @property (nonatomic) dispatch_block_t timeoutBlock;
-@property (nonatomic, assign) BOOL isError;
+@property (nonatomic, assign) BOOL loadComplete;
 
 @end
 
@@ -63,7 +63,7 @@
 - (void)requestAdAndShowInWindow:(nonnull UIWindow *)keyWindow withBottomView:(nonnull UIView *)bottomView {
 
     self.isTimeout = NO;
-    self.isError = NO;
+    self.loadComplete = NO;
     if (self.timeoutBlock) {
         dispatch_block_cancel(self.timeoutBlock);
     }
@@ -92,8 +92,8 @@
                      if (weakSelf.isTimeout) {
                          return;
                      }
+                     self.loadComplete = YES;
                      if (error) {
-                         weakSelf.isError = YES;
                          [weakSelf.delegate adapter:weakSelf failToShow:error.localizedDescription];
                          return;
                      }
@@ -102,7 +102,7 @@
                  }];
     // timeout
     self.timeoutBlock = dispatch_block_create(0, ^{
-        if (weakSelf.isError) {
+        if (weakSelf.loadComplete) {
             return;
         }
         weakSelf.isTimeout = YES;
