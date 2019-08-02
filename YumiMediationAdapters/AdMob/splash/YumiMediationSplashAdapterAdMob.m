@@ -7,24 +7,25 @@
 //
 
 #import "YumiMediationSplashAdapterAdMob.h"
+#import "YumiAppOpenViewController.h"
+#import <GoogleMobileAds/GoogleMobileAds.h>
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiMediationConstants.h>
-#import <GoogleMobileAds/GoogleMobileAds.h>
-#import <YumiMediationSDK/YumiTool.h>
-#import "YumiAppOpenViewController.h"
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationSplashAdapterAdMob () <YumiMediationSplashAdapter>
 
 @property (nonatomic, weak) id<YumiMediationSplashAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationSplashProvider *provider;
 
-@property(nonatomic) GADAppOpenAd *appOpenAd;
+@property (nonatomic) GADAppOpenAd *appOpenAd;
 @property (nonatomic) UIView *bottomView;
 @property (nonatomic, assign) UIInterfaceOrientation interfaceOrientation;
 
-@property (nonatomic, assign)BOOL isTimeout;
+@property (nonatomic, assign) BOOL isTimeout;
 @property (nonatomic) dispatch_block_t timeoutBlock;
+@property (nonatomic, assign) BOOL loadComplete;
 
 @end
 
@@ -60,33 +61,38 @@
     _interfaceOrientation = orientation;
 }
 - (void)requestAdAndShowInWindow:(nonnull UIWindow *)keyWindow withBottomView:(nonnull UIView *)bottomView {
-    
+
     self.isTimeout = NO;
+    self.loadComplete = NO;
     if (self.timeoutBlock) {
         dispatch_block_cancel(self.timeoutBlock);
     }
     // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     GADExtras *extras = [[GADExtras alloc] init];
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
-        extras.additionalParameters = @{@"npa": @"0"};
+        extras.additionalParameters = @{@"npa" : @"0"};
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
-        extras.additionalParameters = @{@"npa": @"1"};
+        extras.additionalParameters = @{@"npa" : @"1"};
     }
-    
+
     GADRequest *request = [GADRequest request];
     [request registerAdNetworkExtras:extras];
-    
+
     self.bottomView = bottomView;
-    
+
     self.appOpenAd = nil;
     __weak typeof(self) weakSelf = self;
     [GADAppOpenAd loadWithAdUnitID:self.provider.data.key1
                            request:request
                        orientation:self.interfaceOrientation
                  completionHandler:^(GADAppOpenAd *_Nullable appOpenAd, NSError *_Nullable error) {
+                     if (weakSelf.isTimeout) {
+                         return;
+                     }
+                     self.loadComplete = YES;
                      if (error) {
                          [weakSelf.delegate adapter:weakSelf failToShow:error.localizedDescription];
                          return;
@@ -96,23 +102,20 @@
                  }];
     // timeout
     self.timeoutBlock = dispatch_block_create(0, ^{
-         weakSelf.isTimeout = YES;
+        if (weakSelf.loadComplete) {
+            return;
+        }
+        weakSelf.isTimeout = YES;
+        [weakSelf.delegate adapter:weakSelf failToShow:@"admob splash time out"];
     });
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.provider.data.requestTimeout * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),self.timeoutBlock);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.provider.data.requestTimeout * NSEC_PER_SEC)),
+                   dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), self.timeoutBlock);
 }
 
-- (void)showSplash{
-    
-    if (self.isTimeout) {
-        self.isTimeout = NO;
-        [self.delegate adapter:self failToShow:@"admob splash time out"];
-        return;
-    }
-    
+- (void)showSplash {
     __weak typeof(self) weakSelf = self;
-    
     YumiAppOpenViewController *viewController = [[YumiAppOpenViewController alloc] init];
-    
+
     // Don't forget to set the ad on the view controller.
     viewController.appOpenAd = self.appOpenAd;
     viewController.bottomView = self.bottomView;
@@ -121,13 +124,13 @@
         weakSelf.appOpenAd = nil;
         [weakSelf.delegate adapter:weakSelf didClose:weakSelf.appOpenAd];
     };
-    
-   [[[YumiTool sharedTool] topMostController] presentViewController:viewController
-                                                                animated:NO
-                                                         completion:^{
-                                                             [weakSelf.delegate adapter:weakSelf successToShow:weakSelf.appOpenAd];
-                                                         }];
-    
+
+    [[[YumiTool sharedTool] topMostController]
+        presentViewController:viewController
+                     animated:NO
+                   completion:^{
+                       [weakSelf.delegate adapter:weakSelf successToShow:weakSelf.appOpenAd];
+                   }];
 }
 
 @end

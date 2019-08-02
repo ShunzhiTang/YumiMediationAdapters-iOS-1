@@ -7,9 +7,7 @@
 
 #import "YumiMediationUnityInstance.h"
 
-@interface YumiMediationUnityInstance ()
-
-@end
+static NSString *separatedString = @"|||";
 
 @implementation YumiMediationUnityInstance
 
@@ -22,16 +20,111 @@
     return sharedInstance;
 }
 
+#pragma mark : - private method
+- (NSString *)getAdapterKeyWith:(NSString *)placementId adType:(YumiMediationAdType)adType {
+    return [NSString stringWithFormat:@"%@%@%ld", placementId, separatedString, adType];
+}
+
+- (NSString *)adapterKey:(NSString *)placementId {
+    __block NSString *adapterKey = nil;
+    [self.adaptersDict.allKeys
+        enumerateObjectsUsingBlock:^(NSString *_Nonnull key, NSUInteger idx, BOOL *_Nonnull stop) {
+            if ([key containsString:placementId]) {
+                adapterKey = key;
+            }
+        }];
+    return adapterKey;
+}
+
+- (id<YumiMediationCoreAdapter>)adapterObject:(NSString *)placementId {
+    return self.adaptersDict[[self adapterKey:placementId]];
+}
+
+- (NSUInteger)adapterAdType:(NSString *)placementId {
+    NSString *adapterKey = [self adapterKey:placementId];
+
+    NSArray *components = [adapterKey componentsSeparatedByString:separatedString];
+
+    if (components.count == 2) {
+        return [components.lastObject integerValue];
+    }
+    return 0;
+}
+
+- (void)delegateErrorIfNeed:(BOOL)isLoadFail errorMsg:(NSString *)errorMsg {
+
+    // call back all adapters
+    [self.adaptersDict
+        enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, id<YumiMediationCoreAdapter> _Nonnull coreAdapter,
+                                            BOOL *_Nonnull stop) {
+
+            NSArray *components = [key componentsSeparatedByString:separatedString];
+            if (components.count != 2) {
+                return;
+            }
+
+            YumiMediationAdType adType = (YumiMediationAdType)components.lastObject;
+
+            if (isLoadFail) {
+                if (adType == YumiMediationAdTypeInterstitial) {
+
+                    [((YumiMediationInterstitialAdapterUnity *)coreAdapter).delegate coreAdapter:coreAdapter
+                                                                                          coreAd:nil
+                                                                                   didFailToLoad:errorMsg
+                                                                                          adType:adType];
+                }
+                if (adType == YumiMediationAdTypeVideo) {
+
+                    [((YumiMediationVideoAdapterUnity *)coreAdapter).delegate coreAdapter:coreAdapter
+                                                                                   coreAd:nil
+                                                                            didFailToLoad:errorMsg
+                                                                                   adType:adType];
+                }
+                return;
+            }
+            // fail to show
+            if (adType == YumiMediationAdTypeInterstitial) {
+
+                [((YumiMediationInterstitialAdapterUnity *)coreAdapter).delegate coreAdapter:coreAdapter
+                                                                              failedToShowAd:nil
+                                                                                 errorString:errorMsg
+                                                                                      adType:adType];
+            }
+            if (adType == YumiMediationAdTypeVideo) {
+
+                [((YumiMediationVideoAdapterUnity *)coreAdapter).delegate coreAdapter:coreAdapter
+                                                                       failedToShowAd:nil
+                                                                          errorString:errorMsg
+                                                                               adType:adType];
+            }
+
+        }];
+}
+
 #pragma mark - UnityAdsDelegate
 - (void)unityAdsReady:(NSString *)placementId {
-    if ([self.unityInterstitialAdapter.provider.data.key2 isEqualToString:placementId]) {
-        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
-                                          didReceivedCoreAd:nil
-                                                     adType:YumiMediationAdTypeInterstitial];
-    } else if ([self.unityVideoAdapter.provider.data.key2 isEqualToString:placementId]) {
-        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
-                                   didReceivedCoreAd:nil
-                                              adType:YumiMediationAdTypeVideo];
+
+    NSUInteger adType = [self adapterAdType:placementId];
+
+    if (adType == 0) {
+        return;
+    }
+
+    id<YumiMediationCoreAdapter> adapter = [self adapterObject:placementId];
+
+    if (adType == YumiMediationAdTypeInterstitial) {
+
+        [((YumiMediationInterstitialAdapterUnity *)adapter).delegate coreAdapter:adapter
+                                                               didReceivedCoreAd:nil
+                                                                          adType:YumiMediationAdTypeInterstitial];
+
+        return;
+    }
+    if (adType == YumiMediationAdTypeVideo) {
+        [((YumiMediationVideoAdapterUnity *)adapter).delegate coreAdapter:adapter
+                                                        didReceivedCoreAd:nil
+                                                                   adType:YumiMediationAdTypeVideo];
+        return;
     }
 }
 
@@ -39,105 +132,120 @@
 
     // show or player ad fail
     if (error == kUnityAdsErrorShowError || error == kUnityAdsErrorVideoPlayerError) {
-        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
-                                             failedToShowAd:nil
-                                                errorString:message
-                                                     adType:YumiMediationAdTypeInterstitial];
 
-        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
-                                      failedToShowAd:nil
-                                         errorString:message
-                                              adType:YumiMediationAdTypeVideo];
+        [self delegateErrorIfNeed:NO errorMsg:message];
+
         return;
     }
-    [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
-                                                 coreAd:nil
-                                          didFailToLoad:message
-                                                 adType:YumiMediationAdTypeInterstitial];
-
-    [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
-                                          coreAd:nil
-                                   didFailToLoad:message
-                                          adType:YumiMediationAdTypeVideo];
+    [self delegateErrorIfNeed:YES errorMsg:message];
 }
 
 - (void)unityAdsDidStart:(NSString *)placementId {
-    if ([self.unityInterstitialAdapter.provider.data.key2 isEqualToString:placementId]) {
+    NSUInteger adType = [self adapterAdType:placementId];
 
-        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
-                                              didOpenCoreAd:nil
-                                                     adType:YumiMediationAdTypeInterstitial];
-        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
-                                          didStartPlayingAd:nil
-                                                     adType:YumiMediationAdTypeInterstitial];
-    } else if ([self.unityVideoAdapter.provider.data.key2 isEqualToString:placementId]) {
+    if (adType == 0) {
+        return;
+    }
 
-        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
-                                       didOpenCoreAd:nil
-                                              adType:YumiMediationAdTypeVideo];
-        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
-                                   didStartPlayingAd:nil
-                                              adType:YumiMediationAdTypeVideo];
+    id<YumiMediationCoreAdapter> adapter = [self adapterObject:placementId];
+
+    if (adType == YumiMediationAdTypeInterstitial) {
+        [((YumiMediationInterstitialAdapterUnity *)adapter).delegate coreAdapter:adapter
+                                                                   didOpenCoreAd:nil
+                                                                          adType:YumiMediationAdTypeInterstitial];
+        [((YumiMediationInterstitialAdapterUnity *)adapter).delegate coreAdapter:adapter
+                                                               didStartPlayingAd:nil
+                                                                          adType:YumiMediationAdTypeInterstitial];
+        return;
+    }
+
+    if (adType == YumiMediationAdTypeVideo) {
+        [((YumiMediationVideoAdapterUnity *)adapter).delegate coreAdapter:adapter
+                                                            didOpenCoreAd:nil
+                                                                   adType:YumiMediationAdTypeVideo];
+        [((YumiMediationVideoAdapterUnity *)adapter).delegate coreAdapter:adapter
+                                                        didStartPlayingAd:nil
+                                                                   adType:YumiMediationAdTypeVideo];
+        return;
     }
 }
 
 - (void)unityAdsDidFinish:(NSString *)placementId withFinishState:(UnityAdsFinishState)state {
-    if(state == kUnityAdsFinishStateError){
-        if ([self.unityInterstitialAdapter.provider.data.key2 isEqualToString:placementId]) {
-            [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
-                                                 failedToShowAd:nil
-                                                    errorString:@"the ad did not successfully display."
-                                                    adType:YumiMediationAdTypeInterstitial];
-        } else if ([self.unityVideoAdapter.provider.data.key2 isEqualToString:placementId]) {
-            [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
-                                          failedToShowAd:nil
-                                             errorString:@"the ad did not successfully display."
-                                                  adType:YumiMediationAdTypeVideo];
-        }
-        
+    if (state == kUnityAdsFinishStateError) {
+
+        [self delegateErrorIfNeed:NO errorMsg:@"the ad did not successfully display."];
         return;
     }
 
-    if ([self.unityInterstitialAdapter.provider.data.key2 isEqualToString:placementId]) {
-        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
-                                             didCloseCoreAd:nil
-                                          isCompletePlaying:NO
-                                                     adType:YumiMediationAdTypeInterstitial];
-    } else if ([self.unityVideoAdapter.provider.data.key2 isEqualToString:placementId]) {
+    NSUInteger adType = [self adapterAdType:placementId];
 
+    if (adType == 0) {
+        return;
+    }
+
+    id<YumiMediationCoreAdapter> adapter = [self adapterObject:placementId];
+
+    if (adType == YumiMediationAdTypeInterstitial) {
+        [((YumiMediationInterstitialAdapterUnity *)adapter).delegate coreAdapter:adapter
+                                                                  didCloseCoreAd:adapter
+                                                               isCompletePlaying:NO
+                                                                          adType:YumiMediationAdTypeInterstitial];
+        return;
+    }
+
+    if (adType == YumiMediationAdTypeVideo) {
         if (state == kUnityAdsFinishStateCompleted) {
-            [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
-                                                  coreAd:nil
-                                               didReward:YES
-                                                  adType:YumiMediationAdTypeVideo];
-            [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
-                                          didCloseCoreAd:nil
-                                       isCompletePlaying:YES
-                                                  adType:YumiMediationAdTypeVideo];
+            [((YumiMediationVideoAdapterUnity *)adapter).delegate coreAdapter:adapter
+                                                                       coreAd:nil
+                                                                    didReward:YES
+                                                                       adType:YumiMediationAdTypeVideo];
+            [((YumiMediationVideoAdapterUnity *)adapter).delegate coreAdapter:adapter
+                                                               didCloseCoreAd:nil
+                                                            isCompletePlaying:YES
+                                                                       adType:YumiMediationAdTypeVideo];
             return;
         }
-        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
-                                      didCloseCoreAd:nil
-                                   isCompletePlaying:NO
-                                              adType:YumiMediationAdTypeVideo];
+        [((YumiMediationVideoAdapterUnity *)adapter).delegate coreAdapter:adapter
+                                                           didCloseCoreAd:nil
+                                                        isCompletePlaying:NO
+                                                                   adType:YumiMediationAdTypeVideo];
+        return;
     }
 }
 
-- (void)unityAdsDidClick:(NSString *)placementId{
-    if ([self.unityInterstitialAdapter.provider.data.key2 isEqualToString:placementId]) {
-        [self.unityInterstitialAdapter.delegate coreAdapter:self.unityInterstitialAdapter
-                                          didClickCoreAd:nil
-                                                     adType:YumiMediationAdTypeInterstitial];
-    } else if ([self.unityVideoAdapter.provider.data.key2 isEqualToString:placementId]) {
-        [self.unityVideoAdapter.delegate coreAdapter:self.unityVideoAdapter
-                                   didClickCoreAd:nil
-                                              adType:YumiMediationAdTypeVideo];
+- (void)unityAdsDidClick:(NSString *)placementId {
+    NSUInteger adType = [self adapterAdType:placementId];
+
+    if (adType == 0) {
+        return;
+    }
+
+    id<YumiMediationCoreAdapter> adapter = [self adapterObject:placementId];
+
+    if (adType == YumiMediationAdTypeInterstitial) {
+        [((YumiMediationInterstitialAdapterUnity *)adapter).delegate coreAdapter:adapter
+                                                                  didClickCoreAd:nil
+                                                                          adType:YumiMediationAdTypeInterstitial];
+        return;
+    }
+    if (adType == YumiMediationAdTypeVideo) {
+        [((YumiMediationVideoAdapterUnity *)adapter).delegate coreAdapter:adapter
+                                                           didClickCoreAd:nil
+                                                                   adType:YumiMediationAdTypeVideo];
+        return;
     }
 }
-
-- (void)unityAdsPlacementStateChanged:(nonnull NSString *)placementId oldState:(UnityAdsPlacementState)oldState newState:(UnityAdsPlacementState)newState {
-    
+- (void)unityAdsPlacementStateChanged:(NSString *)placementId
+                             oldState:(UnityAdsPlacementState)oldState
+                             newState:(UnityAdsPlacementState)newState {
 }
 
+#pragma mark : getter method
+- (NSMutableDictionary<NSString *, id<YumiMediationCoreAdapter>> *)adaptersDict {
+    if (!_adaptersDict) {
+        _adaptersDict = [NSMutableDictionary dictionary];
+    }
+    return _adaptersDict;
+}
 
 @end

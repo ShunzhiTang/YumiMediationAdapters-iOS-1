@@ -46,7 +46,7 @@
     [sdk setLoggingEnabled:NO];
     // set gdpr
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [sdk updateConsentStatus:VungleConsentAccepted consentMessageVersion:@"1"];
     }
@@ -58,20 +58,24 @@
     return self;
 }
 
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
+}
+
 - (void)requestAd {
     NSError *error;
     VungleSDK *sdk = [VungleSDK sharedSDK];
-    
+
     // update gdpr
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [sdk updateConsentStatus:VungleConsentAccepted consentMessageVersion:@"1"];
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [sdk updateConsentStatus:VungleConsentDenied consentMessageVersion:@"1"];
     }
-    
+
     if (sdk.isInitialized) {
         [sdk loadPlacementWithID:self.provider.data.key2 error:&error];
     } else {

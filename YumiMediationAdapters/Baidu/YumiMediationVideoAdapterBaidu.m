@@ -39,6 +39,8 @@
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
                                           adType:(YumiMediationAdType)adType {
+    self = [super init];
+
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
@@ -50,6 +52,10 @@
     self.rewardVideo.AdUnitTag = self.provider.data.key2;
 
     return self;
+}
+
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
 }
 
 - (void)requestAd {

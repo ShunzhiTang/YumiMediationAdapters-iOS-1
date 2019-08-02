@@ -9,8 +9,8 @@
 #import "YumiMediationInterstitialAdapterIQzone.h"
 #import <IMDInterstitialViewController.h>
 #import <IMDSDK.h>
-#import <YumiMediationSDK/YumiTool.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
+#import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationInterstitialAdapterIQzone () <IMDInterstitialViewDelegate>
 
@@ -38,22 +38,26 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-    
-    __weak __typeof(self)weakSelf = self;
+
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         weakSelf.interstitial = [IMDSDK newInterstitialViewController:[[YumiTool sharedTool] topMostController]
-                                                      placementID:weakSelf.provider.data.key1
-                                                   loadedListener:weakSelf
-                                                      andMetadata:nil];
+                                                          placementID:weakSelf.provider.data.key1
+                                                       loadedListener:weakSelf
+                                                          andMetadata:nil];
     });
 
     return self;
 }
 
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
+}
+
 - (void)requestAd {
     // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [self.interstitial setGDPRApplies:IMDGDPR_Applies withConsent:IMDGDPR_Consented];
     }

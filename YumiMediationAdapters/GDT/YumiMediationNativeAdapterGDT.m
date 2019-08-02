@@ -7,6 +7,8 @@
 //
 
 #import "YumiMediationNativeAdapterGDT.h"
+#import "GDTNativeExpressAd.h"
+#import "GDTNativeExpressAdView.h"
 #import "GDTUnifiedNativeAd.h"
 #import "GDTUnifiedNativeAdView.h"
 #import "YumiMediationNativeAdapterGDTConnector.h"
@@ -15,14 +17,18 @@
 #import <YumiMediationSDK/YumiTool.h>
 
 @interface YumiMediationNativeAdapterGDT () <YumiMediationNativeAdapter, GDTUnifiedNativeAdDelegate,
-                                             YumiMediationNativeAdapterConnectorDelegate>
+                                             YumiMediationNativeAdapterConnectorDelegate, GDTNativeExpressAdDelegete>
 
 @property (nonatomic, weak) id<YumiMediationNativeAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationNativeProvider *provider;
+
+/// native ad
 @property (nonatomic) GDTUnifiedNativeAd *nativeAd;
+// native  express ad
+@property (nonatomic) GDTNativeExpressAd *nativeExpressAd;
 
 // origin gdt ads data
-@property (nonatomic) NSArray<GDTUnifiedNativeAdDataObject *> *gdtNativeData;
+@property (nonatomic) NSArray *gdtNativeData;
 // mapping data
 @property (nonatomic) NSMutableArray *mappingData;
 
@@ -59,6 +65,29 @@
     });
 }
 - (void)loadNativeAdsWith:(NSUInteger)adCount {
+
+    // 0： 模版形式 ，1：自渲染 ，默认是0
+    int renderMode = 0;
+
+    if (![self.provider.data.extra[YumiProviderExtraGDT] isKindOfClass:[NSNumber class]]) {
+        renderMode = 0;
+    } else {
+        renderMode = [self.provider.data.extra[YumiProviderExtraGDT] intValue];
+    }
+
+    // need to request expressAd
+    if (renderMode == 0) {
+        self.nativeExpressAd = [[GDTNativeExpressAd alloc] initWithAppId:self.provider.data.key1 ?: @""
+                                                             placementId:self.provider.data.key2 ?: @""
+                                                                  adSize:self.nativeConfig.expressAdSize];
+
+        self.nativeExpressAd.delegate = self;
+        self.nativeExpressAd.videoMuted = NO;
+
+        [self.nativeExpressAd loadAd:adCount];
+        return;
+    }
+    // native ad
     self.nativeAd = [[GDTUnifiedNativeAd alloc] initWithAppId:self.provider.data.key1 ?: @""
                                                   placementId:self.provider.data.key2 ?: @""];
     self.nativeAd.delegate = self;
@@ -71,6 +100,17 @@
                          (NSDictionary<YumiMediationUnifiedNativeAssetIdentifier, UIView *> *)clickableAssetViews
                       withViewController:(UIViewController *)viewController
                                 nativeAd:(YumiMediationNativeModel *)nativeAd {
+
+    if (nativeAd.isExpressAdView) {
+        GDTNativeExpressAdView *expressView = (GDTNativeExpressAdView *)nativeAd.expressAdView;
+
+        expressView.controller = viewController;
+
+        [expressView render];
+
+        return;
+    }
+
     NSMutableArray<UIView *> *clickables = [NSMutableArray array];
     GDTUnifiedNativeAdView *gdtView = [[GDTUnifiedNativeAdView alloc] initWithFrame:view.bounds];
 
@@ -100,10 +140,10 @@
         if (clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset]) {
             mediaSuperView = clickableAssetViews[YumiMediationUnifiedNativeMediaViewAsset];
         }
-        
+
         GDTMediaView *mediaView = [[GDTMediaView alloc] initWithFrame:mediaSuperView.bounds];
         mediaView.videoMuted = YES;
-        
+
         [mediaSuperView addSubview:mediaView];
 
         [gdtView registerDataObject:gdtData
@@ -126,6 +166,21 @@
 - (void)clickAd:(YumiMediationNativeModel *)nativeAd {
 }
 
+#pragma mark: - private method
+- (YumiMediationNativeModel *)getNativeModelWith:(GDTNativeExpressAdView *)nativeExpressAdView {
+    __block YumiMediationNativeModel *nativeModel = nil;
+    [self.mappingData enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
+        if ([obj isKindOfClass:[YumiMediationNativeModel class]]) {
+            if ([((YumiMediationNativeModel *)obj).expressAdView isEqual:nativeExpressAdView]) {
+                nativeModel = obj;
+                *stop = YES;
+            }
+        }
+    }];
+    
+    return nativeModel;
+}
+
 #pragma mark - GDTUnifiedNativeAdDelete
 - (void)gdt_unifiedNativeAdLoaded:(NSArray<GDTUnifiedNativeAdDataObject *> *_Nullable)unifiedNativeAdDataObjects
                             error:(NSError *_Nullable)error {
@@ -136,7 +191,7 @@
     self.gdtNativeData = unifiedNativeAdDataObjects;
 
     __weak typeof(self) weakSelf = self;
-    
+
     [unifiedNativeAdDataObjects
         enumerateObjectsUsingBlock:^(GDTUnifiedNativeAdDataObject *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
             [[[YumiMediationNativeAdapterGDTConnector alloc] init]
@@ -145,6 +200,46 @@
                   disableImageLoading:weakSelf.nativeConfig.disableImageLoading
                     connectorDelegate:weakSelf];
         }];
+}
+
+#pragma mark : GDTNativeExpressAdDelegete
+- (void)nativeExpressAdSuccessToLoad:(GDTNativeExpressAd *)nativeExpressAd
+                               views:(NSArray<__kindof GDTNativeExpressAdView *> *)views {
+
+    self.gdtNativeData = views;
+
+    __weak typeof(self) weakSelf = self;
+    [views enumerateObjectsUsingBlock:^(__kindof GDTNativeExpressAdView *_Nonnull obj, NSUInteger idx,
+                                        BOOL *_Nonnull stop) {
+        [[[YumiMediationNativeAdapterGDTConnector alloc] init]
+            convertWithNativeData:obj
+                      withAdapter:weakSelf
+              disableImageLoading:weakSelf.nativeConfig.disableImageLoading
+                connectorDelegate:weakSelf];
+    }];
+}
+
+- (void)nativeExpressAdFailToLoad:(GDTNativeExpressAd *)nativeExpressAd error:(NSError *)error {
+    [self handleNativeError:error];
+}
+
+- (void)nativeExpressAdViewRenderSuccess:(GDTNativeExpressAdView *)nativeExpressAdView {
+    
+    [self.delegate adapter:self nativeExpressAdViewRenderSuccess:[self getNativeModelWith:nativeExpressAdView]];
+    
+}
+
+- (void)nativeExpressAdViewRenderFail:(GDTNativeExpressAdView *)nativeExpressAdView {
+    
+    [self.delegate adapter:self nativeExpressAd:[self getNativeModelWith:nativeExpressAdView] didRenderFail:@"gdt express ad view render fail"];
+}
+
+- (void)nativeExpressAdViewClosed:(GDTNativeExpressAdView *)nativeExpressAdView {
+    [self.delegate adapter:self nativeExpressAdDidClose:[self getNativeModelWith:nativeExpressAdView]];
+}
+
+- (void)nativeExpressAdViewClicked:(GDTNativeExpressAdView *)nativeExpressAdView {
+    [self.delegate adapter:self didClick:nil];
 }
 
 #pragma mark : -YumiMediationNativeAdapterConnectorDelegate
@@ -178,9 +273,7 @@
             return;
         }
         NSError *error =
-            [NSError errorWithDomain:@"" code:501 userInfo:@{
-                @"error reason" : @"connector yumiAds all data error"
-            }];
+            [NSError errorWithDomain:@"" code:501 userInfo:@{@"error reason" : @"connector yumiAds all data error"}];
         [self handleNativeError:error];
     }
 }

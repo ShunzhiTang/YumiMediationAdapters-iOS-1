@@ -33,15 +33,19 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-    
-    __weak __typeof(self)weakSelf = self;
+
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.rewardVideoAd =
-        [[GDTRewardVideoAd alloc] initWithAppId:weakSelf.provider.data.key1 placementId:weakSelf.provider.data.key2];
+        weakSelf.rewardVideoAd = [[GDTRewardVideoAd alloc] initWithAppId:weakSelf.provider.data.key1
+                                                             placementId:weakSelf.provider.data.key2];
         weakSelf.rewardVideoAd.delegate = weakSelf;
     });
-    
+
     return self;
+}
+
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
 }
 
 - (void)requestAd {

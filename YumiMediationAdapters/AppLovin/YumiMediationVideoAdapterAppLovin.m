@@ -46,17 +46,21 @@
     return self;
 }
 
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
+}
+
 - (void)requestAd {
     // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [ALPrivacySettings setHasUserConsent:YES];
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [ALPrivacySettings setHasUserConsent:NO];
     }
-    
+
     [self.video preloadAndNotify:self];
 }
 
@@ -120,10 +124,6 @@
 }
 
 - (void)rewardValidationRequestForAd:(ALAd *)ad wasRejectedWithResponse:(NSDictionary *)response {
-    self.isReward = NO;
-}
-
-- (void)userDeclinedToViewAd:(ALAd *)ad {
     self.isReward = NO;
 }
 

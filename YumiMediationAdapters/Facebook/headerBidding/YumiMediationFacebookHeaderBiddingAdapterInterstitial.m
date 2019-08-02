@@ -48,6 +48,10 @@
     return self;
 }
 
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
+}
+
 - (void)requestAd {
     if (self.provider.data.payload.length == 0) {
         [self.delegate coreAdapter:self coreAd:nil didFailToLoad:self.provider.data.errMessage adType:self.adType];

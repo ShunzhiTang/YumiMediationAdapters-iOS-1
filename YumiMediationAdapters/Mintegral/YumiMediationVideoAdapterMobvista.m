@@ -36,16 +36,16 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-    
+
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [[MTGSDK sharedInstance] setConsentStatus:YES];
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [[MTGSDK sharedInstance] setConsentStatus:NO];
     }
-    
+
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [[MTGSDK sharedInstance] setAppID:weakSelf.provider.data.key1 ApiKey:weakSelf.provider.data.key2];
@@ -55,17 +55,21 @@
     return self;
 }
 
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
+}
+
 - (void)requestAd {
     // update gdpr
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [[MTGSDK sharedInstance] setConsentStatus:YES];
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [[MTGSDK sharedInstance] setConsentStatus:NO];
     }
-    
+
     [self.videoAd loadVideo:self.provider.data.key3 delegate:self];
 }
 
@@ -104,8 +108,10 @@
             withRewardInfo:(MTGRewardAdInfo *)rewardInfo {
     if (rewardInfo) {
         [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
+        [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:YES adType:self.adType];
+        return;
     }
-    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:YES adType:self.adType];
+    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
 }
 ///  Called when the ad is clicked
 - (void)onVideoAdClicked:(nullable NSString *)unitId {

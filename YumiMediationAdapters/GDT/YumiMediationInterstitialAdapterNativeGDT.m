@@ -72,6 +72,10 @@
     return self;
 }
 
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
+}
+
 - (void)requestAd {
     YumiTool *tool = [YumiTool sharedTool];
     CGSize adSize = CGSizeMake(ScreenWidth, 300);
@@ -152,7 +156,6 @@
     [self.delegate coreAdapter:self didClickCoreAd:self.interstitialVc adType:self.adType];
 }
 - (void)nativeExpressAdViewExposure:(GDTNativeExpressAdView *)nativeExpressAdView {
-    
 }
 - (void)nativeExpressAdViewClosed:(GDTNativeExpressAdView *)nativeExpressAdView {
     [self closeGDTIntestitial];

@@ -35,11 +35,11 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-    
+
     // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
     UADSMetaData *gdprConsentMetaData = [[UADSMetaData alloc] init];
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [gdprConsentMetaData set:@"gdpr.consent" value:@YES];
         [gdprConsentMetaData commit];
@@ -48,13 +48,20 @@
         [gdprConsentMetaData set:@"gdpr.consent" value:@NO];
         [gdprConsentMetaData commit];
     }
-    
+
     if (![UnityAds isInitialized]) {
         [UnityAds initialize:provider.data.key1 delegate:[YumiMediationUnityInstance sharedInstance] testMode:NO];
     }
-    [YumiMediationUnityInstance sharedInstance].unityInterstitialAdapter = self;
+
+    YumiMediationUnityInstance *unityInstance = [YumiMediationUnityInstance sharedInstance];
+    NSString *key = [unityInstance getAdapterKeyWith:self.provider.data.key2 adType:self.adType];
+    [unityInstance.adaptersDict setValue:self forKey:key];
 
     return self;
+}
+
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
 }
 
 - (void)requestAd {
@@ -62,7 +69,7 @@
     // update GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
     UADSMetaData *gdprConsentMetaData = [[UADSMetaData alloc] init];
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [gdprConsentMetaData set:@"gdpr.consent" value:@YES];
         [gdprConsentMetaData commit];
@@ -71,7 +78,7 @@
         [gdprConsentMetaData set:@"gdpr.consent" value:@NO];
         [gdprConsentMetaData commit];
     }
-    
+
     if ([UnityAds isReady:self.provider.data.key2]) {
         [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
     }

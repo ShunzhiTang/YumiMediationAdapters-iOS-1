@@ -35,18 +35,17 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-    
-    
+
     // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
-       [IronSource setConsent:YES];
+        [IronSource setConsent:YES];
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [IronSource setConsent:NO];
     }
-    
+
     [IronSource setISDemandOnlyRewardedVideoDelegate:self];
     [IronSource shouldTrackReachability:YES];
     if (self.provider.data.key1.length == 0 || self.provider.data.key2.length == 0) {
@@ -60,17 +59,22 @@
     return self;
 }
 
+- (void)updateProviderData:(YumiMediationCoreProvider *)provider {
+    self.provider = provider;
+}
+
 - (void)requestAd {
     // NOTE: ironsource do not provide any method for requesting ad, it handles the request internally
     // update GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [IronSource setConsent:YES];
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [IronSource setConsent:NO];
     }
+    self.isReward = NO;
 }
 
 - (BOOL)isReady {
@@ -96,6 +100,7 @@
 //@param placementInfo An object that contains the placement's reward name and amount.
 - (void)didReceiveRewardForPlacement:(ISPlacementInfo *)placementInfo instanceId:(NSString *)instanceId {
     self.isReward = YES;
+    [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
 }
 
 // Called after a rewarded video has attempted to show but failed.
@@ -112,11 +117,8 @@
 
 // Called after a rewarded video has been dismissed.
 - (void)rewardedVideoDidClose:(NSString *)instanceId {
-    if (self.isReward) { // ironsource 确保无中途关闭并且奖励回调始终在关闭之前
-        [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
-        self.isReward = NO;
-    }
     [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:self.isReward adType:self.adType];
+    self.isReward = NO;
 }
 
 // Invoked when the end user clicked on the RewardedVideo ad
