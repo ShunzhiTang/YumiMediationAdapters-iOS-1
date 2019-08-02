@@ -25,6 +25,7 @@
 
 @property (nonatomic, assign) BOOL isTimeout;
 @property (nonatomic) dispatch_block_t timeoutBlock;
+@property (nonatomic, assign) BOOL isError;
 
 @end
 
@@ -62,6 +63,7 @@
 - (void)requestAdAndShowInWindow:(nonnull UIWindow *)keyWindow withBottomView:(nonnull UIView *)bottomView {
 
     self.isTimeout = NO;
+    self.isError = NO;
     if (self.timeoutBlock) {
         dispatch_block_cancel(self.timeoutBlock);
     }
@@ -87,7 +89,11 @@
                            request:request
                        orientation:self.interfaceOrientation
                  completionHandler:^(GADAppOpenAd *_Nullable appOpenAd, NSError *_Nullable error) {
+                     if (weakSelf.isTimeout) {
+                         return;
+                     }
                      if (error) {
+                         weakSelf.isError = YES;
                          [weakSelf.delegate adapter:weakSelf failToShow:error.localizedDescription];
                          return;
                      }
@@ -96,22 +102,18 @@
                  }];
     // timeout
     self.timeoutBlock = dispatch_block_create(0, ^{
+        if (weakSelf.isError) {
+            return;
+        }
         weakSelf.isTimeout = YES;
+        [weakSelf.delegate adapter:weakSelf failToShow:@"admob splash time out"];
     });
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.provider.data.requestTimeout * NSEC_PER_SEC)),
                    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), self.timeoutBlock);
 }
 
 - (void)showSplash {
-
-    if (self.isTimeout) {
-        self.isTimeout = NO;
-        [self.delegate adapter:self failToShow:@"admob splash time out"];
-        return;
-    }
-
     __weak typeof(self) weakSelf = self;
-
     YumiAppOpenViewController *viewController = [[YumiAppOpenViewController alloc] init];
 
     // Don't forget to set the ad on the view controller.
