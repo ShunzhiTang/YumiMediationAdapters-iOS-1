@@ -79,6 +79,16 @@
 }
 
 #pragma mark - ChartboostDelegate
+///  status The result of the initialization. YES if successful. NO if failed.
+- (void)didInitialize:(BOOL)status {
+    if (!status) {
+        [self.delegate coreAdapter:self
+                            coreAd:nil
+                     didFailToLoad:@"Chartboost initialize fail..."
+                            adType:self.adType];
+    }
+}
+
 - (void)didDisplayRewardedVideo:(CBLocation)location {
     [self.delegate coreAdapter:self didOpenCoreAd:nil adType:self.adType];
     [self.delegate coreAdapter:self didStartPlayingAd:nil adType:self.adType];
