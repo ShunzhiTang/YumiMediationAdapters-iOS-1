@@ -18,7 +18,7 @@
 
 @implementation <%=class_name%>
 /// when conforming to a protocol, any property the protocol defines won't be automatically synthesized
-@synthesize disableImageLoading;
+@synthesize nativeConfig;
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerNativeAdapter:self

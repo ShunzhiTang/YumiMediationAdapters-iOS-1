@@ -13,6 +13,8 @@
 
 @property (nonatomic, weak) id<YumiMediationBannerAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationBannerProvider *provider;
+@property (nonatomic, assign) YumiMediationAdViewBannerSize bannerSize;
+@property (nonatomic, assign) BOOL isSmartBanner;
 
 @end
 
@@ -35,6 +37,11 @@
  	// TODO: setup code
  	
 	return self;
+}
+
+- (void)setBannerSizeWith:(YumiMediationAdViewBannerSize)adSize smartBanner:(BOOL)isSmart {
+    self.bannerSize = adSize;
+    self.isSmartBanner = isSmart;
 }
 
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
