@@ -11,7 +11,9 @@
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationInterstitialAdapterChartboost () <ChartboostDelegate>
+
 @property (nonatomic, assign) YumiMediationAdType adType;
+@property (nonatomic, assign) BOOL initStatus;
 
 @end
 
@@ -54,6 +56,11 @@
 }
 
 - (void)requestAd {
+    if (!self.initStatus) {
+        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"Chartboost initialize fail.." adType:self.adType];
+        return;
+    }
+    
     // update GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
 
@@ -78,9 +85,7 @@
 #pragma mark - ChartboostDelegate
 ///  status The result of the initialization. YES if successful. NO if failed.
 - (void)didInitialize:(BOOL)status {
-    if (!status) {
-        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"Chartboost initialize fail..." adType:self.adType];
-    }
+    self.initStatus = status;
 }
 
 - (void)didCacheInterstitial:(CBLocation)location {
