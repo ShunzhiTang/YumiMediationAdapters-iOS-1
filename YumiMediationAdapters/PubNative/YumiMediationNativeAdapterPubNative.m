@@ -10,11 +10,16 @@
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <HyBid/HyBid.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
+#import "YumiMediationNativeAdapterPubNativeConnector.h"
+#import <YumiMediationSDK/YumiMasonry.h>
 
-@interface YumiMediationNativeAdapterPubNative () <YumiMediationNativeAdapter>
+@interface YumiMediationNativeAdapterPubNative () <YumiMediationNativeAdapter,HyBidNativeAdLoaderDelegate,YumiMediationNativeAdapterConnectorDelegate,HyBidNativeAdDelegate>
 
 @property (nonatomic, weak) id<YumiMediationNativeAdapterDelegate> delegate;
 @property (nonatomic) YumiMediationNativeProvider *provider;
+
+@property (nonatomic) HyBidNativeAdLoader *nativeAdLoader;
+@property (nonatomic, strong) HyBidNativeAd *nativeAd;
 
 @end
 
@@ -26,6 +31,10 @@
     [[YumiMediationAdapterRegistry registry] registerNativeAdapter:self
                                                      forProviderID:kYumiMediationAdapterIDPubNative
                                                        requestType:YumiMediationSDKAdRequest];
+}
+
+- (void)dealloc {
+    [self.nativeAd stopTracking];
 }
 
 #pragma mark - YumiMediationNativeAdapter
@@ -53,7 +62,7 @@
             /// ...
         }
     }];
-
+    
     return self;
 }
 
@@ -71,13 +80,62 @@
         [[HyBidUserDataManager sharedInstance] denyConsent];
     }
     
-    
+    self.nativeAdLoader = [[HyBidNativeAdLoader alloc] init];
+    [self.nativeAdLoader loadNativeAdWithDelegate:self withZoneID:self.provider.data.key2];
 }
 - (void)registerViewForNativeAdapterWith:(UIView *)view
                      clickableAssetViews:
                          (NSDictionary<YumiMediationUnifiedNativeAssetIdentifier, UIView *> *)clickableAssetViews
                       withViewController:(UIViewController *)viewController
                                 nativeAd:(YumiMediationNativeModel *)nativeAd {
+    
+    HyBidNativeAd *pubNativeAd = nativeAd.data;
+    
+    //render class
+    HyBidNativeAdRenderer *renderer = [[HyBidNativeAdRenderer alloc] init];
+    
+    UIView *adChoiceView = [[UIView alloc] init];
+    [view addSubview:adChoiceView];
+    
+    CGFloat margin = 5; // left right margin
+    [adChoiceView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
+        make.height.width.mas_equalTo(15);
+    }];
+    self.nativeConfig.preferredAdChoicesPosition = YumiMediationAdViewPositionBottomLeftCorner;
+    
+    if (self.nativeConfig.preferredAdChoicesPosition == YumiMediationAdViewPositionTopRightCorner ||
+        self.nativeConfig.preferredAdChoicesPosition == 0) {
+        [adChoiceView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
+            make.top.equalTo(view).offset(0);
+            make.right.equalTo(view).offset(-margin);
+        }];
+    }
+    if (self.nativeConfig.preferredAdChoicesPosition == YumiMediationAdViewPositionTopLeftCorner) {
+        [adChoiceView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
+            make.top.equalTo(view).offset(0);
+            make.left.equalTo(view).offset(margin);
+        }];
+    }
+    if (self.nativeConfig.preferredAdChoicesPosition == YumiMediationAdViewPositionBottomRightCorner) {
+        [adChoiceView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
+            make.bottom.equalTo(view).offset(0);
+            make.right.equalTo(view).offset(-margin);
+        }];
+    }
+    if (self.nativeConfig.preferredAdChoicesPosition == YumiMediationAdViewPositionBottomLeftCorner) {
+        [adChoiceView mas_makeConstraints:^(YumiMASConstraintMaker *make) {
+            make.bottom.equalTo(view).offset(0);
+            make.left.equalTo(view).offset(margin);
+        }];
+    }
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // update adChoiceView frame
+        [view layoutIfNeeded];
+        renderer.contentInfoView = adChoiceView;
+        [pubNativeAd renderAd:renderer];
+        [pubNativeAd startTrackingView:view withDelegate:weakSelf];
+    });
 }
 
 /// report impression when display the native ad.
@@ -86,6 +144,36 @@
 - (void)clickAd:(YumiMediationNativeModel *)nativeAd {
 }
 
-// TODO: implement third party sdk delegate and delegate to mediation sdk
+#pragma mark:HyBidNativeAdLoaderDelegate
+
+- (void)nativeLoaderDidLoadWithNativeAd:(HyBidNativeAd *)nativeAd {
+    self.nativeAd = nativeAd;
+    
+    YumiMediationNativeAdapterPubNativeConnector *connector = [[YumiMediationNativeAdapterPubNativeConnector alloc] init];
+    [connector convertWithNativeData:self.nativeAd withAdapter:self disableImageLoading:self.nativeConfig.disableImageLoading connectorDelegate:self];
+}
+
+- (void)nativeLoaderDidFailWithError:(NSError *)error {
+    [self.delegate adapter:self didFailToReceiveAd:error.localizedDescription];
+}
+
+#pragma mark : YumiMediationNativeAdapterConnectorDelegate
+- (void)yumiMediationNativeAdSuccessful:(YumiMediationNativeModel *)nativeModel {
+    [self.delegate adapter:self didReceiveAd:@[nativeModel]];
+}
+
+- (void)yumiMediationNativeAdFailed {
+    [self.delegate adapter:self didFailToReceiveAd:@"pubNative convert fail"];
+}
+
+#pragma mark: HyBidNativeAdDelegate
+
+- (void)nativeAd:(HyBidNativeAd *)nativeAd impressionConfirmedWithView:(UIView *)view {
+    
+}
+
+- (void)nativeAdDidClick:(HyBidNativeAd *)nativeAd {
+    [self.delegate adapter:self didClick:nil];
+}
 
 @end
