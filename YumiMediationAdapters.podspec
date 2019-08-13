@@ -39,6 +39,7 @@ Pod::Spec.new do |s|
     { :name => "ZplayAds",:version => "2.4.2"},
     # { :name => "IQzone",:version => "3.0.2141"},
     { :name => "TapjoySDK",:version => "12.3.1"},
+    { :name => "PubNative",:version => "1.3.7"},
   ]
 
   subspecs.each do |spec|
