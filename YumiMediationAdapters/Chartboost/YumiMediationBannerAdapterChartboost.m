@@ -21,7 +21,6 @@
 @property (nonatomic, assign) BOOL isSmartBanner;
 
 @property (nonatomic, strong) CHBBanner *banner;
-@property (nonatomic, assign) BOOL initStatus;
 
 @end
 
@@ -62,11 +61,6 @@
 }
 
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
-    
-    if (!self.initStatus) {
-        [self.delegate adapter:self didFailToReceiveAd:@"Chartboost initialize fail.."];
-        return;
-    }
     // update GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
     
@@ -120,10 +114,6 @@
 }
 
 #pragma mark - ChartboostDelegate
-///  status The result of the initialization. YES if successful. NO if failed.
-- (void)didInitialize:(BOOL)status {
-    self.initStatus = status;
-}
 
 #pragma mark : CHBBannerDelegate
 - (void)didCacheAd:(CHBCacheEvent *)event error:(nullable CHBCacheError *)error {
