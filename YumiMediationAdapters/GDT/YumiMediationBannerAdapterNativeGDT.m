@@ -162,8 +162,11 @@
                                    imageURL:@"大图"
                                hyperlinkURL:@"跳转"];
     }
-
-    [self.webView loadHTMLString:str];
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.webView loadHTMLString:str];
+    });
+    
 }
 
 - (void)nativeAdFailToLoad:(NSError *)error {
