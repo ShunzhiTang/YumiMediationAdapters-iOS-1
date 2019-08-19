@@ -31,7 +31,7 @@ Pod::Spec.new do |s|
     { :name => "InMobi", :version => "8.1.0" },
     { :name => "IronSource", :version => "6.8.3" },
     { :name => "Unity", :version => "3.1.0" },
-    { :name => "Vungle", :version => "6.4.1" },
+    { :name => "Vungle", :version => "6.4.2" },
     { :name => "Mintegral", :version => "5.3.3"},
     { :name => "OneWay",:version => "2.1.0"},
     { :name => "InneractiveAdSDK",:version => "7.2.3"},
