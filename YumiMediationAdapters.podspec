@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'YumiMediationAdapters'
-  s.version = '1.0.0'
+  s.version = '4.3.0'
   s.summary = 'Yumi Mediation Adapters.'
   s.description = 'This is the Yumi Mediation Adapters. Please proceed to http://developers.yumimobi.com/IosSdk/index for more information.'
   s.homepage = 'http://developers.yumimobi.com/IosSdk/index'
