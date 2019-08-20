@@ -232,6 +232,26 @@ platform :ios do
      end
   end
 
+  desc "Publish pod"
+  lane :ReleaseWithSourceCode do
+    version = ENV["TRAVIS_TAG"]
+    next if version.nil? or version.empty?
+    podspec_name = "YumiMediationAdapters"
+    podspec_path = "#{podspec_name}.podspec"
+    version_bump_podspec(path: podspec_path, version_number: version)
+
+    fastlane_require "retries"
+
+    # pod trunk push
+    with_retries(max_tries: 10) do
+      if ENV["isTest"]
+        pod_push(path: podspec_path, allow_warnings: true, repo: "Specs",sources:["https://github.com/yumimobi/Specs.git",'https://github.com/CocoaPods/Specs'],verbose:true)
+      else
+        pod_push(path: podspec_path, allow_warnings: true)
+      end
+    end
+  end
+
   after_all do |lane|
     # This block is called, only if the executed lane was successful
 
