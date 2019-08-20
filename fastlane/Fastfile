@@ -146,9 +146,9 @@ platform :ios do
         # package
         with_retries(max_tries: 10) do
           if ENV["isTest"]
-            sh "pod package #{subspec_path} --force --embedded --no-mangle --exclude-deps --spec-sources=https://github.com/yumimobi/Specs.git,https://github.com/CocoaPods/Specs"
+            sh "pod package #{subspec_path} --force --embedded --no-mangle --exclude-deps --spec-sources=https://github.com/yumimobi/Specs.git,https://github.com/CocoaPods/Specs --verbose"
           else
-            sh "pod package #{subspec_path} --force --embedded --no-mangle --exclude-deps"
+            sh "pod package #{subspec_path} --force --embedded --no-mangle --exclude-deps --verbose"
           end
         end
         # move framework
@@ -230,6 +230,26 @@ platform :ios do
         pod_push(path: podspec_path, allow_warnings: true)
       end
      end
+  end
+
+  desc "Publish pod"
+  lane :ReleaseWithSourceCode do
+    version = ENV["TRAVIS_TAG"]
+    next if version.nil? or version.empty?
+    podspec_name = "YumiMediationAdapters"
+    podspec_path = "#{podspec_name}.podspec"
+    version_bump_podspec(path: podspec_path, version_number: version)
+
+    fastlane_require "retries"
+
+    # pod trunk push
+    with_retries(max_tries: 10) do
+      if ENV["isTest"]
+        pod_push(path: podspec_path, allow_warnings: true, repo: "Specs",sources:["https://github.com/yumimobi/Specs.git",'https://github.com/CocoaPods/Specs'],verbose:true,use_libraries:true)
+      else
+        pod_push(path: podspec_path, allow_warnings: true,verbose:true,use_libraries:true)
+      end
+    end
   end
 
   after_all do |lane|
