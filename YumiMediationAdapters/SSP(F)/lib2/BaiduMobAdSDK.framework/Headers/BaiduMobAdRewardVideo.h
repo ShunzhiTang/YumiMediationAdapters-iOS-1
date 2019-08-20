@@ -28,7 +28,7 @@
 @property (nonatomic, copy) NSString *AdUnitTag;
 
 /**
- *  位置信息
+ *  启动位置信息 如果enable，plist 需要增加NSLocationWhenInUseUsageDescription
  */
 @property (nonatomic, assign) BOOL enableLocation;
 
