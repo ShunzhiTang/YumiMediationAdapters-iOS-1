@@ -11,8 +11,10 @@
 #import <BaiduMobAdSDK/BaiduMobAdInterstitial.h>
 #import <YumiMediationSDK/YumiMasonry.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import <BaiduMobAdSDK/BaiduMobAdRewardVideo.h>
+#import <BaiduMobAdSDK/BaiduMobAdSetting.h>
 
-@interface YumiMediationInterstitialAdapterBaidu () <BaiduMobAdInterstitialDelegate>
+@interface YumiMediationInterstitialAdapterBaidu () <BaiduMobAdInterstitialDelegate,BaiduMobAdRewardVideoDelegate>
 
 @property (nonatomic) BaiduMobAdInterstitial *interstitial;
 @property (nonatomic, assign) YumiMediationAdType adType;
@@ -21,6 +23,12 @@
 @property (nonatomic) YumiMediationInterstitialBaiduViewController *presentAdVc;
 @property (nonatomic, assign) CGSize adSize;
 @property (nonatomic, assign) float aspectRatio;
+// 1 video
+// 2 interstitial (default)
+@property (nonatomic, assign) NSInteger inventoryType;
+@property (nonatomic) BaiduMobAdRewardVideo *rewardVideo;
+@property (nonatomic, assign) BOOL isReward;
+@property (nonatomic, assign) BOOL isPreloadVideo;
 
 @end
 
@@ -47,16 +55,29 @@
     self.delegate = delegate;
     self.adType = adType;
     self.interstitialIsReady = NO;
-
+    self.inventoryType = [self.provider.data.extra[YumiProviderExtraBaiduInventory] integerValue];
+    // init video
+    if (self.inventoryType == 1) {
+        self.rewardVideo = [[BaiduMobAdRewardVideo alloc] init];
+        self.rewardVideo.delegate = self;
+        self.rewardVideo.publisherId = self.provider.data.key1;
+        self.rewardVideo.AdUnitTag = self.provider.data.key2;
+    }
     return self;
 }
 
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
     self.provider = provider;
+    self.inventoryType = [self.provider.data.extra[YumiProviderExtraBaiduInventory] integerValue];
 }
 
 - (void)requestAd {
-
+    // request video
+    if (self.inventoryType == 1) {
+        self.isPreloadVideo = NO;
+        [self.rewardVideo load];
+        return;
+    }
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         weakSelf.interstitial = [[BaiduMobAdInterstitial alloc] init];
@@ -88,11 +109,22 @@
 }
 
 - (BOOL)isReady {
+    if (self.inventoryType == 1) {
+        if (self.isPreloadVideo && [self.rewardVideo isReady]) {
+            return YES;
+        }
+        return NO;
+    }
     return self.interstitialIsReady;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-
+    // present video
+    if (self.inventoryType == 1) {
+        [self.rewardVideo showFromViewController:rootViewController];
+        return;
+    }
+    
     if (self.aspectRatio == 0) {
         [self.interstitial presentFromRootViewController:rootViewController];
         return;
@@ -160,15 +192,86 @@
                                          }];
 }
 
-- (void)clearInterstitial {
+#pragma mark - 视频缓存delegate
+/**
+ *  视频加载缓存成功
+ */
+- (void)rewardedVideoAdLoaded:(BaiduMobAdRewardVideo *)video {
+    self.isPreloadVideo = YES;
+    [self.delegate coreAdapter:self didReceivedCoreAd:video adType:self.adType];
+}
 
+/**
+ *  视频加载缓存失败
+ */
+- (void)rewardedVideoAdLoadFailed:(BaiduMobAdRewardVideo *)video withError:(BaiduMobFailReason)reason {
+    self.isReward = NO;
+    self.isPreloadVideo = NO;
+    [self.delegate coreAdapter:self
+                        coreAd:video
+                 didFailToLoad:[NSString stringWithFormat:@"error code %u", reason]
+                        adType:self.adType];
+}
+
+#pragma mark - 视频播放delegate
+/**
+ *  视频开始播放
+ */
+- (void)rewardedVideoAdDidStarted:(BaiduMobAdRewardVideo *)video {
+    [self.delegate coreAdapter:self didOpenCoreAd:video adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:video adType:self.adType];
+}
+
+/**
+ *  广告展示失败
+ */
+- (void)rewardedVideoAdShowFailed:(BaiduMobAdRewardVideo *)video withError:(BaiduMobFailReason)reason {
+    self.isReward = NO;
+    self.isPreloadVideo = NO;
+    [self.delegate coreAdapter:self
+                failedToShowAd:video
+                   errorString:[NSString stringWithFormat:@"error code %u", reason]
+                        adType:self.adType];
+}
+
+/**
+ *  广告完成播放
+ */
+- (void)rewardedVideoAdDidPlayFinish:(BaiduMobAdRewardVideo *)video {
+    self.isReward = YES;
+}
+
+/**
+ *  用户点击关闭
+ @param progress 当前播放进度 单位百分比 （注意浮点数）
+ */
+- (void)rewardedVideoAdDidClose:(BaiduMobAdRewardVideo *)video withPlayingProgress:(CGFloat)progress {
+    if (self.isReward) {
+        [self.delegate coreAdapter:self coreAd:video didReward:YES adType:self.adType];
+    }
+    [self.delegate coreAdapter:self didCloseCoreAd:video isCompletePlaying:YES adType:self.adType];
+    self.isReward = NO;
+}
+
+/**
+ *  用户点击下载/查看详情
+ @param progress 当前播放进度 单位百分比
+ */
+- (void)rewardedVideoAdDidClick:(BaiduMobAdRewardVideo *)video withPlayingProgress:(CGFloat)progress {
+    [self.delegate coreAdapter:self didClickCoreAd:video adType:self.adType];
+}
+
+- (void)clearInterstitial {
     if (self.presentAdVc) {
         self.presentAdVc = nil;
     }
-
     if (self.interstitial) {
         self.interstitial.delegate = nil;
         self.interstitial = nil;
+    }
+    if (self.rewardVideo) {
+        self.rewardVideo.delegate = nil;
+        self.rewardVideo = nil;
     }
 }
 
