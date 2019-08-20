@@ -245,9 +245,9 @@ platform :ios do
     # pod trunk push
     with_retries(max_tries: 10) do
       if ENV["isTest"]
-        pod_push(path: podspec_path, allow_warnings: true, repo: "Specs",sources:["https://github.com/yumimobi/Specs.git",'https://github.com/CocoaPods/Specs'],verbose:true)
+        pod_push(path: podspec_path, allow_warnings: true, repo: "Specs",sources:["https://github.com/yumimobi/Specs.git",'https://github.com/CocoaPods/Specs'],verbose:true,use_libraries:true)
       else
-        pod_push(path: podspec_path, allow_warnings: true)
+        pod_push(path: podspec_path, allow_warnings: true,verbose:true,use_libraries:true)
       end
     end
   end
