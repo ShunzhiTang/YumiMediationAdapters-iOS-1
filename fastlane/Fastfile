@@ -146,9 +146,9 @@ platform :ios do
         # package
         with_retries(max_tries: 10) do
           if ENV["isTest"]
-            sh "pod package #{subspec_path} --force --embedded --no-mangle --exclude-deps --spec-sources=https://github.com/yumimobi/Specs.git,https://github.com/CocoaPods/Specs"
+            sh "pod package #{subspec_path} --force --embedded --no-mangle --exclude-deps --spec-sources=https://github.com/yumimobi/Specs.git,https://github.com/CocoaPods/Specs --verbose"
           else
-            sh "pod package #{subspec_path} --force --embedded --no-mangle --exclude-deps"
+            sh "pod package #{subspec_path} --force --embedded --no-mangle --exclude-deps --verbose"
           end
         end
         # move framework
