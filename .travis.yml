@@ -22,6 +22,7 @@ install:
   - pod repo update Specs 
 script:
   - travis_wait 60 fastlane release
+  - fastlane ReleaseWithSourceCode
 env:
   matrix:
     - isTest=true
