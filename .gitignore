@@ -34,4 +34,5 @@ Pods/
 
 fastlane/report.xml
 fastlane/screenshots
+fastlane/README.md
 .clang-format
