@@ -32,7 +32,7 @@
 /**
  *  启动位置信息
  */
--(BOOL) enableLocation;
+-(BOOL) enableLocation;//如果enable，plist 需要增加NSLocationWhenInUseUsageDescription
 
 /**
  * 广告请求成功

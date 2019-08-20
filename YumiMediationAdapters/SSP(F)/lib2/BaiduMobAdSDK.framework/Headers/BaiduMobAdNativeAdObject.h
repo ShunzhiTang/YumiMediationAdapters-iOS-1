@@ -85,7 +85,7 @@
 /**
  * 可以不传
  */
-@property (nonatomic, assign)  UIViewController *presentAdViewController;
+@property (nonatomic, weak) UIViewController *presentAdViewController;
 
 //#warning 重要，一定要调用这个方法发送视频状态事件和当前视频播放的位置
 /**
