@@ -64,6 +64,11 @@
         [weakSelf loadNativeAdsWith:adCount];
     });
 }
+
+- (NSString*)networkVersion {
+    return @"4.10.3";
+}
+
 - (void)loadNativeAdsWith:(NSUInteger)adCount {
 
     // 0： 模版形式 ，1：自渲染 ，默认是0
