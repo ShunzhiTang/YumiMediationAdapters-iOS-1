@@ -78,6 +78,10 @@
     self.provider = provider;
 }
 
+- (NSString*)networkVersion {
+    return @"5.3.2";
+}
+
 - (void)requestAd {
     self.isAdReady = NO;
 

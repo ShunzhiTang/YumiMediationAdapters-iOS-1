@@ -43,6 +43,10 @@
     self.provider = provider;
 }
 
+- (NSString*)networkVersion {
+    return @"2.4.2";
+}
+
 - (void)requestAd {
     // TODO: request ad
     self.interstitial = [[PlayableAds alloc] initWithAdUnitID:self.provider.data.key2 appID:self.provider.data.key1];

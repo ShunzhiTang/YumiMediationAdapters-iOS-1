@@ -37,6 +37,7 @@
     }
 }
 
+#pragma mark - YumiMediationBannerAdapter
 - (id<YumiMediationBannerAdapter>)initWithProvider:(YumiMediationBannerProvider *)provider
                                           delegate:(id<YumiMediationBannerAdapterDelegate>)delegate {
     self = [super init];
@@ -52,7 +53,10 @@
     self.isSmartBanner = isSmart;
 }
 
-#pragma mark - YumiMediationBannerAdapter
+- (NSString*)networkVersion {
+    return @"4.6.5";
+}
+
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     CGSize adSize = isiPad ? CGSizeMake(728, 90) : CGSizeMake(320, 50);
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {

@@ -55,7 +55,6 @@
 }
 
 #pragma mark : YumiMediationInterstitialAdapter
-
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
                                           adType:(YumiMediationAdType)adType {
@@ -78,6 +77,10 @@
 
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
     self.provider = provider;
+}
+
+- (NSString*)networkVersion {
+    return @"7.44.0";
 }
 
 - (void)requestAd {

@@ -69,6 +69,10 @@
     self.provider = provider;
 }
 
+- (NSString*)networkVersion {
+    return @"3.3.7";
+}
+
 - (void)requestAd {
     self.isAdReady = NO;
     self.isReward = NO;
