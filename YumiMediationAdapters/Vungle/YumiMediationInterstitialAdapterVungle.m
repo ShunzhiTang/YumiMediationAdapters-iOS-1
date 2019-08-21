@@ -66,6 +66,10 @@
     self.provider = provider;
 }
 
+- (NSString*)networkVersion {
+    return @"6.4.2";
+}
+
 - (void)requestAd {
 
     NSError *error;

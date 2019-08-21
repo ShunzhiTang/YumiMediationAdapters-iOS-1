@@ -90,6 +90,10 @@
     self.provider = provider;
 }
 
+- (NSString*)networkVersion {
+    return @"12.3.1";
+}
+
 - (BOOL)isReady {
     return self.interstitialPlacement.isContentAvailable && self.interstitialPlacement.isContentReady;
     ;

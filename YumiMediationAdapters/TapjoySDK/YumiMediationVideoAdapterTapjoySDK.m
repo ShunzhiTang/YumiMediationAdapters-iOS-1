@@ -73,6 +73,10 @@
     self.provider = provider;
 }
 
+- (NSString*)networkVersion {
+    return @"12.3.1";
+}
+
 - (void)requestAd {
     // update gdpr
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
