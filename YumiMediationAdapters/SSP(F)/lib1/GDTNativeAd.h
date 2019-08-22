@@ -6,19 +6,19 @@
 //  Copyright (c) 2014年 Tencent. All rights reserved.
 //
 
+#import "GDTSDKDefines.h"
 #import <Foundation/Foundation.h>
 #import <StoreKit/StoreKit.h>
-#import "GDTSDKDefines.h"
 
-extern NSString* const GDTNativeAdDataKeyTitle;
-extern NSString* const GDTNativeAdDataKeyDesc;
-extern NSString* const GDTNativeAdDataKeyIconUrl;
-extern NSString* const GDTNativeAdDataKeyImgUrl;
-extern NSString* const GDTNativeAdDataKeyAppRating;
-extern NSString* const GDTNativeAdDataKeyAppPrice;
-extern NSString* const GDTNativeAdDataKeyImgList;
-extern NSString* const GDTNativeAdDataKeyImgWidth;
-extern NSString* const GDTNativeAdDataKeyImgHeight;
+extern NSString *const GDTNativeAdDataKeyTitle;
+extern NSString *const GDTNativeAdDataKeyDesc;
+extern NSString *const GDTNativeAdDataKeyIconUrl;
+extern NSString *const GDTNativeAdDataKeyImgUrl;
+extern NSString *const GDTNativeAdDataKeyAppRating;
+extern NSString *const GDTNativeAdDataKeyAppPrice;
+extern NSString *const GDTNativeAdDataKeyImgList;
+extern NSString *const GDTNativeAdDataKeyImgWidth;
+extern NSString *const GDTNativeAdDataKeyImgHeight;
 
 @interface GDTNativeAdData : NSObject
 
@@ -84,7 +84,7 @@ extern NSString* const GDTNativeAdDataKeyImgHeight;
 
 @end
 
-@interface GDTNativeAd : NSObject<SKStoreProductViewControllerDelegate>
+@interface GDTNativeAd : NSObject <SKStoreProductViewControllerDelegate>
 
 /*
  *  viewControllerForPresentingModalView
@@ -128,6 +128,8 @@ extern NSString* const GDTNativeAdDataKeyImgHeight;
 - (void)clickAd:(GDTNativeAdData *)nativeAdData;
 
 #pragma mark - DEPRECATED
-- (instancetype)initWithAppkey:(NSString *)appkey placementId:(NSString *)placementId GDT_DEPRECATED_MSG_ATTRIBUTE("use initWithAppId:placementId: instead.");
+- (instancetype)initWithAppkey:(NSString *)appkey
+                   placementId:(NSString *)placementId
+    GDT_DEPRECATED_MSG_ATTRIBUTE("use initWithAppId:placementId: instead.");
 
 @end

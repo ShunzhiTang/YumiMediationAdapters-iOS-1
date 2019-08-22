@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-//logo默认宽度
+// logo默认宽度
 extern CGFloat const kGDTLogoImageViewDefaultWidth;
-//logo默认高度
+// logo默认高度
 extern CGFloat const kGDTLogoImageViewDefaultHeight;
 
 @interface GDTLogoView : UIImageView

@@ -3,8 +3,8 @@
 //
 //
 //
-#import <UIKit/UIKit.h>
 #import "BaiduMobAdCommonConfig.h"
+#import <UIKit/UIKit.h>
 
 @interface BaiduMobAdSetting : NSObject
 @property (nonatomic, assign) BOOL supportHttps;
@@ -22,7 +22,6 @@
  */
 + (void)setMaxVideoCacheCapacityMb:(NSInteger)capacity;
 
-
 /**
  关闭百度SDK 打印日志开关
 
@@ -31,4 +30,3 @@
 - (void)setDebugLogEnable:(BOOL)debugLogEnable;
 
 @end
-

@@ -6,17 +6,17 @@
 //  Copyright (c) 2013年 Tencent. All rights reserved.
 //
 
+#import "GDTSDKDefines.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "GDTSDKDefines.h"
 
 /**
  *  广点通推荐尺寸,开发者在嵌入Banner条时，可以手动设置Banner条的宽度用来满足场景需求，
  *  而高度的话广点通侧不建议更改，否则显示效果会有影响
  */
-#define GDTMOB_AD_SUGGEST_SIZE_320x50    CGSizeMake(320, 50) //For iPhone
-#define GDTMOB_AD_SUGGEST_SIZE_468x60    CGSizeMake(468, 60) //For iPad
-#define GDTMOB_AD_SUGGEST_SIZE_728x90    CGSizeMake(728, 90) //For iPad
+#define GDTMOB_AD_SUGGEST_SIZE_320x50 CGSizeMake(320, 50) // For iPhone
+#define GDTMOB_AD_SUGGEST_SIZE_468x60 CGSizeMake(468, 60) // For iPad
+#define GDTMOB_AD_SUGGEST_SIZE_728x90 CGSizeMake(728, 90) // For iPad
 
 @protocol GDTMobBannerViewDelegate <NSObject>
 
@@ -75,8 +75,6 @@
 
 @interface GDTMobBannerView : UIView
 
-
-
 /**
  *  父视图
  *  详解：[必选]需设置为显示广告的UIViewController
@@ -86,28 +84,28 @@
 /**
  *  委托 [可选]
  */
-@property(nonatomic, weak) id<GDTMobBannerViewDelegate> delegate;
+@property (nonatomic, weak) id<GDTMobBannerViewDelegate> delegate;
 
 /**
  *  广告刷新间隔，范围 [30, 120] 秒，默认值 30 秒。设 0 则不刷新。 [可选]
  */
-@property(nonatomic, assign) int interval;
+@property (nonatomic, assign) int interval;
 
 /**
  *  GPS精准广告定位模式开关,默认Gps关闭
  *  详解：[可选]GPS精准定位模式开关，YES为开启GPS，NO为关闭GPS，建议设为开启，可以获取地理位置信息，提高广告的填充率，增加收益。
  */
-@property(nonatomic, assign) BOOL isGpsOn;
+@property (nonatomic, assign) BOOL isGpsOn;
 
 /**
  *  Banner展现和轮播时的动画效果开关，默认打开
  */
-@property(nonatomic, assign) BOOL isAnimationOn;
+@property (nonatomic, assign) BOOL isAnimationOn;
 
 /**
  *  Banner条展示关闭按钮，默认打开
  */
-@property(nonatomic, assign) BOOL showCloseBtn;
+@property (nonatomic, assign) BOOL showCloseBtn;
 
 /**
  *  构造方法
@@ -131,8 +129,12 @@
 - (void)loadAdAndShow;
 
 #pragma mark - DEPRECATED
-- (instancetype)initWithAppkey:(NSString *)appkey placementId:(NSString *)placementId GDT_DEPRECATED_MSG_ATTRIBUTE("use initWithAppId:placementId: instead.");
-- (instancetype)initWithFrame:(CGRect)frame appkey:(NSString *)appkey placementId:(NSString *)placementId GDT_DEPRECATED_MSG_ATTRIBUTE("use initWithFrame:appId:placementId: instead.");
-
+- (instancetype)initWithAppkey:(NSString *)appkey
+                   placementId:(NSString *)placementId
+    GDT_DEPRECATED_MSG_ATTRIBUTE("use initWithAppId:placementId: instead.");
+- (instancetype)initWithFrame:(CGRect)frame
+                       appkey:(NSString *)appkey
+                  placementId:(NSString *)placementId
+    GDT_DEPRECATED_MSG_ATTRIBUTE("use initWithFrame:appId:placementId: instead.");
 
 @end

@@ -5,8 +5,8 @@
 //  Created by deng jinxiang on 13-8-1.
 //
 //
-#import <Foundation/Foundation.h>
 #import "BaiduMobAdCommonConfig.h"
+#import <Foundation/Foundation.h>
 @class BaiduMobAdNative;
 @class BaiduMobAdNativeAdView;
 
@@ -21,17 +21,17 @@
 /**
  * 广告位id
  */
-- (NSString*)apId;
+- (NSString *)apId;
 
 /**
  * 模版高度，仅用于信息流模版广告
  */
-- (NSNumber*)baiduMobAdsHeight;
+- (NSNumber *)baiduMobAdsHeight;
 
 /**
  * 模版宽度，仅用于信息流模版广告
  */
-- (NSNumber*)baiduMobAdsWidth;
+- (NSNumber *)baiduMobAdsWidth;
 
 /**
  *  渠道ID
@@ -41,7 +41,7 @@
 /**
  *  启动位置信息
  */
-- (BOOL) enableLocation;//如果enable，plist 需要增加NSLocationWhenInUseUsageDescription
+- (BOOL)enableLocation; //如果enable，plist 需要增加NSLocationWhenInUseUsageDescription
 
 /**
  * 广告请求成功
@@ -53,7 +53,7 @@
  * @param 失败的BaiduMobAdNative
  * @param 失败的类型 BaiduMobFailReason
  */
-- (void)nativeAdsFailLoad:(BaiduMobFailReason) reason;
+- (void)nativeAdsFailLoad:(BaiduMobFailReason)reason;
 
 /**
  *  广告点击

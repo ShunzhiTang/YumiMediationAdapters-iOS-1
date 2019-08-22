@@ -5,8 +5,8 @@
 //  Copyright © 2016年 Baidu Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "BaiduMobAdCommonConfig.h"
+#import <Foundation/Foundation.h>
 
 @class BaiduMobAdBaseNativeAdView;
 
@@ -20,7 +20,7 @@
 /**
  * 广告位id
  */
--(NSString*)apId;
+- (NSString *)apId;
 
 @optional
 
@@ -32,26 +32,26 @@
 /**
  *  启动位置信息
  */
--(BOOL) enableLocation;//如果enable，plist 需要增加NSLocationWhenInUseUsageDescription
+- (BOOL)enableLocation; //如果enable，plist 需要增加NSLocationWhenInUseUsageDescription
 
 /**
  * 广告请求成功
  * @param 请求成功的AdObject数组，如果只成功返回一条广告，数组大小为1
  */
-- (void)onAdObjectsSuccessLoad:(NSArray*)adsArray;
+- (void)onAdObjectsSuccessLoad:(NSArray *)adsArray;
 /**
  *  广告请求失败
  * @param 失败的类型 BaiduMobFailReason
  */
-- (void)onAdsFailLoad:(BaiduMobFailReason) reason;
+- (void)onAdsFailLoad:(BaiduMobFailReason)reason;
 
 /**
  *  广告点击
  */
-- (void)onAdClicked:(BaiduMobAdBaseNativeAdView*)adView;
+- (void)onAdClicked:(BaiduMobAdBaseNativeAdView *)adView;
 
 /**
  *  广告详情页关闭
  */
--(void)didDismissLandingPage:(BaiduMobAdBaseNativeAdView *)adView;
+- (void)didDismissLandingPage:(BaiduMobAdBaseNativeAdView *)adView;
 @end

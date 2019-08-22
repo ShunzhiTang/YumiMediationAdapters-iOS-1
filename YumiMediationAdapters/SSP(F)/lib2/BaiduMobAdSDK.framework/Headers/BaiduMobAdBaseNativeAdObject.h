@@ -6,9 +6,8 @@
 //  Copyright (c) 2015年 lishan04. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "BaiduMobAdCommonConfig.h"
+#import <Foundation/Foundation.h>
 
-@interface BaiduMobAdBaseNativeAdObject: NSObject
+@interface BaiduMobAdBaseNativeAdObject : NSObject
 @end
-

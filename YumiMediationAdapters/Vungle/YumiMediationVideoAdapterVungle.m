@@ -62,7 +62,7 @@
     self.provider = provider;
 }
 
-- (NSString*)networkVersion {
+- (NSString *)networkVersion {
     return @"6.4.2";
 }
 
