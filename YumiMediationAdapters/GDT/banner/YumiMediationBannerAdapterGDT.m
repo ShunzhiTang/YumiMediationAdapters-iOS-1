@@ -29,6 +29,7 @@
                                                        requestType:YumiMediationSDKAdRequest];
 }
 
+#pragma mark - YumiMediationBannerAdapter
 - (id<YumiMediationBannerAdapter>)initWithProvider:(YumiMediationBannerProvider *)provider
                                           delegate:(id<YumiMediationBannerAdapterDelegate>)delegate {
     self = [super init];
@@ -39,12 +40,15 @@
     return self;
 }
 
+- (NSString*)networkVersion {
+    return @"4.10.3";
+}
+
 - (void)setBannerSizeWith:(YumiMediationAdViewBannerSize)adSize smartBanner:(BOOL)isSmart {
     self.bannerSize = adSize;
     self.isSmartBanner = isSmart;
 }
 
-#pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait ||
         self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {

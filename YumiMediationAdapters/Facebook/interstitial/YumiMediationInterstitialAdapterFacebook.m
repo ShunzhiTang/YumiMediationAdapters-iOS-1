@@ -41,6 +41,10 @@
     return self;
 }
 
+- (NSString*)networkVersion {
+    return @"5.3.2";
+}
+
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
     self.provider = provider;
 }

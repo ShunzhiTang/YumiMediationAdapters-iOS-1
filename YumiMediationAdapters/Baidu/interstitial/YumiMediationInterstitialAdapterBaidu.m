@@ -14,6 +14,12 @@
 #import <BaiduMobAdSDK/BaiduMobAdRewardVideo.h>
 #import <BaiduMobAdSDK/BaiduMobAdSetting.h>
 
+static NSString * const kYumiProviderExtraBaiduInterstitialAspectRatio = @"interstitialAspectRatio";
+// 1: video
+// 2: interstitial
+// Default is 2
+static NSString * const kYumiProviderExtraBaiduInventory = @"inventory";
+
 @interface YumiMediationInterstitialAdapterBaidu () <BaiduMobAdInterstitialDelegate,BaiduMobAdRewardVideoDelegate>
 
 @property (nonatomic) BaiduMobAdInterstitial *interstitial;
@@ -55,7 +61,7 @@
     self.delegate = delegate;
     self.adType = adType;
     self.interstitialIsReady = NO;
-    self.inventoryType = [self.provider.data.extra[YumiProviderExtraBaiduInventory] integerValue];
+    self.inventoryType = [self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue];
     // init video
     if (self.inventoryType == 1) {
         self.rewardVideo = [[BaiduMobAdRewardVideo alloc] init];
@@ -66,9 +72,13 @@
     return self;
 }
 
+- (NSString*)networkVersion {
+    return @"4.6.5";
+}
+
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
     self.provider = provider;
-    self.inventoryType = [self.provider.data.extra[YumiProviderExtraBaiduInventory] integerValue];
+    self.inventoryType = [self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue];
 }
 
 - (void)requestAd {
@@ -85,10 +95,10 @@
         weakSelf.interstitial.AdUnitTag = weakSelf.provider.data.key2;
 
         // aspectRatio = width : height
-        if (![self.provider.data.extra[YumiProviderExtraBaidu] isKindOfClass:[NSNumber class]]) {
+        if (![self.provider.data.extra[kYumiProviderExtraBaiduInterstitialAspectRatio] isKindOfClass:[NSNumber class]]) {
             self.aspectRatio = 0;
         } else {
-            self.aspectRatio = [self.provider.data.extra[YumiProviderExtraBaidu] floatValue];
+            self.aspectRatio = [self.provider.data.extra[kYumiProviderExtraBaiduInterstitialAspectRatio] floatValue];
         }
 
         if (self.aspectRatio == 0) {

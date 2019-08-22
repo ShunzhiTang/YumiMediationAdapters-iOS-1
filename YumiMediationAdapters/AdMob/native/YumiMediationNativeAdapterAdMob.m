@@ -61,6 +61,10 @@ static NSUInteger maxNumberOfAds = 5;
     return self;
 }
 
+- (NSString*)networkVersion {
+    return @"7.44.0";
+}
+
 - (void)requestAd:(NSUInteger)adCount {
 
     [self clearNativeData];

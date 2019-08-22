@@ -38,6 +38,10 @@
     return self;
 }
 
+- (NSString*)networkVersion {
+    return @"4.10.3";
+}
+
 - (void)requestAdAndShowInWindow:(nonnull UIWindow *)keyWindow withBottomView:(nonnull UIView *)bottomView {
 
     __weak typeof(self) weakSelf = self;

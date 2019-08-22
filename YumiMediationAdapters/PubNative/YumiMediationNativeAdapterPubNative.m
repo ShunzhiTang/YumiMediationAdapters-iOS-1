@@ -66,6 +66,10 @@
     return self;
 }
 
+- (NSString*)networkVersion {
+    return @"1.3.7";
+}
+
 - (void)requestAd:(NSUInteger)adCount {
     
     // update gdpr
