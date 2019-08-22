@@ -9,18 +9,18 @@
 #import "YumiMediationInterstitialAdapterBaidu.h"
 #import "YumiMediationInterstitialBaiduViewController.h"
 #import <BaiduMobAdSDK/BaiduMobAdInterstitial.h>
-#import <YumiMediationSDK/YumiMasonry.h>
-#import <YumiMediationSDK/YumiTool.h>
 #import <BaiduMobAdSDK/BaiduMobAdRewardVideo.h>
 #import <BaiduMobAdSDK/BaiduMobAdSetting.h>
+#import <YumiMediationSDK/YumiMasonry.h>
+#import <YumiMediationSDK/YumiTool.h>
 
-static NSString * const kYumiProviderExtraBaiduInterstitialAspectRatio = @"interstitialAspectRatio";
+static NSString *const kYumiProviderExtraBaiduInterstitialAspectRatio = @"interstitialAspectRatio";
 // 1: video
 // 2: interstitial
 // Default is 2
-static NSString * const kYumiProviderExtraBaiduInventory = @"inventory";
+static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
 
-@interface YumiMediationInterstitialAdapterBaidu () <BaiduMobAdInterstitialDelegate,BaiduMobAdRewardVideoDelegate>
+@interface YumiMediationInterstitialAdapterBaidu () <BaiduMobAdInterstitialDelegate, BaiduMobAdRewardVideoDelegate>
 
 @property (nonatomic) BaiduMobAdInterstitial *interstitial;
 @property (nonatomic, assign) YumiMediationAdType adType;
@@ -72,7 +72,7 @@ static NSString * const kYumiProviderExtraBaiduInventory = @"inventory";
     return self;
 }
 
-- (NSString*)networkVersion {
+- (NSString *)networkVersion {
     return @"4.6.5";
 }
 
@@ -95,7 +95,8 @@ static NSString * const kYumiProviderExtraBaiduInventory = @"inventory";
         weakSelf.interstitial.AdUnitTag = weakSelf.provider.data.key2;
 
         // aspectRatio = width : height
-        if (![self.provider.data.extra[kYumiProviderExtraBaiduInterstitialAspectRatio] isKindOfClass:[NSNumber class]]) {
+        if (!
+            [self.provider.data.extra[kYumiProviderExtraBaiduInterstitialAspectRatio] isKindOfClass:[NSNumber class]]) {
             self.aspectRatio = 0;
         } else {
             self.aspectRatio = [self.provider.data.extra[kYumiProviderExtraBaiduInterstitialAspectRatio] floatValue];
@@ -134,7 +135,7 @@ static NSString * const kYumiProviderExtraBaiduInventory = @"inventory";
         [self.rewardVideo showFromViewController:rootViewController];
         return;
     }
-    
+
     if (self.aspectRatio == 0) {
         [self.interstitial presentFromRootViewController:rootViewController];
         return;

@@ -45,7 +45,7 @@
     self.isSmartBanner = isSmart;
 }
 
-- (NSString*)networkVersion {
+- (NSString *)networkVersion {
     return @"5.3.2";
 }
 

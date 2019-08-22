@@ -19,7 +19,7 @@
 // 0: template
 // 1: reder
 // Default is 0
-static NSString * const kYumiProviderExtraGDTRenderModel = @"GDTRenderModel";
+static NSString *const kYumiProviderExtraGDTRenderModel = @"GDTRenderModel";
 
 @interface YumiMediationNativeAdapterGDT () <YumiMediationNativeAdapter, GDTUnifiedNativeAdDelegate,
                                              YumiMediationNativeAdapterConnectorDelegate, GDTNativeExpressAdDelegete>
@@ -70,7 +70,7 @@ static NSString * const kYumiProviderExtraGDTRenderModel = @"GDTRenderModel";
     });
 }
 
-- (NSString*)networkVersion {
+- (NSString *)networkVersion {
     return @"4.10.3";
 }
 
@@ -176,7 +176,7 @@ static NSString * const kYumiProviderExtraGDTRenderModel = @"GDTRenderModel";
 - (void)clickAd:(YumiMediationNativeModel *)nativeAd {
 }
 
-#pragma mark: - private method
+#pragma mark : - private method
 - (YumiMediationNativeModel *)getNativeModelWith:(GDTNativeExpressAdView *)nativeExpressAdView {
     __block YumiMediationNativeModel *nativeModel = nil;
     [self.mappingData enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
@@ -187,7 +187,7 @@ static NSString * const kYumiProviderExtraGDTRenderModel = @"GDTRenderModel";
             }
         }
     }];
-    
+
     return nativeModel;
 }
 
@@ -234,14 +234,15 @@ static NSString * const kYumiProviderExtraGDTRenderModel = @"GDTRenderModel";
 }
 
 - (void)nativeExpressAdViewRenderSuccess:(GDTNativeExpressAdView *)nativeExpressAdView {
-    
+
     [self.delegate adapter:self nativeExpressAdViewRenderSuccess:[self getNativeModelWith:nativeExpressAdView]];
-    
 }
 
 - (void)nativeExpressAdViewRenderFail:(GDTNativeExpressAdView *)nativeExpressAdView {
-    
-    [self.delegate adapter:self nativeExpressAd:[self getNativeModelWith:nativeExpressAdView] didRenderFail:@"gdt express ad view render fail"];
+
+    [self.delegate adapter:self
+           nativeExpressAd:[self getNativeModelWith:nativeExpressAdView]
+             didRenderFail:@"gdt express ad view render fail"];
 }
 
 - (void)nativeExpressAdViewClosed:(GDTNativeExpressAdView *)nativeExpressAdView {

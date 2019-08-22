@@ -6,8 +6,8 @@
 //  Copyright © 2018 Baidu Inc. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "BaiduMobAdCommonConfig.h"
+#import <UIKit/UIKit.h>
 
 @class BaiduMobAdVideoView;
 @protocol BaiduMobAdVideoViewDelegate <NSObject>
@@ -15,7 +15,7 @@
 
 /**
  视频准备开始播放（首帧）
- 
+
  @param videoView self
  */
 - (void)fullscreenVideoAdDidStartPlaying:(BaiduMobAdVideoView *)videoView;
@@ -36,7 +36,7 @@
 
 /**
  视频发生点击
- 
+
  @param videoView self
  */
 - (void)fullscreenVideoAdDidClick:(BaiduMobAdVideoView *)videoView;
@@ -45,7 +45,7 @@
 
 @interface BaiduMobAdVideoView : UIView
 
-@property (nonatomic, weak) id <BaiduMobAdVideoViewDelegate> delegate;
+@property (nonatomic, weak) id<BaiduMobAdVideoViewDelegate> delegate;
 
 /**
  * 广告素材type

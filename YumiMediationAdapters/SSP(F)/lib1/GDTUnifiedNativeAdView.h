@@ -6,16 +6,16 @@
 //  Copyright © 2018 Tencent. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "GDTLogoView.h"
 #import "GDTMediaView.h"
-#import "GDTUnifiedNativeAdDataObject.h"
 #import "GDTSDKDefines.h"
+#import "GDTUnifiedNativeAdDataObject.h"
+#import <UIKit/UIKit.h>
 
 @class GDTUnifiedNativeAdView;
 
 //视频广告时长Key
-extern NSString* const kGDTUnifiedNativeAdKeyVideoDuration;
+extern NSString *const kGDTUnifiedNativeAdKeyVideoDuration;
 
 @protocol GDTUnifiedNativeAdViewDelegate <NSObject>
 /**
@@ -25,14 +25,12 @@ extern NSString* const kGDTUnifiedNativeAdKeyVideoDuration;
  */
 - (void)gdt_unifiedNativeAdViewWillExpose:(GDTUnifiedNativeAdView *)unifiedNativeAdView;
 
-
 /**
  广告点击回调
 
  @param unifiedNativeAdView GDTUnifiedNativeAdView 实例
  */
 - (void)gdt_unifiedNativeAdViewDidClick:(GDTUnifiedNativeAdView *)unifiedNativeAdView;
-
 
 /**
  广告详情页关闭回调
@@ -41,14 +39,12 @@ extern NSString* const kGDTUnifiedNativeAdKeyVideoDuration;
  */
 - (void)gdt_unifiedNativeAdDetailViewClosed:(GDTUnifiedNativeAdView *)unifiedNativeAdView;
 
-
 /**
  当点击应用下载或者广告调用系统程序打开时调用
- 
+
  @param unifiedNativeAdView GDTUnifiedNativeAdView 实例
  */
 - (void)gdt_unifiedNativeAdViewApplicationWillEnterBackground:(GDTUnifiedNativeAdView *)unifiedNativeAdView;
-
 
 /**
  广告详情页面即将展示回调
@@ -57,7 +53,6 @@ extern NSString* const kGDTUnifiedNativeAdKeyVideoDuration;
  */
 - (void)gdt_unifiedNativeAdDetailViewWillPresentScreen:(GDTUnifiedNativeAdView *)unifiedNativeAdView;
 
-
 /**
  视频广告播放状态更改回调
 
@@ -65,10 +60,12 @@ extern NSString* const kGDTUnifiedNativeAdKeyVideoDuration;
  @param status 视频广告播放状态
  @param userInfo 视频广告信息
  */
-- (void)gdt_unifiedNativeAdView:(GDTUnifiedNativeAdView *)unifiedNativeAdView playerStatusChanged:(GDTMediaPlayerStatus)status userInfo:(NSDictionary *)userInfo;
+- (void)gdt_unifiedNativeAdView:(GDTUnifiedNativeAdView *)unifiedNativeAdView
+            playerStatusChanged:(GDTMediaPlayerStatus)status
+                       userInfo:(NSDictionary *)userInfo;
 @end
 
-@interface GDTUnifiedNativeAdView:UIView
+@interface GDTUnifiedNativeAdView : UIView
 @property (nonatomic, strong, readonly) GDTMediaView *mediaView;
 @property (nonatomic, weak) id<GDTUnifiedNativeAdViewDelegate> delegate;
 
@@ -77,7 +74,6 @@ extern NSString* const kGDTUnifiedNativeAdKeyVideoDuration;
  *  详解：开发者需传入用来弹出目标页的ViewController，一般为当前ViewController
  */
 @property (nonatomic, weak) UIViewController *viewController;
-
 
 /**
  自渲染2.0视图注册方法
@@ -92,10 +88,9 @@ extern NSString* const kGDTUnifiedNativeAdKeyVideoDuration;
             viewController:(UIViewController *)viewController
             clickableViews:(NSArray<UIView *> *)clickableViews;
 
-
 /**
  自渲染2.0视图注册方法
- 
+
  @param dataObject 数据对象，必传字段
  @param mediaView 媒体对象视图，此处放视频播放器的容器视图
  @param logoView logo视图
@@ -108,6 +103,3 @@ extern NSString* const kGDTUnifiedNativeAdKeyVideoDuration;
             viewController:(UIViewController *)viewController
             clickableViews:(NSArray<UIView *> *)clickableViews;
 @end
-
-
-

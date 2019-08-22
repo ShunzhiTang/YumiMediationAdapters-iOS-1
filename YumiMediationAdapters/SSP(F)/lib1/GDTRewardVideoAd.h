@@ -14,7 +14,7 @@
 
 @property (nonatomic, getter=isAdValid, readonly) BOOL adValid;
 @property (nonatomic, assign, readonly) NSInteger expiredTimestamp;
-@property (nonatomic, weak) id <GDTRewardedVideoAdDelegate> delegate;
+@property (nonatomic, weak) id<GDTRewardedVideoAdDelegate> delegate;
 
 /**
  构造方法
@@ -38,11 +38,9 @@
 
 @end
 
-
 @protocol GDTRewardedVideoAdDelegate <NSObject>
 
 @optional
-
 
 /**
  广告数据加载成功回调

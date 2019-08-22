@@ -4,9 +4,9 @@
 //  Copyright (c) 2015 lishan04. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "BaiduMobAdCommonConfig.h"
 #import "BaiduMobAdNativeVideoBaseView.h"
+#import <UIKit/UIKit.h>
 
 @class BaiduMobAdNativeAdObject;
 @interface BaiduMobAdNativeVideoView : BaiduMobAdNativeVideoBaseView
@@ -14,8 +14,8 @@
 @property BOOL supportActImage;
 #define VideoViewAyyay [[NSMutableArray alloc] initWithCapacity:5];
 
-@property (nonatomic, strong)   UIButton *btnLP;//点击查看详情按钮
-@property (nonatomic, strong)   UIButton *btnReplay;//重播按钮
+@property (nonatomic, strong) UIButton *btnLP;     //点击查看详情按钮
+@property (nonatomic, strong) UIButton *btnReplay; //重播按钮
 // 初始化方法，需要传入广告返回的BaiduMobAdNativeAdObject
 - (instancetype)initWithFrame:(CGRect)frame andObject:(BaiduMobAdNativeAdObject *)object;
 
@@ -27,6 +27,6 @@
 
 - (BOOL)isPlaying;
 #warning 重要，一定要向BaiduMobAdNativeAdObject发送视频状态事件和当前视频播放的位置，只有在第一次播放才需要发送
-- (void)sendVideoEvent:(BaiduAdNativeVideoEvent)event currentTime:(NSTimeInterval) currentTime;
+- (void)sendVideoEvent:(BaiduAdNativeVideoEvent)event currentTime:(NSTimeInterval)currentTime;
 
 @end

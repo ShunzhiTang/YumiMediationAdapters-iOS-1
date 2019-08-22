@@ -76,5 +76,5 @@
  @param dataObject 需要对比的自渲染2.0广告数据对象
  @return YES or NO
  */
-- (BOOL) equlasAdData:(GDTUnifiedNativeAdDataObject *)dataObject;
+- (BOOL)equlasAdData:(GDTUnifiedNativeAdDataObject *)dataObject;
 @end

@@ -55,7 +55,7 @@
     return self;
 }
 
-- (NSString*)networkVersion {
+- (NSString *)networkVersion {
     return @"8.0.1";
 }
 
@@ -67,14 +67,14 @@
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     // update GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    
+
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [Chartboost setPIDataUseConsent:YesBehavioral];
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [Chartboost setPIDataUseConsent:NoBehavioral];
     }
-    
+
     if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait ||
         self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
         [self.delegate adapter:self

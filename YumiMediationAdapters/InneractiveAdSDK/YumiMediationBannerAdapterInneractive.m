@@ -97,7 +97,7 @@
     return self;
 }
 
-- (NSString*)networkVersion {
+- (NSString *)networkVersion {
     return @"7.2.3";
 }
 

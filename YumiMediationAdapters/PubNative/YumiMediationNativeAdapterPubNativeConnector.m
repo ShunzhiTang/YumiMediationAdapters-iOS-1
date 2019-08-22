@@ -119,12 +119,10 @@
 #pragma mark : YumiMediationNativeAdapterConnectorMedia
 /// Play the video. Doesn't do anything if the video is already playing.
 - (void)play {
-   
 }
 
 /// Pause the video. Doesn't do anything if the video is already paused.
 - (void)pause {
-   
 }
 
 /// Returns the video's aspect ratio (width/height) or 0 if no video is present.
@@ -144,7 +142,7 @@
 }
 
 - (NSString *)callToAction {
-    
+
     return self.nativeObject.callToActionTitle;
 }
 - (NSString *)appPrice {
@@ -157,7 +155,7 @@
     return nil;
 }
 - (NSString *)appRating {
-    return [NSString stringWithFormat:@"%@",self.nativeObject.rating];
+    return [NSString stringWithFormat:@"%@", self.nativeObject.rating];
     ;
 }
 - (NSString *)other {

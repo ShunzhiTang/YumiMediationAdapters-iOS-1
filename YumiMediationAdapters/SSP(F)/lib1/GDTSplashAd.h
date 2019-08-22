@@ -7,9 +7,9 @@
 //  Copyright © 2015年 Tencent. All rights reserved.
 //
 
+#import "GDTSDKDefines.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "GDTSDKDefines.h"
 
 @class GDTSplashAd;
 
@@ -146,6 +146,8 @@
 - (void)loadAdAndShowInWindow:(UIWindow *)window withBottomView:(UIView *)bottomView skipView:(UIView *)skipView;
 
 #pragma mark - DEPRECATED
-- (instancetype)initWithAppkey:(NSString *)appkey placementId:(NSString *)placementId GDT_DEPRECATED_MSG_ATTRIBUTE("use initWithAppId:placementId: instead.");
+- (instancetype)initWithAppkey:(NSString *)appkey
+                   placementId:(NSString *)placementId
+    GDT_DEPRECATED_MSG_ATTRIBUTE("use initWithAppId:placementId: instead.");
 
 @end
