@@ -16,6 +16,11 @@
 #import <YumiMediationSDK/YumiMediationAdapterRegistry.h>
 #import <YumiMediationSDK/YumiTool.h>
 
+// 0: template
+// 1: reder
+// Default is 0
+static NSString * const kYumiProviderExtraGDTRenderModel = @"GDTRenderModel";
+
 @interface YumiMediationNativeAdapterGDT () <YumiMediationNativeAdapter, GDTUnifiedNativeAdDelegate,
                                              YumiMediationNativeAdapterConnectorDelegate, GDTNativeExpressAdDelegete>
 
@@ -74,10 +79,10 @@
     // 0： 模版形式 ，1：自渲染 ，默认是0
     int renderMode = 0;
 
-    if (![self.provider.data.extra[YumiProviderExtraGDT] isKindOfClass:[NSNumber class]]) {
+    if (![self.provider.data.extra[kYumiProviderExtraGDTRenderModel] isKindOfClass:[NSNumber class]]) {
         renderMode = 0;
     } else {
-        renderMode = [self.provider.data.extra[YumiProviderExtraGDT] intValue];
+        renderMode = [self.provider.data.extra[kYumiProviderExtraGDTRenderModel] intValue];
     }
 
     // need to request expressAd
