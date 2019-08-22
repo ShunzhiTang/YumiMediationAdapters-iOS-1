@@ -78,7 +78,7 @@
     return self;
 }
 
-- (NSString*)networkVersion {
+- (NSString *)networkVersion {
     return @"4.10.3";
 }
 
@@ -170,7 +170,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [weakSelf.webView loadHTMLString:str];
     });
-    
 }
 
 - (void)nativeAdFailToLoad:(NSError *)error {

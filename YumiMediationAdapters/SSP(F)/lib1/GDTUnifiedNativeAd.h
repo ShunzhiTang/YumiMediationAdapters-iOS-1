@@ -6,9 +6,9 @@
 //  Copyright © 2018 Tencent. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "GDTUnifiedNativeAdDataObject.h"
 #import "GDTUnifiedNativeAdView.h"
+#import <Foundation/Foundation.h>
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol GDTUnifiedNativeAdDelegate <NSObject>
@@ -19,7 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
  @param unifiedNativeAdDataObjects 广告数据数组
  @param error 错误信息
  */
-- (void)gdt_unifiedNativeAdLoaded:(NSArray<GDTUnifiedNativeAdDataObject *> * _Nullable)unifiedNativeAdDataObjects error:(NSError * _Nullable)error;
+- (void)gdt_unifiedNativeAdLoaded:(NSArray<GDTUnifiedNativeAdDataObject *> *_Nullable)unifiedNativeAdDataObjects
+                            error:(NSError *_Nullable)error;
 @end
 
 @interface GDTUnifiedNativeAd : NSObject

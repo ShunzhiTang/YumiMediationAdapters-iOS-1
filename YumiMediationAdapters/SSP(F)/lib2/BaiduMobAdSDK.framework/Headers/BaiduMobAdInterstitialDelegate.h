@@ -29,7 +29,7 @@
 /**
  *  location
  */
-- (BOOL) enableLocation;
+- (BOOL)enableLocation;
 
 /**
  *  广告预加载成功
@@ -54,7 +54,7 @@
 /**
  *  广告展示失败
  */
-- (void)interstitialFailPresentScreen:(BaiduMobAdInterstitial *)interstitial withError:(BaiduMobFailReason) reason;
+- (void)interstitialFailPresentScreen:(BaiduMobAdInterstitial *)interstitial withError:(BaiduMobFailReason)reason;
 
 /**
  *  广告展示被用户点击时的回调

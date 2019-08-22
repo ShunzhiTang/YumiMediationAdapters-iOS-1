@@ -6,9 +6,8 @@
 //  Copyright © 2018年 Baidu Inc. All rights reserved.
 //
 
-
-#import <Foundation/Foundation.h>
 #import "BaiduMobAdCommonConfig.h"
+#import <Foundation/Foundation.h>
 
 @class BaiduMobAdRewardVideo;
 
@@ -56,4 +55,3 @@
 - (void)rewardedVideoAdDidClick:(BaiduMobAdRewardVideo *)video withPlayingProgress:(CGFloat)progress;
 
 @end
-

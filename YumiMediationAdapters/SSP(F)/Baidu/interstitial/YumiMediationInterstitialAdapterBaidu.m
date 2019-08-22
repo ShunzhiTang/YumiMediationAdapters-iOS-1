@@ -9,12 +9,12 @@
 #import "YumiMediationInterstitialAdapterBaidu.h"
 #import "YumiMediationInterstitialBaiduViewController.h"
 #import <BaiduMobAdSDK/BaiduMobAdInterstitial.h>
-#import <YumiMediationSDK/YumiMasonry.h>
-#import <YumiMediationSDK/YumiTool.h>
 #import <BaiduMobAdSDK/BaiduMobAdRewardVideo.h>
 #import <BaiduMobAdSDK/BaiduMobAdSetting.h>
+#import <YumiMediationSDK/YumiMasonry.h>
+#import <YumiMediationSDK/YumiTool.h>
 
-@interface YumiMediationInterstitialAdapterBaidu () <BaiduMobAdInterstitialDelegate,BaiduMobAdRewardVideoDelegate>
+@interface YumiMediationInterstitialAdapterBaidu () <BaiduMobAdInterstitialDelegate, BaiduMobAdRewardVideoDelegate>
 
 @property (nonatomic) BaiduMobAdInterstitial *interstitial;
 @property (nonatomic, assign) YumiMediationAdType adType;
@@ -124,7 +124,7 @@
         [self.rewardVideo showFromViewController:rootViewController];
         return;
     }
-    
+
     if (self.aspectRatio == 0) {
         [self.interstitial presentFromRootViewController:rootViewController];
         return;

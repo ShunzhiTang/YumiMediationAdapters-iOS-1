@@ -24,13 +24,12 @@
 /**
  *  渠道id
  */
-- (NSString*) channelId;
+- (NSString *)channelId;
 
 /**
  *  启动位置信息
  */
--(BOOL) enableLocation;
-
+- (BOOL)enableLocation;
 
 /**
  *  广告展示成功
@@ -40,7 +39,7 @@
 /**
  *  广告展示失败
  */
-- (void)splashlFailPresentScreen:(BaiduMobAdSplash *)splash withError:(BaiduMobFailReason) reason;
+- (void)splashlFailPresentScreen:(BaiduMobAdSplash *)splash withError:(BaiduMobFailReason)reason;
 
 /**
  *  广告被点击
@@ -62,8 +61,6 @@
  *  adType:广告类型 BaiduMobMaterialType
  *  videoDuration:视频时长，仅广告为视频时出现。非视频类广告默认0。 单位ms
  */
-- (void)splashDidReady:(BaiduMobAdSplash *)splash
-             AndAdType:(NSString *)adType
-         VideoDuration:(NSInteger)videoDuration;
+- (void)splashDidReady:(BaiduMobAdSplash *)splash AndAdType:(NSString *)adType VideoDuration:(NSInteger)videoDuration;
 
 @end

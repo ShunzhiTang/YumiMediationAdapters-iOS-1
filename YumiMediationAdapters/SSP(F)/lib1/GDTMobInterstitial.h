@@ -6,9 +6,9 @@
 //  Copyright (c) 2013年 Tencent. All rights reserved.
 //
 
+#import "GDTSDKDefines.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "GDTSDKDefines.h"
 
 @class GDTMobInterstitial;
 
@@ -121,6 +121,8 @@
 - (void)presentFromRootViewController:(UIViewController *)rootViewController;
 
 #pragma mark - DEPRECATED
-- (instancetype)initWithAppkey:(NSString *)appkey placementId:(NSString *)placementId GDT_DEPRECATED_MSG_ATTRIBUTE("use initWithAppId:placementId: instead.");
+- (instancetype)initWithAppkey:(NSString *)appkey
+                   placementId:(NSString *)placementId
+    GDT_DEPRECATED_MSG_ATTRIBUTE("use initWithAppId:placementId: instead.");
 
 @end

@@ -6,19 +6,19 @@
 //  Copyright (c) 2015年 lishan04. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "BaiduMobAdCommonConfig.h"
+#import <Foundation/Foundation.h>
 
-@interface BaiduMobAdNativeAdObject: NSObject
+@interface BaiduMobAdNativeAdObject : NSObject
 
 /**
  * 标题 text
  */
-@property (copy, nonatomic)  NSString *title;
+@property (copy, nonatomic) NSString *title;
 /**
  * 描述 text
  */
-@property (copy, nonatomic)  NSString *text;
+@property (copy, nonatomic) NSString *text;
 /**
  * 小图 url
  */
@@ -45,42 +45,42 @@
 /**
  * 视频url
  */
-@property (copy, nonatomic)  NSString *videoURLString;
+@property (copy, nonatomic) NSString *videoURLString;
 /**
  * 视频时长，单位为s
  */
-@property (copy, nonatomic)  NSNumber *videoDuration;
+@property (copy, nonatomic) NSNumber *videoDuration;
 /**
  * 品牌名称，若广告返回中无品牌名称则为空
  */
-@property (copy, nonatomic)  NSString *brandName;
+@property (copy, nonatomic) NSString *brandName;
 /**
  * 自动播放
  */
-@property (copy, nonatomic)  NSNumber *autoPlay;
+@property (copy, nonatomic) NSNumber *autoPlay;
 /**
-* 开发者配置可接受视频后，对返回的广告单元，需先判断BaiduMobMaterialType再决定使用何种渲染组件
+ * 开发者配置可接受视频后，对返回的广告单元，需先判断BaiduMobMaterialType再决定使用何种渲染组件
  */
 @property BaiduMobMaterialType materialType;
 
 /**
  * 返回广告单元的点击类型
  */
-@property (nonatomic)   BaiduMobNativeAdActionType actType;
+@property (nonatomic) BaiduMobNativeAdActionType actType;
 
 /**
  * 大图图片宽
  */
-@property (copy, nonatomic)  NSString *w;
+@property (copy, nonatomic) NSString *w;
 /**
  * 大图图片高
  */
-@property (copy, nonatomic)  NSString *h;
+@property (copy, nonatomic) NSString *h;
 
 /**
  * 是否过期，默认为false，30分钟后过期，需要重新请求广告
  */
--(BOOL) isExpired;
+- (BOOL)isExpired;
 
 /**
  * 可以不传
@@ -102,6 +102,6 @@
 /**
  * 发送点击
  */
--(void)handleClick:(UIView*)view;
+- (void)handleClick:(UIView *)view;
 
 @end

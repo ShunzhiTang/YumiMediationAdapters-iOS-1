@@ -60,7 +60,7 @@
 }
 
 #pragma mark - YumiMediationBannerAdapter
-- (NSString*)networkVersion {
+- (NSString *)networkVersion {
     return @"8.1.0";
 }
 
