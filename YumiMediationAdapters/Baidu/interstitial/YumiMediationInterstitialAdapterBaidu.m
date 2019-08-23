@@ -135,24 +135,19 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
         [self.rewardVideo showFromViewController:rootViewController];
         return;
     }
-
     if (self.aspectRatio == 0) {
         [self.interstitial presentFromRootViewController:rootViewController];
         return;
     }
-
     YumiMediationInterstitialBaiduViewController *vc = [[YumiMediationInterstitialBaiduViewController alloc] init];
-
     self.presentAdVc = vc;
-
     __weak typeof(self) weakSelf = self;
 
-    [[[YumiTool sharedTool] topMostController]
-        presentViewController:self.presentAdVc
-                     animated:NO
-                   completion:^{
-                       [weakSelf.presentAdVc presentBaiduInterstitial:weakSelf.interstitial adSize:weakSelf.adSize];
-                   }];
+    [rootViewController presentViewController:self.presentAdVc
+                                     animated:NO
+                                   completion:^{
+                                       [weakSelf.presentAdVc presentBaiduInterstitial:weakSelf.interstitial adSize:weakSelf.adSize];
+                                   }];
 }
 
 #pragma mark - BaiduMobAdInterstitialDelegate
