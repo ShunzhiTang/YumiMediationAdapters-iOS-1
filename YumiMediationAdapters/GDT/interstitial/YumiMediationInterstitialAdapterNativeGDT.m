@@ -67,7 +67,6 @@
 
     self.provider = provider;
     self.delegate = delegate;
-    self.isInterstitialReady = NO;
     self.adType = adType;
 
     return self;
@@ -82,6 +81,7 @@
 }
 
 - (void)requestAd {
+    self.isInterstitialReady = NO;
     YumiTool *tool = [YumiTool sharedTool];
     CGSize adSize = CGSizeMake(ScreenWidth, 300);
     if (![tool isInterfaceOrientationPortrait]) {
