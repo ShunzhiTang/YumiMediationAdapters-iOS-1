@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.subspec 'AdMob' do |sp|
     sp.source_files = "YumiMediationAdapters/AdMob/**/*.{h,m}"
     sp.dependency 'YumiAdMob', '7.44.0'
-    sp.resource = 'YumiMediationAdapters/AdMob/resources/*'
+    sp.resource_bundles = {'YumiMediationAdMob' => ['YumiMediationAdapters/AdMob/resources/*']}
   end
   s.subspec 'AppLovin' do |sp|
     sp.source_files = "YumiMediationAdapters/AppLovin/**/*.{h,m}"
@@ -33,7 +33,7 @@ Pod::Spec.new do |s|
   s.subspec 'Facebook' do |sp|
     sp.source_files = "YumiMediationAdapters/Facebook/**/*.{h,m}"
     sp.dependency 'YumiFacebook', '5.3.2'
-    sp.resource = 'YumiMediationAdapters/Facebook/resources/*'
+    sp.resource_bundles = {'YumiMediationFacebook' => ['YumiMediationAdapters/Facebook/resources/*']}
   end
   s.subspec 'Domob' do |sp|
     sp.source_files = "YumiMediationAdapters/Domob/**/*.{h,m}"
@@ -42,7 +42,7 @@ Pod::Spec.new do |s|
   s.subspec 'GDT' do |sp|
     sp.source_files = "YumiMediationAdapters/GDT/**/*.{h,m}"
     sp.dependency 'YumiGDT', '4.10.3'
-    sp.resource = 'YumiMediationAdapters/GDT/resources/*'
+    sp.resource_bundles = {'YumiMediationGDT' => ['YumiMediationAdapters/GDT/resources/*']}
   end
   s.subspec 'InMobi' do |sp|
     sp.source_files = "YumiMediationAdapters/InMobi/**/*.{h,m}"
