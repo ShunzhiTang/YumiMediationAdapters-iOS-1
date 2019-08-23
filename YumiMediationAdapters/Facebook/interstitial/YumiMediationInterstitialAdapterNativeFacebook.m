@@ -98,7 +98,7 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     __weak __typeof(self) weakSelf = self;
-    [self.rootViewController presentViewController:self.interstitial
+    [rootViewController presentViewController:self.interstitial
                                      animated:YES
                                    completion:^{
                                        [weakSelf.delegate coreAdapter:weakSelf didOpenCoreAd:nil adType:weakSelf.adType];
