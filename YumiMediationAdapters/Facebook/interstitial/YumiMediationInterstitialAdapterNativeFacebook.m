@@ -17,6 +17,7 @@
 @property (nonatomic) YumiFacebookAdapterInterstitialVc *interstitial;
 @property (nonatomic, assign) BOOL isAdReady;
 @property (nonatomic, assign) YumiMediationAdType adType;
+@property (nonatomic) UIViewController *rootViewController;
 
 @end
 
@@ -55,7 +56,7 @@
 }
 
 - (void)closeFacebookIntestitial {
-    [[[YumiTool sharedTool] topMostController] dismissViewControllerAnimated:YES completion:nil];
+    [self.rootViewController dismissViewControllerAnimated:YES completion:nil];
 
     [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
     self.interstitial = nil;
@@ -83,13 +84,11 @@
 }
 
 - (void)requestAd {
+    self.rootViewController = [[YumiTool sharedTool] topMostController];
     self.isAdReady = NO;
-
     self.interstitial = [self createInterstitialVc];
-
     FBNativeAd *nativeAd = [[FBNativeAd alloc] initWithPlacementID:self.provider.data.key1];
     nativeAd.delegate = self;
-
     [nativeAd loadAd];
 }
 
@@ -99,13 +98,12 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     __weak __typeof(self) weakSelf = self;
-    [[[YumiTool sharedTool] topMostController]
-        presentViewController:self.interstitial
-                     animated:YES
-                   completion:^{
-                       [weakSelf.delegate coreAdapter:weakSelf didOpenCoreAd:nil adType:weakSelf.adType];
-                       [weakSelf.delegate coreAdapter:weakSelf didStartPlayingAd:nil adType:weakSelf.adType];
-                   }];
+    [self.rootViewController presentViewController:self.interstitial
+                                     animated:YES
+                                   completion:^{
+                                       [weakSelf.delegate coreAdapter:weakSelf didOpenCoreAd:nil adType:weakSelf.adType];
+                                       [weakSelf.delegate coreAdapter:weakSelf didStartPlayingAd:nil adType:weakSelf.adType];
+                                   }];
 }
 
 #pragma mark FBNativeAdDelegate
@@ -132,7 +130,7 @@
     [self.nativeAd registerViewForInteraction:self.interstitial.adUIView
                                     mediaView:self.interstitial.adCoverMediaView
                                      iconView:self.interstitial.adIconImageView
-                               viewController:[[YumiTool sharedTool] topMostController]];
+                               viewController:self.rootViewController];
 
     // Update AdChoices view
     self.interstitial.adChoicesView.nativeAd = nativeAd;
