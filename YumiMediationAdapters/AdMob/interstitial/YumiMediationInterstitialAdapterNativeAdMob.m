@@ -123,7 +123,7 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [self.rootViewController.view addSubview:self.appInstallAdView];
+    [rootViewController.view addSubview:self.appInstallAdView];
 }
 
 #pragma mark : - GADAdLoaderDelegate
