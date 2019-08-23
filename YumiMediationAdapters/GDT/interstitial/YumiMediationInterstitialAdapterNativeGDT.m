@@ -25,6 +25,7 @@
 @property (nonatomic) YumiGDTAdapterInterstitialViewController *interstitialVc;
 @property (nonatomic, assign) BOOL isInterstitialReady;
 @property (nonatomic, assign) YumiMediationAdType adType;
+@property (nonatomic) UIViewController *rootViewController;
 
 @end
 
@@ -52,7 +53,7 @@
     return vc;
 }
 - (void)closeGDTIntestitial {
-    [[[YumiTool sharedTool] topMostController] dismissViewControllerAnimated:YES completion:nil];
+    [self.rootViewController dismissViewControllerAnimated:YES completion:nil];
 
     [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
     self.interstitialVc = nil;
@@ -66,7 +67,6 @@
 
     self.provider = provider;
     self.delegate = delegate;
-    self.isInterstitialReady = NO;
     self.adType = adType;
 
     return self;
@@ -81,6 +81,7 @@
 }
 
 - (void)requestAd {
+    self.isInterstitialReady = NO;
     YumiTool *tool = [YumiTool sharedTool];
     CGSize adSize = CGSizeMake(ScreenWidth, 300);
     if (![tool isInterfaceOrientationPortrait]) {
@@ -107,13 +108,13 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     __weak __typeof(self) weakSelf = self;
-    [[[YumiTool sharedTool] topMostController]
-        presentViewController:self.interstitialVc
-                     animated:YES
-                   completion:^{
-                       [weakSelf.delegate coreAdapter:weakSelf didOpenCoreAd:nil adType:weakSelf.adType];
-                       [weakSelf.delegate coreAdapter:weakSelf didStartPlayingAd:nil adType:weakSelf.adType];
-                   }];
+    self.rootViewController = rootViewController;
+    [rootViewController presentViewController:self.interstitialVc
+                                     animated:YES
+                                   completion:^{
+                                       [weakSelf.delegate coreAdapter:weakSelf didOpenCoreAd:nil adType:weakSelf.adType];
+                                       [weakSelf.delegate coreAdapter:weakSelf didStartPlayingAd:nil adType:weakSelf.adType];
+                                   }];
 }
 
 #pragma mark : - GDTNativeExpressAdDelegete
