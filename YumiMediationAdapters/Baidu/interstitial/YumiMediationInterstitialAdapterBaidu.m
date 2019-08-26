@@ -31,7 +31,6 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
 @property (nonatomic, assign) float aspectRatio;
 // 1 video
 // 2 interstitial (default)
-@property (nonatomic, assign) NSInteger inventoryType;
 @property (nonatomic) BaiduMobAdRewardVideo *rewardVideo;
 @property (nonatomic, assign) BOOL isReward;
 @property (nonatomic, assign) BOOL isPreloadVideo;
@@ -60,15 +59,7 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-    self.interstitialIsReady = NO;
-    self.inventoryType = [self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue];
-    // init video
-    if (self.inventoryType == 1) {
-        self.rewardVideo = [[BaiduMobAdRewardVideo alloc] init];
-        self.rewardVideo.delegate = self;
-        self.rewardVideo.publisherId = self.provider.data.key1;
-        self.rewardVideo.AdUnitTag = self.provider.data.key2;
-    }
+    
     return self;
 }
 
@@ -78,18 +69,26 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
 
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
     self.provider = provider;
-    self.inventoryType = [self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue];
 }
 
 - (void)requestAd {
     // request video
-    if (self.inventoryType == 1) {
+    if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
         self.isPreloadVideo = NO;
+        //video
+        if (!self.rewardVideo) {
+            self.rewardVideo = [[BaiduMobAdRewardVideo alloc] init];
+            self.rewardVideo.delegate = self;
+            self.rewardVideo.publisherId = self.provider.data.key1;
+            self.rewardVideo.AdUnitTag = self.provider.data.key2;
+        }
+       
         [self.rewardVideo load];
         return;
     }
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.interstitialIsReady = NO;
         weakSelf.interstitial = [[BaiduMobAdInterstitial alloc] init];
         weakSelf.interstitial.delegate = weakSelf;
         weakSelf.interstitial.AdUnitTag = weakSelf.provider.data.key2;
@@ -120,7 +119,7 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
 }
 
 - (BOOL)isReady {
-    if (self.inventoryType == 1) {
+    if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
         if (self.isPreloadVideo && [self.rewardVideo isReady]) {
             return YES;
         }
@@ -131,7 +130,7 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     // present video
-    if (self.inventoryType == 1) {
+    if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
         [self.rewardVideo showFromViewController:rootViewController];
         return;
     }
