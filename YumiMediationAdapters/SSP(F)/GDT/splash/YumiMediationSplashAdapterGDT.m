@@ -7,8 +7,8 @@
 //
 
 #import "YumiMediationSplashAdapterGDT.h"
-#import <YumiAdSDK/YumiMediationAdapterRegistry.h>
 #import <YumiGDT/GDTSplashAd.h>
+#import <YumiAdSDK/YumiMediationAdapterRegistry.h>
 
 @interface YumiMediationSplashAdapterGDT () <YumiMediationSplashAdapter, GDTSplashAdDelegate>
 
@@ -36,6 +36,10 @@
     self.provider = provider;
 
     return self;
+}
+
+- (NSString *)networkVersion {
+    return @"4.10.3";
 }
 
 - (void)requestAdAndShowInWindow:(nonnull UIWindow *)keyWindow withBottomView:(nonnull UIView *)bottomView {
