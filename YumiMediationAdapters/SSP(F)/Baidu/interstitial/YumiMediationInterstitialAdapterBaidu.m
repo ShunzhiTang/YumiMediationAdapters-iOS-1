@@ -11,8 +11,14 @@
 #import <BaiduMobAdSDK/BaiduMobAdInterstitial.h>
 #import <BaiduMobAdSDK/BaiduMobAdRewardVideo.h>
 #import <BaiduMobAdSDK/BaiduMobAdSetting.h>
-#import <YumiMediationSDK/YumiMasonry.h>
-#import <YumiMediationSDK/YumiTool.h>
+#import <YumiAdSDK/YumiMasonry.h>
+#import <YumiAdSDK/YumiTool.h>
+
+static NSString *const kYumiProviderExtraBaiduInterstitialAspectRatio = @"interstitialAspectRatio";
+// 1: video
+// 2: interstitial
+// Default is 2
+static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
 
 @interface YumiMediationInterstitialAdapterBaidu () <BaiduMobAdInterstitialDelegate, BaiduMobAdRewardVideoDelegate>
 
@@ -25,7 +31,6 @@
 @property (nonatomic, assign) float aspectRatio;
 // 1 video
 // 2 interstitial (default)
-@property (nonatomic, assign) NSInteger inventoryType;
 @property (nonatomic) BaiduMobAdRewardVideo *rewardVideo;
 @property (nonatomic, assign) BOOL isReward;
 @property (nonatomic, assign) BOOL isPreloadVideo;
@@ -54,41 +59,46 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-    self.interstitialIsReady = NO;
-    self.inventoryType = [self.provider.data.extra[YumiProviderExtraBaiduInventory] integerValue];
-    // init video
-    if (self.inventoryType == 1) {
-        self.rewardVideo = [[BaiduMobAdRewardVideo alloc] init];
-        self.rewardVideo.delegate = self;
-        self.rewardVideo.publisherId = self.provider.data.key1;
-        self.rewardVideo.AdUnitTag = self.provider.data.key2;
-    }
+    
     return self;
+}
+
+- (NSString *)networkVersion {
+    return @"4.6.5";
 }
 
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
     self.provider = provider;
-    self.inventoryType = [self.provider.data.extra[YumiProviderExtraBaiduInventory] integerValue];
 }
 
 - (void)requestAd {
     // request video
-    if (self.inventoryType == 1) {
+    if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
         self.isPreloadVideo = NO;
+        //video
+        if (!self.rewardVideo) {
+            self.rewardVideo = [[BaiduMobAdRewardVideo alloc] init];
+            self.rewardVideo.delegate = self;
+            self.rewardVideo.publisherId = self.provider.data.key1;
+            self.rewardVideo.AdUnitTag = self.provider.data.key2;
+        }
+       
         [self.rewardVideo load];
         return;
     }
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.interstitialIsReady = NO;
         weakSelf.interstitial = [[BaiduMobAdInterstitial alloc] init];
         weakSelf.interstitial.delegate = weakSelf;
         weakSelf.interstitial.AdUnitTag = weakSelf.provider.data.key2;
 
         // aspectRatio = width : height
-        if (![self.provider.data.extra[YumiProviderExtraBaidu] isKindOfClass:[NSNumber class]]) {
+        if (!
+            [self.provider.data.extra[kYumiProviderExtraBaiduInterstitialAspectRatio] isKindOfClass:[NSNumber class]]) {
             self.aspectRatio = 0;
         } else {
-            self.aspectRatio = [self.provider.data.extra[YumiProviderExtraBaidu] floatValue];
+            self.aspectRatio = [self.provider.data.extra[kYumiProviderExtraBaiduInterstitialAspectRatio] floatValue];
         }
 
         if (self.aspectRatio == 0) {
@@ -109,7 +119,7 @@
 }
 
 - (BOOL)isReady {
-    if (self.inventoryType == 1) {
+    if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
         if (self.isPreloadVideo && [self.rewardVideo isReady]) {
             return YES;
         }
@@ -120,28 +130,23 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     // present video
-    if (self.inventoryType == 1) {
+    if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
         [self.rewardVideo showFromViewController:rootViewController];
         return;
     }
-
     if (self.aspectRatio == 0) {
         [self.interstitial presentFromRootViewController:rootViewController];
         return;
     }
-
     YumiMediationInterstitialBaiduViewController *vc = [[YumiMediationInterstitialBaiduViewController alloc] init];
-
     self.presentAdVc = vc;
-
     __weak typeof(self) weakSelf = self;
 
-    [[[YumiTool sharedTool] topMostController]
-        presentViewController:self.presentAdVc
-                     animated:NO
-                   completion:^{
-                       [weakSelf.presentAdVc presentBaiduInterstitial:weakSelf.interstitial adSize:weakSelf.adSize];
-                   }];
+    [rootViewController presentViewController:self.presentAdVc
+                                     animated:NO
+                                   completion:^{
+                                       [weakSelf.presentAdVc presentBaiduInterstitial:weakSelf.interstitial adSize:weakSelf.adSize];
+                                   }];
 }
 
 #pragma mark - BaiduMobAdInterstitialDelegate

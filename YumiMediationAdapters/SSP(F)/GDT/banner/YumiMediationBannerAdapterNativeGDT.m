@@ -78,6 +78,10 @@
     return self;
 }
 
+- (NSString *)networkVersion {
+    return @"4.10.3";
+}
+
 - (void)setBannerSizeWith:(YumiMediationAdViewBannerSize)adSize smartBanner:(BOOL)isSmart {
     self.bannerSize = adSize;
     self.isSmartBanner = isSmart;
@@ -162,8 +166,10 @@
                                    imageURL:@"大图"
                                hyperlinkURL:@"跳转"];
     }
-
-    [self.webView loadHTMLString:str];
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.webView loadHTMLString:str];
+    });
 }
 
 - (void)nativeAdFailToLoad:(NSError *)error {
