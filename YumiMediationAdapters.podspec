@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.authors = {"zplay sdk team"=>"ad-client@zplay.cn"}
   s.source = {:git => 'git@github.com:yumimobi/YumiMediationAdapters-iOS.git',:tag => s.version.to_s}
   s.platforms = {"ios"=>"8.0"}
-  s.dependency 'YumiMediationSDK', '~> 4.2.0'
+  s.dependency 'YumiMediationSDK', '~> 4.3.0'
   s.subspec 'AdColony' do |sp|
     sp.source_files = "YumiMediationAdapters/AdColony/**/*.{h,m}"
     sp.dependency 'YumiAdColony', '3.3.7'
