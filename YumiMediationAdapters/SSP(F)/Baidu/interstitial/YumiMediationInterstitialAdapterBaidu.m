@@ -59,7 +59,7 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-    
+
     return self;
 }
 
@@ -75,14 +75,14 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
     // request video
     if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
         self.isPreloadVideo = NO;
-        //video
+        // video
         if (!self.rewardVideo) {
             self.rewardVideo = [[BaiduMobAdRewardVideo alloc] init];
             self.rewardVideo.delegate = self;
             self.rewardVideo.publisherId = self.provider.data.key1;
             self.rewardVideo.AdUnitTag = self.provider.data.key2;
         }
-       
+
         [self.rewardVideo load];
         return;
     }
@@ -142,11 +142,12 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
     self.presentAdVc = vc;
     __weak typeof(self) weakSelf = self;
 
-    [rootViewController presentViewController:self.presentAdVc
-                                     animated:NO
-                                   completion:^{
-                                       [weakSelf.presentAdVc presentBaiduInterstitial:weakSelf.interstitial adSize:weakSelf.adSize];
-                                   }];
+    [rootViewController
+        presentViewController:self.presentAdVc
+                     animated:NO
+                   completion:^{
+                       [weakSelf.presentAdVc presentBaiduInterstitial:weakSelf.interstitial adSize:weakSelf.adSize];
+                   }];
 }
 
 #pragma mark - BaiduMobAdInterstitialDelegate

@@ -98,12 +98,13 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     __weak __typeof(self) weakSelf = self;
-    [rootViewController presentViewController:self.interstitial
-                                     animated:YES
-                                   completion:^{
-                                       [weakSelf.delegate coreAdapter:weakSelf didOpenCoreAd:nil adType:weakSelf.adType];
-                                       [weakSelf.delegate coreAdapter:weakSelf didStartPlayingAd:nil adType:weakSelf.adType];
-                                   }];
+    [rootViewController
+        presentViewController:self.interstitial
+                     animated:YES
+                   completion:^{
+                       [weakSelf.delegate coreAdapter:weakSelf didOpenCoreAd:nil adType:weakSelf.adType];
+                       [weakSelf.delegate coreAdapter:weakSelf didStartPlayingAd:nil adType:weakSelf.adType];
+                   }];
 }
 
 #pragma mark FBNativeAdDelegate

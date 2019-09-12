@@ -47,10 +47,10 @@
 }
 
 - (void)requestAd {
-    
+
     self.interstitial = [[FBInterstitialAd alloc] initWithPlacementID:self.provider.data.key1];
     self.interstitial.delegate = self;
-    
+
     [self.interstitial loadAd];
 }
 
