@@ -109,12 +109,13 @@
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     __weak __typeof(self) weakSelf = self;
     self.rootViewController = rootViewController;
-    [rootViewController presentViewController:self.interstitialVc
-                                     animated:YES
-                                   completion:^{
-                                       [weakSelf.delegate coreAdapter:weakSelf didOpenCoreAd:nil adType:weakSelf.adType];
-                                       [weakSelf.delegate coreAdapter:weakSelf didStartPlayingAd:nil adType:weakSelf.adType];
-                                   }];
+    [rootViewController
+        presentViewController:self.interstitialVc
+                     animated:YES
+                   completion:^{
+                       [weakSelf.delegate coreAdapter:weakSelf didOpenCoreAd:nil adType:weakSelf.adType];
+                       [weakSelf.delegate coreAdapter:weakSelf didStartPlayingAd:nil adType:weakSelf.adType];
+                   }];
 }
 
 #pragma mark : - GDTNativeExpressAdDelegete

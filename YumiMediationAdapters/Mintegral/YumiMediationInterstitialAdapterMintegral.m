@@ -8,21 +8,22 @@
 #import "YumiMediationInterstitialAdapterMintegral.h"
 #import <MTGSDK/MTGSDK.h>
 #import <MTGSDKInterstitial/MTGInterstitialAdManager.h>
-#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 #import <MTGSDKInterstitialVideo/MTGInterstitialVideoAdManager.h>
+#import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 // 1: interstitial video
 // 2: interstitial
 // Default is 2
 static NSString *const kYumiProviderExtraMintegralInventory = @"inventory";
 
-@interface YumiMediationInterstitialAdapterMintegral () <MTGInterstitialAdLoadDelegate, MTGInterstitialAdShowDelegate,MTGInterstitialVideoDelegate>
+@interface YumiMediationInterstitialAdapterMintegral () <MTGInterstitialAdLoadDelegate, MTGInterstitialAdShowDelegate,
+                                                         MTGInterstitialVideoDelegate>
 @property (nonatomic, strong) MTGInterstitialAdManager *interstitialAdManager;
 @property (nonatomic, assign) BOOL isInterstitialAvailable;
 @property (nonatomic, assign) YumiMediationAdType adType;
 
 // Interstitial video
-@property (nonatomic) MTGInterstitialVideoAdManager  *interstitialVideo;
+@property (nonatomic) MTGInterstitialVideoAdManager *interstitialVideo;
 
 @end
 
@@ -78,26 +79,26 @@ static NSString *const kYumiProviderExtraMintegralInventory = @"inventory";
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [[MTGSDK sharedInstance] setConsentStatus:NO];
     }
-    
+
     // interstitial video
     if ([self.provider.data.extra[kYumiProviderExtraMintegralInventory] integerValue] == 1) {
-        self.interstitialVideo = [[MTGInterstitialVideoAdManager alloc] initWithUnitID:self.provider.data.key3 delegate:self];
-        
+        self.interstitialVideo =
+            [[MTGInterstitialVideoAdManager alloc] initWithUnitID:self.provider.data.key3 delegate:self];
+
         [self.interstitialVideo loadAd];
         return;
     }
     // interstitial
     self.isInterstitialAvailable = NO;
-    self.interstitialAdManager =
-    [[MTGInterstitialAdManager alloc] initWithUnitID:self.provider.data.key3 adCategory:0];
-    
+    self.interstitialAdManager = [[MTGInterstitialAdManager alloc] initWithUnitID:self.provider.data.key3 adCategory:0];
+
     [self.interstitialAdManager loadWithDelegate:self];
 }
 
 - (BOOL)isReady {
     // interstitial video
     if ([self.provider.data.extra[kYumiProviderExtraMintegralInventory] integerValue] == 1) {
-         return [self.interstitialVideo isVideoReadyToPlay:self.provider.data.key3];
+        return [self.interstitialVideo isVideoReadyToPlay:self.provider.data.key3];
     }
     // interstitial
     return self.isInterstitialAvailable;
@@ -139,14 +140,12 @@ static NSString *const kYumiProviderExtraMintegralInventory = @"inventory";
 
 #pragma mark - MTGInterstitialVideoDelegate
 - (void)onInterstitialVideoLoadSuccess:(MTGInterstitialVideoAdManager *_Nonnull)adManager {
-    
+
     [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
 }
 - (void)onInterstitialVideoLoadFail:(nonnull NSError *)error
                           adManager:(MTGInterstitialVideoAdManager *_Nonnull)adManager;
-{
-    [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:self.adType];
-}
+{ [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:self.adType]; }
 
 - (void)onInterstitialVideoShowSuccess:(MTGInterstitialVideoAdManager *_Nonnull)adManager {
     [self.delegate coreAdapter:self didOpenCoreAd:nil adType:self.adType];
