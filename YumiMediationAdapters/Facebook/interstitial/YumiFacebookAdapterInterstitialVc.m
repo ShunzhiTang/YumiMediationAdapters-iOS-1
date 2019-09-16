@@ -14,10 +14,18 @@
 
 @implementation YumiFacebookAdapterInterstitialVc
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        //Fixed iOS 13 modalPresentationStyle
+        self.modalPresentationStyle = UIModalPresentationFullScreen;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //Fixed iOS 13 modalPresentationStyle
-    self.modalPresentationStyle = UIModalPresentationFullScreen;
 }
 
 - (void)didReceiveMemoryWarning {
