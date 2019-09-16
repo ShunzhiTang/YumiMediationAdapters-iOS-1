@@ -16,12 +16,20 @@
 
 @implementation YumiMediationInterstitialBaiduViewController
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        //Fixed iOS 13 modalPresentationStyle
+        self.modalPresentationStyle = UIModalPresentationFullScreen;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     self.view.backgroundColor = [UIColor blackColor];
-    //Fixed iOS 13 modalPresentationStyle
-    self.modalPresentationStyle = UIModalPresentationFullScreen;
 }
 
 - (void)presentBaiduInterstitial:(BaiduMobAdInterstitial *)interstitial adSize:(CGSize)adSize {
