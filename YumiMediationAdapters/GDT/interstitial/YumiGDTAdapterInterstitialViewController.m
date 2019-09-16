@@ -15,7 +15,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    //Fixed iOS 13 modalPresentationStyle
+    self.modalPresentationStyle = UIModalPresentationFullScreen;
 }
 
 - (IBAction)closeInterstitial:(UIButton *)sender {
