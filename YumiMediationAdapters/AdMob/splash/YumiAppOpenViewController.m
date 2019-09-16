@@ -34,6 +34,8 @@
     self.appOpenAdView.appOpenAd = self.appOpenAd;
 
     [self layoutViews];
+    //Fixed iOS 13 modalPresentationStyle
+    self.modalPresentationStyle = UIModalPresentationFullScreen;
 }
 
 - (void)layoutViews {
