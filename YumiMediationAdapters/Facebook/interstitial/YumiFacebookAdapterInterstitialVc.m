@@ -16,7 +16,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    //Fixed iOS 13 modalPresentationStyle
+    self.modalPresentationStyle = UIModalPresentationFullScreen;
 }
 
 - (void)didReceiveMemoryWarning {
