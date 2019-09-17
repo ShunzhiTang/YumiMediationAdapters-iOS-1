@@ -50,7 +50,7 @@
 }
 
 - (NSString *)networkVersion {
-    return @"2.4.2";
+    return @"2.4.3";
 }
 
 - (void)requestAd {
