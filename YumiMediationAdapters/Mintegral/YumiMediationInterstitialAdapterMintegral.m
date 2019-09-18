@@ -62,7 +62,7 @@ static NSString *const kYumiProviderExtraMintegralInventory = @"inventory";
 }
 
 - (NSString *)networkVersion {
-    return @"5.3.3";
+    return @"5.7.1";
 }
 
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
