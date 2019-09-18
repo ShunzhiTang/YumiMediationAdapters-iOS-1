@@ -45,7 +45,7 @@
 }
 
 - (NSString *)networkVersion {
-    return @"4.10.3";
+    return @"4.10.10";
 }
 
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
