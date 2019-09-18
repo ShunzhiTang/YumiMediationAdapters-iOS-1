@@ -71,7 +71,7 @@ static NSString *const kYumiProviderExtraGDTRenderModel = @"GDTRenderModel";
 }
 
 - (NSString *)networkVersion {
-    return @"4.10.3";
+    return @"4.10.10";
 }
 
 - (void)loadNativeAdsWith:(NSUInteger)adCount {
@@ -123,7 +123,9 @@ static NSString *const kYumiProviderExtraGDTRenderModel = @"GDTRenderModel";
 
     NSMutableArray<UIView *> *clickables = [NSMutableArray array];
     GDTUnifiedNativeAdView *gdtView = [[GDTUnifiedNativeAdView alloc] initWithFrame:view.bounds];
-
+    
+    gdtView.viewController = viewController;
+    
     [view addSubview:gdtView];
 
     GDTLogoView *logoView = [[GDTLogoView alloc] init];
@@ -143,6 +145,11 @@ static NSString *const kYumiProviderExtraGDTRenderModel = @"GDTRenderModel";
     [clickables addObject:gdtView];
     [clickables addObject:logoView];
 
+    //注册可点击的callToAction视图的方法
+    if (!clickableAssetViews[YumiMediationUnifiedNativeCallToActionAsset]) {
+        [gdtView registerClickableCallToActionView:clickableAssetViews[YumiMediationUnifiedNativeCallToActionAsset]];
+    }
+    
     // media view
     if (nativeAd.hasVideoContent) {
         UIView *mediaSuperView = clickableAssetViews[YumiMediationUnifiedNativeCoverImageAsset];
@@ -152,22 +159,17 @@ static NSString *const kYumiProviderExtraGDTRenderModel = @"GDTRenderModel";
         }
 
         GDTMediaView *mediaView = [[GDTMediaView alloc] initWithFrame:mediaSuperView.bounds];
-        mediaView.videoMuted = YES;
-
+        [mediaView muteEnable:YES];
+        
         [mediaSuperView addSubview:mediaView];
 
-        [gdtView registerDataObject:gdtData
-                          mediaView:mediaView
-                           logoView:logoView
-                     viewController:[[YumiTool sharedTool] topMostController]
-                     clickableViews:[clickables copy]];
+        [clickables addObject:mediaView];
+        
+        [gdtView registerDataObject:gdtData clickableViews:[clickables copy]];
         return;
     }
 
-    [gdtView registerDataObject:gdtData
-                       logoView:logoView
-                 viewController:[[YumiTool sharedTool] topMostController]
-                 clickableViews:[clickables copy]];
+    [gdtView registerDataObject:gdtData clickableViews:[clickables copy]];
 }
 
 - (void)reportImpressionForNativeAdapter:(YumiMediationNativeModel *)nativeAd view:(nonnull UIView *)view {
