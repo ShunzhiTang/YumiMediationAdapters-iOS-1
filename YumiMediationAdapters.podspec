@@ -66,7 +66,7 @@ Pod::Spec.new do |s|
   end
   s.subspec 'OneWay' do |sp|
     sp.source_files = "YumiMediationAdapters/OneWay/**/*.{h,m}"
-    sp.dependency 'YumiOneWay', '2.1.0'
+    sp.dependency 'YumiOneWay', '2.1.0.0'
   end
   s.subspec 'InneractiveAdSDK' do |sp|
     sp.source_files = "YumiMediationAdapters/InneractiveAdSDK/**/*.{h,m}"
