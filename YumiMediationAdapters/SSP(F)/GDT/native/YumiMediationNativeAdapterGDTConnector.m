@@ -20,6 +20,7 @@
 @property (nonatomic) YumiMediationNativeVideoController *videoController;
 
 @property (nonatomic) GDTNativeExpressAdView *currentExpressAdView;
+@property (nonatomic, assign) BOOL isClicked;
 
 @end
 
@@ -155,10 +156,15 @@
 }
 
 - (void)gdt_unifiedNativeAdViewDidClick:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
-    [self.connectorDelegate yumiMediationNativeAdDidClick:nil];
+    if (!self.isClicked) {
+        [self.connectorDelegate yumiMediationNativeAdDidClick:nil];
+        self.isClicked = YES;
+    }
+    
 }
 
 - (void)gdt_unifiedNativeAdDetailViewClosed:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
+    self.isClicked = NO;
 }
 
 - (void)gdt_unifiedNativeAdViewApplicationWillEnterBackground:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
