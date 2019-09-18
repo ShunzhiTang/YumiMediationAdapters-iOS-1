@@ -41,7 +41,7 @@ Pod::Spec.new do |s|
   end
   s.subspec 'GDT' do |sp|
     sp.source_files = "YumiMediationAdapters/GDT/**/*.{h,m}"
-    sp.dependency 'YumiGDT', '4.10.3'
+    sp.dependency 'YumiGDT', '4.10.10'
     sp.resource_bundles = {'YumiMediationGDT' => ['YumiMediationAdapters/GDT/resources/*']}
   end
   s.subspec 'InMobi' do |sp|
@@ -58,11 +58,11 @@ Pod::Spec.new do |s|
   end
   s.subspec 'Vungle' do |sp|
     sp.source_files = "YumiMediationAdapters/Vungle/**/*.{h,m}"
-    sp.dependency 'YumiVungle', '6.4.2'
+    sp.dependency 'YumiVungle', '6.4.3'
   end
   s.subspec 'Mintegral' do |sp|
     sp.source_files = "YumiMediationAdapters/Mintegral/**/*.{h,m}"
-    sp.dependency 'YumiMintegral', '5.3.3'
+    sp.dependency 'YumiMintegral', '5.7.1'
   end
   s.subspec 'OneWay' do |sp|
     sp.source_files = "YumiMediationAdapters/OneWay/**/*.{h,m}"
