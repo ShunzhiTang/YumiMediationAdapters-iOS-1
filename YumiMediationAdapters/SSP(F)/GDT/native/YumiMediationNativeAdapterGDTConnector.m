@@ -20,6 +20,7 @@
 @property (nonatomic) YumiMediationNativeVideoController *videoController;
 
 @property (nonatomic) GDTNativeExpressAdView *currentExpressAdView;
+@property (nonatomic, assign) BOOL isClicked;
 
 @end
 
@@ -133,10 +134,12 @@
 #pragma mark : YumiMediationNativeAdapterConnectorMedia
 /// Play the video. Doesn't do anything if the video is already playing.
 - (void)play {
+    [self.gdtNativeView.mediaView play];
 }
 
 /// Pause the video. Doesn't do anything if the video is already paused.
 - (void)pause {
+    [self.gdtNativeView.mediaView pause];
 }
 
 /// Returns the video's aspect ratio (width/height) or 0 if no video is present.
@@ -153,13 +156,19 @@
 }
 
 - (void)gdt_unifiedNativeAdViewDidClick:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
-    [self.connectorDelegate yumiMediationNativeAdDidClick:nil];
+    if (!self.isClicked) {
+        [self.connectorDelegate yumiMediationNativeAdDidClick:nil];
+        self.isClicked = YES;
+    }
+    
 }
 
 - (void)gdt_unifiedNativeAdDetailViewClosed:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
+    self.isClicked = NO;
 }
 
 - (void)gdt_unifiedNativeAdViewApplicationWillEnterBackground:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
+    self.isClicked = NO;
 }
 - (void)gdt_unifiedNativeAdDetailViewWillPresentScreen:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
 }
