@@ -9,6 +9,7 @@ cache:
   - cocoapods
   - bundler
 before_install:
+  - echo -e "machine github.com\n  login ci-user\n  password $CI_USER_PASSWORD" > ~/.netrc
   - gem update --system
   - gem install bundler
   - brew install clang-format
