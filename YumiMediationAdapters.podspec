@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   end
   s.subspec 'AppLovin' do |sp|
     sp.source_files = "YumiMediationAdapters/AppLovin/**/*.{h,m}"
-    sp.dependency 'YumiAppLovin', '6.7.1'
+    sp.dependency 'YumiAppLovin', '6.7.1.0'
   end
   s.subspec 'Baidu' do |sp|
     sp.source_files = "YumiMediationAdapters/Baidu/**/*.{h,m}"
