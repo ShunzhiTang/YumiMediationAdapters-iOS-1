@@ -53,6 +53,10 @@
     self.provider = provider;
 }
 
+- (NSString *)networkVersion {
+    return @"7.44.0";
+}
+
 - (void)requestAd {
     //  Only one interstitial request is allowed at a time.
     self.interstitial = [[GADInterstitial alloc] initWithAdUnitID:self.provider.data.key1];

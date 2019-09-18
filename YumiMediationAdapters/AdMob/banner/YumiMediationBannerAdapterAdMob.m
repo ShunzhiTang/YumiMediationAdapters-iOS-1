@@ -33,6 +33,7 @@
     [standardUserDefaults removeObjectForKey:YumiMediationAdmobAdapterUUID];
 }
 
+#pragma mark - YumiMediationBannerAdapter
 - (id<YumiMediationBannerAdapter>)initWithProvider:(YumiMediationBannerProvider *)provider
                                           delegate:(id<YumiMediationBannerAdapterDelegate>)delegate {
     self = [super init];
@@ -51,12 +52,15 @@
     return self;
 }
 
+- (NSString *)networkVersion {
+    return @"7.44.0";
+}
+
 - (void)setBannerSizeWith:(YumiMediationAdViewBannerSize)adSize smartBanner:(BOOL)isSmart {
     self.bannerSize = adSize;
     self.isSmartBanner = isSmart;
 }
 
-#pragma mark - YumiMediationBannerAdapter
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     // set adSize
     GADAdSize adSize = isiPad ? kGADAdSizeLeaderboard : kGADAdSizeBanner;

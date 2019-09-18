@@ -21,7 +21,7 @@ install:
   - pod repo update master
   - pod repo update Specs 
 script:
-  - travis_wait 60 fastlane release
+  - fastlane ReleaseWithSourceCode
 env:
   matrix:
   global:

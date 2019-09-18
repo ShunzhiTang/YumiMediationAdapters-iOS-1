@@ -55,6 +55,10 @@
     self.provider = provider;
 }
 
+- (NSString *)networkVersion {
+    return @"5.4.0";
+}
+
 - (void)requestAd {
     if (self.provider.data.payload.length == 0) {
         [self.delegate coreAdapter:self coreAd:nil didFailToLoad:self.provider.data.errMessage adType:self.adType];

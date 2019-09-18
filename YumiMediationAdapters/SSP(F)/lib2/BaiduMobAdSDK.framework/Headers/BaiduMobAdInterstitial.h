@@ -6,8 +6,8 @@
 //  Copyright © 2016年 Baidu Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "BaiduMobAdInterstitialDelegate.h"
+#import <Foundation/Foundation.h>
 /*
  * 5 插屏广告：其他场景中使用 BaiduMobAdViewTypeInterstitialOther
  * 7 插屏广告：视频图片前贴片 BaiduMobAdViewTypeInterstitialBeforeVideo 有倒计时5s
@@ -17,15 +17,14 @@ typedef enum _BaiduMobAdInterstitialType {
     BaiduMobAdViewTypeInterstitialOther = 5,
     BaiduMobAdViewTypeInterstitialBeforeVideo = 7,
     BaiduMobAdViewTypeInterstitialPauseVideo = 8
-    
+
 } BaiduMobAdInterstitialType;
 
 @interface BaiduMobAdInterstitial : NSObject
 /**
  *  委托对象
  */
-@property (nonatomic ,weak) id<BaiduMobAdInterstitialDelegate> delegate;
-
+@property (nonatomic, weak) id<BaiduMobAdInterstitialDelegate> delegate;
 
 /**
  *  插屏广告类型
@@ -40,12 +39,17 @@ typedef enum _BaiduMobAdInterstitialType {
 /**
  *  设置/获取代码位id
  */
-@property (nonatomic,copy) NSString* AdUnitTag;
+@property (nonatomic, copy) NSString *AdUnitTag;
 
 /**
  *  SDK版本
  */
-@property (nonatomic, readonly) NSString* Version;
+@property (nonatomic, readonly) NSString *Version;
+
+/**
+ *  使用controller present 落地页
+ */
+@property (nonatomic, weak) UIViewController *presentAdViewController;
 
 /**
  *  实时加载并显示插屏广告.会卡住约两秒钟,影响用户体验,不建议使用.

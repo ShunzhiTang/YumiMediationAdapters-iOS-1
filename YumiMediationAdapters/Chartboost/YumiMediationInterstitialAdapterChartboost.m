@@ -11,6 +11,7 @@
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationInterstitialAdapterChartboost () <ChartboostDelegate>
+
 @property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
@@ -49,11 +50,16 @@
     return self;
 }
 
+- (NSString *)networkVersion {
+    return @"8.0.1";
+}
+
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
     self.provider = provider;
 }
 
 - (void)requestAd {
+
     // update GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
 
@@ -76,6 +82,7 @@
 }
 
 #pragma mark - ChartboostDelegate
+
 - (void)didCacheInterstitial:(CBLocation)location {
     [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
 }

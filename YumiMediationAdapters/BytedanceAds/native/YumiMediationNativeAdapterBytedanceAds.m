@@ -46,6 +46,10 @@
     return self;
 }
 
+- (NSString *)networkVersion {
+    return @"2.0.1.1";
+}
+
 - (void)requestAd:(NSUInteger)adCount {
 
     [self clearNativeData];
@@ -63,6 +67,7 @@
 
     [self.buNativeManager loadAdDataWithCount:adCount];
 }
+
 - (void)registerViewForNativeAdapterWith:(UIView *)view
                      clickableAssetViews:
                          (NSDictionary<YumiMediationUnifiedNativeAssetIdentifier, UIView *> *)clickableAssetViews

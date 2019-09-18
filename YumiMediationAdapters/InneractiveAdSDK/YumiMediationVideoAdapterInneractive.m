@@ -92,6 +92,10 @@
     self.provider = provider;
 }
 
+- (NSString *)networkVersion {
+    return @"7.2.3";
+}
+
 - (void)requestAd {
 
     self.isVideoReady = NO;

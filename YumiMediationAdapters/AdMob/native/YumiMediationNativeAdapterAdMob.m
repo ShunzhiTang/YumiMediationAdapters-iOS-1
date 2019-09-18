@@ -61,6 +61,10 @@ static NSUInteger maxNumberOfAds = 5;
     return self;
 }
 
+- (NSString *)networkVersion {
+    return @"7.44.0";
+}
+
 - (void)requestAd:(NSUInteger)adCount {
 
     [self clearNativeData];
@@ -165,7 +169,7 @@ static NSUInteger maxNumberOfAds = 5;
 
         GADMediaView *mediaView = [[GADMediaView alloc] initWithFrame:mediaSuperView.bounds];
         [mediaSuperView addSubview:mediaView];
-       
+
         mediaView.mediaContent = gadNativeAd.mediaContent;
         gadView.mediaView = mediaView;
     }

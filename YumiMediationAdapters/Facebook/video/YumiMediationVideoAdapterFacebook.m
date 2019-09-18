@@ -43,6 +43,10 @@
     self.provider = provider;
 }
 
+- (NSString *)networkVersion {
+    return @"5.4.0";
+}
+
 - (void)requestAd {
     // FBRewardedVideoAd loadAd can only be called once
     self.rewardedVideoAd = [[FBRewardedVideoAd alloc] initWithPlacementID:self.provider.data.key1];

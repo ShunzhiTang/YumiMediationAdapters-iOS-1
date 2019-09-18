@@ -5,8 +5,8 @@
 //  Created by deng jinxiang on 13-8-1.
 //
 //
-#import <Foundation/Foundation.h>
 #import "BaiduMobAdCommonConfig.h"
+#import <Foundation/Foundation.h>
 @class BaiduMobAdNative;
 @class BaiduMobAdNativeAdView;
 
@@ -21,17 +21,17 @@
 /**
  * 广告位id
  */
--(NSString*)apId;
+- (NSString *)apId;
 
 /**
  * 模版高度，仅用于信息流模版广告
  */
--(NSNumber*)baiduMobAdsHeight;
+- (NSNumber *)baiduMobAdsHeight;
 
 /**
  * 模版宽度，仅用于信息流模版广告
  */
--(NSNumber*)baiduMobAdsWidth;
+- (NSNumber *)baiduMobAdsWidth;
 
 /**
  *  渠道ID
@@ -41,31 +41,44 @@
 /**
  *  启动位置信息
  */
--(BOOL) enableLocation;
-
+- (BOOL)enableLocation; //如果enable，plist 需要增加NSLocationWhenInUseUsageDescription
 
 /**
  * 广告请求成功
  * @param 请求成功的BaiduMobAdNativeAdObject数组，如果只成功返回一条原生广告，数组大小为1
  */
-- (void)nativeAdObjectsSuccessLoad:(NSArray*)nativeAds;
+- (void)nativeAdObjectsSuccessLoad:(NSArray *)nativeAds;
 /**
  *  广告请求失败
  * @param 失败的BaiduMobAdNative
  * @param 失败的类型 BaiduMobFailReason
  */
-- (void)nativeAdsFailLoad:(BaiduMobFailReason) reason;
+- (void)nativeAdsFailLoad:(BaiduMobFailReason)reason;
 
 /**
  *  广告点击
  */
-- (void)nativeAdClicked:(UIView*)nativeAdView;
+- (void)nativeAdClicked:(UIView *)nativeAdView;
 
 /**
  *  广告详情页关闭
  */
--(void)didDismissLandingPage:(UIView *)nativeAdView;
+- (void)didDismissLandingPage:(UIView *)nativeAdView;
 
+@end
 
+#pragma mark - 视频缓存delegate
 
+@protocol BaiduMobAdNativeCacheDelegate <NSObject>
+
+@optional
+/**
+ *  视频缓存成功
+ */
+- (void)nativeVideoAdCacheSuccess:(BaiduMobAdNative *)nativeAd;
+
+/**
+ *  视频缓存失败
+ */
+- (void)nativeVideoAdCacheFail:(BaiduMobAdNative *)nativeAd withError:(BaiduMobFailReason)reason;
 @end

@@ -42,6 +42,10 @@
     return self;
 }
 
+- (NSString *)networkVersion {
+    return @"2.0.1.1";
+}
+
 - (void)requestAdAndShowInWindow:(nonnull UIWindow *)keyWindow withBottomView:(nonnull UIView *)bottomView {
 
     __weak typeof(self) weakSelf = self;
@@ -63,7 +67,6 @@
 }
 
 #pragma mark :BUSplashAdDelegate
-
 - (void)splashAdDidLoad:(BUSplashAdView *)splashAd {
 
     __weak typeof(self) weakSelf = self;

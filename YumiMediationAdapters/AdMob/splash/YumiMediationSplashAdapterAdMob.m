@@ -57,6 +57,10 @@
     return self;
 }
 
+- (NSString *)networkVersion {
+    return @"7.44.0";
+}
+
 - (void)setInterfaceOrientation:(UIInterfaceOrientation)orientation {
     _interfaceOrientation = orientation;
 }

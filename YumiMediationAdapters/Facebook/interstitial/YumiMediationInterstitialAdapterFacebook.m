@@ -35,10 +35,11 @@
     self.delegate = delegate;
     self.adType = adType;
 
-    self.interstitial = [[FBInterstitialAd alloc] initWithPlacementID:self.provider.data.key1];
-    self.interstitial.delegate = self;
-
     return self;
+}
+
+- (NSString *)networkVersion {
+    return @"5.4.0";
 }
 
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
@@ -46,11 +47,15 @@
 }
 
 - (void)requestAd {
+
+    self.interstitial = [[FBInterstitialAd alloc] initWithPlacementID:self.provider.data.key1];
+    self.interstitial.delegate = self;
+
     [self.interstitial loadAd];
 }
 
 - (BOOL)isReady {
-    return self.interstitial.adValid;
+    return self.interstitial.isAdValid;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {

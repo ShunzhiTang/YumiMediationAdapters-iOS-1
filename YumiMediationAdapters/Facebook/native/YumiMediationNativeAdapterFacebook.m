@@ -44,6 +44,10 @@
     return self;
 }
 
+- (NSString *)networkVersion {
+    return @"5.4.0";
+}
+
 - (void)requestAd:(NSUInteger)adCount {
 
     self.fbNativeAd = nil;

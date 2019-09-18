@@ -11,6 +11,7 @@
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
 @interface YumiMediationVideoAdapterChartboost () <ChartboostDelegate>
+
 @property (nonatomic, assign) BOOL isReward;
 @property (nonatomic, assign) YumiMediationAdType adType;
 
@@ -52,6 +53,10 @@
     return self;
 }
 
+- (NSString *)networkVersion {
+    return @"8.0.1";
+}
+
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
     self.provider = provider;
 }
@@ -79,6 +84,7 @@
 }
 
 #pragma mark - ChartboostDelegate
+
 - (void)didDisplayRewardedVideo:(CBLocation)location {
     [self.delegate coreAdapter:self didOpenCoreAd:nil adType:self.adType];
     [self.delegate coreAdapter:self didStartPlayingAd:nil adType:self.adType];

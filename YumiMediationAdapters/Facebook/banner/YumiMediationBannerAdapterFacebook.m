@@ -39,12 +39,16 @@
     return self;
 }
 
+#pragma mark - YumiMediationBannerAdapter
 - (void)setBannerSizeWith:(YumiMediationAdViewBannerSize)adSize smartBanner:(BOOL)isSmart {
     self.bannerSize = adSize;
     self.isSmartBanner = isSmart;
 }
 
-#pragma mark - YumiMediationBannerAdapter
+- (NSString *)networkVersion {
+    return @"5.4.0";
+}
+
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     if (self.bannerSize == kYumiMediationAdViewSmartBannerLandscape && [[YumiTool sharedTool] isiPhone]) {
         [self.delegate adapter:self

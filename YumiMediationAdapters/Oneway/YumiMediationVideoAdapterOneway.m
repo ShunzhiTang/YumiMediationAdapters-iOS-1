@@ -43,6 +43,10 @@
     self.provider = provider;
 }
 
+- (NSString *)networkVersion {
+    return @"2.1.0";
+}
+
 - (void)requestAd {
     if ([OneWaySDK isConfigured]) {
         [OWRewardedAd initWithDelegate:self];

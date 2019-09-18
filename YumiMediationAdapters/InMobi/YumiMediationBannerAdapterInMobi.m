@@ -60,6 +60,10 @@
 }
 
 #pragma mark - YumiMediationBannerAdapter
+- (NSString *)networkVersion {
+    return @"8.1.0";
+}
+
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
     // update gdpr
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;

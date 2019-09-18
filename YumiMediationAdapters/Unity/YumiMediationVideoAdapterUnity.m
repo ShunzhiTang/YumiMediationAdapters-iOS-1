@@ -64,6 +64,10 @@
     self.provider = provider;
 }
 
+- (NSString *)networkVersion {
+    return @"3.1.0";
+}
+
 - (void)requestAd {
     // NOTE: Unity do not provide any method for requesting ad, it handles the request internally
     // update GDPR

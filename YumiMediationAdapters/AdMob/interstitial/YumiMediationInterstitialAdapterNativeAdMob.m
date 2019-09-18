@@ -19,6 +19,7 @@
 @property (nonatomic) GADUnifiedNativeAdView *appInstallAdView;
 @property (nonatomic, assign) BOOL isAdReady;
 @property (nonatomic, assign) YumiMediationAdType adType;
+@property (nonatomic) UIViewController *rootViewController;
 
 @end
 
@@ -55,7 +56,6 @@
 }
 
 #pragma mark : YumiMediationInterstitialAdapter
-
 - (id<YumiMediationCoreAdapter>)initWithProvider:(YumiMediationCoreProvider *)provider
                                         delegate:(id<YumiMediationCoreAdapterDelegate>)delegate
                                           adType:(YumiMediationAdType)adType {
@@ -80,7 +80,12 @@
     self.provider = provider;
 }
 
+- (NSString *)networkVersion {
+    return @"7.44.0";
+}
+
 - (void)requestAd {
+    self.rootViewController = [[YumiTool sharedTool] topMostController];
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         GADNativeAdViewAdOptions *option = [[GADNativeAdViewAdOptions alloc] init];
@@ -89,7 +94,7 @@
         [adTypes addObject:kGADAdLoaderAdTypeUnifiedNative];
 
         weakSelf.adLoader = [[GADAdLoader alloc] initWithAdUnitID:weakSelf.provider.data.key1
-                                               rootViewController:[[YumiTool sharedTool] topMostController]
+                                               rootViewController:weakSelf.rootViewController
                                                           adTypes:adTypes
                                                           options:@[ option ]];
 
@@ -118,7 +123,7 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [[[YumiTool sharedTool] topMostController].view addSubview:self.appInstallAdView];
+    [rootViewController.view addSubview:self.appInstallAdView];
 }
 
 #pragma mark : - GADAdLoaderDelegate

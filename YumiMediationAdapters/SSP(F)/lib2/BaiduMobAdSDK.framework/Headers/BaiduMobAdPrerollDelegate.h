@@ -6,8 +6,8 @@
 //
 //
 
-#import <Foundation/Foundation.h>
 #import "BaiduMobAdCommonConfig.h"
+#import <Foundation/Foundation.h>
 
 @class BaiduMobAdPreroll;
 
@@ -29,7 +29,7 @@
 /**
  *  广告展示失败
  */
-- (void)prerollAdDidFailed:(BaiduMobAdPreroll *)preroll withError:(BaiduMobFailReason) reason;
+- (void)prerollAdDidFailed:(BaiduMobAdPreroll *)preroll withError:(BaiduMobFailReason)reason;
 
 /**
  *  广告展示结束

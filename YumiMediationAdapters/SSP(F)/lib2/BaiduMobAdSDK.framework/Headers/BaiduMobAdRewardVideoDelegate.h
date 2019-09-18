@@ -6,22 +6,22 @@
 //  Copyright © 2018年 Baidu Inc. All rights reserved.
 //
 
-
-#import <Foundation/Foundation.h>
 #import "BaiduMobAdCommonConfig.h"
+#import <Foundation/Foundation.h>
 
 @class BaiduMobAdRewardVideo;
 
 @protocol BaiduMobAdRewardVideoDelegate <NSObject>
+
 @optional
 #pragma mark - 视频缓存delegate
 /**
- *  视频加载缓存成功
+ *  视频缓存成功
  */
 - (void)rewardedVideoAdLoaded:(BaiduMobAdRewardVideo *)video;
 
 /**
- *  视频加载缓存失败
+ *  视频缓存失败
  */
 - (void)rewardedVideoAdLoadFailed:(BaiduMobAdRewardVideo *)video withError:(BaiduMobFailReason)reason;
 
@@ -55,4 +55,3 @@
 - (void)rewardedVideoAdDidClick:(BaiduMobAdRewardVideo *)video withPlayingProgress:(CGFloat)progress;
 
 @end
-

@@ -62,6 +62,10 @@
     self.provider = provider;
 }
 
+- (NSString *)networkVersion {
+    return @"6.4.3";
+}
+
 - (void)requestAd {
     NSError *error;
     VungleSDK *sdk = [VungleSDK sharedSDK];

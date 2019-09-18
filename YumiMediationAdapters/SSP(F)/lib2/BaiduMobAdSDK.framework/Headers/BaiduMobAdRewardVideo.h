@@ -6,16 +6,15 @@
 //  Copyright © 2018年 Baidu Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "BaiduMobAdRewardVideoDelegate.h"
-
+#import <Foundation/Foundation.h>
 
 @interface BaiduMobAdRewardVideo : NSObject
 
 /**
  *  委托对象
  */
-@property (nonatomic, weak) id <BaiduMobAdRewardVideoDelegate> delegate;
+@property (nonatomic, weak) id<BaiduMobAdRewardVideoDelegate> delegate;
 
 /**
  *  应用的APPID
@@ -28,10 +27,9 @@
 @property (nonatomic, copy) NSString *AdUnitTag;
 
 /**
- *  位置信息
+ *  启动位置信息 如果enable，plist 需要增加NSLocationWhenInUseUsageDescription
  */
 @property (nonatomic, assign) BOOL enableLocation;
-
 
 /**
  *  预加载视频广告，并缓存物料信息到本地。
