@@ -22,7 +22,7 @@
 #endif
 
 #define ScreenHeight ([UIScreen mainScreen].bounds.size.height)
-#define ScreenWidth ([UIScreen mainScreen].bounds.size.width)
+#define ScreenWidth  ([UIScreen mainScreen].bounds.size.width)
 
 /**
  *  视频播放器状态
@@ -31,18 +31,18 @@
  *
  */
 typedef NS_ENUM(NSUInteger, GDTMediaPlayerStatus) {
-    GDTMediaPlayerStatusInitial = 0, // 初始状态
-    GDTMediaPlayerStatusLoading = 1, // 加载中
-    GDTMediaPlayerStatusStarted = 2, // 开始播放
-    GDTMediaPlayerStatusPaused = 3,  // 用户行为导致暂停
-    GDTMediaPlayerStatusStoped = 4,  // 播放停止
-    GDTMediaPlayerStatusError = 5,   // 播放出错
+    GDTMediaPlayerStatusInitial = 0,         // 初始状态
+    GDTMediaPlayerStatusLoading = 1,         // 加载中
+    GDTMediaPlayerStatusStarted = 2,         // 开始播放
+    GDTMediaPlayerStatusPaused = 3,          // 用户行为导致暂停
+    GDTMediaPlayerStatusStoped = 4,          // 播放停止
+    GDTMediaPlayerStatusError = 5,           // 播放出错
 };
 
 typedef enum GDTSDKLoginType {
     GDTSDKLoginTypeUnknow = 0,
-    GDTSDKLoginTypeWeiXin = 1, //微信账号
-    GDTSDKLoginTypeQQ = 2,     // QQ账号
+    GDTSDKLoginTypeWeiXin = 1,    //微信账号
+    GDTSDKLoginTypeQQ = 2,        //QQ账号
 } GDTSDKLoginType;
 
 static inline BOOL isIPhoneXSeries() {

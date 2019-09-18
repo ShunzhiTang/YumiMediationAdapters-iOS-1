@@ -6,9 +6,9 @@
 //  Copyright © 2017年 Tencent. All rights reserved.
 //
 
-#import "GDTSDKDefines.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "GDTSDKDefines.h"
 
 @class GDTNativeExpressAdView;
 @class GDTNativeExpressAd;
@@ -19,8 +19,7 @@
 /**
  * 拉取原生模板广告成功
  */
-- (void)nativeExpressAdSuccessToLoad:(GDTNativeExpressAd *)nativeExpressAd
-                               views:(NSArray<__kindof GDTNativeExpressAdView *> *)views;
+- (void)nativeExpressAdSuccessToLoad:(GDTNativeExpressAd *)nativeExpressAd views:(NSArray<__kindof GDTNativeExpressAdView *> *)views;
 
 /**
  * 拉取原生模板广告失败
@@ -80,8 +79,7 @@
 /**
  * 原生模板视频广告 player 播放状态更新回调
  */
-- (void)nativeExpressAdView:(GDTNativeExpressAdView *)nativeExpressAdView
-        playerStatusChanged:(GDTMediaPlayerStatus)status;
+- (void)nativeExpressAdView:(GDTNativeExpressAdView *)nativeExpressAdView playerStatusChanged:(GDTMediaPlayerStatus)status;
 
 /**
  * 原生视频模板详情页 WillPresent 回调
@@ -112,6 +110,7 @@
  */
 @property (nonatomic, weak) id<GDTNativeExpressAdDelegete> delegate;
 
+
 /**
  *  非 WiFi 网络，是否自动播放。默认 NO。loadAd 前设置。
  */
@@ -124,9 +123,11 @@
 @property (nonatomic, assign) BOOL videoMuted;
 
 /**
- 请求视频的时长上限，有效值范围为[5,30]。
+ 请求视频的时长上限，有效值范围为[5,60]。
  */
 @property (nonatomic) NSInteger maxVideoDuration;
+
+@property (nonatomic, readonly) NSString *placementId;
 
 /**
  *  构造方法
@@ -139,9 +140,6 @@
 - (void)loadAd:(NSInteger)count;
 
 #pragma mark - DEPRECATED
-- (instancetype)initWithAppkey:(NSString *)appkey
-                   placementId:(NSString *)placementId
-                        adSize:(CGSize)size
-    GDT_DEPRECATED_MSG_ATTRIBUTE("use initWithAppId:placementId:adSize instead.");
+- (instancetype)initWithAppkey:(NSString *)appkey placementId:(NSString *)placementId adSize:(CGSize)size GDT_DEPRECATED_MSG_ATTRIBUTE("use initWithAppId:placementId:adSize instead.");
 
 @end

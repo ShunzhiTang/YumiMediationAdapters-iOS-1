@@ -6,9 +6,9 @@
 //  Copyright © 2018 Tencent. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "GDTUnifiedNativeAdDataObject.h"
 #import "GDTUnifiedNativeAdView.h"
-#import <Foundation/Foundation.h>
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol GDTUnifiedNativeAdDelegate <NSObject>
@@ -19,15 +19,14 @@ NS_ASSUME_NONNULL_BEGIN
  @param unifiedNativeAdDataObjects 广告数据数组
  @param error 错误信息
  */
-- (void)gdt_unifiedNativeAdLoaded:(NSArray<GDTUnifiedNativeAdDataObject *> *_Nullable)unifiedNativeAdDataObjects
-                            error:(NSError *_Nullable)error;
+- (void)gdt_unifiedNativeAdLoaded:(NSArray<GDTUnifiedNativeAdDataObject *> * _Nullable)unifiedNativeAdDataObjects error:(NSError * _Nullable)error;
 @end
 
 @interface GDTUnifiedNativeAd : NSObject
 @property (nonatomic, weak) id<GDTUnifiedNativeAdDelegate> delegate;
 
 /**
- 请求视频的最大时长，有效值范围为[5,30]。
+ 请求视频的最大时长，有效值范围为[5,60]。
  */
 @property (nonatomic) NSInteger maxVideoDuration;
 
@@ -51,5 +50,12 @@ NS_ASSUME_NONNULL_BEGIN
  @param adCount 加载条数
  */
 - (void)loadAdWithAdCount:(int)adCount;
+
+/**
+ 返回广告平台名称
+ 
+ @return 当使用流量分配功能时，用于区分广告平台；未使用时为空字符串
+ */
+- (NSString *)adNetworkName;
 @end
 NS_ASSUME_NONNULL_END
