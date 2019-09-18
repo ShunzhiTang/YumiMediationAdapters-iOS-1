@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.homepage = 'http://developers.yumimobi.com/IosSdk/index'
   s.license = 'Custom'
   s.authors = {"zplay sdk team"=>"ad-client@zplay.cn"}
-  s.source = {:git => 'https://github.com/yumimobi/YumiMediationAdapters-iOS.git',:tag => s.version.to_s}
+  s.source = {:git => 'https://github.com/yumimobi/YumiMediationAdapters-iOS',:tag => s.version.to_s}
   s.platforms = {"ios"=>"8.0"}
   s.dependency 'YumiMediationSDK', '~> 4.3.0'
   s.subspec 'AdColony' do |sp|
