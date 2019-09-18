@@ -2,3 +2,4 @@
 *.a filter=lfs diff=lfs merge=lfs -text
 YumiMediationAdapters/SSP(F)/lib2/BaiduMobAdSDK.framework filter=lfs diff=lfs merge=lfs -text
 BaiduMobAdSDK filter=lfs diff=lfs merge=lfs -text
+YumiMediationAdapters/SSP(F)/lib2/BaiduMobAdSDK.framework/BaiduMobAdSDK filter=lfs diff=lfs merge=lfs -text
