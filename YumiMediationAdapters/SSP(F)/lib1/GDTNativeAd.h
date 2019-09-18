@@ -6,19 +6,19 @@
 //  Copyright (c) 2014年 Tencent. All rights reserved.
 //
 
-#import "GDTSDKDefines.h"
 #import <Foundation/Foundation.h>
 #import <StoreKit/StoreKit.h>
+#import "GDTSDKDefines.h"
 
-extern NSString *const GDTNativeAdDataKeyTitle;
-extern NSString *const GDTNativeAdDataKeyDesc;
-extern NSString *const GDTNativeAdDataKeyIconUrl;
-extern NSString *const GDTNativeAdDataKeyImgUrl;
-extern NSString *const GDTNativeAdDataKeyAppRating;
-extern NSString *const GDTNativeAdDataKeyAppPrice;
-extern NSString *const GDTNativeAdDataKeyImgList;
-extern NSString *const GDTNativeAdDataKeyImgWidth;
-extern NSString *const GDTNativeAdDataKeyImgHeight;
+extern NSString* const GDTNativeAdDataKeyTitle;
+extern NSString* const GDTNativeAdDataKeyDesc;
+extern NSString* const GDTNativeAdDataKeyIconUrl;
+extern NSString* const GDTNativeAdDataKeyImgUrl;
+extern NSString* const GDTNativeAdDataKeyAppRating;
+extern NSString* const GDTNativeAdDataKeyAppPrice;
+extern NSString* const GDTNativeAdDataKeyImgList;
+extern NSString* const GDTNativeAdDataKeyImgWidth;
+extern NSString* const GDTNativeAdDataKeyImgHeight;
 
 @interface GDTNativeAdData : NSObject
 
@@ -49,6 +49,20 @@ extern NSString *const GDTNativeAdDataKeyImgHeight;
  *  获取该原生广告是否为三小图广告，当为三小图广告时，可以通过GDTNativeAdDataKeyImgList获取三张图片资源供渲染
  */
 - (BOOL)isThreeImgsAd;
+
+/**
+ 返回广告的eCPM，单位：分
+ 
+ @return 成功返回一个大于等于0的值，-1表示无权限或后台出现异常
+ */
+- (NSInteger)eCPM;
+
+/**
+ 返回广告的eCPM等级
+ 
+ @return 成功返回一个包含数字的string，@""或nil表示无权限或后台异常
+ */
+- (NSString *)eCPMLevel;
 
 @end
 
@@ -84,7 +98,7 @@ extern NSString *const GDTNativeAdDataKeyImgHeight;
 
 @end
 
-@interface GDTNativeAd : NSObject <SKStoreProductViewControllerDelegate>
+@interface GDTNativeAd : NSObject<SKStoreProductViewControllerDelegate>
 
 /*
  *  viewControllerForPresentingModalView
@@ -128,8 +142,6 @@ extern NSString *const GDTNativeAdDataKeyImgHeight;
 - (void)clickAd:(GDTNativeAdData *)nativeAdData;
 
 #pragma mark - DEPRECATED
-- (instancetype)initWithAppkey:(NSString *)appkey
-                   placementId:(NSString *)placementId
-    GDT_DEPRECATED_MSG_ATTRIBUTE("use initWithAppId:placementId: instead.");
+- (instancetype)initWithAppkey:(NSString *)appkey placementId:(NSString *)placementId GDT_DEPRECATED_MSG_ATTRIBUTE("use initWithAppId:placementId: instead.");
 
 @end

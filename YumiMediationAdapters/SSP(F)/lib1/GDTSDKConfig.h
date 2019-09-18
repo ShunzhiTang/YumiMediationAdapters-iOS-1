@@ -6,8 +6,8 @@
 //  Copyright (c) 2014年 Tencent. All rights reserved.
 //
 
-#import "GDTSDKDefines.h"
 #import <Foundation/Foundation.h>
+#import "GDTSDKDefines.h"
 
 @interface GDTSDKConfig : NSObject
 /**
@@ -20,11 +20,15 @@
  */
 + (NSString *)sdkSrc;
 
+
+
 /**
  * 获取 SDK 版本
  */
 
 + (NSString *)sdkVersion;
+
++ (void)enableGPS:(BOOL)enabled;
 
 #pragma mark - DEPRECATED
 

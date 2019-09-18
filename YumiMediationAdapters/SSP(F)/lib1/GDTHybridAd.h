@@ -10,7 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_OPTIONS(NSInteger, GDTHybridAdOptions) { GDTHybridAdOptionRewardVideo = 1 << 0 };
+typedef NS_OPTIONS(NSInteger, GDTHybridAdOptions) {
+    GDTHybridAdOptionRewardVideo = 1 << 0
+};
 
 @class GDTHybridAd;
 
@@ -37,12 +39,14 @@ typedef NS_OPTIONS(NSInteger, GDTHybridAdOptions) { GDTHybridAdOptionRewardVideo
 @property (nonatomic, strong) UIColor *navigationBarBottomColor;
 @property (nonatomic, strong) UIColor *separatorLineColor;
 @property (nonatomic, strong) UIImage *closeImage; // 如需自定义关闭图片，请按 44*44 大小设置
-@property (nonatomic, strong) UIImage *backImage;  // 如需自定义后退图片，请按 44*44 大小设置
+@property (nonatomic, strong) UIImage *backImage; // 如需自定义后退图片，请按 44*44 大小设置
+
 
 /**
  委托对象
  */
-@property (nonatomic, weak) id<GDTHybridAdDelegate> delegate;
+@property (nonatomic, weak) id <GDTHybridAdDelegate> delegate;
+
 
 /**
  构造方法
@@ -53,12 +57,14 @@ typedef NS_OPTIONS(NSInteger, GDTHybridAdOptions) { GDTHybridAdOptionRewardVideo
  */
 - (instancetype)initWithAppId:(NSString *)appId type:(GDTHybridAdOptions)adOptions;
 
+
 /**
  加载广告方法 支持 iOS8.1 及以上系统
 
  @param url 加载的 X 中心 URL
  */
 - (void)loadWithUrl:(NSString *)url;
+
 
 /**
  展示浏览器方法
