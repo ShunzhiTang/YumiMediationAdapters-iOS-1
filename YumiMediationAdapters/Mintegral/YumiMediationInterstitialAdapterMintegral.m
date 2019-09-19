@@ -81,7 +81,7 @@ static NSString *const kYumiProviderExtraMintegralInventory = @"inventory";
     }
 
     // interstitial video
-    if ([self.provider.data.extra[kYumiProviderExtraMintegralInventory] integerValue] == 1) {
+    if ([self.provider.data.extra[kYumiProviderExtraMintegralInventory] isKindOfClass:[NSNumber class]] && [self.provider.data.extra[kYumiProviderExtraMintegralInventory] integerValue] == 1) {
         self.interstitialVideo =
             [[MTGInterstitialVideoAdManager alloc] initWithUnitID:self.provider.data.key3 delegate:self];
 
@@ -97,7 +97,7 @@ static NSString *const kYumiProviderExtraMintegralInventory = @"inventory";
 
 - (BOOL)isReady {
     // interstitial video
-    if ([self.provider.data.extra[kYumiProviderExtraMintegralInventory] integerValue] == 1) {
+    if ([self.provider.data.extra[kYumiProviderExtraMintegralInventory] isKindOfClass:[NSNumber class]] && [self.provider.data.extra[kYumiProviderExtraMintegralInventory] integerValue] == 1) {
         return [self.interstitialVideo isVideoReadyToPlay:self.provider.data.key3];
     }
     // interstitial
@@ -106,7 +106,7 @@ static NSString *const kYumiProviderExtraMintegralInventory = @"inventory";
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     // interstitial video
-    if ([self.provider.data.extra[kYumiProviderExtraMintegralInventory] integerValue] == 1) {
+    if ([self.provider.data.extra[kYumiProviderExtraMintegralInventory] isKindOfClass:[NSNumber class]] && [self.provider.data.extra[kYumiProviderExtraMintegralInventory] integerValue] == 1) {
         [self.interstitialVideo showFromViewController:rootViewController];
         return;
     }
