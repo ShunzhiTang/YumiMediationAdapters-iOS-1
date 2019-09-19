@@ -72,7 +72,7 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
 
 - (void)requestAd {
     // request video
-    if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
+    if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] isKindOfClass:[NSNumber class]] && [self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
         self.isPreloadVideo = NO;
         // video
         if (!self.rewardVideo) {
@@ -118,7 +118,7 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
 }
 
 - (BOOL)isReady {
-    if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
+    if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] isKindOfClass:[NSNumber class]]  && [self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
         if (self.isPreloadVideo && [self.rewardVideo isReady]) {
             return YES;
         }
@@ -129,7 +129,7 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     // present video
-    if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
+    if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] isKindOfClass:[NSNumber class]]  && [self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
         [self.rewardVideo showFromViewController:rootViewController];
         return;
     }
