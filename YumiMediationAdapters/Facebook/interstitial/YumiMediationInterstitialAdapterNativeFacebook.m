@@ -98,6 +98,7 @@
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     __weak __typeof(self) weakSelf = self;
+    self.interstitial.modalPresentationStyle = UIModalPresentationFullScreen;
     [rootViewController
         presentViewController:self.interstitial
                      animated:YES
