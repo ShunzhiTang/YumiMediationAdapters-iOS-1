@@ -32,7 +32,6 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
 // 1 video
 // 2 interstitial (default)
 @property (nonatomic) BaiduMobAdRewardVideo *rewardVideo;
-@property (nonatomic, assign) BOOL isReward;
 @property (nonatomic, assign) BOOL isPreloadVideo;
 
 @end
@@ -73,7 +72,7 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
 
 - (void)requestAd {
     // request video
-    if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
+    if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] isKindOfClass:[NSNumber class]] && [self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
         self.isPreloadVideo = NO;
         // video
         if (!self.rewardVideo) {
@@ -119,7 +118,7 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
 }
 
 - (BOOL)isReady {
-    if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
+    if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] isKindOfClass:[NSNumber class]]  && [self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
         if (self.isPreloadVideo && [self.rewardVideo isReady]) {
             return YES;
         }
@@ -130,7 +129,7 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
     // present video
-    if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
+    if ([self.provider.data.extra[kYumiProviderExtraBaiduInventory] isKindOfClass:[NSNumber class]]  && [self.provider.data.extra[kYumiProviderExtraBaiduInventory] integerValue] == 1) {
         [self.rewardVideo showFromViewController:rootViewController];
         return;
     }
@@ -211,7 +210,6 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
  *  视频加载缓存失败
  */
 - (void)rewardedVideoAdLoadFailed:(BaiduMobAdRewardVideo *)video withError:(BaiduMobFailReason)reason {
-    self.isReward = NO;
     self.isPreloadVideo = NO;
     [self.delegate coreAdapter:self
                         coreAd:video
@@ -232,7 +230,6 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
  *  广告展示失败
  */
 - (void)rewardedVideoAdShowFailed:(BaiduMobAdRewardVideo *)video withError:(BaiduMobFailReason)reason {
-    self.isReward = NO;
     self.isPreloadVideo = NO;
     [self.delegate coreAdapter:self
                 failedToShowAd:video
@@ -244,7 +241,6 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
  *  广告完成播放
  */
 - (void)rewardedVideoAdDidPlayFinish:(BaiduMobAdRewardVideo *)video {
-    self.isReward = YES;
 }
 
 /**
@@ -252,11 +248,8 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
  @param progress 当前播放进度 单位百分比 （注意浮点数）
  */
 - (void)rewardedVideoAdDidClose:(BaiduMobAdRewardVideo *)video withPlayingProgress:(CGFloat)progress {
-    if (self.isReward) {
-        [self.delegate coreAdapter:self coreAd:video didReward:YES adType:self.adType];
-    }
-    [self.delegate coreAdapter:self didCloseCoreAd:video isCompletePlaying:YES adType:self.adType];
-    self.isReward = NO;
+    
+    [self.delegate coreAdapter:self didCloseCoreAd:video isCompletePlaying:NO adType:self.adType];
 }
 
 /**

@@ -20,6 +20,7 @@
 @property (nonatomic, strong) BaiduMobAdSplash *splash;
 @property (nonatomic) UIWindow *keyWindow;
 @property (nonatomic) UIView *bottomView;
+@property (nonatomic) UIView *containerView;
 
 @end
 
@@ -66,12 +67,12 @@
         }
         weakSelf.keyWindow = keyWindow;
         weakSelf.bottomView = bottomView;
-        UIView *containerView =
+        weakSelf.containerView =
             [[UIView alloc] initWithFrame:CGRectMake(0, 0, keyWindow.bounds.size.width,
                                                      keyWindow.bounds.size.height - bottomView.bounds.size.height)];
 
-        [weakSelf.keyWindow addSubview:containerView];
-        [weakSelf.splash loadAndDisplayUsingContainerView:containerView];
+        [weakSelf.keyWindow addSubview:weakSelf.containerView];
+        [weakSelf.splash loadAndDisplayUsingContainerView:weakSelf.containerView];
     });
 }
 
@@ -81,7 +82,12 @@
         self.splash = nil;
     }
     if (self.bottomView) {
+        [self.bottomView removeFromSuperview];
         self.bottomView = nil;
+    }
+    if (self.containerView) {
+        [self.containerView removeFromSuperview];
+        self.containerView = nil;
     }
     if (self.keyWindow) {
         self.keyWindow = nil;
@@ -107,8 +113,12 @@
 }
 
 - (void)splashlFailPresentScreen:(BaiduMobAdSplash *)splash withError:(BaiduMobFailReason)reason {
-    [self.delegate adapter:self failToShow:[NSString stringWithFormat:@"baidu error reason %d", reason]];
-    [self clearSplash];
+    
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.delegate adapter:weakSelf failToShow:[NSString stringWithFormat:@"baidu error reason %d", reason]];
+        [weakSelf clearSplash];
+    });
 }
 
 - (void)splashDidClicked:(BaiduMobAdSplash *)splash {
@@ -119,7 +129,7 @@
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.bottomView removeFromSuperview];
+        
         [weakSelf.delegate adapter:weakSelf didClose:splash];
         [weakSelf clearSplash];
     });
