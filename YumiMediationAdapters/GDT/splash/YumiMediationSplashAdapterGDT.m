@@ -78,6 +78,6 @@
 }
 /// 当点击下载应用时会调用系统程序打开，应用切换到后台
 - (void)splashAdApplicationWillEnterBackground:(GDTSplashAd *)splashAd {
-    [self.delegate adapter:self didClose:splashAd];
+    
 }
 @end
