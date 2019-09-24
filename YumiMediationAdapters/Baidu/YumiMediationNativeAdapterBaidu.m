@@ -56,7 +56,7 @@
 }
 
 - (NSString *)networkVersion {
-    return @"4.6.5";
+    return @"4.6.7";
 }
 
 - (void)requestAd:(NSUInteger)adCount {
@@ -68,7 +68,11 @@
     self.native.adId = self.provider.data.key2;
     self.native.delegate = self;
     // request native ads
-    [self.native requestNativeAds];
+    __weak typeof(self) wealSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+         [wealSelf.native requestNativeAds];
+    });
+   
 }
 - (void)registerViewForNativeAdapterWith:(UIView *)view
                      clickableAssetViews:
@@ -140,9 +144,7 @@
 }
 
 #pragma mark : BaiduMobAdNativeAdDelegate
-
-- (void)nativeAdObjectsSuccessLoad:(NSArray *)nativeAds {
-
+- (void)nativeAdObjectsSuccessLoad:(NSArray *)nativeAds nativeAd:(BaiduMobAdNative *)nativeAd {
     self.bdNativeData = nativeAds;
 
     __weak typeof(self) weakSelf = self;
@@ -156,7 +158,7 @@
         }];
 }
 
-- (void)nativeAdsFailLoad:(BaiduMobFailReason)reason {
+- (void)nativeAdsFailLoad:(BaiduMobFailReason)reason nativeAd:(BaiduMobAdNative *)nativeAd {
     NSString *errorReason = [NSString stringWithFormat:@"BaiduMobFailReason is %u", reason];
     NSError *error = [NSError errorWithDomain:@"" code:501 userInfo:@{@"error reason" : errorReason}];
     [self handleNativeError:error];
