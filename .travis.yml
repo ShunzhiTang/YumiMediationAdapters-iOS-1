@@ -16,8 +16,7 @@ before_install:
   - git lfs install
   - git lfs pull
 install:
-  - bundle update
-  - pod setup
+  - bundle install
   - pod repo add Specs https://github.com/yumimobi/Specs.git
   - pod repo update
 script:
