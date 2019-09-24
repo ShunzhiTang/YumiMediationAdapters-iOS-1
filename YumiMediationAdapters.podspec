@@ -24,7 +24,7 @@ Pod::Spec.new do |s|
   end
   s.subspec 'Baidu' do |sp|
     sp.source_files = "YumiMediationAdapters/Baidu/**/*.{h,m}"
-    sp.dependency 'YumiBaidu', '4.6.5'
+    sp.dependency 'YumiBaidu', '4.6.7'
   end
   s.subspec 'Chartboost' do |sp|
     sp.source_files = "YumiMediationAdapters/Chartboost/**/*.{h,m}"
