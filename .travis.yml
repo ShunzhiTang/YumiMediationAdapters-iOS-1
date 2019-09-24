@@ -17,9 +17,9 @@ before_install:
   - git lfs pull
 install:
   - bundle update
+  - pod setup
   - pod repo add Specs https://github.com/yumimobi/Specs.git
-  - pod repo update master
-  - pod repo update Specs 
+  - pod repo update
 script:
   - fastlane ReleaseWithSourceCode
 env:
