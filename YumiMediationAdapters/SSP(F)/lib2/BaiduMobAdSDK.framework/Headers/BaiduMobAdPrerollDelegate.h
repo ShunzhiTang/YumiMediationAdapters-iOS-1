@@ -6,8 +6,8 @@
 //
 //
 
-#import "BaiduMobAdCommonConfig.h"
 #import <Foundation/Foundation.h>
+#import "BaiduMobAdCommonConfig.h"
 
 @class BaiduMobAdPreroll;
 
@@ -17,9 +17,14 @@
 
 /**
  *  加载成功
-@param  adMaterialType  BaiduMobMaterialType
+ *  @param  adMaterialType  BaiduMobMaterialType
  */
 - (void)prerollAdloadSuccess:(BaiduMobAdPreroll *)preroll withAdMaterialType:(NSString *)adMaterialType;
+
+/**
+ *  加载失败
+ */
+- (void)prerollAdLoadFail:(BaiduMobAdPreroll *)preroll;
 
 /**
  *  展示成功
@@ -29,7 +34,7 @@
 /**
  *  广告展示失败
  */
-- (void)prerollAdDidFailed:(BaiduMobAdPreroll *)preroll withError:(BaiduMobFailReason)reason;
+- (void)prerollAdDidFailed:(BaiduMobAdPreroll *)preroll withError:(BaiduMobFailReason) reason;
 
 /**
  *  广告展示结束

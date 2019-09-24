@@ -6,27 +6,27 @@
 //  Copyright © 2019 Baidu Inc. All rights reserved.
 //
 
-#import "BaiduMobAdPrerollDelegate.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "BaiduMobAdPrerollDelegate.h"
 
 @interface BaiduMobAdPreroll : NSObject
 /**
  *  委托对象
  */
-@property (nonatomic, weak) id<BaiduMobAdPrerollDelegate> delegate;
+@property (nonatomic ,weak) id<BaiduMobAdPrerollDelegate> delegate;
 /**
  *  应用的APPID
  */
-@property (nonatomic, copy) NSString *publisherId;
+@property(nonatomic, copy) NSString *publisherId;
 /**
  *  设置/获取代码位id
  */
-@property (nonatomic, copy) NSString *adId;
+@property(nonatomic, copy) NSString *adId;
 /**
  *  设置贴片baseview
  */
-@property (nonatomic, strong) UIView *renderBaseView;
+@property(nonatomic, strong) UIView *renderBaseView;
 
 /**
  *  位置信息
@@ -35,7 +35,7 @@
 
 /**
  设置静音（默认非静音）
-
+ 
  @param mute YES静音 NO非静音
  */
 @property (nonatomic, assign) BOOL mute;
@@ -74,4 +74,19 @@
  */
 - (NSString *)adMaterialType;
 
+
+/**
+ * @brief 重新布局，根据触发时目前新尺寸，用于横竖屏切换
+ *
+ */
+- (void)reSize;
+
+
+/**
+ * @brief 重新布局.动画式变化
+ *
+ * @param duration 动画时长
+ * @param frame 目标的尺寸
+ */
+- (void)reSizeInAnimateDuration:(double)duration targetFrame:(CGRect)frame;
 @end

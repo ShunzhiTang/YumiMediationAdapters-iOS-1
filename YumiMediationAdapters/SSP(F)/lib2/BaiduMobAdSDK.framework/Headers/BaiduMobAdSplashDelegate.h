@@ -31,6 +31,7 @@
  */
 - (BOOL)enableLocation;
 
+
 /**
  *  广告展示成功
  */
@@ -39,7 +40,7 @@
 /**
  *  广告展示失败
  */
-- (void)splashlFailPresentScreen:(BaiduMobAdSplash *)splash withError:(BaiduMobFailReason)reason;
+- (void)splashlFailPresentScreen:(BaiduMobAdSplash *)splash withError:(BaiduMobFailReason) reason;
 
 /**
  *  广告被点击
@@ -61,6 +62,22 @@
  *  adType:广告类型 BaiduMobMaterialType
  *  videoDuration:视频时长，仅广告为视频时出现。非视频类广告默认0。 单位ms
  */
-- (void)splashDidReady:(BaiduMobAdSplash *)splash AndAdType:(NSString *)adType VideoDuration:(NSInteger)videoDuration;
+- (void)splashDidReady:(BaiduMobAdSplash *)splash
+             AndAdType:(NSString *)adType
+         VideoDuration:(NSInteger)videoDuration;
+
+/**
+ * 开屏广告请求成功
+ *
+ * @param splash 开屏广告对象
+ */
+- (void)splashAdLoadSuccess:(BaiduMobAdSplash *)splash;
+
+/**
+ * 开屏广告请求失败
+ *
+ * @param splash 开屏广告对象
+ */
+- (void)splashAdLoadFail:(BaiduMobAdSplash *)splash;
 
 @end

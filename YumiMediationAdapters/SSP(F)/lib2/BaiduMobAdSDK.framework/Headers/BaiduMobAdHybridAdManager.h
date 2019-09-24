@@ -6,6 +6,7 @@
 //  Copyright © 2018 Baidu. All rights reserved.
 //
 
+
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
@@ -30,18 +31,16 @@
 
 @end
 
-@interface BaiduMobAdHybridAdManager : NSObject
+@interface BaiduMobAdHybridAdManager: NSObject
 
 @property (nonatomic, copy) NSString *publisherId;
-@property (nonatomic, weak) id<BaiduMobAdHybridAdManagerDelegate> delegate;
+@property (nonatomic, weak) id <BaiduMobAdHybridAdManagerDelegate> delegate;
+
 
 //重要，把wkwebview传给BaiduMobAdHybridAdManager进行注册
 - (void)injectJavaScriptBridgeForWKWebView:(WKWebView *)webview;
-- (void)injectJavaScriptBridgeForUIWebView:(UIWebView *)webview;
 
 //重要，在wkwebview回调时通知BaiduMobAdHybridAdManager，返回是否继续加载
 - (BOOL)webView:(WKWebView *)webView shouldStartLoadForNavigationAction:(WKNavigationAction *)navigationAction;
-- (BOOL)webView:(UIWebView *)webView
-    shouldStartLoadWithRequest:(NSURLRequest *)request
-                navigationType:(UIWebViewNavigationType)navigationType;
+
 @end
