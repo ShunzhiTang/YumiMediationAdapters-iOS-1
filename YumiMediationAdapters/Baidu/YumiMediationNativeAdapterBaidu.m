@@ -133,8 +133,6 @@
 
                                       }];
     }
-    // 曝光事件，必传
-    [bdView trackImpression];
 }
 
 /// report impression when display the native ad.
