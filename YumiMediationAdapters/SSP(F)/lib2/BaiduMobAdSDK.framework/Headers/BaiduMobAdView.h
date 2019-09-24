@@ -17,28 +17,30 @@
  *  广告类型
  * 0 banner广告
  */
-typedef enum _BaiduMobAdViewType { BaiduMobAdViewTypeBanner = 0 } BaiduMobAdViewType;
+typedef enum _BaiduMobAdViewType {
+    BaiduMobAdViewTypeBanner = 0
+} BaiduMobAdViewType;
 
 @interface BaiduMobAdView : UIView
 /**
  *  委托对象
  */
-@property (nonatomic, weak) id<BaiduMobAdViewDelegate> delegate;
+@property(nonatomic, weak) id<BaiduMobAdViewDelegate> delegate;
 
 /**
  *  设置／获取需要展示的广告类型
  */
-@property (nonatomic, assign) BaiduMobAdViewType AdType;
+@property(nonatomic, assign) BaiduMobAdViewType AdType;
 
 /**
  *  设置/获取代码位id
  */
-@property (nonatomic, copy) NSString *AdUnitTag;
+@property(nonatomic, copy) NSString *AdUnitTag;
 
 /**
  *  SDK版本
  */
-@property (nonatomic, readonly) NSString *Version;
+@property(nonatomic, readonly) NSString *Version;
 
 /**
  *  使用controller present 落地页

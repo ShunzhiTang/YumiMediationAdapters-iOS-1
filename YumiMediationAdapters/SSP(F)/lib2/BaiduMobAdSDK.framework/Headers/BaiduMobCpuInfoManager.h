@@ -19,7 +19,8 @@
  *  @param appId 应用ID
  *  说明：
  */
-- (NSString *)getCpuInfoUrlWithChannelId:(NSString *)channelId appId:(NSString *)appId;
+- (NSString *)getCpuInfoUrlWithChannelId:(NSString *)channelId
+                                   appId:(NSString *)appId;
 
 /**
  返回媒体URL
@@ -28,6 +29,8 @@
  @param appId 应用ID
  @return url
  */
-- (NSString *)getCpuInfoUrlWithBlockId:(NSString *)blockId appId:(NSString *)appId;
+- (NSString *)getCpuInfoUrlWithBlockId:(NSString *)blockId
+                                 appId:(NSString *)appId;
+
 
 @end
