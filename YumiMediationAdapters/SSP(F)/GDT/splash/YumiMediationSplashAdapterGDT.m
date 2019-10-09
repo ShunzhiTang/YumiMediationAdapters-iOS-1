@@ -39,7 +39,7 @@
 }
 
 - (NSString *)networkVersion {
-    return @"4.10.10";
+    return @"4.10.13";
 }
 
 - (void)requestAdAndShowInWindow:(nonnull UIWindow *)keyWindow withBottomView:(nonnull UIView *)bottomView {
@@ -78,6 +78,6 @@
 }
 /// 当点击下载应用时会调用系统程序打开，应用切换到后台
 - (void)splashAdApplicationWillEnterBackground:(GDTSplashAd *)splashAd {
-    [self.delegate adapter:self didClose:splashAd];
+    
 }
 @end
