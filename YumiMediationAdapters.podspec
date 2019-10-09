@@ -41,7 +41,7 @@ Pod::Spec.new do |s|
   end
   s.subspec 'GDT' do |sp|
     sp.source_files = "YumiMediationAdapters/GDT/**/*.{h,m}"
-    sp.dependency 'YumiGDT', '4.10.10'
+    sp.dependency 'YumiGDT', '4.10.13'
     sp.resource_bundles = {'YumiMediationGDT' => ['YumiMediationAdapters/GDT/resources/*']}
   end
   s.subspec 'InMobi' do |sp|
