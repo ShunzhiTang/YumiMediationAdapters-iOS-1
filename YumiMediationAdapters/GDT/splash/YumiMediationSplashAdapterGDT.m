@@ -39,7 +39,7 @@
 }
 
 - (NSString *)networkVersion {
-    return @"4.10.10";
+    return @"4.10.13";
 }
 
 - (void)requestAdAndShowInWindow:(nonnull UIWindow *)keyWindow withBottomView:(nonnull UIView *)bottomView {
