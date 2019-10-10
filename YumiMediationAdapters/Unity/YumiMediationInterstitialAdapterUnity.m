@@ -85,6 +85,8 @@
 
     if ([UnityAds isReady:self.provider.data.key2]) {
         [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
+    } else {
+        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"Unity not ready." adType:self.adType];
     }
 }
 
