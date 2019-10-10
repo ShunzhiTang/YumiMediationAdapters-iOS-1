@@ -96,17 +96,14 @@
         }
         return [UnityAds isReady];
     }
-    self.theFirstTime = YES;
-    __block BOOL tempParameter = NO;
     __weak __typeof(self)weakSelf = self;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
     dispatch_source_set_timer(timer, dispatch_walltime(NULL, 0), 1.0 * NSEC_PER_SEC, 0); //每秒执行
     dispatch_source_set_event_handler(timer, ^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            if ([UnityAds isReady] == YES) {
+            if ([UnityAds isReady]) {
                 dispatch_suspend(timer);
-                tempParameter = NO;
                 [weakSelf.delegate coreAdapter:weakSelf didReceivedCoreAd:nil adType:weakSelf.adType];
             }
         });
@@ -117,12 +114,11 @@
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         dispatch_source_cancel(timer);
-        tempParameter = NO;
         if (![UnityAds isReady]) {
             [weakSelf.delegate coreAdapter:weakSelf coreAd:nil didFailToLoad:@"Unity not ready." adType:weakSelf.adType];
         }
     });
-    self.theFirstTime = tempParameter;
+    self.theFirstTime = NO;
     return [UnityAds isReady];
 }
 
