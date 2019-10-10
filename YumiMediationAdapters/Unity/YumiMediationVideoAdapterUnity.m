@@ -14,6 +14,7 @@
 @interface YumiMediationVideoAdapterUnity ()
 
 @property (nonatomic, assign) YumiMediationAdType adType;
+@property (nonatomic, assign) BOOL theFirstTime;
 
 @end
 
@@ -36,23 +37,6 @@
     self.provider = provider;
     self.adType = adType;
 
-    // set GDPR
-    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-    UADSMetaData *gdprConsentMetaData = [[UADSMetaData alloc] init];
-
-    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
-        [gdprConsentMetaData set:@"gdpr.consent" value:@YES];
-        [gdprConsentMetaData commit];
-    }
-    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
-        [gdprConsentMetaData set:@"gdpr.consent" value:@NO];
-        [gdprConsentMetaData commit];
-    }
-
-    if (![UnityAds isInitialized]) {
-        [UnityAds initialize:provider.data.key1 delegate:[YumiMediationUnityInstance sharedInstance] testMode:NO];
-    }
-
     YumiMediationUnityInstance *unityInstance = [YumiMediationUnityInstance sharedInstance];
     NSString *key = [unityInstance getAdapterKeyWith:self.provider.data.key2 adType:self.adType];
     [unityInstance.adaptersDict setValue:self forKey:key];
@@ -65,12 +49,12 @@
 }
 
 - (NSString *)networkVersion {
-    return @"3.1.0";
+    return @"3.3.0";
 }
 
 - (void)requestAd {
     // NOTE: Unity do not provide any method for requesting ad, it handles the request internally
-    // update GDPR
+    // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
     UADSMetaData *gdprConsentMetaData = [[UADSMetaData alloc] init];
 
@@ -82,17 +66,42 @@
         [gdprConsentMetaData set:@"gdpr.consent" value:@NO];
         [gdprConsentMetaData commit];
     }
-
+    
+     __weak typeof(self) weakSelf = self;
+       if (![UnityAds isInitialized]) {
+           [[YumiLogger stdLogger] debug:@"---Unity init SDK"];
+           [UnityAds initialize:self.provider.data.key1 delegate:[YumiMediationUnityInstance sharedInstance] testMode:NO];
+           
+           [[YumiMediationUnityInstance sharedInstance] unitySDKDidInitializeCompleted:^(BOOL isSuccessed) {
+               [weakSelf callBackAdLodingResult];
+               //initialize fail ,retry
+               if (!isSuccessed) {
+                    [UnityAds initialize:weakSelf.provider.data.key1 delegate:[YumiMediationUnityInstance sharedInstance] testMode:NO];
+               }
+           }];
+           return;
+          }
+       
+       [self callBackAdLodingResult];
+}
+- (void)callBackAdLodingResult {
     if ([UnityAds isReady:self.provider.data.key2]) {
-        [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
-    }
+       [[YumiLogger stdLogger] debug:@"---Unity video did load isReady is YES"];
+       [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
+        return ;
+   }
+   [[YumiLogger stdLogger] debug:@"---Unity video not ready"];
+        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"Unity not ready." adType:self.adType];
 }
 
 - (BOOL)isReady {
+    NSString *msg = [NSString stringWithFormat:@"---Unity check ready status.%d",[UnityAds isReady:self.provider.data.key2]];
+    [[YumiLogger stdLogger] debug:msg];
     return [UnityAds isReady:self.provider.data.key2];
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---Unity video present"];
     [UnityAds show:rootViewController placementId:self.provider.data.key2];
 }
 
