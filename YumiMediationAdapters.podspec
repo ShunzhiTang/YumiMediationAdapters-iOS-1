@@ -32,7 +32,7 @@ Pod::Spec.new do |s|
   end
   s.subspec 'Facebook' do |sp|
     sp.source_files = "YumiMediationAdapters/Facebook/**/*.{h,m}"
-    sp.dependency 'YumiFacebook', '5.4.0.0'
+    sp.dependency 'YumiFacebook', '5.5.1'
     sp.resource_bundles = {'YumiMediationFacebook' => ['YumiMediationAdapters/Facebook/resources/*']}
   end
   s.subspec 'Domob' do |sp|
