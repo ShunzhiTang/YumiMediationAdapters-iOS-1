@@ -46,7 +46,7 @@
 }
 
 - (NSString *)networkVersion {
-    return @"5.4.0";
+    return @"5.5.1";
 }
 
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
