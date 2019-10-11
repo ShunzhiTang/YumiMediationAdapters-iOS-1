@@ -85,10 +85,10 @@
         [gdprConsentMetaData commit];
     }
 
-    [self checkUnityReadyStatus];
+    [self checkAdLodingStatus];
 }
 
-- (BOOL)checkUnityReadyStatus {
+- (BOOL)checkAdLodingStatus {
     if (!self.theFirstTime) {
         if ([UnityAds isReady:self.provider.data.key2]) {
             [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
