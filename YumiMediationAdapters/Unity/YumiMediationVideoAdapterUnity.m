@@ -14,6 +14,7 @@
 @interface YumiMediationVideoAdapterUnity ()
 
 @property (nonatomic, assign) YumiMediationAdType adType;
+@property (nonatomic, assign) BOOL theFirstTime;
 
 @end
 
@@ -35,7 +36,7 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-
+    
     // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
     UADSMetaData *gdprConsentMetaData = [[UADSMetaData alloc] init];
@@ -50,6 +51,7 @@
     }
 
     if (![UnityAds isInitialized]) {
+        self.theFirstTime = YES;
         [UnityAds initialize:provider.data.key1 delegate:[YumiMediationUnityInstance sharedInstance] testMode:NO];
     }
 
@@ -83,9 +85,43 @@
         [gdprConsentMetaData commit];
     }
 
-    if ([UnityAds isReady:self.provider.data.key2]) {
-        [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
+    [self checkUnityReadyStatus];
+}
+
+- (BOOL)checkUnityReadyStatus {
+    if (!self.theFirstTime) {
+        if ([UnityAds isReady:self.provider.data.key2]) {
+            [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
+        } else {
+            [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"Unity not ready." adType:self.adType];
+        }
+        return [UnityAds isReady:self.provider.data.key2];
     }
+
+    __weak __typeof(self)weakSelf = self;
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
+    dispatch_source_set_timer(timer, dispatch_walltime(NULL, 0), 1.0 * NSEC_PER_SEC, 0); //每秒执行
+    dispatch_source_set_event_handler(timer, ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([UnityAds isReady:self.provider.data.key2]) {
+                dispatch_suspend(timer);
+                [weakSelf.delegate coreAdapter:weakSelf didReceivedCoreAd:nil adType:weakSelf.adType];
+            }
+        });
+    });
+    dispatch_resume(timer);
+    
+    double delayInSeconds = self.provider.data.requestTimeout?:30;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        dispatch_source_cancel(timer);
+        if (![UnityAds isReady:self.provider.data.key2]) {
+            [weakSelf.delegate coreAdapter:weakSelf coreAd:nil didFailToLoad:@"Unity not ready." adType:weakSelf.adType];
+        }
+    });
+    self.theFirstTime = NO;
+    return [UnityAds isReady:self.provider.data.key2];
 }
 
 - (BOOL)isReady {
