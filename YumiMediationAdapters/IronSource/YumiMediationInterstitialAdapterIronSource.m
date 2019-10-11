@@ -73,7 +73,10 @@
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [IronSource setConsent:NO];
     }
-
+    if ([self isReady]) {
+        [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
+        return;
+    }
     [IronSource loadISDemandOnlyInterstitial:self.provider.data.key2];
 }
 
