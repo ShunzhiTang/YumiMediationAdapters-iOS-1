@@ -79,6 +79,14 @@
         [IronSource setConsent:NO];
     }
     self.isReward = NO;
+    
+    // IS 初始化10s以上，不考虑第一次的情况。
+    // 以下方式处理不会有超时情况。
+    if ([self isReady]) {
+        [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
+    } else {
+        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"ironSource is not available" adType:self.adType];
+    }
 }
 
 - (BOOL)isReady {
@@ -93,11 +101,6 @@
 // Called after a rewarded video has changed its availability.
 //@param available The new rewarded video availability. YES if available and ready to be shown, NO otherwise.
 - (void)rewardedVideoHasChangedAvailability:(BOOL)available instanceId:(NSString *)instanceId {
-    if (available) {
-        [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
-    } else {
-        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"ironSource is not available" adType:self.adType];
-    }
 }
 
 // Called after a rewarded video has been viewed completely and the user is eligible for reward.
