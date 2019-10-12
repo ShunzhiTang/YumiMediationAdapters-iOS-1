@@ -11,16 +11,16 @@ Pod::Spec.new do |s|
   s.dependency 'YumiMediationSDK', '~> 4.3.0'
   s.subspec 'AdColony' do |sp|
     sp.source_files = "YumiMediationAdapters/AdColony/**/*.{h,m}"
-    sp.dependency 'YumiAdColony', '3.3.7'
+    sp.dependency 'YumiAdColony', '4.1.1'
   end
   s.subspec 'AdMob' do |sp|
     sp.source_files = "YumiMediationAdapters/AdMob/**/*.{h,m}"
-    sp.dependency 'YumiAdMob', '7.44.0'
+    sp.dependency 'YumiAdMob', '7.50.0'
     sp.resource_bundles = {'YumiMediationAdMob' => ['YumiMediationAdapters/AdMob/resources/*']}
   end
   s.subspec 'AppLovin' do |sp|
     sp.source_files = "YumiMediationAdapters/AppLovin/**/*.{h,m}"
-    sp.dependency 'YumiAppLovin', '6.7.1.0'
+    sp.dependency 'YumiAppLovin', '6.9.4'
   end
   s.subspec 'Baidu' do |sp|
     sp.source_files = "YumiMediationAdapters/Baidu/**/*.{h,m}"
@@ -46,15 +46,15 @@ Pod::Spec.new do |s|
   end
   s.subspec 'InMobi' do |sp|
     sp.source_files = "YumiMediationAdapters/InMobi/**/*.{h,m}"
-    sp.dependency 'YumiInMobi', '8.1.0'
+    sp.dependency 'YumiInMobi', '9.0.0'
   end
   s.subspec 'IronSource' do |sp|
     sp.source_files = "YumiMediationAdapters/IronSource/**/*.{h,m}"
-    sp.dependency 'YumiIronSource', '6.8.3'
+    sp.dependency 'YumiIronSource', '6.8.7'
   end
   s.subspec 'Unity' do |sp|
     sp.source_files = "YumiMediationAdapters/Unity/**/*.{h,m}"
-    sp.dependency 'YumiUnity', '3.1.0'
+    sp.dependency 'YumiUnity', '3.3.0'
   end
   s.subspec 'Vungle' do |sp|
     sp.source_files = "YumiMediationAdapters/Vungle/**/*.{h,m}"
@@ -70,18 +70,18 @@ Pod::Spec.new do |s|
   end
   s.subspec 'InneractiveAdSDK' do |sp|
     sp.source_files = "YumiMediationAdapters/InneractiveAdSDK/**/*.{h,m}"
-    sp.dependency 'YumiInneractiveAdSDK', '7.2.3'
+    sp.dependency 'YumiInneractiveAdSDK', '7.4.1'
   end
   s.subspec 'BytedanceAds' do |sp|
     sp.source_files = "YumiMediationAdapters/BytedanceAds/**/*.{h,m}"
-    sp.dependency 'YumiBytedanceAds', '2.0.1.1'
+    sp.dependency 'YumiBytedanceAds', '2.4.6.7'
   end
   s.subspec 'ZplayAds' do |sp|
     sp.source_files = "YumiMediationAdapters/ZplayAds/**/*.{h,m}"
   end
   s.subspec 'TapjoySDK' do |sp|
     sp.source_files = "YumiMediationAdapters/TapjoySDK/**/*.{h,m}"
-    sp.dependency 'YumiTapjoySDK', '12.3.1'
+    sp.dependency 'YumiTapjoySDK', '12.3.4'
   end
   s.subspec 'PubNative' do |sp|
     sp.source_files = "YumiMediationAdapters/PubNative/**/*.{h,m}"
