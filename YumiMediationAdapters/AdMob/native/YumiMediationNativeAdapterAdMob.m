@@ -62,7 +62,7 @@ static NSUInteger maxNumberOfAds = 5;
 }
 
 - (NSString *)networkVersion {
-    return @"7.44.0";
+    return @"7.50.0";
 }
 
 - (void)requestAd:(NSUInteger)adCount {
