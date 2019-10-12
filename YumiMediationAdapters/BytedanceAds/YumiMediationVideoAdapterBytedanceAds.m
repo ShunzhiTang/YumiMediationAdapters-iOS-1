@@ -43,7 +43,7 @@
 }
 
 - (NSString *)networkVersion {
-    return @"2.0.1.1";
+    return @"2.4.6.7";
 }
 
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
@@ -52,7 +52,6 @@
 
 - (void)requestAd {
     BURewardedVideoModel *model = [[BURewardedVideoModel alloc] init];
-    model.isShowDownloadBar = YES;
 
     self.rewardedVideoAd = [[BURewardedVideoAd alloc] initWithSlotID:self.provider.data.key2 rewardedVideoModel:model];
     self.rewardedVideoAd.delegate = self;

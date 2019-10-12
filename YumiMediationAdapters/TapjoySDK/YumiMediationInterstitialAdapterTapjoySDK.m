@@ -91,7 +91,7 @@
 }
 
 - (NSString *)networkVersion {
-    return @"12.3.1";
+    return @"12.3.4";
 }
 
 - (BOOL)isReady {

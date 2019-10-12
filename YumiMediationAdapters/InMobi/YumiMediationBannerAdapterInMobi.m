@@ -61,7 +61,7 @@
 
 #pragma mark - YumiMediationBannerAdapter
 - (NSString *)networkVersion {
-    return @"8.1.0";
+    return @"9.0.0";
 }
 
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {

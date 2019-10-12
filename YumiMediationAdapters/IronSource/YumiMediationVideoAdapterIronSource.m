@@ -60,7 +60,7 @@
 }
 
 - (NSString *)networkVersion {
-    return @"6.8.3";
+    return @"6.8.7";
 }
 
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
@@ -80,13 +80,7 @@
     }
     self.isReward = NO;
     
-    // IS 初始化10s以上，不考虑第一次的情况。
-    // 以下方式处理不会有超时情况。
-    if ([self isReady]) {
-        [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
-    } else {
-        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"ironSource is not available" adType:self.adType];
-    }
+    [IronSource loadISDemandOnlyRewardedVideo:self.provider.data.key2];
 }
 
 - (BOOL)isReady {
@@ -98,39 +92,37 @@
 }
 
 #pragma mark - ISDemandOnlyRewardedVideoDelegate
-// Called after a rewarded video has changed its availability.
-//@param available The new rewarded video availability. YES if available and ready to be shown, NO otherwise.
-- (void)rewardedVideoHasChangedAvailability:(BOOL)available instanceId:(NSString *)instanceId {
+
+- (void)rewardedVideoDidLoad:(NSString *)instanceId {
+   [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
 }
 
-// Called after a rewarded video has been viewed completely and the user is eligible for reward.
-//@param placementInfo An object that contains the placement's reward name and amount.
-- (void)didReceiveRewardForPlacement:(ISPlacementInfo *)placementInfo instanceId:(NSString *)instanceId {
-    self.isReward = YES;
-    [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
+- (void)rewardedVideoDidFailToLoadWithError:(NSError *)error instanceId:(NSString *)instanceId {
+    [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:self.adType];
 }
 
-// Called after a rewarded video has attempted to show but failed.
-//@param error The reason for the error
-- (void)rewardedVideoDidFailToShowWithError:(NSError *)error instanceId:(NSString *)instanceId {
-    [self.delegate coreAdapter:self failedToShowAd:nil errorString:error.localizedDescription adType:self.adType];
-}
-
-// Called after a rewarded video has been opened.
 - (void)rewardedVideoDidOpen:(NSString *)instanceId {
     [self.delegate coreAdapter:self didOpenCoreAd:nil adType:self.adType];
     [self.delegate coreAdapter:self didStartPlayingAd:nil adType:self.adType];
 }
 
-// Called after a rewarded video has been dismissed.
 - (void)rewardedVideoDidClose:(NSString *)instanceId {
     [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:self.isReward adType:self.adType];
     self.isReward = NO;
 }
 
-// Invoked when the end user clicked on the RewardedVideo ad
-- (void)didClickRewardedVideo:(ISPlacementInfo *)placementInfo instanceId:(NSString *)instanceId {
+- (void)rewardedVideoDidFailToShowWithError:(NSError *)error instanceId:(NSString *)instanceId {
+    [self.delegate coreAdapter:self failedToShowAd:nil errorString:error.localizedDescription adType:self.adType];
+}
+
+- (void)rewardedVideoDidClick:(NSString *)instanceId {
     [self.delegate coreAdapter:self didClickCoreAd:nil adType:self.adType];
 }
+
+- (void)rewardedVideoAdRewarded:(NSString *)instanceId {
+    self.isReward = YES;
+    [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
+}
+
 
 @end

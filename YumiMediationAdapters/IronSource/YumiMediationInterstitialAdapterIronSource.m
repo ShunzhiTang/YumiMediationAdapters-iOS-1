@@ -60,7 +60,7 @@
 }
 
 - (NSString *)networkVersion {
-    return @"6.8.3";
+    return @"6.8.7";
 }
 
 - (void)requestAd {

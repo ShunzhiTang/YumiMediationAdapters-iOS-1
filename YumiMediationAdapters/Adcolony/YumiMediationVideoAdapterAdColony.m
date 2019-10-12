@@ -10,7 +10,7 @@
 #import <AdColony/AdColony.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
 
-@interface YumiMediationVideoAdapterAdColony ()
+@interface YumiMediationVideoAdapterAdColony ()<AdColonyInterstitialDelegate>
 
 @property (nonatomic, assign) BOOL isAdReady;
 @property (nonatomic, assign) BOOL isReward;
@@ -70,14 +70,13 @@
 }
 
 - (NSString *)networkVersion {
-    return @"3.3.7";
+    return @"4.1.1";
 }
 
 - (void)requestAd {
     self.isAdReady = NO;
     self.isReward = NO;
-
-    __weak typeof(self) weakSelf = self;
+    self.video = nil;
     // update adcolony gdpr
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
     AdColonyAppOptions *options = [AdColonyAppOptions new];
@@ -92,46 +91,53 @@
 
     [AdColony setAppOptions:options];
 
-    [AdColony requestInterstitialInZone:self.provider.data.key2
-        options:nil
-        success:^(AdColonyInterstitial *_Nonnull ad) {
-            weakSelf.isAdReady = YES;
-            weakSelf.video = ad;
-            [weakSelf.delegate coreAdapter:weakSelf didReceivedCoreAd:weakSelf.video adType:weakSelf.adType];
-            [ad setOpen:^{
-                [weakSelf.delegate coreAdapter:weakSelf didOpenCoreAd:weakSelf.video adType:weakSelf.adType];
-                [weakSelf.delegate coreAdapter:weakSelf didStartPlayingAd:weakSelf.video adType:weakSelf.adType];
-            }];
-            [ad setClose:^{
-                if (weakSelf.isReward) {
-                    [weakSelf.delegate coreAdapter:weakSelf coreAd:weakSelf.video didReward:YES adType:weakSelf.adType];
-                }
-                [weakSelf.delegate coreAdapter:weakSelf
-                                didCloseCoreAd:weakSelf.video
-                             isCompletePlaying:weakSelf.isReward
-                                        adType:weakSelf.adType];
-                weakSelf.isAdReady = NO;
-                weakSelf.isReward = NO;
-            }];
-            [ad setClick:^{
-                [weakSelf.delegate coreAdapter:weakSelf didClickCoreAd:weakSelf.video adType:weakSelf.adType];
-            }];
-        }
-        failure:^(AdColonyAdRequestError *_Nonnull error) {
-            weakSelf.isAdReady = NO;
-            [weakSelf.delegate coreAdapter:weakSelf
-                                    coreAd:nil
-                             didFailToLoad:[error localizedDescription]
-                                    adType:weakSelf.adType];
-        }];
+    [AdColony requestInterstitialInZone:self.provider.data.key2 options:nil andDelegate:self];
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [self.video showWithPresentingViewController:rootViewController];
+    
+    BOOL showState = [self.video showWithPresentingViewController:rootViewController];
+    
+    if (!showState) {
+        [self.delegate coreAdapter:self failedToShowAd:self.video errorString:@"AdColony show fail... " adType:self.adType];
+    }
 }
 
 - (BOOL)isReady {
     return self.isAdReady;
+}
+
+#pragma mark: AdColonyInterstitialDelegate
+- (void)adColonyInterstitialDidLoad:(AdColonyInterstitial * _Nonnull)interstitial {
+    self.isAdReady = YES;
+    self.video = interstitial;
+    [self.delegate coreAdapter:self didReceivedCoreAd:self.video adType:self.adType];
+}
+
+- (void)adColonyInterstitialDidFailToLoad:(AdColonyAdRequestError * _Nonnull)error {
+    self.isAdReady = NO;
+    [self.delegate coreAdapter:self coreAd:nil didFailToLoad:[error localizedDescription] adType:self.adType];
+}
+
+- (void)adColonyInterstitialWillOpen:(AdColonyInterstitial * _Nonnull)interstitial {
+    [self.delegate coreAdapter:self didOpenCoreAd:self.video adType:self.adType];
+    [self.delegate coreAdapter:self didStartPlayingAd:self.video adType:self.adType];
+}
+
+- (void)adColonyInterstitialDidClose:(AdColonyInterstitial * _Nonnull)interstitial {
+    if (self.isReward) {
+        [self.delegate coreAdapter:self coreAd:self.video didReward:YES adType:self.adType];
+    }
+    [self.delegate coreAdapter:self
+                    didCloseCoreAd:self.video
+                 isCompletePlaying:self.isReward
+                            adType:self.adType];
+    self.isAdReady = NO;
+    self.isReward = NO;
+}
+
+- (void)adColonyInterstitialDidReceiveClick:(AdColonyInterstitial * _Nonnull)interstitial {
+     [self.delegate coreAdapter:self didClickCoreAd:self.video adType:self.adType];
 }
 
 @end
