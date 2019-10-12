@@ -93,7 +93,7 @@
 }
 
 - (NSString *)networkVersion {
-    return @"7.2.3";
+    return @"7.4.1";
 }
 
 - (void)requestAd {
