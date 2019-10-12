@@ -45,7 +45,7 @@
 }
 
 - (NSString *)networkVersion {
-    return @"6.7.1";
+    return @"6.9.4";
 }
 
 - (void)setBannerSizeWith:(YumiMediationAdViewBannerSize)adSize smartBanner:(BOOL)isSmart {
@@ -89,7 +89,7 @@
         }
 
         weakSelf.sdk = [ALSdk sharedWithKey:weakSelf.provider.data.key1];
-        weakSelf.bannerView = [[ALAdView alloc] initWithFrame:adframe size:[ALAdSize sizeBanner] sdk:weakSelf.sdk];
+        weakSelf.bannerView = [[ALAdView alloc] initWithFrame:adframe size:ALAdSize.banner sdk:weakSelf.sdk];
         weakSelf.bannerView.adLoadDelegate = weakSelf;
         weakSelf.bannerView.adDisplayDelegate = weakSelf;
         // set refresh state
