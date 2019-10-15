@@ -46,7 +46,7 @@ Pod::Spec.new do |s|
   end
   s.subspec 'InMobi' do |sp|
     sp.source_files = "YumiMediationAdapters/InMobi/**/*.{h,m}"
-    sp.dependency 'YumiInMobi', '9.0.0'
+    sp.dependency 'YumiInMobi', '7.4.0'
   end
   s.subspec 'IronSource' do |sp|
     sp.source_files = "YumiMediationAdapters/IronSource/**/*.{h,m}"
