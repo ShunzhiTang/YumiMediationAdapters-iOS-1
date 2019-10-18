@@ -17,6 +17,8 @@ before_install:
   - git lfs pull
 install:
   - bundle install
+  - pod setup
+  - pod repo add-cdn trunk 'https://cdn.cocoapods.org/'
   - pod repo add Specs https://github.com/yumimobi/Specs.git
   - pod repo update
 script:
