@@ -9,6 +9,7 @@
 #import "YumiMediationVideoAdapterAdColony.h"
 #import <AdColony/AdColony.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
+#import <YumiMediationSDK/YumiLogger.h>
 
 @interface YumiMediationVideoAdapterAdColony ()<AdColonyInterstitialDelegate>
 
@@ -66,16 +67,19 @@
     [AdColony setAppOptions:options];
     
     if (self.isConfigured) {
+        [[YumiLogger stdLogger] debug:@"---adColony start request"];
         [AdColony requestInterstitialInZone:self.provider.data.key2 options:nil andDelegate:self];
         return;
     }
+    [[YumiLogger stdLogger] debug:@"---adColony init"];
     __weak typeof(self) weakSelf = self;
-    
     [AdColony configureWithAppID:self.provider.data.key1
                          zoneIDs:@[ self.provider.data.key2 ]
                          options:options
                       completion:^(NSArray<AdColonyZone *> *_Nonnull zones) {
+                          [[YumiLogger stdLogger] debug:@"---adColony configured"];
                           weakSelf.isConfigured = YES;
+                          [[YumiLogger stdLogger] debug:@"---adColony start request"];
                           [AdColony requestInterstitialInZone:weakSelf.provider.data.key2 options:nil andDelegate:weakSelf];
                           [[zones firstObject] setReward:^(BOOL success, NSString *_Nonnull name, int amount) {
                               // NOTE: not reward here but in ad close block
@@ -85,6 +89,7 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---adColony present"];
     BOOL showState = [self.video showWithPresentingViewController:rootViewController];
     if (!showState) {
         [self.delegate coreAdapter:self failedToShowAd:self.video errorString:@"AdColony show fail... " adType:self.adType];
@@ -105,6 +110,7 @@
  @param interstitial Loaded interstitial
  */
 - (void)adColonyInterstitialDidLoad:(AdColonyInterstitial * _Nonnull)interstitial {
+    [[YumiLogger stdLogger] debug:@"---adColony did load"];
     self.video = interstitial;
     [self.delegate coreAdapter:self didReceivedCoreAd:self.video adType:self.adType];
 }
@@ -115,6 +121,7 @@
  @param error Error with failure explanation
  */
 - (void)adColonyInterstitialDidFailToLoad:(AdColonyAdRequestError * _Nonnull)error {
+    [[YumiLogger stdLogger] debug:@"---adColony did fail to load"];
     self.video = nil;
     [self.delegate coreAdapter:self coreAd:nil didFailToLoad:[error localizedDescription] adType:self.adType];
 }
@@ -136,8 +143,10 @@
  */
 - (void)adColonyInterstitialDidClose:(AdColonyInterstitial * _Nonnull)interstitial {
     if (self.isReward) {
+        [[YumiLogger stdLogger] debug:@"---adColony reward"];
         [self.delegate coreAdapter:self coreAd:self.video didReward:YES adType:self.adType];
     }
+    [[YumiLogger stdLogger] debug:@"---adColony is closed"];
     [self.delegate coreAdapter:self
                     didCloseCoreAd:self.video
                  isCompletePlaying:self.isReward
@@ -170,7 +179,8 @@
  @param interstitial interstitial ad object
  */
 - (void)adColonyInterstitialDidReceiveClick:(AdColonyInterstitial * _Nonnull)interstitial {
-     [self.delegate coreAdapter:self didClickCoreAd:self.video adType:self.adType];
+    [[YumiLogger stdLogger] debug:@"---adColony received click"];
+    [self.delegate coreAdapter:self didClickCoreAd:self.video adType:self.adType];
 }
 
 /** @name Videos For Purchase (V4P) */
