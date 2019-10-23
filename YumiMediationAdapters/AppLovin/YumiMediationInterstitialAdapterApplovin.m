@@ -21,6 +21,9 @@
 @end
 
 @implementation YumiMediationInterstitialAdapterApplovin
+- (NSString *)networkVersion {
+    return @"6.9.4";
+}
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
@@ -40,15 +43,10 @@
     self.adType = adType;
 
     self.sdk = [ALSdk sharedWithKey:self.provider.data.key1];
-
     self.interstitial = [[ALInterstitialAd alloc] initWithSdk:self.sdk];
     self.interstitial.adDisplayDelegate = self;
 
     return self;
-}
-
-- (NSString *)networkVersion {
-    return @"6.9.4";
 }
 
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
