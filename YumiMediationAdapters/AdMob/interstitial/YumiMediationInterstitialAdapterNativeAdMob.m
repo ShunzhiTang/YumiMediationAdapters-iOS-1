@@ -157,7 +157,11 @@
             [YumiMediationAdMob loadNibNamed:@"AdmobNativeInstallAdView_Lan" owner:nil options:nil].firstObject;
     }
 
-    self.appInstallAdView.frame = [UIScreen mainScreen].bounds;
+    
+    CGFloat w = UIScreen.mainScreen.bounds.size.width;
+    CGFloat h = UIScreen.mainScreen.bounds.size.height-100;
+    self.appInstallAdView.frame = CGRectMake(0, 0, w, h);
+    self.appInstallAdView.center = [UIApplication sharedApplication].keyWindow.rootViewController.view.center;
     nativeAd.delegate = self;
     self.appInstallAdView.nativeAd = nativeAd;
 
