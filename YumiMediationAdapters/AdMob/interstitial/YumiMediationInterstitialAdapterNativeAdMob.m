@@ -154,17 +154,18 @@
     NSBundle *mainBundle = [NSBundle bundleForClass:[self class]];
     NSURL *bundleURL = [mainBundle URLForResource:@"YumiMediationAdMob" withExtension:@"bundle"];
     NSBundle *YumiMediationAdMob = [NSBundle bundleWithURL:bundleURL];
-
+    
+    CGFloat w = UIScreen.mainScreen.bounds.size.width;
+    CGFloat h = UIScreen.mainScreen.bounds.size.height;
     if ([[YumiTool sharedTool] isInterfaceOrientationPortrait]) {
         self.self.appInstallAdView =
             [YumiMediationAdMob loadNibNamed:@"AdmobNativeInstallAdView" owner:nil options:nil].firstObject;
+        h = h-100;
     } else {
         self.appInstallAdView =
             [YumiMediationAdMob loadNibNamed:@"AdmobNativeInstallAdView_Lan" owner:nil options:nil].firstObject;
     }
     
-    CGFloat w = UIScreen.mainScreen.bounds.size.width;
-    CGFloat h = UIScreen.mainScreen.bounds.size.height-100;
     self.appInstallAdView.frame = CGRectMake(0, 0, w, h);
     self.appInstallAdView.center = [UIApplication sharedApplication].keyWindow.rootViewController.view.center;
     
