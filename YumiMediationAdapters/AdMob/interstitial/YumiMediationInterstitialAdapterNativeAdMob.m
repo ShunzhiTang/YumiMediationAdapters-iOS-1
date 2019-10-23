@@ -162,6 +162,7 @@
             [YumiMediationAdMob loadNibNamed:@"AdmobNativeInstallAdView" owner:nil options:nil].firstObject;
         h = h-100;
     } else {
+        w = UIScreen.mainScreen.bounds.size.width-100;
         self.appInstallAdView =
             [YumiMediationAdMob loadNibNamed:@"AdmobNativeInstallAdView_Lan" owner:nil options:nil].firstObject;
     }
