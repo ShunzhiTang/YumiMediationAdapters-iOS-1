@@ -81,7 +81,6 @@
 - (void)requestAd {
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     if ([standardUserDefaults objectForKey:YumiMediationAdmobAdapterUUID]) {
-        [[YumiLogger stdLogger] debug:@"---Admob start request"];
         [self requestAdmobNativeAd];
         return;
     }
@@ -91,12 +90,12 @@
         [[YumiLogger stdLogger] debug:@"---Admob configured"];
         [standardUserDefaults setObject:@"Admob_is_starting" forKey:YumiMediationAdmobAdapterUUID];
         [standardUserDefaults synchronize];
-        [[YumiLogger stdLogger] debug:@"---Admob start request"];
         [weakSelf requestAdmobNativeAd];
     }];
 }
 
 - (void)requestAdmobNativeAd {
+    [[YumiLogger stdLogger] debug:@"---Admob start request"];
     self.presentController = [[UIViewController alloc] init];
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -168,6 +167,7 @@
     CGFloat h = UIScreen.mainScreen.bounds.size.height-100;
     self.appInstallAdView.frame = CGRectMake(0, 0, w, h);
     self.appInstallAdView.center = [UIApplication sharedApplication].keyWindow.rootViewController.view.center;
+    
     nativeAd.delegate = self;
     self.appInstallAdView.nativeAd = nativeAd;
 
