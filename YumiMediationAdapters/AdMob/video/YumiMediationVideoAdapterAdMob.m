@@ -9,6 +9,7 @@
 #import "YumiMediationVideoAdapterAdMob.h"
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
+#import <YumiMediationSDK/YumiLogger.h>
 
 @interface YumiMediationVideoAdapterAdMob () <GADRewardedAdDelegate>
 @property (nonatomic, assign) BOOL isReward;
@@ -57,7 +58,9 @@
         return;
     }
     __weak __typeof(self)weakSelf = self;
+    [[YumiLogger stdLogger] debug:@"---Admob init"];
     [[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *_Nonnull status) {
+        [[YumiLogger stdLogger] debug:@"---Admob configured"];
         [standardUserDefaults setObject:@"Admob_is_starting" forKey:YumiMediationAdmobAdapterUUID];
         [standardUserDefaults synchronize];
         [weakSelf requestAdmobVideo];
@@ -66,6 +69,7 @@
 }
 
 - (void)requestAdmobVideo {
+    [[YumiLogger stdLogger] debug:@"---Admob start request"];
     // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
     GADExtras *extras = [[GADExtras alloc] init];
@@ -88,11 +92,12 @@
                                         coreAd:weakSelf.rewardedAd
                                  didFailToLoad:[error localizedDescription]
                                         adType:weakSelf.adType];
+                [[YumiLogger stdLogger] debug:@"---Admob did fail to load"];
                 return;
             }
             //  Ad successfully loaded.
             [weakSelf.delegate coreAdapter:weakSelf didReceivedCoreAd:weakSelf.rewardedAd adType:weakSelf.adType];
-
+            [[YumiLogger stdLogger] debug:@"---Admob did load"];
         }];
 }
 
@@ -101,6 +106,7 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---Admob present"];
     [self.rewardedAd presentFromRootViewController:rootViewController delegate:self];
 }
 
@@ -127,9 +133,11 @@
 /// Tells the delegate that the rewarded ad was dismissed.
 - (void)rewardedAdDidDismiss:(nonnull GADRewardedAd *)rewardedAd {
     if (self.isReward) {
+        [[YumiLogger stdLogger] debug:@"---Admob is rewarded"];
         [self.delegate coreAdapter:self coreAd:self.rewardedAd didReward:YES adType:self.adType];
     }
     [self.delegate coreAdapter:self didCloseCoreAd:self.rewardedAd isCompletePlaying:self.isReward adType:self.adType];
+    [[YumiLogger stdLogger] debug:@"---Admob is closed"];
     self.isReward = NO;
     self.rewardedAd = nil;
 }
