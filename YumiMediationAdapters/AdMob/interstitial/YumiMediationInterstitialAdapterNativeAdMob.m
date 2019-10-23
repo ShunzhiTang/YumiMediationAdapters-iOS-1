@@ -19,11 +19,14 @@
 @property (nonatomic) GADUnifiedNativeAdView *appInstallAdView;
 @property (nonatomic, assign) BOOL isAdReady;
 @property (nonatomic, assign) YumiMediationAdType adType;
-@property (nonatomic) UIViewController *rootViewController;
+@property (nonatomic) UIViewController *presentController;
 
 @end
 
 @implementation YumiMediationInterstitialAdapterNativeAdMob
+- (NSString *)networkVersion {
+    return @"7.50.0";
+}
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
@@ -51,7 +54,9 @@
 - (void)closeIntersitital {
     self.isAdReady = NO;
 
-    [self.appInstallAdView removeFromSuperview];
+    [self.presentController dismissViewControllerAnimated:NO completion:^{
+        [self.appInstallAdView removeFromSuperview];
+    }];
     [self.delegate coreAdapter:self didCloseCoreAd:self.appInstallAdView isCompletePlaying:NO adType:self.adType];
 }
 
@@ -65,14 +70,6 @@
     self.delegate = delegate;
     self.adType = adType;
 
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    if ([standardUserDefaults objectForKey:YumiMediationAdmobAdapterUUID]) {
-        return self;
-    }
-    [[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *_Nonnull status) {
-        [standardUserDefaults setObject:@"Admob_is_starting" forKey:YumiMediationAdmobAdapterUUID];
-        [standardUserDefaults synchronize];
-    }];
     return self;
 }
 
@@ -80,12 +77,22 @@
     self.provider = provider;
 }
 
-- (NSString *)networkVersion {
-    return @"7.50.0";
+- (void)requestAd {
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    if ([standardUserDefaults objectForKey:YumiMediationAdmobAdapterUUID]) {
+        [self requestAdmobNativeAd];
+        return;
+    }
+    __weak __typeof(self)weakSelf = self;
+    [[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *_Nonnull status) {
+        [standardUserDefaults setObject:@"Admob_is_starting" forKey:YumiMediationAdmobAdapterUUID];
+        [standardUserDefaults synchronize];
+        [weakSelf requestAdmobNativeAd];
+    }];
 }
 
-- (void)requestAd {
-    self.rootViewController = [[YumiTool sharedTool] topMostController];
+- (void)requestAdmobNativeAd {
+    self.presentController = [[UIViewController alloc] init];
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         GADNativeAdViewAdOptions *option = [[GADNativeAdViewAdOptions alloc] init];
@@ -94,7 +101,7 @@
         [adTypes addObject:kGADAdLoaderAdTypeUnifiedNative];
 
         weakSelf.adLoader = [[GADAdLoader alloc] initWithAdUnitID:weakSelf.provider.data.key1
-                                               rootViewController:weakSelf.rootViewController
+                                               rootViewController:weakSelf.presentController
                                                           adTypes:adTypes
                                                           options:@[ option ]];
 
@@ -118,12 +125,13 @@
 }
 
 - (BOOL)isReady {
-
     return self.isAdReady;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [rootViewController.view addSubview:self.appInstallAdView];
+    [self.presentController.view addSubview:self.appInstallAdView];
+    self.presentController.modalPresentationStyle = UIModalPresentationFullScreen;
+    [rootViewController presentViewController:self.presentController animated:NO completion:nil];
 }
 
 #pragma mark : - GADAdLoaderDelegate
@@ -189,7 +197,6 @@
 }
 
 #pragma mark : - GADNativeAdDelegate
-
 - (void)nativeAdDidRecordImpression:(GADNativeAd *)nativeAd {
     [self.delegate coreAdapter:self didOpenCoreAd:self.appInstallAdView adType:self.adType];
     [self.delegate coreAdapter:self didStartPlayingAd:self.appInstallAdView adType:self.adType];
