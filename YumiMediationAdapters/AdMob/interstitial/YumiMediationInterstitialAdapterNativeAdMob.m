@@ -11,6 +11,7 @@
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import <YumiMediationSDK/YumiLogger.h>
 
 @interface YumiMediationInterstitialAdapterNativeAdMob () <GADUnifiedNativeAdLoaderDelegate, GADAdLoaderDelegate,
                                                            GADUnifiedNativeAdDelegate>
@@ -53,10 +54,10 @@
 
 - (void)closeIntersitital {
     self.isAdReady = NO;
-
     [self.presentController dismissViewControllerAnimated:NO completion:^{
         [self.appInstallAdView removeFromSuperview];
     }];
+    [[YumiLogger stdLogger] debug:@"---Admob is closed"];
     [self.delegate coreAdapter:self didCloseCoreAd:self.appInstallAdView isCompletePlaying:NO adType:self.adType];
 }
 
@@ -80,13 +81,17 @@
 - (void)requestAd {
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     if ([standardUserDefaults objectForKey:YumiMediationAdmobAdapterUUID]) {
+        [[YumiLogger stdLogger] debug:@"---Admob start request"];
         [self requestAdmobNativeAd];
         return;
     }
     __weak __typeof(self)weakSelf = self;
+    [[YumiLogger stdLogger] debug:@"---Admob init"];
     [[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *_Nonnull status) {
+        [[YumiLogger stdLogger] debug:@"---Admob configured"];
         [standardUserDefaults setObject:@"Admob_is_starting" forKey:YumiMediationAdmobAdapterUUID];
         [standardUserDefaults synchronize];
+        [[YumiLogger stdLogger] debug:@"---Admob start request"];
         [weakSelf requestAdmobNativeAd];
     }];
 }
@@ -129,6 +134,8 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---Admob present"];
+    self.presentController.view.backgroundColor = [UIColor blackColor];
     [self.presentController.view addSubview:self.appInstallAdView];
     self.presentController.modalPresentationStyle = UIModalPresentationFullScreen;
     [rootViewController presentViewController:self.presentController animated:NO completion:nil];
@@ -136,8 +143,8 @@
 
 #pragma mark : - GADAdLoaderDelegate
 - (void)adLoader:(GADAdLoader *)adLoader didFailToReceiveAdWithError:(GADRequestError *)error {
+    [[YumiLogger stdLogger] debug:@"---Admob did fail to load"];
     self.isAdReady = NO;
-
     [self.delegate coreAdapter:self coreAd:adLoader didFailToLoad:[error localizedDescription] adType:self.adType];
 }
 
@@ -156,7 +163,6 @@
         self.appInstallAdView =
             [YumiMediationAdMob loadNibNamed:@"AdmobNativeInstallAdView_Lan" owner:nil options:nil].firstObject;
     }
-
     
     CGFloat w = UIScreen.mainScreen.bounds.size.width;
     CGFloat h = UIScreen.mainScreen.bounds.size.height-100;
@@ -196,7 +202,7 @@
     } else {
         self.appInstallAdView.priceView.hidden = YES;
     }
-
+    [[YumiLogger stdLogger] debug:@"---Admob did load"];
     [self.delegate coreAdapter:self didReceivedCoreAd:self.appInstallAdView adType:self.adType];
 }
 
