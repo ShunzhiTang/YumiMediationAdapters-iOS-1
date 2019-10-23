@@ -162,12 +162,13 @@
             [YumiMediationAdMob loadNibNamed:@"AdmobNativeInstallAdView" owner:nil options:nil].firstObject;
         h = h-100;
     } else {
+        w = UIScreen.mainScreen.bounds.size.width-100;
         self.appInstallAdView =
             [YumiMediationAdMob loadNibNamed:@"AdmobNativeInstallAdView_Lan" owner:nil options:nil].firstObject;
     }
     
     self.appInstallAdView.frame = CGRectMake(0, 0, w, h);
-    self.appInstallAdView.center = [UIApplication sharedApplication].keyWindow.rootViewController.view.center;
+    self.appInstallAdView.center = [[YumiTool sharedTool] topMostController].view.center;
     
     nativeAd.delegate = self;
     self.appInstallAdView.nativeAd = nativeAd;
