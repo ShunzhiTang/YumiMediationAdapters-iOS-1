@@ -168,7 +168,7 @@
     }
     
     self.appInstallAdView.frame = CGRectMake(0, 0, w, h);
-    self.appInstallAdView.center = [UIApplication sharedApplication].keyWindow.rootViewController.view.center;
+    self.appInstallAdView.center = [[YumiTool sharedTool] topMostController].view.center;
     
     nativeAd.delegate = self;
     self.appInstallAdView.nativeAd = nativeAd;
