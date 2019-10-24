@@ -7,6 +7,12 @@
 
 #import "YumiMediationVungleInstance.h"
 
+@interface YumiMediationVungleInstance ()
+
+@property (nonatomic,copy)VungleInitializeBlock initBlock;
+
+@end
+
 @implementation YumiMediationVungleInstance
 
 + (YumiMediationVungleInstance *)sharedInstance {
@@ -26,14 +32,21 @@
     return self;
 }
 
+#pragma mark: private method
+- (void)vungleSDKDidInitializeCompleted:(VungleInitializeBlock)completed {
+    self.initBlock = completed;
+}
+
 #pragma mark : -- VungleSDKDelegate
 - (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable
                       placementID:(nullable NSString *)placementID
                             error:(nullable NSError *)error {
     for (YumiMediationVideoAdapterVungle *videoAdapter in self.vungleVideoAdapters) {
         if ([videoAdapter.provider.data.key2 isEqualToString:placementID] && isAdPlayable) {
+            [[YumiLogger stdLogger] debug:@"---Vungle video did load "];
             [videoAdapter.delegate coreAdapter:videoAdapter didReceivedCoreAd:nil adType:YumiMediationAdTypeVideo];
         } else if ([videoAdapter.provider.data.key2 isEqualToString:placementID] && !isAdPlayable) {
+            [[YumiLogger stdLogger] debug:@"---Vungle video did fail "];
             [videoAdapter.delegate coreAdapter:videoAdapter
                                         coreAd:nil
                                  didFailToLoad:@"vungle is no fill"
@@ -43,10 +56,12 @@
 
     for (YumiMediationInterstitialAdapterVungle *interstitialAdapter in self.vungleInterstitialAdapters) {
         if ([interstitialAdapter.provider.data.key3 isEqualToString:placementID] && isAdPlayable) {
+            [[YumiLogger stdLogger] debug:@"---Vungle interstitial did load "];
             [interstitialAdapter.delegate coreAdapter:interstitialAdapter
                                     didReceivedCoreAd:nil
                                                adType:YumiMediationAdTypeInterstitial];
         } else if ([interstitialAdapter.provider.data.key3 isEqualToString:placementID] && !isAdPlayable) {
+            [[YumiLogger stdLogger] debug:@"---Vungle interstitial did fail "];
             [interstitialAdapter.delegate coreAdapter:interstitialAdapter
                                                coreAd:nil
                                         didFailToLoad:@"vungle is no fill"
@@ -87,11 +102,13 @@
             }
             // reward
             if ([info.completedView boolValue]) {
+                [[YumiLogger stdLogger] debug:@"---Vungle video did reward "];
                 [videoAdapter.delegate coreAdapter:videoAdapter
                                             coreAd:nil
                                          didReward:YES
                                             adType:YumiMediationAdTypeVideo];
             }
+            [[YumiLogger stdLogger] debug:@"---Vungle video did close "];
             [videoAdapter.delegate coreAdapter:videoAdapter
                                 didCloseCoreAd:nil
                              isCompletePlaying:[info.completedView boolValue]
@@ -105,6 +122,7 @@
                                            didClickCoreAd:nil
                                                    adType:YumiMediationAdTypeInterstitial];
             }
+            [[YumiLogger stdLogger] debug:@"---Vungle interstitial did close "];
             [interstitialAdapter.delegate coreAdapter:interstitialAdapter
                                        didCloseCoreAd:nil
                                     isCompletePlaying:NO
@@ -112,19 +130,15 @@
         }
     }
 }
-
-- (void)videoVungleSDKFailedToInitializeWith:(YumiMediationVideoAdapterVungle *)videoAdapter {
-    [videoAdapter.delegate coreAdapter:videoAdapter
-                                coreAd:nil
-                         didFailToLoad:@"vungleSDKFailedToInitialize"
-                                adType:YumiMediationAdTypeVideo];
+#pragma mark: vungle init callback
+- (void)vungleSDKDidInitialize {
+    if (self.initBlock) {
+        self.initBlock(YES);
+    }
 }
-
-- (void)interstitialVungleSDKFailedToInitializeWith:(YumiMediationInterstitialAdapterVungle *)interstitialAdapter {
-    [interstitialAdapter.delegate coreAdapter:interstitialAdapter
-                                       coreAd:nil
-                                didFailToLoad:@"vungleSDKFailedToInitialize"
-                                       adType:YumiMediationAdTypeInterstitial];
+- (void)vungleSDKFailedToInitializeWithError:(NSError *)error  {
+    if (self.initBlock) {
+        self.initBlock(NO);
+    }
 }
-
 @end
