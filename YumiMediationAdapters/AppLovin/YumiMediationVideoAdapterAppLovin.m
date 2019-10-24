@@ -16,10 +16,14 @@
 @property (nonatomic) ALIncentivizedInterstitialAd *video;
 @property (nonatomic, assign) BOOL isReward;
 @property (nonatomic, assign) YumiMediationAdType adType;
+@property (nonatomic, assign) BOOL isConfigured;
 
 @end
 
 @implementation YumiMediationVideoAdapterAppLovin
+- (NSString *)networkVersion {
+    return @"6.9.4";
+}
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
@@ -37,17 +41,8 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-    // initialize Sdk
-    ALSdk *sdk = [ALSdk sharedWithKey:provider.data.key1];
-    self.video = [[ALIncentivizedInterstitialAd alloc] initWithZoneIdentifier:provider.data.key2 sdk:sdk];
-    self.video.adDisplayDelegate = self;
-    self.video.adVideoPlaybackDelegate = self;
 
     return self;
-}
-
-- (NSString *)networkVersion {
-    return @"6.9.4";
 }
 
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
@@ -57,15 +52,34 @@
 - (void)requestAd {
     // set GDPR
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
         [ALPrivacySettings setHasUserConsent:YES];
     }
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [ALPrivacySettings setHasUserConsent:NO];
     }
-
-    [self.video preloadAndNotify:self];
+    // applovin zone id can't be nil;
+    if (self.provider.data.key1.length == 0) {
+        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"No zone identifier specified" adType:self.adType];
+        return;
+    }
+    
+    if (self.isConfigured) {
+        [[YumiLogger stdLogger] debug:@"---Applovin start request"];
+        [self.video preloadAndNotify:self];
+        return;
+    }
+    [[YumiLogger stdLogger] debug:@"---Applovin start init"];
+    __weak __typeof(self)weakSelf = self;
+    [[ALSdk shared] initializeSdkWithCompletionHandler:^(ALSdkConfiguration * _Nonnull configuration) {
+        [[YumiLogger stdLogger] debug:@"---Applovin is configured"];
+        weakSelf.isConfigured = YES;
+        [[YumiLogger stdLogger] debug:@"---Applovin start request"];
+        weakSelf.video = [[ALIncentivizedInterstitialAd alloc] initWithZoneIdentifier:weakSelf.provider.data.key1];
+        [weakSelf.video preloadAndNotify:weakSelf];
+    }];
+    
+    
 }
 
 - (BOOL)isReady {
@@ -73,6 +87,8 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    self.video.adDisplayDelegate = self;
+    self.video.adVideoPlaybackDelegate = self;
     [self.video showAndNotify:self];
 }
 
@@ -106,10 +122,12 @@
 
 #pragma mark - ALAdLoadDelegate
 - (void)adService:(ALAdService *)adService didLoadAd:(ALAd *)ad {
+    [[YumiLogger stdLogger] debug:@"---Applovin did loaded"];
     [self.delegate coreAdapter:self didReceivedCoreAd:ad adType:self.adType];
 }
 
 - (void)adService:(ALAdService *)adService didFailToLoadAdWithError:(int)code {
+    [[YumiLogger stdLogger] debug:@"---Applovin did fail to load"];
     NSString *error = [NSString stringWithFormat:@"fail to load applovin video with code %d", code];
     [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error adType:self.adType];
 }
