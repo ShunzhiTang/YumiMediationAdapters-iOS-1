@@ -78,8 +78,6 @@
         weakSelf.video = [[ALIncentivizedInterstitialAd alloc] initWithZoneIdentifier:weakSelf.provider.data.key1];
         [weakSelf.video preloadAndNotify:weakSelf];
     }];
-    
-    
 }
 
 - (BOOL)isReady {
