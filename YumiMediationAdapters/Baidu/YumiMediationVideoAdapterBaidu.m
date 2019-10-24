@@ -20,6 +20,9 @@
 @end
 
 @implementation YumiMediationVideoAdapterBaidu
+- (NSString *)networkVersion {
+    return @"4.6.7";
+}
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
@@ -54,22 +57,17 @@
     return self;
 }
 
-- (NSString *)networkVersion {
-    return @"4.6.7";
-}
-
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
     self.provider = provider;
 }
 
 - (void)requestAd {
-    [[YumiLogger stdLogger] debug:@"start request"];
+    [[YumiLogger stdLogger] debug:@"---Baidu start request"];
     self.isPreloadVideo = NO;
     [self.rewardVideo load];
 }
 
 - (BOOL)isReady {
-
     if (self.isPreloadVideo && [self.rewardVideo isReady]) {
         return YES;
     }
@@ -85,6 +83,7 @@
  *  视频加载缓存成功
  */
 - (void)rewardedVideoAdLoaded:(BaiduMobAdRewardVideo *)video {
+    [[YumiLogger stdLogger] debug:@"---Baidu did load"];
     self.isPreloadVideo = YES;
     [self.delegate coreAdapter:self didReceivedCoreAd:video adType:self.adType];
 }
@@ -93,6 +92,7 @@
  *  视频加载缓存失败
  */
 - (void)rewardedVideoAdLoadFailed:(BaiduMobAdRewardVideo *)video withError:(BaiduMobFailReason)reason {
+    [[YumiLogger stdLogger] debug:@"---Baidu did fail to load"];
     self.isReward = NO;
     self.isPreloadVideo = NO;
     [self.delegate coreAdapter:self
