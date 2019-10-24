@@ -97,6 +97,7 @@
                         adType:self.adType];
     [[YumiLogger stdLogger] debug:@"---Bytedance did closed"];
     self.isRewarded = NO;
+    self.rewardedVideoAd = nil;
 }
 - (void)rewardedVideoAdDidPlayFinish:(BURewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
     if (error) {
