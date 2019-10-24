@@ -9,9 +9,9 @@
 #import "YumiMediationVideoAdapterBaidu.h"
 #import <BaiduMobAdSDK/BaiduMobAdRewardVideo.h>
 #import <BaiduMobAdSDK/BaiduMobAdSetting.h>
+#import <YumiMediationSDK/YumiLogger.h>
 
 @interface YumiMediationVideoAdapterBaidu () <BaiduMobAdRewardVideoDelegate>
-
 @property (nonatomic) BaiduMobAdRewardVideo *rewardVideo;
 @property (nonatomic, assign) BOOL isReward;
 @property (nonatomic, assign) BOOL isPreloadVideo;
@@ -44,9 +44,9 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-
+    
+    [[YumiLogger stdLogger] debug:@"---Baidu start init"];
     self.rewardVideo = [[BaiduMobAdRewardVideo alloc] init];
-
     self.rewardVideo.delegate = self;
     self.rewardVideo.publisherId = self.provider.data.key1;
     self.rewardVideo.AdUnitTag = self.provider.data.key2;
@@ -63,6 +63,7 @@
 }
 
 - (void)requestAd {
+    [[YumiLogger stdLogger] debug:@"start request"];
     self.isPreloadVideo = NO;
     [self.rewardVideo load];
 }
