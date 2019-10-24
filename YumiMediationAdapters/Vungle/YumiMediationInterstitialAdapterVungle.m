@@ -9,6 +9,7 @@
 #import "YumiMediationVungleInstance.h"
 #import <VungleSDK/VungleSDK.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
+#import <YumiMediationSDK/YumiLogger.h>
 
 @interface YumiMediationInterstitialAdapterVungle ()
 
@@ -40,24 +41,9 @@
         vungleInstance.vungleInterstitialAdapters = [NSMutableArray new];
     }
     [vungleInstance.vungleInterstitialAdapters addObject:self];
-
-    NSError *error;
-    NSString *appID = self.provider.data.key1;
-    VungleSDK *sdk = [VungleSDK sharedSDK];
-    sdk.delegate = vungleInstance;
-    [sdk setLoggingEnabled:NO];
-
-    // set gdpr
-    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-
-    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
-        [sdk updateConsentStatus:VungleConsentAccepted consentMessageVersion:@"1"];
-    }
-    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
-        [sdk updateConsentStatus:VungleConsentDenied consentMessageVersion:@"1"];
-    }
-
-    [sdk startWithAppId:appID error:&error];
+    
+    
+    [VungleSDK sharedSDK].delegate = vungleInstance;
 
     return self;
 }
@@ -72,10 +58,10 @@
 
 - (void)requestAd {
 
-    NSError *error;
+    NSError *initError = nil;
     VungleSDK *sdk = [VungleSDK sharedSDK];
-
-    // update gdpr
+    [sdk setLoggingEnabled:NO];
+    // set gdpr
     YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
 
     if (gdprStatus == YumiMediationConsentStatusPersonalized) {
@@ -84,12 +70,35 @@
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [sdk updateConsentStatus:VungleConsentDenied consentMessageVersion:@"1"];
     }
-
+    
     if (sdk.isInitialized) {
-        [sdk loadPlacementWithID:self.provider.data.key3 error:&error];
-    } else {
-        [[YumiMediationVungleInstance sharedInstance] interstitialVungleSDKFailedToInitializeWith:self];
+        [self loadVungleAd];
+        return;
     }
+    
+    [[YumiLogger stdLogger] debug:@"---Vungle init SDK"];
+    [sdk startWithAppId:self.provider.data.key1 error:&initError];
+    
+    __weak typeof(self) weakSelf = self;
+    [[YumiMediationVungleInstance sharedInstance] vungleSDKDidInitializeCompleted:^(BOOL isSuccessed) {
+        if (isSuccessed) {
+            [[YumiLogger stdLogger] debug:@"---Vungle init completed "];
+            [weakSelf loadVungleAd];
+            return ;
+        }
+        [[YumiLogger stdLogger] debug:@"--- Vungle init fail "];
+        [weakSelf.delegate coreAdapter:self
+                                              coreAd:nil
+                                       didFailToLoad:@"vungleSDKFailedToInitialize"
+                                              adType:weakSelf.adType];
+    }];
+
+}
+
+- (void)loadVungleAd {
+    [[YumiLogger stdLogger] debug:@"---Vungle start load"];
+    NSError *loadError = nil;
+    [[VungleSDK sharedSDK] loadPlacementWithID:self.provider.data.key3 error:&loadError];
 }
 
 - (BOOL)isReady {
@@ -97,6 +106,7 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---Vungle did present"];
     NSError *error;
     [[VungleSDK sharedSDK] playAd:rootViewController options:nil placementID:self.provider.data.key3 error:&error];
 
