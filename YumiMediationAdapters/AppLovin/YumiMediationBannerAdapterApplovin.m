@@ -103,11 +103,11 @@
         [[YumiLogger stdLogger] debug:@"---Applovin start request"];
         weakSelf.bannerView = [[ALAdView alloc] initWithSize:ALAdSize.banner zoneIdentifier:weakSelf.provider.data.key1];
         // Optional: Implement the ad delegates to receive ad events.
-        self.bannerView.adLoadDelegate = self;
-        self.bannerView.adDisplayDelegate = self;
-        self.bannerView.translatesAutoresizingMaskIntoConstraints = NO;
+        weakSelf.bannerView.adLoadDelegate = self;
+        weakSelf.bannerView.adDisplayDelegate = self;
+        weakSelf.bannerView.translatesAutoresizingMaskIntoConstraints = NO;
         // Call loadNextAd() to start showing ads
-        [self.bannerView loadNextAd];
+        [weakSelf.bannerView loadNextAd];
     }];
     // set refresh state
     if (weakSelf.provider.data.autoRefreshInterval == 0) {
