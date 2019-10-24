@@ -103,6 +103,7 @@
 - (void) adService:(ALAdService *)adService didFailToLoadAdWithError:(int)code
 {
     [[YumiLogger stdLogger] debug:[NSString stringWithFormat:@"---Applovin Interstitial failed to load with error code = %d", code]];
+    self.isAdReady = NO;
     [self.delegate coreAdapter:self
                            coreAd:nil
                     didFailToLoad:[NSString stringWithFormat:@"applovin error code:%d", code]
@@ -119,6 +120,8 @@
 
 - (void)ad:(ALAd *)ad wasHiddenIn:(UIView *)view
 {
+    self.isAdReady = NO;
+    self.ad = nil;
     [self.delegate coreAdapter:self didCloseCoreAd:ad isCompletePlaying:NO adType:self.adType];
 }
 
