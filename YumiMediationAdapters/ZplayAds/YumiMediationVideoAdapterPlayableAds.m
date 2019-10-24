@@ -9,6 +9,7 @@
 #import "YumiMediationVideoAdapterPlayableAds.h"
 #import <YumiMediationSDK/PlayableAds.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
+#import <YumiMediationSDK/YumiLogger.h>
 
 @interface YumiMediationVideoAdapterPlayableAds () <PlayableAdsDelegate>
 
@@ -36,12 +37,7 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-
-    self.video = [[PlayableAds alloc] initWithAdUnitID:self.provider.data.key2 appID:self.provider.data.key1];
-    self.video.delegate = self;
-    self.video.autoLoad = YES;
-    [self.video loadAd];
-
+    
     return self;
 }
 
@@ -55,6 +51,13 @@
 
 - (void)requestAd {
     // playableads auto load
+    if (!self.video) {
+        [[YumiLogger stdLogger] debug:@"---ZplayAds only init and request"];
+        self.video = [[PlayableAds alloc] initWithAdUnitID:self.provider.data.key2 appID:self.provider.data.key1];
+        self.video.delegate = self;
+        self.video.autoLoad = YES;
+        [self.video loadAd];
+    }
 }
 
 - (BOOL)isReady {
@@ -62,6 +65,7 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---ZplayAds start present"];
     [self.video present];
 }
 
@@ -72,6 +76,7 @@
 }
 
 - (void)playableAdsDidLoad:(PlayableAds *)ads {
+    [[YumiLogger stdLogger] debug:@"---ZplayAds did load"];
     [self.delegate coreAdapter:self didReceivedCoreAd:ads adType:self.adType];
 }
 
@@ -86,8 +91,10 @@
 
 - (void)playableAdsDidDismissScreen:(PlayableAds *)ads {
     if (self.isReward) {
+        [[YumiLogger stdLogger] debug:@"---ZplayAds did reward"];
         [self.delegate coreAdapter:self coreAd:ads didReward:YES adType:self.adType];
     }
+    [[YumiLogger stdLogger] debug:@"---ZplayAds did close"];
     [self.delegate coreAdapter:self didCloseCoreAd:ads isCompletePlaying:self.isReward adType:self.adType];
     self.isReward = NO;
 }
