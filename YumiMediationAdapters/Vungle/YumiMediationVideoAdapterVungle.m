@@ -92,7 +92,7 @@
 - (void)loadVungleAd {
     [[YumiLogger stdLogger] debug:@"---Vungle video start load"];
     NSError *loadError = nil;
-    [[VungleSDK sharedSDK] loadPlacementWithID:self.provider.data.key3 error:&loadError];
+    [[VungleSDK sharedSDK] loadPlacementWithID:self.provider.data.key2 error:&loadError];
 }
 
 - (BOOL)isReady {
