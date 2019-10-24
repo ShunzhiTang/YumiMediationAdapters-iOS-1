@@ -10,13 +10,15 @@
 #import <Foundation/Foundation.h>
 #import <VungleSDK/VungleSDK.h>
 
+typedef void(^VungleInitializeBlock)(BOOL isSuccessed);
+
 @interface YumiMediationVungleInstance : NSObject <VungleSDKDelegate>
 
 @property (nonatomic) NSMutableArray<YumiMediationInterstitialAdapterVungle *> *vungleInterstitialAdapters;
 @property (nonatomic) NSMutableArray<YumiMediationVideoAdapterVungle *> *vungleVideoAdapters;
 
 + (YumiMediationVungleInstance *)sharedInstance;
-- (void)videoVungleSDKFailedToInitializeWith:(YumiMediationVideoAdapterVungle *)videoAdapter;
-- (void)interstitialVungleSDKFailedToInitializeWith:(YumiMediationInterstitialAdapterVungle *)interstitialAdapter;
+
+- (void)vungleSDKDidInitializeCompleted:(VungleInitializeBlock)completed;
 
 @end

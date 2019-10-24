@@ -9,6 +9,7 @@
 #import "YumiMediationInterstitialAdapterPlayableAds.h"
 #import <YumiMediationSDK/PlayableAds.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
+#import <YumiMediationSDK/YumiLogger.h>
 
 @interface YumiMediationInterstitialAdapterPlayableAds () <PlayableAdsDelegate>
 
@@ -49,6 +50,7 @@
 
 - (void)requestAd {
     // TODO: request ad
+    [[YumiLogger stdLogger] debug:@"---ZplayAds start request"];
     self.interstitial = [[PlayableAds alloc] initWithAdUnitID:self.provider.data.key2 appID:self.provider.data.key1];
     self.interstitial.autoLoad = NO;
     self.interstitial.delegate = self;
@@ -61,6 +63,7 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---ZplayAds did present"];
     [self.interstitial present];
 }
 
@@ -68,6 +71,7 @@
 - (void)playableAdsDidRewardUser:(PlayableAds *)ads {
 }
 - (void)playableAdsDidLoad:(PlayableAds *)ads {
+     [[YumiLogger stdLogger] debug:@"---ZplayAds did load"];
     [self.delegate coreAdapter:self didReceivedCoreAd:ads adType:self.adType];
 }
 - (void)playableAds:(PlayableAds *)ads didFailToLoadWithError:(NSError *)error {
@@ -75,6 +79,7 @@
 }
 - (void)playableAdsDidDismissScreen:(PlayableAds *)ads {
     [self.delegate coreAdapter:self didCloseCoreAd:ads isCompletePlaying:NO adType:self.adType];
+    [[YumiLogger stdLogger] debug:@"---ZplayAds did close"];
 }
 
 - (void)playableAdsDidClick:(PlayableAds *)ads {
