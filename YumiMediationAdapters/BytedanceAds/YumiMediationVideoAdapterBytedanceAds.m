@@ -41,9 +41,6 @@
     self.adType = adType;
 
     [BUAdSDKManager setAppID:self.provider.data.key1];
-    BURewardedVideoModel *model = [[BURewardedVideoModel alloc] init];
-    self.rewardedVideoAd = [[BURewardedVideoAd alloc] initWithSlotID:self.provider.data.key2 rewardedVideoModel:model];
-    self.rewardedVideoAd.delegate = self;
     return self;
 }
 
@@ -53,6 +50,9 @@
 
 - (void)requestAd {
     [[YumiLogger stdLogger] debug:@"---Bytedance start request"];
+    BURewardedVideoModel *model = [[BURewardedVideoModel alloc] init];
+    self.rewardedVideoAd = [[BURewardedVideoAd alloc] initWithSlotID:self.provider.data.key2 rewardedVideoModel:model];
+    self.rewardedVideoAd.delegate = self;
     [self.rewardedVideoAd loadAdData];
 }
 
