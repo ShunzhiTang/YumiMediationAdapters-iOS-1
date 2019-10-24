@@ -9,9 +9,9 @@
 #import "YumiMediationVideoAdapterBytedanceAds.h"
 #import <BUAdSDK/BUAdSDK.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import <YumiMediationSDK/YumiLogger.h>
 
 @interface YumiMediationVideoAdapterBytedanceAds () <BURewardedVideoAdDelegate>
-
 @property (nonatomic, assign) YumiMediationAdType adType;
 @property (nonatomic, strong) BURewardedVideoAd *rewardedVideoAd;
 @property (nonatomic, assign) BOOL isRewarded;
@@ -19,6 +19,9 @@
 @end
 
 @implementation YumiMediationVideoAdapterBytedanceAds
+- (NSString *)networkVersion {
+    return @"2.4.6.7";
+}
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
@@ -38,12 +41,10 @@
     self.adType = adType;
 
     [BUAdSDKManager setAppID:self.provider.data.key1];
-
+    BURewardedVideoModel *model = [[BURewardedVideoModel alloc] init];
+    self.rewardedVideoAd = [[BURewardedVideoAd alloc] initWithSlotID:self.provider.data.key2 rewardedVideoModel:model];
+    self.rewardedVideoAd.delegate = self;
     return self;
-}
-
-- (NSString *)networkVersion {
-    return @"2.4.6.7";
 }
 
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
@@ -51,14 +52,12 @@
 }
 
 - (void)requestAd {
-    BURewardedVideoModel *model = [[BURewardedVideoModel alloc] init];
-
-    self.rewardedVideoAd = [[BURewardedVideoAd alloc] initWithSlotID:self.provider.data.key2 rewardedVideoModel:model];
-    self.rewardedVideoAd.delegate = self;
+    [[YumiLogger stdLogger] debug:@"---Bytedance start request"];
     [self.rewardedVideoAd loadAdData];
 }
 
 - (BOOL)isReady {
+    [[YumiLogger stdLogger] debug:[NSString stringWithFormat:@"---Bytedance ready status: %d",self.rewardedVideoAd.isAdValid]];
     return self.rewardedVideoAd.isAdValid;
 }
 
@@ -69,10 +68,12 @@
 #pragma mark : BURewardedVideoAdDelegate
 // This method is called when video ad material loaded successfully.
 - (void)rewardedVideoAdDidLoad:(BURewardedVideoAd *)rewardedVideoAd {
+    [[YumiLogger stdLogger] debug:@"---Bytedance did load"];
     [self.delegate coreAdapter:self didReceivedCoreAd:rewardedVideoAd adType:self.adType];
 }
 
 - (void)rewardedVideoAd:(BURewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
+    [[YumiLogger stdLogger] debug:@"---Bytedance did fail to load"];
     [self.delegate coreAdapter:self coreAd:rewardedVideoAd didFailToLoad:error.localizedDescription adType:self.adType];
 }
 
@@ -87,14 +88,15 @@
 
 - (void)rewardedVideoAdDidClose:(BURewardedVideoAd *)rewardedVideoAd {
     if (self.isRewarded) {
+        [[YumiLogger stdLogger] debug:@"---Bytedance did rewarded"];
         [self.delegate coreAdapter:self coreAd:rewardedVideoAd didReward:YES adType:self.adType];
     }
     [self.delegate coreAdapter:self
                 didCloseCoreAd:rewardedVideoAd
              isCompletePlaying:self.isRewarded
                         adType:self.adType];
+    [[YumiLogger stdLogger] debug:@"---Bytedance did closed"];
     self.isRewarded = NO;
-    self.rewardedVideoAd = nil;
 }
 - (void)rewardedVideoAdDidPlayFinish:(BURewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
     if (error) {
