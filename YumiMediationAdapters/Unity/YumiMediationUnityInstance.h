@@ -10,15 +10,16 @@
 #import <Foundation/Foundation.h>
 #import <UnityAds/UnityAds.h>
 
-@interface YumiMediationUnityInstance : NSObject <UnityAdsExtendedDelegate>
+typedef void(^UnityInitializedBlock)(BOOL isSuccessed);
 
-//@property (nonatomic) YumiMediationInterstitialAdapterUnity *unityInterstitialAdapter;
-//@property (nonatomic) YumiMediationVideoAdapterUnity *unityVideoAdapter;
+@interface YumiMediationUnityInstance : NSObject <UnityAdsExtendedDelegate>
 
 + (YumiMediationUnityInstance *)sharedInstance;
 
 @property (nonatomic) NSMutableDictionary<NSString *, id<YumiMediationCoreAdapter>> *adaptersDict;
 
 - (NSString *)getAdapterKeyWith:(NSString *)placementId adType:(YumiMediationAdType)adType;
+
+- (void)unitySDKDidInitializeCompleted:(UnityInitializedBlock)completed;
 
 @end
