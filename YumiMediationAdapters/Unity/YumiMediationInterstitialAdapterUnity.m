@@ -67,52 +67,32 @@
         [gdprConsentMetaData commit];
     }
     
+    __weak typeof(self) weakSelf = self;
     if (![UnityAds isInitialized]) {
         [[YumiLogger stdLogger] debug:@"---Unity init SDK"];
-           self.theFirstTime = YES;
-           [UnityAds initialize:self.provider.data.key1 delegate:[YumiMediationUnityInstance sharedInstance] testMode:NO];
+        [UnityAds initialize:self.provider.data.key1 delegate:[YumiMediationUnityInstance sharedInstance] testMode:NO];
+        
+        [[YumiMediationUnityInstance sharedInstance] unitySDKDidInitializeCompleted:^(BOOL isSuccessed) {
+            [weakSelf callBackAdLodingResult];
+            //initialize fail ,retry
+            if (!isSuccessed) {
+                 [UnityAds initialize:weakSelf.provider.data.key1 delegate:[YumiMediationUnityInstance sharedInstance] testMode:NO];
+            }
+        }];
+        return;
        }
     
-    [self checkAdLodingStatus];
+    [self callBackAdLodingResult];
 }
 
-- (BOOL)checkAdLodingStatus {
-    if (!self.theFirstTime) {
-        if ([UnityAds isReady:self.provider.data.key2]) {
-            [[YumiLogger stdLogger] debug:@"---Unity interstitial did load isReady is YES"];
-            [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
-        } else {
-            [[YumiLogger stdLogger] debug:@"---Unity interstitial not ready"];
-            [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"Unity not ready." adType:self.adType];
-        }
-        return [UnityAds isReady:self.provider.data.key2];
-    }
-    __weak __typeof(self)weakSelf = self;
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-    dispatch_source_set_timer(timer, dispatch_walltime(NULL, 0), 1.0 * NSEC_PER_SEC, 0); //每秒执行
-    dispatch_source_set_event_handler(timer, ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if ([UnityAds isReady:self.provider.data.key2]) {
-                dispatch_suspend(timer);
-                [[YumiLogger stdLogger] debug:@"---Unity interstitial  did load isReady is YES"];
-                [weakSelf.delegate coreAdapter:weakSelf didReceivedCoreAd:nil adType:weakSelf.adType];
-            }
-        });
-    });
-    dispatch_resume(timer);
-    
-    double delayInSeconds = self.provider.data.requestTimeout ?: 30;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        dispatch_source_cancel(timer);
-        if (![UnityAds isReady:self.provider.data.key2]) {
-            [[YumiLogger stdLogger] debug:@"---Unity interstitial not ready"];
-            [weakSelf.delegate coreAdapter:weakSelf coreAd:nil didFailToLoad:@"Unity not ready." adType:weakSelf.adType];
-        }
-    });
-    self.theFirstTime = NO;
-    return [UnityAds isReady:self.provider.data.key2];
+- (void)callBackAdLodingResult {
+    if ([UnityAds isReady:self.provider.data.key2]) {
+       [[YumiLogger stdLogger] debug:@"---Unity interstitial did load isReady is YES"];
+       [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
+        return ;
+   }
+   [[YumiLogger stdLogger] debug:@"---Unity interstitial not ready"];
+        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"Unity not ready." adType:self.adType];
 }
 
 - (BOOL)isReady {
