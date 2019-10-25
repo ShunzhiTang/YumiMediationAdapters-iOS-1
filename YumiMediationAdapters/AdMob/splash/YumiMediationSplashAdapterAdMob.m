@@ -35,6 +35,8 @@
     [[YumiMediationAdapterRegistry registry] registerSplashAdapter:self
                                                      forProviderID:kYumiMediationAdapterIDAdMob
                                                        requestType:YumiMediationSDKAdRequest];
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults removeObjectForKey:YumiMediationAdmobAdapterUUID];
 }
 
 #pragma mark - YumiMediationSplashAdapter
