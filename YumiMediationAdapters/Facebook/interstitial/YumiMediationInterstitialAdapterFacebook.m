@@ -8,6 +8,7 @@
 
 #import "YumiMediationInterstitialAdapterFacebook.h"
 #import <FBAudienceNetwork/FBInterstitialAd.h>
+#import <YumiMediationSDK/YumiLogger.h>
 
 @interface YumiMediationInterstitialAdapterFacebook () <FBInterstitialAdDelegate>
 
@@ -47,7 +48,7 @@
 }
 
 - (void)requestAd {
-
+    [[YumiLogger stdLogger] debug:@"---Facebook start request"];
     self.interstitial = [[FBInterstitialAd alloc] initWithPlacementID:self.provider.data.key1];
     self.interstitial.delegate = self;
 
@@ -55,19 +56,23 @@
 }
 
 - (BOOL)isReady {
+    [[YumiLogger stdLogger] debug:[NSString stringWithFormat:@"---Facebook chack ready status.%d",self.interstitial.isAdValid]];
     return self.interstitial.isAdValid;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---Facebook present"];
     [self.interstitial showAdFromRootViewController:rootViewController];
 }
 
 #pragma mark - FBInterstitialAdDelegate
 - (void)interstitialAdDidLoad:(FBInterstitialAd *)interstitialAd {
+    [[YumiLogger stdLogger] debug:@"---Facebook did load"];
     [self.delegate coreAdapter:self didReceivedCoreAd:interstitialAd adType:self.adType];
 }
 
 - (void)interstitialAd:(FBInterstitialAd *)interstitialAd didFailWithError:(NSError *)error {
+    [[YumiLogger stdLogger] debug:[NSString stringWithFormat:@"---Facebook did fail to load.%@",error]];
     [self.delegate coreAdapter:self
                         coreAd:interstitialAd
                  didFailToLoad:[error localizedDescription]
@@ -79,7 +84,9 @@
 }
 
 - (void)interstitialAdDidClose:(FBInterstitialAd *)interstitialAd {
+    [[YumiLogger stdLogger] debug:@"---Facebook did closed"];
     [self.delegate coreAdapter:self didCloseCoreAd:interstitialAd isCompletePlaying:NO adType:self.adType];
+    self.interstitial = nil;
 }
 
 /**
