@@ -9,6 +9,12 @@
 
 static NSString *separatedString = @"|||";
 
+@interface YumiMediationUnityInstance ()
+
+@property (nonatomic,copy)UnityInitializedBlock block;
+
+@end
+
 @implementation YumiMediationUnityInstance
 
 + (YumiMediationUnityInstance *)sharedInstance {
@@ -18,6 +24,10 @@ static NSString *separatedString = @"|||";
         sharedInstance = [[YumiMediationUnityInstance alloc] init];
     });
     return sharedInstance;
+}
+
+- (void)unitySDKDidInitializeCompleted:(UnityInitializedBlock)completed {
+    self.block = completed;
 }
 
 #pragma mark : - private method
@@ -79,7 +89,10 @@ static NSString *separatedString = @"|||";
 
 #pragma mark - UnityAdsDelegate
 - (void)unityAdsReady:(NSString *)placementId {
-    // feedback in request method.
+    if (self.block) {
+        self.block(YES);
+        self.block = nil;
+    }
 }
 
 - (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message {
@@ -88,7 +101,13 @@ static NSString *separatedString = @"|||";
         [self delegateErrorIfNeedWithErrorMsg:message];
         return;
     }
-    // load fail feedback in request method.
+    //Initialized fail
+    if (error == kUnityAdsErrorNotInitialized || error == kUnityAdsErrorInitializedFailed) {
+        if (self.block) {
+            self.block(NO);
+            self.block = nil;
+        }
+    }
 }
 
 - (void)unityAdsDidStart:(NSString *)placementId {
