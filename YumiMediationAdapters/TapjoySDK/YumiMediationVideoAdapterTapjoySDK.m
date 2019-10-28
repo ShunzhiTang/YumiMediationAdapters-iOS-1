@@ -159,6 +159,8 @@
              isCompletePlaying:self.isRewarded
                         adType:self.adType];
     self.isRewarded = NO;
+    self.videoPlacement.delegate = nil;
+    self.videoPlacement = nil;
 }
 - (void)didClick:(TJPlacement *)placement {
     [self.delegate coreAdapter:self didClickCoreAd:self.videoPlacement adType:self.adType];

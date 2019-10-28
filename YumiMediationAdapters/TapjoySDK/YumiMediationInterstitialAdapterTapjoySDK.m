@@ -150,6 +150,9 @@
 - (void)contentDidDisappear:(TJPlacement *)placement {
     [[YumiLogger stdLogger] debug:@"---Tapjoy did close"];
     [self.delegate coreAdapter:self didCloseCoreAd:self.interstitialPlacement isCompletePlaying:NO adType:self.adType];
+    
+    self.interstitialPlacement.delegate = nil;
+    self.interstitialPlacement = nil;
 }
 - (void)didClick:(TJPlacement *)placement {
     [self.delegate coreAdapter:self didClickCoreAd:self.interstitialPlacement adType:self.adType];
