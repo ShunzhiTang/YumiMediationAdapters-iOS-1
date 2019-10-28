@@ -53,7 +53,7 @@
 }
 
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
-    if (self.provider.data.key1.length == 0) {
+    if (self.provider.data.key2.length == 0) {
         [self.delegate adapter:self didFailToReceiveAd:@"No zone identifier specified"];
         return;
     }
@@ -86,7 +86,7 @@
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     if ([standardUserDefaults objectForKey:YumiMediationApplovinAdapterUUID]) {
         [[YumiLogger stdLogger] debug:@"---Applovin start request"];
-        weakSelf.bannerView = [[ALAdView alloc] initWithSize:ALAdSize.banner zoneIdentifier:weakSelf.provider.data.key1];
+        weakSelf.bannerView = [[ALAdView alloc] initWithSize:ALAdSize.banner zoneIdentifier:weakSelf.provider.data.key2];
         // Optional: Implement the ad delegates to receive ad events.
         self.bannerView.adLoadDelegate = self;
         self.bannerView.adDisplayDelegate = self;
@@ -101,7 +101,7 @@
         [standardUserDefaults setObject:@"Applovin_is_starting" forKey:YumiMediationApplovinAdapterUUID];
         [standardUserDefaults synchronize];
         [[YumiLogger stdLogger] debug:@"---Applovin start request"];
-        weakSelf.bannerView = [[ALAdView alloc] initWithSize:ALAdSize.banner zoneIdentifier:weakSelf.provider.data.key1];
+        weakSelf.bannerView = [[ALAdView alloc] initWithSize:ALAdSize.banner zoneIdentifier:weakSelf.provider.data.key2];
         // Optional: Implement the ad delegates to receive ad events.
         weakSelf.bannerView.adLoadDelegate = self;
         weakSelf.bannerView.adDisplayDelegate = self;
