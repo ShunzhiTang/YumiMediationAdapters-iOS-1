@@ -9,11 +9,14 @@
 #import "YumiMediationInterstitialAdapterPubNative.h"
 #import <HyBid/HyBid.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
+#import <YumiMediationSDK/YumiLogger.h>
 
 @interface YumiMediationInterstitialAdapterPubNative () <HyBidInterstitialAdDelegate>
 
 @property (nonatomic, assign) YumiMediationAdType adType;
 @property (nonatomic, strong) HyBidInterstitialAd *interstitialAd;
+
+@property (nonatomic, assign) BOOL isInitSDKSuccess;
 
 @end
 
@@ -36,27 +39,6 @@
     self.provider = provider;
     self.adType = adType;
 
-    // set gdpr
-    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-
-    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
-        // Call this to let PubNative know the user has granted consent
-        [[HyBidUserDataManager sharedInstance] grantConsent];
-    }
-    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
-        // Call this to let PubNative know the user has revoked consent
-        [[HyBidUserDataManager sharedInstance] denyConsent];
-    }
-    // init sdk
-    [HyBid initWithAppToken:self.provider.data.key1
-                 completion:^(BOOL success) {
-                     if (success) {
-                         /// ...
-                     }
-                 }];
-
-    self.interstitialAd = [[HyBidInterstitialAd alloc] initWithZoneID:self.provider.data.key2 andWithDelegate:self];
-
     return self;
 }
 
@@ -76,8 +58,32 @@
         // Call this to let PubNative know the user has revoked consent
         [[HyBidUserDataManager sharedInstance] denyConsent];
     }
+    
+    if (self.isInitSDKSuccess) {
+        [self loadAd];
+        return;
+    }
+    
+   // init sdk
+    __weak typeof(self) weakSelf = self;
+   [[YumiLogger stdLogger] debug:@"---PubNative init SDK"];
+   [HyBid initWithAppToken:self.provider.data.key1 completion:^(BOOL success) {
+       weakSelf.isInitSDKSuccess = success;
+       if (success) {
+           [[YumiLogger stdLogger] debug:@"---PubNative init completion"];
+           [weakSelf loadAd];
+           return ;
+       }
+       [[YumiLogger stdLogger] debug:@"---PubNative init fail"];
+       [weakSelf.delegate coreAdapter:weakSelf coreAd:nil didFailToLoad:@"PubNative init fail" adType:weakSelf.adType];
+   }];
+    
+}
 
+- (void)loadAd{
+    self.interstitialAd = [[HyBidInterstitialAd alloc] initWithZoneID:self.provider.data.key2 andWithDelegate:self];
     [self.interstitialAd load];
+    [[YumiLogger stdLogger] debug:@"---PubNative start request ad"];
 }
 
 - (BOOL)isReady {
@@ -86,7 +92,7 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-
+    [[YumiLogger stdLogger] debug:@"---PubNative present"];
     [self.interstitialAd show];
 }
 
@@ -97,12 +103,14 @@
 #pragma mark : HyBidInterstitialAdDelegate
 - (void)interstitialDidLoad {
     [self.delegate coreAdapter:self didReceivedCoreAd:self.interstitialAd adType:self.adType];
+    [[YumiLogger stdLogger] debug:@"---PubNative did load"];
 }
 - (void)interstitialDidFailWithError:(NSError *)error {
     [self.delegate coreAdapter:self
                         coreAd:self.interstitialAd
                  didFailToLoad:error.localizedDescription
                         adType:self.adType];
+    [[YumiLogger stdLogger] debug:@"---PubNative did fail"];
 }
 - (void)interstitialDidTrackImpression {
     [self.delegate coreAdapter:self didOpenCoreAd:self.interstitialAd adType:self.adType];
@@ -113,6 +121,9 @@
 }
 - (void)interstitialDidDismiss {
     [self.delegate coreAdapter:self didCloseCoreAd:self.interstitialAd isCompletePlaying:NO adType:self.adType];
+    [[YumiLogger stdLogger] debug:@"---PubNative did close"];
+    
+    self.interstitialAd = nil;
 }
 
 @end
