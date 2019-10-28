@@ -9,15 +9,18 @@
 #import "YumiMediationVideoAdapterChartboost.h"
 #import <Chartboost/Chartboost.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
+#import <YumiMediationSDK/YumiLogger.h>
 
 @interface YumiMediationVideoAdapterChartboost () <ChartboostDelegate>
-
 @property (nonatomic, assign) BOOL isReward;
 @property (nonatomic, assign) YumiMediationAdType adType;
 
 @end
 
 @implementation YumiMediationVideoAdapterChartboost
+- (NSString *)networkVersion {
+    return @"8.0.1";
+}
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
@@ -45,16 +48,12 @@
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [Chartboost setPIDataUseConsent:NoBehavioral];
     }
-
+    [[YumiLogger stdLogger] debug:@"---chartboost start init"];
     [Chartboost startWithAppId:self.provider.data.key1 appSignature:self.provider.data.key2 delegate:self];
     [Chartboost setShouldPrefetchVideoContent:YES];
     [Chartboost setAutoCacheAds:YES];
 
     return self;
-}
-
-- (NSString *)networkVersion {
-    return @"8.0.1";
 }
 
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
@@ -71,15 +70,18 @@
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [Chartboost setPIDataUseConsent:NoBehavioral];
     }
-
+    [[YumiLogger stdLogger] debug:@"---chartboost start request"];
     [Chartboost cacheRewardedVideo:CBLocationDefault];
 }
 
 - (BOOL)isReady {
+    NSString *msg = [NSString stringWithFormat:@"---chartboost check ready status.%d",[Chartboost hasRewardedVideo:CBLocationDefault]];
+    [[YumiLogger stdLogger] debug:msg];
     return [Chartboost hasRewardedVideo:CBLocationDefault];
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---chartboost present"];
     [Chartboost showRewardedVideo:CBLocationDefault];
 }
 
@@ -91,10 +93,12 @@
 }
 
 - (void)didCacheRewardedVideo:(CBLocation)location {
+    [[YumiLogger stdLogger] debug:@"---chartboost did load"];
     [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
 }
 
 - (void)didFailToLoadRewardedVideo:(CBLocation)location withError:(CBLoadError)error {
+    [[YumiLogger stdLogger] debug:@"---chartboost did fail to load"];
     [self.delegate coreAdapter:self
                         coreAd:nil
                  didFailToLoad:[NSString stringWithFormat:@"error code %@", @(error)]
@@ -103,8 +107,10 @@
 
 - (void)didDismissRewardedVideo:(CBLocation)location {
     if (self.isReward) {
+        [[YumiLogger stdLogger] debug:@"---chartboost did rewarded"];
         [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
     }
+    [[YumiLogger stdLogger] debug:@"---chartboost did closed"];
     [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:self.isReward adType:self.adType];
     self.isReward = NO;
 }

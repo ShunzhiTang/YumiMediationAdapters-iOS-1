@@ -61,14 +61,14 @@
         [ALPrivacySettings setHasUserConsent:NO];
     }
     // applovin zone id can't be nil;
-    if (self.provider.data.key1.length == 0) {
+    if (self.provider.data.key2.length == 0) {
         [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"No zone identifier specified" adType:self.adType];
         return;
     }
     
     if (self.isConfigured) {
         [[YumiLogger stdLogger] debug:@"---Applovin start request"];
-        [[ALSdk shared].adService loadNextAdForZoneIdentifier:self.provider.data.key1 andNotify: self];
+        [[ALSdk shared].adService loadNextAdForZoneIdentifier:self.provider.data.key2 andNotify: self];
         return;
     }
     [[YumiLogger stdLogger] debug:@"---Applovin start init"];
@@ -77,7 +77,7 @@
         [[YumiLogger stdLogger] debug:@"---Applovin is configured"];
         weakSelf.isConfigured = YES;
         [[YumiLogger stdLogger] debug:@"---Applovin start request"];
-        [[ALSdk shared].adService loadNextAdForZoneIdentifier:weakSelf.provider.data.key1 andNotify: weakSelf];
+        [[ALSdk shared].adService loadNextAdForZoneIdentifier:weakSelf.provider.data.key2 andNotify: weakSelf];
     }];
 }
 
