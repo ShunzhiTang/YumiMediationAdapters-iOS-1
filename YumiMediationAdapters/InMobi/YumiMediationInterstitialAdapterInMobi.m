@@ -9,7 +9,6 @@
 #import "YumiMediationInterstitialAdapterInMobi.h"
 #import <InMobiSDK/InMobiSDK.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
-#import <YumiMediationSDK/YumiLogger.h>
 
 @interface YumiMediationInterstitialAdapterInMobi () <IMInterstitialDelegate>
 
@@ -19,9 +18,6 @@
 @end
 
 @implementation YumiMediationInterstitialAdapterInMobi
-- (NSString *)networkVersion {
-    return @"7.4.0";
-}
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
@@ -51,13 +47,17 @@
     }
 
     // Initialize InMobi SDK with your account ID
-    [IMSdk initWithAccountID:@"6ed7fbbecb5c4925be467900dbf45daa" consentDictionary:consentDict];
+    [IMSdk initWithAccountID:provider.data.key1 consentDictionary:consentDict];
     [IMSdk setLogLevel:kIMSDKLogLevelNone];
 
     self.interstitial =
-        [[IMInterstitial alloc] initWithPlacementId:[@"1569757040026" longLongValue] delegate:self];
+        [[IMInterstitial alloc] initWithPlacementId:[self.provider.data.key2 longLongValue] delegate:self];
 
     return self;
+}
+
+- (NSString *)networkVersion {
+    return @"7.4.0";
 }
 
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
@@ -74,28 +74,24 @@
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [IMSdk updateGDPRConsent:@{ IM_GDPR_CONSENT_AVAILABLE : @(NO) }];
     }
-    [[YumiLogger stdLogger] debug:@"---Inmobi start request"];
+
     [self.interstitial load];
 }
 
 - (BOOL)isReady {
-    [[YumiLogger stdLogger] debug:[NSString stringWithFormat:@"---Inmobi cheack ready status.%d",[self.interstitial isReady]]];
     return [self.interstitial isReady];
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    [[YumiLogger stdLogger] debug:@"---Inmobi present"];
     [self.interstitial showFromViewController:rootViewController];
 }
 
 #pragma mark - IMInterstitialDelegate
 - (void)interstitialDidFinishLoading:(IMInterstitial *)interstitial {
-    [[YumiLogger stdLogger] debug:@"---Inmobi did load"];
     [self.delegate coreAdapter:self didReceivedCoreAd:interstitial adType:self.adType];
 }
 
 - (void)interstitial:(IMInterstitial *)interstitial didFailToLoadWithError:(IMRequestStatus *)error {
-    [[YumiLogger stdLogger] debug:@"---Inmobi did fail to load"];
     [self.delegate coreAdapter:self coreAd:interstitial didFailToLoad:error.localizedDescription adType:self.adType];
 }
 
@@ -105,7 +101,6 @@
 }
 
 - (void)interstitialDidDismiss:(IMInterstitial *)interstitial {
-    [[YumiLogger stdLogger] debug:@"---Inmobi closed"];
     [self.delegate coreAdapter:self didCloseCoreAd:interstitial isCompletePlaying:NO adType:self.adType];
 }
 
