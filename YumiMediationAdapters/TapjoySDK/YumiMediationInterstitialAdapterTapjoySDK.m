@@ -9,6 +9,7 @@
 #import "YumiMediationInterstitialAdapterTapjoySDK.h"
 #import <Tapjoy/Tapjoy.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
+#import <YumiMediationSDK/YumiLogger.h>
 
 @interface YumiMediationInterstitialAdapterTapjoySDK () <TJPlacementDelegate, TJPlacementVideoDelegate>
 
@@ -40,30 +41,6 @@
     self.provider = provider;
     self.adType = adType;
 
-    // Tapjoy Connect Notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(tjcConnectSuccess:)
-                                                 name:TJC_CONNECT_SUCCESS
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(tjcConnectFail:)
-                                                 name:TJC_CONNECT_FAILED
-                                               object:nil];
-
-    // set gdpr
-    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-
-    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
-        [Tapjoy subjectToGDPR:YES];   // 用户遵守GDPR规则
-        [Tapjoy setUserConsent:@"1"]; // 用户同意
-    }
-    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
-        [Tapjoy subjectToGDPR:YES];
-        [Tapjoy setUserConsent:@"0"];
-    }
-
-    [Tapjoy connect:self.provider.data.key1 options:@{ TJC_OPTION_ENABLE_LOGGING : @(YES) }];
-
     return self;
 }
 
@@ -79,7 +56,16 @@
         [Tapjoy subjectToGDPR:YES];
         [Tapjoy setUserConsent:@"0"];
     }
+    
+    if (![Tapjoy isConnected]) {
+         [self initTapjoySDK];
+        return;
+    }
+    [self loadAd];
+}
 
+- (void)loadAd{
+    [[YumiLogger stdLogger] debug:@"---Tapjoy start request ad"];
     self.interstitialPlacement = [TJPlacement placementWithName:self.provider.data.key2 delegate:self];
     // Set video delegate TJPlacementVideoDelegate
     self.interstitialPlacement.videoDelegate = self;
@@ -100,16 +86,42 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---Tapjoy interstitial did present"];
     [self.interstitialPlacement showContentWithViewController:rootViewController];
 }
 
 #pragma mark : privare method
+
+- (void)initTapjoySDK {
+    
+    [[YumiLogger stdLogger] debug:@"---Tapjoy init SDK"];
+    // remove Notifications
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:TJC_CONNECT_SUCCESS object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:TJC_CONNECT_FAILED object:nil];
+    
+    // Add Tapjoy Connect Notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(tjcConnectSuccess:)
+                                                 name:TJC_CONNECT_SUCCESS
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(tjcConnectFail:)
+                                                 name:TJC_CONNECT_FAILED
+                                               object:nil];
+
+    [Tapjoy connect:self.provider.data.key1 options:@{ TJC_OPTION_ENABLE_LOGGING : @(YES) }];
+}
+
 - (void)tjcConnectSuccess:(NSNotification *)notifyObj {
     // Remove observer after it's notified once
     [[NSNotificationCenter defaultCenter] removeObserver:self name:TJC_CONNECT_SUCCESS object:nil];
+    [[YumiLogger stdLogger] debug:@"---Tapjoy init complated"];
+    
+    [self loadAd];
 }
 
 - (void)tjcConnectFail:(NSNotification *)notifyObj {
+    [[YumiLogger stdLogger] debug:@"---Tapjoy init fail"];
     // Remove observer after it's notified once
     [[NSNotificationCenter defaultCenter] removeObserver:self name:TJC_CONNECT_FAILED object:nil];
 
@@ -121,10 +133,12 @@
 }
 
 - (void)requestDidFail:(TJPlacement *)placement error:(NSError *)error {
+    [[YumiLogger stdLogger] debug:@"---Tapjoy interstitial load fail"];
     [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:self.adType];
 }
 
 - (void)contentIsReady:(TJPlacement *)placement {
+    [[YumiLogger stdLogger] debug:@"---Tapjoy interstitial did load"];
     [self.delegate coreAdapter:self didReceivedCoreAd:self.interstitialPlacement adType:self.adType];
 }
 
@@ -134,8 +148,11 @@
 }
 
 - (void)contentDidDisappear:(TJPlacement *)placement {
-
+    [[YumiLogger stdLogger] debug:@"---Tapjoy did close"];
     [self.delegate coreAdapter:self didCloseCoreAd:self.interstitialPlacement isCompletePlaying:NO adType:self.adType];
+    
+    self.interstitialPlacement.delegate = nil;
+    self.interstitialPlacement = nil;
 }
 - (void)didClick:(TJPlacement *)placement {
     [self.delegate coreAdapter:self didClickCoreAd:self.interstitialPlacement adType:self.adType];
