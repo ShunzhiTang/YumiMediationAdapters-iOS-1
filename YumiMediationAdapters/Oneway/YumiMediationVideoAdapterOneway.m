@@ -8,6 +8,7 @@
 
 #import "YumiMediationVideoAdapterOneway.h"
 #import <OneWaySDK.h>
+#import <YumiMediationSDK/YumiLogger.h>
 
 @interface YumiMediationVideoAdapterOneway () <oneWaySDKRewardedAdDelegate>
 
@@ -33,9 +34,7 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-
-    [OneWaySDK configure:self.provider.data.key1];
-
+    
     return self;
 }
 
@@ -48,23 +47,31 @@
 }
 
 - (void)requestAd {
-    if ([OneWaySDK isConfigured]) {
-        [OWRewardedAd initWithDelegate:self];
-    } else {
-        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"OneWaySDK no configured" adType:self.adType];
-    }
+    
+    [OneWaySDK configure:self.provider.data.key1];
+    [OWRewardedAd initWithDelegate:self];
+    [[YumiLogger stdLogger] debug:@"---OneWaySDK configure and set OWRewardedAd delegate "];
 }
 
 - (BOOL)isReady {
+    NSString *msg = [NSString stringWithFormat:@"---OneWaySDK isReady result = %u ",[OWRewardedAd isReady]];
+    [[YumiLogger stdLogger] debug:msg];
     return [OWRewardedAd isReady];
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    dispatch_async(dispatch_get_main_queue(), ^{
+       
+    });
+    
+    [[YumiLogger stdLogger] debug:@"---OneWaySDK did present"];
     [OWRewardedAd show:rootViewController];
+    
 }
 
 #pragma mark : oneWaySDKRewardedAdDelegate
 - (void)oneWaySDKRewardedAdReady {
+    [[YumiLogger stdLogger] debug:@"---OneWaySDK did load"];
     [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
 }
 
@@ -74,13 +81,16 @@
 }
 
 - (void)oneWaySDKRewardedAdDidClose:(NSString *)tag withState:(NSNumber *)state {
+    
+    BOOL isReward = NO;
     if ([state integerValue] == kOneWaySDKFinishStateCompleted) {
-        [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
-        [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:YES adType:self.adType];
-        return;
+        isReward = YES;
+        [self.delegate coreAdapter:self coreAd:nil didReward:isReward adType:self.adType];
+        [[YumiLogger stdLogger] debug:@"---OneWaySDK did reward"];
     }
-
-    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
+    
+    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:isReward adType:self.adType];
+    [[YumiLogger stdLogger] debug:@"---OneWaySDK did close"];
 }
 
 - (void)oneWaySDKDidError:(OneWaySDKError)error withMessage:(NSString *)message {
@@ -88,6 +98,7 @@
         [self.delegate coreAdapter:self failedToShowAd:nil errorString:message adType:self.adType];
         return;
     }
+    [[YumiLogger stdLogger] debug:@"---OneWaySDK load fail"];
     [self.delegate coreAdapter:self coreAd:nil didFailToLoad:message adType:self.adType];
 }
 
