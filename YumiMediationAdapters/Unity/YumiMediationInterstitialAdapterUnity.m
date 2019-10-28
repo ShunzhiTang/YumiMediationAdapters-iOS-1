@@ -96,6 +96,7 @@
 }
 
 - (BOOL)isReady {
+    [[YumiLogger stdLogger] debug:[NSString stringWithFormat:@"---Unity cheack ready status.%d",[UnityAds isReady:self.provider.data.key2]]];
     return [UnityAds isReady:self.provider.data.key2];
 }
 
