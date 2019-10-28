@@ -60,10 +60,6 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    dispatch_async(dispatch_get_main_queue(), ^{
-       
-    });
-    
     [[YumiLogger stdLogger] debug:@"---OneWaySDK did present"];
     [OWRewardedAd show:rootViewController];
     
