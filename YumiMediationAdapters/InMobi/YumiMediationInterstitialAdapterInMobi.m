@@ -51,11 +51,11 @@
     }
 
     // Initialize InMobi SDK with your account ID
-    [IMSdk initWithAccountID:provider.data.key1 consentDictionary:consentDict];
+    [IMSdk initWithAccountID:@"6ed7fbbecb5c4925be467900dbf45daa" consentDictionary:consentDict];
     [IMSdk setLogLevel:kIMSDKLogLevelNone];
 
     self.interstitial =
-        [[IMInterstitial alloc] initWithPlacementId:[provider.data.key2 longLongValue] delegate:self];
+        [[IMInterstitial alloc] initWithPlacementId:[@"1569757040026" longLongValue] delegate:self];
 
     return self;
 }
