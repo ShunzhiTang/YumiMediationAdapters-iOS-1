@@ -56,6 +56,7 @@
         return nil;
     }
     [IronSource initISDemandOnly:self.provider.data.key1 adUnits:@[ IS_REWARDED_VIDEO ]];
+    [[YumiLogger stdLogger] debug:@"---IronSource init Demand video"];
     return self;
 }
 
@@ -81,6 +82,7 @@
     self.isReward = NO;
     
     [IronSource loadISDemandOnlyRewardedVideo:self.provider.data.key2];
+    [[YumiLogger stdLogger] debug:@"---IronSource video start request"];
 }
 
 - (BOOL)isReady {
@@ -88,16 +90,19 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---IronSource video did present"];
     [IronSource showISDemandOnlyRewardedVideo:rootViewController instanceId:self.provider.data.key2];
 }
 
 #pragma mark - ISDemandOnlyRewardedVideoDelegate
 
 - (void)rewardedVideoDidLoad:(NSString *)instanceId {
+    [[YumiLogger stdLogger] debug:@"---IronSource video did load"];
    [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
 }
 
 - (void)rewardedVideoDidFailToLoadWithError:(NSError *)error instanceId:(NSString *)instanceId {
+    [[YumiLogger stdLogger] debug:@"---IronSource video load fail"];
     [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:self.adType];
 }
 
@@ -107,6 +112,7 @@
 }
 
 - (void)rewardedVideoDidClose:(NSString *)instanceId {
+    [[YumiLogger stdLogger] debug:@"---IronSource video did close"];
     [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:self.isReward adType:self.adType];
     self.isReward = NO;
 }
@@ -122,6 +128,7 @@
 - (void)rewardedVideoAdRewarded:(NSString *)instanceId {
     self.isReward = YES;
     [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
+    [[YumiLogger stdLogger] debug:@"---IronSource video did reward"];
 }
 
 
