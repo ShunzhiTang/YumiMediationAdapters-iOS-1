@@ -102,6 +102,8 @@
 }
 
 - (BOOL)isReady {
+    NSString *msg = [NSString stringWithFormat:@"---Vungle check ready status.%d",[[VungleSDK sharedSDK] isAdCachedForPlacementID:self.provider.data.key3]];
+    [[YumiLogger stdLogger] debug:msg];
     return [[VungleSDK sharedSDK] isAdCachedForPlacementID:self.provider.data.key3];
 }
 
