@@ -215,12 +215,10 @@ static NSString *separatedString = @"|||";
     }
     // placementId == bannerads ,oldState -- 1 ,newState = 0
     // placementId == video ,oldState -- 3 ,newState = 0
-    if (oldState == kUnityAdsPlacementStateNotAvailable || oldState == kUnityAdsPlacementStateWaiting) {
-        if (newState == kUnityAdsPlacementStateReady || newState == kUnityAdsPlacementStateNoFill ) {
-            if (self.block) {
-                self.block(YES);
-                self.block = nil;
-            }
+    if (newState == kUnityAdsPlacementStateReady || newState == kUnityAdsPlacementStateNoFill ) {
+        if (self.block) {
+            self.block(YES);
+            self.block = nil;
         }
     }
 }
