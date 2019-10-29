@@ -10,7 +10,6 @@
 #import "YumiMediationUnityInstance.h"
 #import <UnityAds/UnityAds.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
-#import <YumiMediationSDK/YumiLogger.h>
 
 @interface YumiMediationVideoAdapterUnity ()
 
@@ -94,8 +93,6 @@
    [[YumiLogger stdLogger] debug:@"---Unity video not ready"];
         [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"Unity not ready." adType:self.adType];
 }
-
-
 
 - (BOOL)isReady {
     return [UnityAds isReady:self.provider.data.key2];

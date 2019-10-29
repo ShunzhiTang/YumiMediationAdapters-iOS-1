@@ -14,7 +14,6 @@
 
 @interface YumiMediationInterstitialAdapterUnity ()
 @property (nonatomic, assign) YumiMediationAdType adType;
-@property(nonatomic, assign) BOOL theFirstTime;
 
 @end
 
