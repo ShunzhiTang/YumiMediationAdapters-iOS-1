@@ -90,18 +90,6 @@ static NSString *separatedString = @"|||";
 #pragma mark - UnityAdsDelegate
 - (void)unityAdsReady:(NSString *)placementId {
     
-    NSUInteger adType = [self adapterAdType:placementId];
-    if (adType == 0) {
-        return;
-    }
-    id<YumiMediationCoreAdapter> adapter = [self adapterObject:placementId];
-    if (adapter) {
-        if (self.block) {
-            self.block(YES);
-            self.block = nil;
-        }
-    }
-    
 }
 
 - (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message {
@@ -205,6 +193,36 @@ static NSString *separatedString = @"|||";
 - (void)unityAdsPlacementStateChanged:(NSString *)placementId
                              oldState:(UnityAdsPlacementState)oldState
                              newState:(UnityAdsPlacementState)newState {
+    
+    NSString *stateString = [NSString stringWithFormat:@"placementId == %@ ,oldState -- %ld ,newState = %ld",placementId,oldState,newState];
+    [[YumiLogger stdLogger] debug:stateString];
+    
+    NSUInteger adType = [self adapterAdType:placementId];
+    if (adType == 0) {
+       return;
+    }
+    id<YumiMediationCoreAdapter> adapter = [self adapterObject:placementId];
+    if (!adapter) {
+        return;
+    }
+    
+    if (oldState == kUnityAdsPlacementStateDisabled) {
+        if (self.block) {
+            self.block(YES);
+            self.block = nil;
+        }
+        return;
+    }
+    // placementId == bannerads ,oldState -- 1 ,newState = 0
+    // placementId == video ,oldState -- 3 ,newState = 0
+    if (oldState == kUnityAdsPlacementStateNotAvailable || oldState == kUnityAdsPlacementStateWaiting) {
+        if (newState == kUnityAdsPlacementStateReady || newState == kUnityAdsPlacementStateNoFill ) {
+            if (self.block) {
+                self.block(YES);
+                self.block = nil;
+            }
+        }
+    }
 }
 
 #pragma mark : getter method
