@@ -89,10 +89,19 @@ static NSString *separatedString = @"|||";
 
 #pragma mark - UnityAdsDelegate
 - (void)unityAdsReady:(NSString *)placementId {
-    if (self.block) {
-        self.block(YES);
-        self.block = nil;
+    
+    NSUInteger adType = [self adapterAdType:placementId];
+    if (adType == 0) {
+        return;
     }
+    id<YumiMediationCoreAdapter> adapter = [self adapterObject:placementId];
+    if (adapter) {
+        if (self.block) {
+            self.block(YES);
+            self.block = nil;
+        }
+    }
+    
 }
 
 - (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message {
