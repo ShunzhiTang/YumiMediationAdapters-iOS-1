@@ -52,7 +52,6 @@
     return @"6.4.3";
 }
 - (void)requestAd {
-
     NSError *initError = nil;
     VungleSDK *sdk = [VungleSDK sharedSDK];
     [sdk setLoggingEnabled:NO];
@@ -96,6 +95,8 @@
 }
 
 - (BOOL)isReady {
+    NSString *msg = [NSString stringWithFormat:@"---Vungle check ready status.%d",[[VungleSDK sharedSDK] isAdCachedForPlacementID:self.provider.data.key2]];
+    [[YumiLogger stdLogger] debug:msg];
     return [[VungleSDK sharedSDK] isAdCachedForPlacementID:self.provider.data.key2];
 }
 

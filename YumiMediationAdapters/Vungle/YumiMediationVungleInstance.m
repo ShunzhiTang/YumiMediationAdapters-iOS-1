@@ -132,11 +132,13 @@
 }
 #pragma mark: vungle init callback
 - (void)vungleSDKDidInitialize {
+    [[YumiLogger stdLogger] debug:@"---vungleSDKDidInitialize"];
     if (self.initBlock) {
         self.initBlock(YES);
     }
 }
 - (void)vungleSDKFailedToInitializeWithError:(NSError *)error  {
+     [[YumiLogger stdLogger] debug:@"---vungleSDKFailedToInitializeWithError"];
     if (self.initBlock) {
         self.initBlock(NO);
     }
