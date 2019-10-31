@@ -80,6 +80,8 @@
 }
 
 - (BOOL)isReady {
+    NSString *msg = [NSString stringWithFormat:@"---Mintegral check ready status.%d",[self.videoAd isVideoReadyToPlay:self.provider.data.key3]];
+    [[YumiLogger stdLogger] debug:msg];
     return [self.videoAd isVideoReadyToPlay:self.provider.data.key3];
 }
 
