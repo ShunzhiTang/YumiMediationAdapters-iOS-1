@@ -89,7 +89,21 @@ static NSString *separatedString = @"|||";
 
 #pragma mark - UnityAdsDelegate
 - (void)unityAdsReady:(NSString *)placementId {
-    
+    if (self.block) {
+        return;
+    }
+    NSUInteger adType = [self adapterAdType:placementId];
+    if (adType == 0) {
+        return;
+    }
+    id<YumiMediationCoreAdapter> adapter = [self adapterObject:placementId];
+    if (adType == YumiMediationAdTypeInterstitial) {
+        [((YumiMediationInterstitialAdapterUnity *)adapter).delegate coreAdapter:adapter didReceivedCoreAd:nil adType:YumiMediationAdTypeInterstitial];
+        return;
+    }
+    if (adType == YumiMediationAdTypeVideo) {
+        [((YumiMediationVideoAdapterUnity *)adapter).delegate coreAdapter:adapter didReceivedCoreAd:nil adType:YumiMediationAdTypeVideo];
+    }
 }
 
 - (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message {
