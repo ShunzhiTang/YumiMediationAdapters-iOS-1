@@ -95,6 +95,8 @@
 }
 
 - (BOOL)isReady {
+    NSString *msg = [NSString stringWithFormat:@"---Unity check ready status.%d",[UnityAds isReady:self.provider.data.key2]];
+    [[YumiLogger stdLogger] debug:msg];
     return [UnityAds isReady:self.provider.data.key2];
 }
 

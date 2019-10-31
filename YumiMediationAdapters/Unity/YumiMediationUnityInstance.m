@@ -89,7 +89,23 @@ static NSString *separatedString = @"|||";
 
 #pragma mark - UnityAdsDelegate
 - (void)unityAdsReady:(NSString *)placementId {
-    
+    if (self.block) {
+        return;
+    }
+    NSUInteger adType = [self adapterAdType:placementId];
+    if (adType == 0) {
+        return;
+    }
+    id<YumiMediationCoreAdapter> adapter = [self adapterObject:placementId];
+    if (adType == YumiMediationAdTypeInterstitial) {
+        [((YumiMediationInterstitialAdapterUnity *)adapter).delegate coreAdapter:adapter didReceivedCoreAd:nil adType:YumiMediationAdTypeInterstitial];
+        [[YumiLogger stdLogger] debug:@"---Unity video did load"];
+        return;
+    }
+    if (adType == YumiMediationAdTypeVideo) {
+        [((YumiMediationVideoAdapterUnity *)adapter).delegate coreAdapter:adapter didReceivedCoreAd:nil adType:YumiMediationAdTypeVideo];
+        [[YumiLogger stdLogger] debug:@"---Unity video did load"];
+    }
 }
 
 - (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message {
@@ -194,7 +210,7 @@ static NSString *separatedString = @"|||";
                              oldState:(UnityAdsPlacementState)oldState
                              newState:(UnityAdsPlacementState)newState {
     
-    NSString *stateString = [NSString stringWithFormat:@"placementId == %@ ,oldState -- %ld ,newState = %ld",placementId,oldState,newState];
+    NSString *stateString = [NSString stringWithFormat:@"---Unity placementId == %@ ,oldState -- %ld ,newState = %ld",placementId,oldState,newState];
     [[YumiLogger stdLogger] debug:stateString];
     
     NSUInteger adType = [self adapterAdType:placementId];
