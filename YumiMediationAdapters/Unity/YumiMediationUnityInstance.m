@@ -11,7 +11,8 @@ static NSString *separatedString = @"|||";
 
 @interface YumiMediationUnityInstance ()
 
-@property (nonatomic,copy)UnityInitializedBlock block;
+@property (nonatomic, copy) UnityInitializedBlock block;
+@property (nonatomic, assign) BOOL initializedBlockIsExecuted;
 
 @end
 
@@ -39,7 +40,8 @@ static NSString *separatedString = @"|||";
     __block NSString *adapterKey = nil;
     [self.adaptersDict.allKeys
         enumerateObjectsUsingBlock:^(NSString *_Nonnull key, NSUInteger idx, BOOL *_Nonnull stop) {
-            if ([key containsString:placementId]) {
+            NSArray *tempStringArray = [key componentsSeparatedByString:separatedString];
+            if ([tempStringArray[0] isEqual:placementId]) {
                 adapterKey = key;
             }
         }];
@@ -52,9 +54,7 @@ static NSString *separatedString = @"|||";
 
 - (NSUInteger)adapterAdType:(NSString *)placementId {
     NSString *adapterKey = [self adapterKey:placementId];
-
     NSArray *components = [adapterKey componentsSeparatedByString:separatedString];
-
     if (components.count == 2) {
         return [components.lastObject integerValue];
     }
@@ -89,7 +89,7 @@ static NSString *separatedString = @"|||";
 
 #pragma mark - UnityAdsDelegate
 - (void)unityAdsReady:(NSString *)placementId {
-    if (self.block) {
+    if (self.block || self.initializedBlockIsExecuted) {
         return;
     }
     NSUInteger adType = [self adapterAdType:placementId];
@@ -224,6 +224,7 @@ static NSString *separatedString = @"|||";
     
     if (oldState == kUnityAdsPlacementStateDisabled) {
         if (self.block) {
+            self.initializedBlockIsExecuted = YES;
             self.block(YES);
             self.block = nil;
         }
@@ -233,6 +234,7 @@ static NSString *separatedString = @"|||";
     // placementId == video ,oldState -- 3 ,newState = 0
     if (newState == kUnityAdsPlacementStateReady || newState == kUnityAdsPlacementStateNoFill ) {
         if (self.block) {
+            self.initializedBlockIsExecuted = YES;
             self.block(YES);
             self.block = nil;
         }
