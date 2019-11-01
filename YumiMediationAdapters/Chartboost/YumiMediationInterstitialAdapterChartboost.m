@@ -50,7 +50,7 @@
     
     [[YumiLogger stdLogger] debug:@"---chartboost start init"];
     [Chartboost startWithAppId:self.provider.data.key1 appSignature:self.provider.data.key2 delegate:self];
-    [Chartboost setAutoCacheAds:NO];
+    [Chartboost setAutoCacheAds:YES];
     return self;
 }
 
