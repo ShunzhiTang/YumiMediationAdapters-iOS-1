@@ -57,10 +57,6 @@
 }
 
 - (BOOL)isReady {
-    if (self.rewardVideoAd.expiredTimestamp <= [[NSDate date] timeIntervalSince1970]) {
-        [[YumiLogger stdLogger] debug:@"---GDT video: NO"];
-        return NO;
-    }
     if (!self.rewardVideoAd.isAdValid) {
         [[YumiLogger stdLogger] debug:@"---GDT video: NO"];
         return NO;
@@ -70,8 +66,8 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
-    if (self.rewardVideoAd.expiredTimestamp <= [[NSDate date] timeIntervalSince1970] || !self.rewardVideoAd.isAdValid) {
-        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"GDT video ad is not valid" adType:self.adType];
+    if (self.rewardVideoAd.expiredTimestamp <= [[NSDate date] timeIntervalSince1970]) {
+        [self.delegate coreAdapter:self failedToShowAd:nil errorString:@"GDT video ad is not valid" adType:self.adType];
         return;
     }
     [[YumiLogger stdLogger] debug:@"---GDT video present"];
