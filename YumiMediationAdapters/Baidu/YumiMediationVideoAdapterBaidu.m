@@ -69,12 +69,15 @@
 
 - (BOOL)isReady {
     if (self.isPreloadVideo && [self.rewardVideo isReady]) {
+        [[YumiLogger stdLogger] debug:@"---Baidu check ready status.YES"];
         return YES;
     }
+    [[YumiLogger stdLogger] debug:@"---Baidu check ready status.NO"];
     return NO;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---Baidu presented"];
     [self.rewardVideo showFromViewController:rootViewController];
 }
 
@@ -136,8 +139,10 @@
  */
 - (void)rewardedVideoAdDidClose:(BaiduMobAdRewardVideo *)video withPlayingProgress:(CGFloat)progress {
     if (self.isReward) {
+        [[YumiLogger stdLogger] debug:@"---Baidu rewarded"];
         [self.delegate coreAdapter:self coreAd:video didReward:YES adType:self.adType];
     }
+    [[YumiLogger stdLogger] debug:@"---Baidu closed"];
     [self.delegate coreAdapter:self didCloseCoreAd:video isCompletePlaying:YES adType:self.adType];
     self.isReward = NO;
 }
