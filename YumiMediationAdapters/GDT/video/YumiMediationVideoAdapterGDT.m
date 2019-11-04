@@ -59,6 +59,8 @@
 - (BOOL)isReady {
     if (self.rewardVideoAd.expiredTimestamp && self.rewardVideoAd.expiredTimestamp <= [[NSDate date] timeIntervalSince1970]) {
         [self.delegate coreAdapter:self failedToShowAd:nil errorString:@"GDT video ad is not valid" adType:self.adType];
+        self.rewardVideoAd.delegate = nil;
+        self.rewardVideoAd = nil;
         return NO;
     }
     if (!self.rewardVideoAd.isAdValid) {
