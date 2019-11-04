@@ -81,10 +81,13 @@
 }
 
 - (BOOL)isReady {
+    NSString *msg = [NSString stringWithFormat:@"---Applovin check ready status.%d",self.video.isReadyForDisplay];
+    [[YumiLogger stdLogger] debug:msg];
     return self.video.isReadyForDisplay;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---Applovin presented"];
     self.video.adDisplayDelegate = self;
     self.video.adVideoPlaybackDelegate = self;
     [self.video showAndNotify:self];
@@ -97,8 +100,10 @@
 
 - (void)ad:(ALAd *)ad wasHiddenIn:(UIView *)view {
     if (self.isReward) {
+        [[YumiLogger stdLogger] debug:@"---Applovin rewarded"];
         [self.delegate coreAdapter:self coreAd:ad didReward:YES adType:self.adType];
     }
+    [[YumiLogger stdLogger] debug:@"---Applovin closed"];
     [self.delegate coreAdapter:self didCloseCoreAd:ad isCompletePlaying:self.isReward adType:self.adType];
     self.isReward = NO;
 }
@@ -125,8 +130,8 @@
 }
 
 - (void)adService:(ALAdService *)adService didFailToLoadAdWithError:(int)code {
-    [[YumiLogger stdLogger] debug:@"---Applovin did fail to load"];
-    NSString *error = [NSString stringWithFormat:@"fail to load applovin video with code %d", code];
+    NSString *error = [NSString stringWithFormat:@"---Applovin fail to load with code %d", code];
+    [[YumiLogger stdLogger] debug:error];
     [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error adType:self.adType];
 }
 
