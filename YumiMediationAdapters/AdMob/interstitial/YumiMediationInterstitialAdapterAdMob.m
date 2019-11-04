@@ -85,6 +85,8 @@
 }
 
 - (BOOL)isReady {
+    NSString *msg = [NSString stringWithFormat:@"---Admob check ready status.%d",[self.interstitial isReady]];
+    [[YumiLogger stdLogger] debug:msg];
     return [self.interstitial isReady];
 }
 
@@ -117,6 +119,8 @@
 - (void)interstitialWillDismissScreen:(GADInterstitial *)ad {
     [[YumiLogger stdLogger] debug:@"---Admob is closed"];
     [self.delegate coreAdapter:self didCloseCoreAd:ad isCompletePlaying:NO adType:self.adType];
+    self.interstitial.delegate = nil;
+    self.interstitial = nil;
 }
 
 - (void)interstitialWillLeaveApplication:(GADInterstitial *)ad {
