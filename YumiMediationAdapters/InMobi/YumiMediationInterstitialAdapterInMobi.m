@@ -75,7 +75,7 @@
     }
     
     self.interstitial =
-           [[IMInterstitial alloc] initWithPlacementId:[@(111) longLongValue] delegate:self];
+           [[IMInterstitial alloc] initWithPlacementId:[self.provider.data.key2 longLongValue] delegate:self];
     [self.interstitial load];
     [[YumiLogger stdLogger] debug:@"---InMobi interstitial start request ad"];
 }
