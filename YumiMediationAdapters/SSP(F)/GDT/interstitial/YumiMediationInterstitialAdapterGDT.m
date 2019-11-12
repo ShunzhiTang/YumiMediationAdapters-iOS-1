@@ -17,6 +17,9 @@
 @end
 
 @implementation YumiMediationInterstitialAdapterGDT
+- (NSString *)networkVersion {
+    return @"4.10.13";
+}
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
@@ -38,18 +41,12 @@
     return self;
 }
 
-- (NSString *)networkVersion {
-    return @"4.10.13";
-}
-
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
     self.provider = provider;
 }
 
 - (void)requestAd {
-    if (self.interstitial) {
-        self.interstitial.delegate = nil;
-    }
+    [[YumiLogger stdLogger] debug:@"---GDT interstitial start request"];
     self.interstitial = [[GDTUnifiedInterstitialAd alloc] initWithAppId:self.provider.data.key1 ?: @""
                                                             placementId:self.provider.data.key2 ?: @""];
     self.interstitial.delegate = self;
@@ -57,20 +54,24 @@
 }
 
 - (BOOL)isReady {
+    [[YumiLogger stdLogger] debug:[NSString stringWithFormat:@"---GDT interstitial cheack ready status.%d",[self.interstitial isAdValid]]];
     return [self.interstitial isAdValid];
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---GDT interstitial present"];
     [self.interstitial presentAdFromRootViewController:rootViewController];
 }
 
 #pragma mark - GDTUnifiedInterstitialAdDelegate
 
 - (void)unifiedInterstitialSuccessToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
+    [[YumiLogger stdLogger] debug:@"---GDT interstitial did load"];
     [self.delegate coreAdapter:self didReceivedCoreAd:unifiedInterstitial adType:self.adType];
 }
 
 - (void)unifiedInterstitialFailToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial error:(NSError *)error {
+    [[YumiLogger stdLogger] debug:@"---GDT interstitial did fail to load"];
     [self.delegate coreAdapter:self
                         coreAd:unifiedInterstitial
                  didFailToLoad:[error localizedDescription]
@@ -87,7 +88,10 @@
 }
 
 - (void)unifiedInterstitialDidDismissScreen:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
+    [[YumiLogger stdLogger] debug:@"---GDT interstitial did closed"];
     [self.delegate coreAdapter:self didCloseCoreAd:unifiedInterstitial isCompletePlaying:NO adType:self.adType];
+    self.interstitial.delegate = nil;
+    self.interstitial = nil;
 }
 
 @end
