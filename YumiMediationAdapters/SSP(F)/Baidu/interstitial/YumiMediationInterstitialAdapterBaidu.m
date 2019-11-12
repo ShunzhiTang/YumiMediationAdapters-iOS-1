@@ -87,6 +87,7 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
     }
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        [[YumiLogger stdLogger] debug:@"---Baidu start request"];
         weakSelf.interstitialIsReady = NO;
         weakSelf.interstitial = [[BaiduMobAdInterstitial alloc] init];
         weakSelf.interstitial.delegate = weakSelf;
@@ -155,11 +156,13 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
 }
 
 - (void)interstitialSuccessToLoadAd:(BaiduMobAdInterstitial *)interstitial {
+    [[YumiLogger stdLogger] debug:@"---Baidu interstitial did load"];
     self.interstitialIsReady = YES;
     [self.delegate coreAdapter:self didReceivedCoreAd:interstitial adType:self.adType];
 }
 
 - (void)interstitialFailToLoadAd:(BaiduMobAdInterstitial *)interstitial {
+    [[YumiLogger stdLogger] debug:@"---Baidu interstitial did fail to load"];
     self.interstitialIsReady = NO;
     [self.delegate coreAdapter:self coreAd:interstitial didFailToLoad:@"Baidu ad load fail" adType:self.adType];
 
@@ -173,9 +176,10 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
 }
 
 - (void)interstitialFailPresentScreen:(BaiduMobAdInterstitial *)interstitial withError:(BaiduMobFailReason)reason {
+    self.interstitialIsReady = NO;
     [self.delegate coreAdapter:self
                 failedToShowAd:interstitial
-                   errorString:@"Baidu ad failed to show"
+                   errorString:@"Baidu interstitial failed to show"
                         adType:self.adType];
     [self clearInterstitial];
 }
@@ -185,6 +189,8 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
 }
 
 - (void)interstitialDidDismissScreen:(BaiduMobAdInterstitial *)interstitial {
+    [[YumiLogger stdLogger] debug:@"---Baidu interstitial closed"];
+    self.interstitialIsReady = NO;
     __weak typeof(self) weakSelf = self;
     [self.presentAdVc dismissViewControllerAnimated:NO
                                          completion:^{
@@ -248,7 +254,7 @@ static NSString *const kYumiProviderExtraBaiduInventory = @"inventory";
  @param progress 当前播放进度 单位百分比 （注意浮点数）
  */
 - (void)rewardedVideoAdDidClose:(BaiduMobAdRewardVideo *)video withPlayingProgress:(CGFloat)progress {
-    
+    self.isPreloadVideo = NO;
     [self.delegate coreAdapter:self didCloseCoreAd:video isCompletePlaying:NO adType:self.adType];
 }
 
