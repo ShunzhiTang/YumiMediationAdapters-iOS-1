@@ -66,20 +66,23 @@
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
          [[PlayableAdsGDPR sharedGDPRManager] updatePlayableAdsConsentStatus:PlayableAdsConsentStatusNonPersonalized];
     }
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.banner = [[AtmosplayAdsBanner alloc] initWithAdUnitID:weakSelf.provider.data.key2 appID:weakSelf.provider.data.key1 rootViewController:[weakSelf.delegate rootViewControllerForPresentingModalView]];
+        
+        AtmosplayAdsBannerSize bannerSize = isiPad ? kAtmosplayAdsBanner728x90 :kAtmosplayAdsBanner320x50;
+        if (weakSelf.bannerSize == kYumiMediationAdViewSmartBannerPortrait) {
+            bannerSize = kAtmosplayAdsSmartBannerPortrait;
+        }
+        if (weakSelf.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
+            bannerSize = kAtmosplayAdsSmartBannerLandscape;
+        }
+        
+        weakSelf.banner.bannerSize  = bannerSize;
+        weakSelf.banner.delegate = weakSelf;
+        [weakSelf.banner loadAd];
+    });
     
-    self.banner = [[AtmosplayAdsBanner alloc] initWithAdUnitID:self.provider.data.key2 appID:self.provider.data.key1 rootViewController:[self.delegate rootViewControllerForPresentingModalView]];
-    
-    AtmosplayAdsBannerSize bannerSize = isiPad ? kAtmosplayAdsBanner728x90 :kAtmosplayAdsBanner320x50;
-    if (self.bannerSize == kYumiMediationAdViewSmartBannerPortrait) {
-        bannerSize = kAtmosplayAdsSmartBannerPortrait;
-    }
-    if (self.bannerSize == kYumiMediationAdViewSmartBannerLandscape) {
-        bannerSize = kAtmosplayAdsSmartBannerLandscape;
-    }
-    
-    self.banner.bannerSize  = bannerSize;
-    self.banner.delegate = self;
-    [self.banner loadAd];
 }
 
 #pragma mark: AtmosplayAdsBannerDelegate
