@@ -10,6 +10,7 @@
 #import <YumiMediationSDK/PlayableAds.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
 #import <YumiMediationSDK/YumiLogger.h>
+#import <YumiMediationSDK/PlayableAdsGDPR.h>
 
 @interface YumiMediationInterstitialAdapterPlayableAds () <PlayableAdsDelegate>
 
@@ -49,6 +50,16 @@
 }
 
 - (void)requestAd {
+    // set gdpr
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [[PlayableAdsGDPR sharedGDPRManager] updatePlayableAdsConsentStatus:PlayableAdsConsentStatusPersonalized];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+         [[PlayableAdsGDPR sharedGDPRManager] updatePlayableAdsConsentStatus:PlayableAdsConsentStatusNonPersonalized];
+    }
+    
     // TODO: request ad
     [[YumiLogger stdLogger] debug:@"---ZplayAds start request"];
     self.interstitial = [[PlayableAds alloc] initWithAdUnitID:self.provider.data.key2 appID:self.provider.data.key1];
