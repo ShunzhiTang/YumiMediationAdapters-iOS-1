@@ -30,6 +30,9 @@
 @end
 
 @implementation YumiMediationInterstitialAdapterNativeGDT
+- (NSString *)networkVersion {
+    return @"4.10.13";
+}
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
@@ -53,10 +56,13 @@
     return vc;
 }
 - (void)closeGDTIntestitial {
+    [[YumiLogger stdLogger] debug:@"---GDT native interstitial closed"];
     [self.rootViewController dismissViewControllerAnimated:YES completion:nil];
 
     [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
     self.interstitialVc = nil;
+    self.isInterstitialReady = NO;
+    self.nativeExpressAd = nil;
 }
 
 #pragma mark - YumiMediationInterstitialAdapter
@@ -72,15 +78,12 @@
     return self;
 }
 
-- (NSString *)networkVersion {
-    return @"4.10.13";
-}
-
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
     self.provider = provider;
 }
 
 - (void)requestAd {
+    [[YumiLogger stdLogger] debug:@"---GDT native interstitial start request"];
     self.isInterstitialReady = NO;
     YumiTool *tool = [YumiTool sharedTool];
     CGSize adSize = CGSizeMake(ScreenWidth, 300);
@@ -103,10 +106,12 @@
 }
 
 - (BOOL)isReady {
+    [[YumiLogger stdLogger] debug:[NSString stringWithFormat:@"---GDT native interstitial cheack ready status.%d",self.isInterstitialReady]];
     return self.isInterstitialReady;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---GDT native interstitial present"];
     __weak __typeof(self) weakSelf = self;
     self.rootViewController = rootViewController;
     self.interstitialVc.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -151,13 +156,14 @@
         make.height.mas_equalTo(adSize.height);
         make.width.mas_equalTo(adSize.width);
     }];
-
+    [[YumiLogger stdLogger] debug:@"---GDT native interstitial did load"];
     [self.delegate coreAdapter:self didReceivedCoreAd:self.interstitialVc adType:self.adType];
 }
 
 - (void)nativeExpressAdFailToLoad:(GDTNativeExpressAd *)nativeExpressAd error:(NSError *)error {
     self.isInterstitialReady = NO;
     [self.delegate coreAdapter:self coreAd:self.interstitialVc didFailToLoad:@"gdt failed to load" adType:self.adType];
+    [[YumiLogger stdLogger] debug:@"---GDT native interstitial did fail to load"];
 }
 - (void)nativeExpressAdViewClicked:(GDTNativeExpressAdView *)nativeExpressAdView {
     [self.delegate coreAdapter:self didClickCoreAd:self.interstitialVc adType:self.adType];
