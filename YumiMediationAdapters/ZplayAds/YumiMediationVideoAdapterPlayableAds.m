@@ -46,7 +46,7 @@
 }
 
 - (NSString *)networkVersion {
-    return @"2.4.3";
+    return  @"2.6.0";
 }
 
 - (void)requestAd {
