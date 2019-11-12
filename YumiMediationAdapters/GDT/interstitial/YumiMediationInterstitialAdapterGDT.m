@@ -84,7 +84,13 @@
     [self.delegate coreAdapter:self didStartPlayingAd:unifiedInterstitial adType:self.adType];
 }
 
+- (void)unifiedInterstitialFailToPresent:(GDTUnifiedInterstitialAd *)unifiedInterstitial error:(NSError *)error {
+    [[YumiLogger stdLogger] debug:@"---GDT interstitial did fail to show"];
+    [self.delegate coreAdapter:self failedToShowAd:unifiedInterstitial errorString:[error localizedDescription] adType:self.adType];
+}
+
 - (void)unifiedInterstitialClicked:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
+    [[YumiLogger stdLogger] debug:@"---GDT interstitial did click"];
     [self.delegate coreAdapter:self didClickCoreAd:unifiedInterstitial adType:self.adType];
 }
 
