@@ -49,8 +49,10 @@
 - (void)requestAd {
     [[YumiLogger stdLogger] debug:@"---GDT interstitial start request"];
     self.interstitial = [[GDTUnifiedInterstitialAd alloc] initWithAppId:self.provider.data.key1 ?: @""
-                                                            placementId:self.provider.data.key2 ?: @""];
+                                                            placementId:@"3040588929084464"];
     self.interstitial.delegate = self;
+    //非 WiFi 网络，自动播放
+    self.interstitial.videoAutoPlayOnWWAN = YES;
     [self.interstitial loadAd];
 }
 
