@@ -15,6 +15,7 @@
 #import <YumiAdSDK/YumiBannerViewTemplateManager.h>
 #import <YumiAdSDK/YumiMasonry.h>
 #import <YumiAdSDK/YumiTool.h>
+#import <YumiAdSDK/YumiLogger.h>
 
 @interface YumiMediationInterstitialAdapterNativeGDT () <GDTNativeExpressAdDelegete>
 
@@ -31,7 +32,7 @@
 
 @implementation YumiMediationInterstitialAdapterNativeGDT
 - (NSString *)networkVersion {
-    return @"4.10.13";
+    return @"4.10.19";
 }
 
 + (void)load {
