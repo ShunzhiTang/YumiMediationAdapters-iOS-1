@@ -68,6 +68,7 @@
     }
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        [[YumiLogger stdLogger] debug:@"---Atmosplay Banner start request"];
         weakSelf.banner = [[AtmosplayAdsBanner alloc] initWithAdUnitID:weakSelf.provider.data.key2 appID:weakSelf.provider.data.key1 rootViewController:[weakSelf.delegate rootViewControllerForPresentingModalView]];
         
         AtmosplayAdsBannerSize bannerSize = isiPad ? kAtmosplayAdsBanner728x90 :kAtmosplayAdsBanner320x50;
@@ -88,15 +89,18 @@
 #pragma mark: AtmosplayAdsBannerDelegate
 - (void)atmosplayAdsBannerViewDidLoad:(AtmosplayAdsBanner *)bannerView {
    [self.delegate adapter:self didReceiveAd:bannerView];
+    [[YumiLogger stdLogger] debug:@"---Atmosplay Banner did received"];
 }
 /// Tells the delegate that a request failed.
 - (void)atmosplayAdsBannerView:(AtmosplayAdsBanner *)bannerView didFailWithError:(NSError *)error {
     [self.delegate adapter:self didFailToReceiveAd:[error localizedDescription]];
+    [[YumiLogger stdLogger] debug:@"---Atmosplay Banner did fail to load"];
 }
 
 /// Tells the delegate that the banner view has been clicked.
 - (void)atmosplayAdsBannerViewDidClick:(AtmosplayAdsBanner *)bannerView {
     [self.delegate adapter:self didClick:bannerView];
+    [[YumiLogger stdLogger] debug:@"---Atmosplay Banner did click"];
 }
 
 @end

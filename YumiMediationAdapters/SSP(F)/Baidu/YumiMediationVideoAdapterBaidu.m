@@ -20,6 +20,9 @@
 @end
 
 @implementation YumiMediationVideoAdapterBaidu
+- (NSString *)networkVersion {
+    return @"4.6.7";
+}
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
@@ -44,9 +47,9 @@
     self.delegate = delegate;
     self.provider = provider;
     self.adType = adType;
-
+    
+    [[YumiLogger stdLogger] debug:@"---Baidu start init"];
     self.rewardVideo = [[BaiduMobAdRewardVideo alloc] init];
-
     self.rewardVideo.delegate = self;
     self.rewardVideo.publisherId = self.provider.data.key1;
     self.rewardVideo.AdUnitTag = self.provider.data.key2;
@@ -54,28 +57,27 @@
     return self;
 }
 
-- (NSString *)networkVersion {
-    return @"4.6.7";
-}
-
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
     self.provider = provider;
 }
 
 - (void)requestAd {
+    [[YumiLogger stdLogger] debug:@"---Baidu start request"];
     self.isPreloadVideo = NO;
     [self.rewardVideo load];
 }
 
 - (BOOL)isReady {
-
     if (self.isPreloadVideo && [self.rewardVideo isReady]) {
+        [[YumiLogger stdLogger] debug:@"---Baidu check ready status.YES"];
         return YES;
     }
+    [[YumiLogger stdLogger] debug:@"---Baidu check ready status.NO"];
     return NO;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---Baidu presented"];
     [self.rewardVideo showFromViewController:rootViewController];
 }
 
@@ -84,6 +86,7 @@
  *  视频加载缓存成功
  */
 - (void)rewardedVideoAdLoaded:(BaiduMobAdRewardVideo *)video {
+    [[YumiLogger stdLogger] debug:@"---Baidu did load"];
     self.isPreloadVideo = YES;
     [self.delegate coreAdapter:self didReceivedCoreAd:video adType:self.adType];
 }
@@ -92,6 +95,7 @@
  *  视频加载缓存失败
  */
 - (void)rewardedVideoAdLoadFailed:(BaiduMobAdRewardVideo *)video withError:(BaiduMobFailReason)reason {
+    [[YumiLogger stdLogger] debug:@"---Baidu did fail to load"];
     self.isReward = NO;
     self.isPreloadVideo = NO;
     [self.delegate coreAdapter:self
@@ -135,8 +139,10 @@
  */
 - (void)rewardedVideoAdDidClose:(BaiduMobAdRewardVideo *)video withPlayingProgress:(CGFloat)progress {
     if (self.isReward) {
+        [[YumiLogger stdLogger] debug:@"---Baidu rewarded"];
         [self.delegate coreAdapter:self coreAd:video didReward:YES adType:self.adType];
     }
+    [[YumiLogger stdLogger] debug:@"---Baidu closed"];
     [self.delegate coreAdapter:self didCloseCoreAd:video isCompletePlaying:YES adType:self.adType];
     self.isReward = NO;
 }
