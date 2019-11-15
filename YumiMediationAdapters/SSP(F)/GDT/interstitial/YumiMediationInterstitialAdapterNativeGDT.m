@@ -15,7 +15,7 @@
 #import <YumiAdSDK/YumiBannerViewTemplateManager.h>
 #import <YumiAdSDK/YumiMasonry.h>
 #import <YumiAdSDK/YumiTool.h>
-#import <YumiMediationSDK/YumiLogger.h>
+#import <YumiAdSDK/YumiLogger.h>
 
 @interface YumiMediationInterstitialAdapterNativeGDT () <GDTNativeExpressAdDelegete>
 

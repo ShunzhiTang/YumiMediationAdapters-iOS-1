@@ -8,7 +8,7 @@
 
 #import "YumiMediationInterstitialAdapterGDT.h"
 #import "GDTUnifiedInterstitialAd.h"
-#import <YumiMediationSDK/YumiLogger.h>
+#import <YumiAdSDK/YumiLogger.h>
 
 @interface YumiMediationInterstitialAdapterGDT () <GDTUnifiedInterstitialAdDelegate>
 
