@@ -42,7 +42,9 @@
 #pragma mark :private method
 - (void)requestBannerViewAdTemplate {
     NSString *fileName = [NSString stringWithFormat:@"banner%@", self.provider.data.providerID];
-
+    if (self.provider.data.generalTemplate == nil && self.provider.data.landscapeTemplate == nil && self.provider.data.verticalTemplate == nil) {
+        return;
+    }
     self.templateManager =
         [[YumiBannerViewTemplateManager alloc] initWithGeneralTemplate:self.provider.data.generalTemplate
                                                      landscapeTemplate:self.provider.data.landscapeTemplate
@@ -79,7 +81,7 @@
 }
 
 - (NSString *)networkVersion {
-    return @"4.10.13";
+    return @"4.10.19";
 }
 
 - (void)setBannerSizeWith:(YumiMediationAdViewBannerSize)adSize smartBanner:(BOOL)isSmart {
