@@ -89,12 +89,15 @@
        bannerSize = MTGMediumRectangularBanner300x250;
     }
     
-    self.bannerAdView = [[MTGBannerAdView alloc] initBannerAdViewWithBannerSizeType:bannerSize unitId:self.provider.data.key3 rootViewController:[self.delegate rootViewControllerForPresentingModalView]];
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.bannerAdView = [[MTGBannerAdView alloc] initBannerAdViewWithBannerSizeType:bannerSize unitId:weakSelf.provider.data.key3 rootViewController:[weakSelf.delegate rootViewControllerForPresentingModalView]];
 
-    self.bannerAdView.autoRefreshTime = self.provider.data.autoRefreshInterval;
-    self.bannerAdView.delegate = self;
+       weakSelf.bannerAdView.autoRefreshTime = weakSelf.provider.data.autoRefreshInterval;
+       weakSelf.bannerAdView.delegate = weakSelf;
 
-    [self.bannerAdView loadBannerAd];
+       [weakSelf.bannerAdView loadBannerAd];
+    });
     
 }
 
