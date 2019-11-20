@@ -243,7 +243,7 @@ platform :ios do
     fastlane_require "retries"
 
     # pod trunk push
-    with_retries(max_tries: 10) do
+    with_retries(max_tries: 1) do
       if ENV["isTest"]
         pod_push(path: podspec_path, allow_warnings: true, repo: "Specs",sources:["https://github.com/yumimobi/Specs.git",'https://github.com/CocoaPods/Specs'],verbose:false,use_libraries:true)
       else
