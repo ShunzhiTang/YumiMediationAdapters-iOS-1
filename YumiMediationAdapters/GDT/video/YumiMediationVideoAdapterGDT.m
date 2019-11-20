@@ -18,7 +18,7 @@
 
 @implementation YumiMediationVideoAdapterGDT
 - (NSString *)networkVersion {
-    return @"4.10.13";
+    return @"4.10.19";
 }
 
 + (void)load {

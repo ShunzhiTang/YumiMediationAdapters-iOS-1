@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
   end
   s.subspec 'Chartboost' do |sp|
     sp.source_files = "YumiMediationAdapters/Chartboost/**/*.{h,m}"
-    sp.dependency 'YumiChartboost', '8.0.1'
+    sp.dependency 'YumiChartboost', '8.0.3'
   end
   s.subspec 'Facebook' do |sp|
     sp.source_files = "YumiMediationAdapters/Facebook/**/*.{h,m}"
@@ -41,7 +41,7 @@ Pod::Spec.new do |s|
   end
   s.subspec 'GDT' do |sp|
     sp.source_files = "YumiMediationAdapters/GDT/**/*.{h,m}"
-    sp.dependency 'YumiGDT', '4.10.13'
+    sp.dependency 'YumiGDT', '4.10.19'
     sp.resource_bundles = {'YumiMediationGDT' => ['YumiMediationAdapters/GDT/resources/*']}
   end
   s.subspec 'InMobi' do |sp|

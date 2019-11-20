@@ -10,6 +10,7 @@
 #import <YumiMediationSDK/PlayableAds.h>
 #import <YumiMediationSDK/YumiMediationGDPRManager.h>
 #import <YumiMediationSDK/YumiLogger.h>
+#import <YumiMediationSDK/PlayableAdsGDPR.h>
 
 @interface YumiMediationVideoAdapterPlayableAds () <PlayableAdsDelegate>
 
@@ -46,10 +47,20 @@
 }
 
 - (NSString *)networkVersion {
-    return @"2.4.3";
+    return  @"2.6.0";
 }
 
 - (void)requestAd {
+    // set gdpr
+    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
+
+    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
+        [[PlayableAdsGDPR sharedGDPRManager] updatePlayableAdsConsentStatus:PlayableAdsConsentStatusPersonalized];
+    }
+    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
+         [[PlayableAdsGDPR sharedGDPRManager] updatePlayableAdsConsentStatus:PlayableAdsConsentStatusNonPersonalized];
+    }
+    
     // playableads auto load
     if (!self.video) {
         [[YumiLogger stdLogger] debug:@"---ZplayAds only init and request"];

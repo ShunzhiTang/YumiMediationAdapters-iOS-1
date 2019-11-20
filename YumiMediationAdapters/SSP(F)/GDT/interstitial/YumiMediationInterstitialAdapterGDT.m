@@ -8,6 +8,7 @@
 
 #import "YumiMediationInterstitialAdapterGDT.h"
 #import "GDTUnifiedInterstitialAd.h"
+#import <YumiAdSDK/YumiLogger.h>
 
 @interface YumiMediationInterstitialAdapterGDT () <GDTUnifiedInterstitialAdDelegate>
 
@@ -18,7 +19,7 @@
 
 @implementation YumiMediationInterstitialAdapterGDT
 - (NSString *)networkVersion {
-    return @"4.10.13";
+    return @"4.10.19";
 }
 
 + (void)load {
@@ -50,6 +51,8 @@
     self.interstitial = [[GDTUnifiedInterstitialAd alloc] initWithAppId:self.provider.data.key1 ?: @""
                                                             placementId:self.provider.data.key2 ?: @""];
     self.interstitial.delegate = self;
+    //非 WiFi 网络，自动播放
+    self.interstitial.videoAutoPlayOnWWAN = YES;
     [self.interstitial loadAd];
 }
 
@@ -83,7 +86,13 @@
     [self.delegate coreAdapter:self didStartPlayingAd:unifiedInterstitial adType:self.adType];
 }
 
+- (void)unifiedInterstitialFailToPresent:(GDTUnifiedInterstitialAd *)unifiedInterstitial error:(NSError *)error {
+    [[YumiLogger stdLogger] debug:@"---GDT interstitial did fail to show"];
+    [self.delegate coreAdapter:self failedToShowAd:unifiedInterstitial errorString:[error localizedDescription] adType:self.adType];
+}
+
 - (void)unifiedInterstitialClicked:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
+    [[YumiLogger stdLogger] debug:@"---GDT interstitial did click"];
     [self.delegate coreAdapter:self didClickCoreAd:unifiedInterstitial adType:self.adType];
 }
 
