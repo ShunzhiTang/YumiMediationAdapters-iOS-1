@@ -9,6 +9,13 @@
 
 static NSString *separatedString = @"|||";
 
+@interface YumiMediationUnityInstance ()
+
+@property (nonatomic, copy) UnityInitializedBlock block;
+@property (nonatomic, assign) BOOL initializedBlockIsExecuted;
+
+@end
+
 @implementation YumiMediationUnityInstance
 
 + (YumiMediationUnityInstance *)sharedInstance {
@@ -20,6 +27,10 @@ static NSString *separatedString = @"|||";
     return sharedInstance;
 }
 
+- (void)unitySDKDidInitializeCompleted:(UnityInitializedBlock)completed {
+    self.block = completed;
+}
+
 #pragma mark : - private method
 - (NSString *)getAdapterKeyWith:(NSString *)placementId adType:(YumiMediationAdType)adType {
     return [NSString stringWithFormat:@"%@%@%ld", placementId, separatedString, adType];
@@ -29,7 +40,8 @@ static NSString *separatedString = @"|||";
     __block NSString *adapterKey = nil;
     [self.adaptersDict.allKeys
         enumerateObjectsUsingBlock:^(NSString *_Nonnull key, NSUInteger idx, BOOL *_Nonnull stop) {
-            if ([key containsString:placementId]) {
+            NSArray *tempStringArray = [key componentsSeparatedByString:separatedString];
+            if ([tempStringArray[0] isEqual:placementId]) {
                 adapterKey = key;
             }
         }];
@@ -42,113 +54,81 @@ static NSString *separatedString = @"|||";
 
 - (NSUInteger)adapterAdType:(NSString *)placementId {
     NSString *adapterKey = [self adapterKey:placementId];
-
     NSArray *components = [adapterKey componentsSeparatedByString:separatedString];
-
     if (components.count == 2) {
         return [components.lastObject integerValue];
     }
     return 0;
 }
 
-- (void)delegateErrorIfNeed:(BOOL)isLoadFail errorMsg:(NSString *)errorMsg {
-
+- (void)delegateErrorIfNeedWithErrorMsg:(NSString *)errorMsg {
     // call back all adapters
     [self.adaptersDict
         enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, id<YumiMediationCoreAdapter> _Nonnull coreAdapter,
                                             BOOL *_Nonnull stop) {
-
             NSArray *components = [key componentsSeparatedByString:separatedString];
             if (components.count != 2) {
                 return;
             }
-
             YumiMediationAdType adType = (YumiMediationAdType)components.lastObject;
-
-            if (isLoadFail) {
-                if (adType == YumiMediationAdTypeInterstitial) {
-
-                    [((YumiMediationInterstitialAdapterUnity *)coreAdapter).delegate coreAdapter:coreAdapter
-                                                                                          coreAd:nil
-                                                                                   didFailToLoad:errorMsg
-                                                                                          adType:adType];
-                }
-                if (adType == YumiMediationAdTypeVideo) {
-
-                    [((YumiMediationVideoAdapterUnity *)coreAdapter).delegate coreAdapter:coreAdapter
-                                                                                   coreAd:nil
-                                                                            didFailToLoad:errorMsg
-                                                                                   adType:adType];
-                }
-                return;
-            }
             // fail to show
             if (adType == YumiMediationAdTypeInterstitial) {
-
                 [((YumiMediationInterstitialAdapterUnity *)coreAdapter).delegate coreAdapter:coreAdapter
                                                                               failedToShowAd:nil
                                                                                  errorString:errorMsg
                                                                                       adType:adType];
             }
             if (adType == YumiMediationAdTypeVideo) {
-
                 [((YumiMediationVideoAdapterUnity *)coreAdapter).delegate coreAdapter:coreAdapter
                                                                        failedToShowAd:nil
                                                                           errorString:errorMsg
                                                                                adType:adType];
             }
-
         }];
 }
 
 #pragma mark - UnityAdsDelegate
 - (void)unityAdsReady:(NSString *)placementId {
-
+    if (self.block || self.initializedBlockIsExecuted) {
+        return;
+    }
     NSUInteger adType = [self adapterAdType:placementId];
-
     if (adType == 0) {
         return;
     }
-
     id<YumiMediationCoreAdapter> adapter = [self adapterObject:placementId];
-
     if (adType == YumiMediationAdTypeInterstitial) {
-
-        [((YumiMediationInterstitialAdapterUnity *)adapter).delegate coreAdapter:adapter
-                                                               didReceivedCoreAd:nil
-                                                                          adType:YumiMediationAdTypeInterstitial];
-
+        [((YumiMediationInterstitialAdapterUnity *)adapter).delegate coreAdapter:adapter didReceivedCoreAd:nil adType:YumiMediationAdTypeInterstitial];
+        [[YumiLogger stdLogger] debug:@"---Unity video did load"];
         return;
     }
     if (adType == YumiMediationAdTypeVideo) {
-        [((YumiMediationVideoAdapterUnity *)adapter).delegate coreAdapter:adapter
-                                                        didReceivedCoreAd:nil
-                                                                   adType:YumiMediationAdTypeVideo];
-        return;
+        [((YumiMediationVideoAdapterUnity *)adapter).delegate coreAdapter:adapter didReceivedCoreAd:nil adType:YumiMediationAdTypeVideo];
+        [[YumiLogger stdLogger] debug:@"---Unity video did load"];
     }
 }
 
 - (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message {
-
-    // show or player ad fail
+    // show error or video player error
     if (error == kUnityAdsErrorShowError || error == kUnityAdsErrorVideoPlayerError) {
-
-        [self delegateErrorIfNeed:NO errorMsg:message];
-
+        [self delegateErrorIfNeedWithErrorMsg:message];
         return;
     }
-    [self delegateErrorIfNeed:YES errorMsg:message];
+    //Initialized fail
+    if (error == kUnityAdsErrorNotInitialized || error == kUnityAdsErrorInitializedFailed) {
+        if (self.block) {
+            self.block(NO);
+            self.block = nil;
+        }
+    }
 }
 
 - (void)unityAdsDidStart:(NSString *)placementId {
     NSUInteger adType = [self adapterAdType:placementId];
-
     if (adType == 0) {
         return;
     }
-
     id<YumiMediationCoreAdapter> adapter = [self adapterObject:placementId];
-
     if (adType == YumiMediationAdTypeInterstitial) {
         [((YumiMediationInterstitialAdapterUnity *)adapter).delegate coreAdapter:adapter
                                                                    didOpenCoreAd:nil
@@ -158,7 +138,6 @@ static NSString *separatedString = @"|||";
                                                                           adType:YumiMediationAdTypeInterstitial];
         return;
     }
-
     if (adType == YumiMediationAdTypeVideo) {
         [((YumiMediationVideoAdapterUnity *)adapter).delegate coreAdapter:adapter
                                                             didOpenCoreAd:nil
@@ -172,19 +151,15 @@ static NSString *separatedString = @"|||";
 
 - (void)unityAdsDidFinish:(NSString *)placementId withFinishState:(UnityAdsFinishState)state {
     if (state == kUnityAdsFinishStateError) {
-
-        [self delegateErrorIfNeed:NO errorMsg:@"the ad did not successfully display."];
+        [self delegateErrorIfNeedWithErrorMsg:@"The ad did not successfully display."];
         return;
     }
 
     NSUInteger adType = [self adapterAdType:placementId];
-
     if (adType == 0) {
         return;
     }
-
     id<YumiMediationCoreAdapter> adapter = [self adapterObject:placementId];
-
     if (adType == YumiMediationAdTypeInterstitial) {
         [((YumiMediationInterstitialAdapterUnity *)adapter).delegate coreAdapter:adapter
                                                                   didCloseCoreAd:adapter
@@ -192,7 +167,6 @@ static NSString *separatedString = @"|||";
                                                                           adType:YumiMediationAdTypeInterstitial];
         return;
     }
-
     if (adType == YumiMediationAdTypeVideo) {
         if (state == kUnityAdsFinishStateCompleted) {
             [((YumiMediationVideoAdapterUnity *)adapter).delegate coreAdapter:adapter
@@ -215,13 +189,10 @@ static NSString *separatedString = @"|||";
 
 - (void)unityAdsDidClick:(NSString *)placementId {
     NSUInteger adType = [self adapterAdType:placementId];
-
     if (adType == 0) {
         return;
     }
-
     id<YumiMediationCoreAdapter> adapter = [self adapterObject:placementId];
-
     if (adType == YumiMediationAdTypeInterstitial) {
         [((YumiMediationInterstitialAdapterUnity *)adapter).delegate coreAdapter:adapter
                                                                   didClickCoreAd:nil
@@ -238,6 +209,36 @@ static NSString *separatedString = @"|||";
 - (void)unityAdsPlacementStateChanged:(NSString *)placementId
                              oldState:(UnityAdsPlacementState)oldState
                              newState:(UnityAdsPlacementState)newState {
+    
+    NSString *stateString = [NSString stringWithFormat:@"---Unity placementId == %@ ,oldState -- %ld ,newState = %ld",placementId,oldState,newState];
+    [[YumiLogger stdLogger] debug:stateString];
+    
+    NSUInteger adType = [self adapterAdType:placementId];
+    if (adType == 0) {
+       return;
+    }
+    id<YumiMediationCoreAdapter> adapter = [self adapterObject:placementId];
+    if (!adapter) {
+        return;
+    }
+    
+    if (oldState == kUnityAdsPlacementStateDisabled) {
+        if (self.block) {
+            self.initializedBlockIsExecuted = YES;
+            self.block(YES);
+            self.block = nil;
+        }
+        return;
+    }
+    // placementId == bannerads ,oldState -- 1 ,newState = 0
+    // placementId == video ,oldState -- 3 ,newState = 0
+    if (newState == kUnityAdsPlacementStateReady || newState == kUnityAdsPlacementStateNoFill ) {
+        if (self.block) {
+            self.initializedBlockIsExecuted = YES;
+            self.block(YES);
+            self.block = nil;
+        }
+    }
 }
 
 #pragma mark : getter method

@@ -44,7 +44,7 @@
 }
 
 - (NSString *)networkVersion {
-    return @"2.0.1.1";
+    return @"2.4.6.7";
 }
 
 - (void)setBannerSizeWith:(YumiMediationAdViewBannerSize)adSize smartBanner:(BOOL)isSmart {

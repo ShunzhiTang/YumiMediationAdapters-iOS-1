@@ -36,22 +36,7 @@
     self.provider = provider;
     self.delegate = delegate;
     self.adType = adType;
-
-    YumiMediationConsentStatus gdprStatus = [YumiMediationGDPRManager sharedGDPRManager].getConsentStatus;
-
-    if (gdprStatus == YumiMediationConsentStatusPersonalized) {
-        [[MTGSDK sharedInstance] setConsentStatus:YES];
-    }
-    if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
-        [[MTGSDK sharedInstance] setConsentStatus:NO];
-    }
-
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[MTGSDK sharedInstance] setAppID:weakSelf.provider.data.key1 ApiKey:weakSelf.provider.data.key2];
-        weakSelf.videoAd = [MTGRewardAdManager sharedInstance];
-    });
-
+    
     return self;
 }
 
@@ -73,11 +58,20 @@
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [[MTGSDK sharedInstance] setConsentStatus:NO];
     }
-
-    [self.videoAd loadVideo:self.provider.data.key3 delegate:self];
+    
+    __weak typeof(self) weakSelf = self;
+      dispatch_async(dispatch_get_main_queue(), ^{
+          [[MTGSDK sharedInstance] setAppID:weakSelf.provider.data.key1 ApiKey:weakSelf.provider.data.key2];
+          if (!weakSelf.videoAd) {
+              weakSelf.videoAd = [MTGRewardAdManager sharedInstance];
+          }
+         [weakSelf.videoAd loadVideo:weakSelf.provider.data.key3 delegate:weakSelf];
+          [[YumiLogger stdLogger] debug:@"---Mintegral start request ad"];
+      });
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---Mintegral did present"];
     [self.videoAd showVideo:self.provider.data.key3
                withRewardId:self.provider.data.key4
                      userId:@""
@@ -86,15 +80,19 @@
 }
 
 - (BOOL)isReady {
+    NSString *msg = [NSString stringWithFormat:@"---Mintegral check ready status.%d",[self.videoAd isVideoReadyToPlay:self.provider.data.key3]];
+    [[YumiLogger stdLogger] debug:msg];
     return [self.videoAd isVideoReadyToPlay:self.provider.data.key3];
 }
 
 #pragma mark : - MTGRewardAdLoadDelegate
 
 - (void)onVideoAdLoadSuccess:(nullable NSString *)unitId {
+    [[YumiLogger stdLogger] debug:@"---Mintegral did load"];
     [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
 }
 - (void)onVideoAdLoadFailed:(nullable NSString *)unitId error:(nonnull NSError *)error {
+    [[YumiLogger stdLogger] debug:@"---Mintegral load fail"];
     [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:self.adType];
 }
 
@@ -110,12 +108,14 @@
 - (void)onVideoAdDismissed:(NSString *)unitId
              withConverted:(BOOL)converted
             withRewardInfo:(MTGRewardAdInfo *)rewardInfo {
+    BOOL isReward = NO;
     if (rewardInfo) {
-        [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
-        [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:YES adType:self.adType];
-        return;
+        isReward = YES;
+        [self.delegate coreAdapter:self coreAd:nil didReward:isReward adType:self.adType];
+        [[YumiLogger stdLogger] debug:@"---Mintegral did reward"];
     }
-    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
+    [[YumiLogger stdLogger] debug:@"---Mintegral did close"];
+    [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:isReward adType:self.adType];
 }
 ///  Called when the ad is clicked
 - (void)onVideoAdClicked:(nullable NSString *)unitId {

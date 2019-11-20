@@ -52,6 +52,8 @@
         return nil;
     }
     [IronSource initISDemandOnly:self.provider.data.key1 adUnits:@[ IS_INTERSTITIAL ]];
+    [[YumiLogger stdLogger] debug:@"---IronSource init Demand interstitial"];
+    
     return self;
 }
 
@@ -60,7 +62,7 @@
 }
 
 - (NSString *)networkVersion {
-    return @"6.8.3";
+    return @"6.8.7";
 }
 
 - (void)requestAd {
@@ -74,6 +76,7 @@
         [IronSource setConsent:NO];
     }
 
+    [[YumiLogger stdLogger] debug:@"---IronSource Interstitial start request"];
     [IronSource loadISDemandOnlyInterstitial:self.provider.data.key2];
 }
 
@@ -82,6 +85,7 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---IronSource Interstitial did present"];
     [IronSource showISDemandOnlyInterstitial:rootViewController instanceId:self.provider.data.key2];
 }
 
@@ -90,6 +94,7 @@
  Called after an interstitial has been loaded
  */
 - (void)interstitialDidLoad:(NSString *)instanceId {
+    [[YumiLogger stdLogger] debug:@"---IronSource Interstitial did load"];
     [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
 }
 
@@ -98,6 +103,7 @@
  @param error The reason for the error
  */
 - (void)interstitialDidFailToLoadWithError:(NSError *)error instanceId:(NSString *)instanceId {
+    [[YumiLogger stdLogger] debug:@"---IronSource Interstitial load fail"];
     [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:self.adType];
 }
 /**
@@ -112,6 +118,7 @@
  Called after an interstitial has been dismissed.
  */
 - (void)interstitialDidClose:(NSString *)instanceId {
+    [[YumiLogger stdLogger] debug:@"---IronSource Interstitial did close"];
     [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
 }
 

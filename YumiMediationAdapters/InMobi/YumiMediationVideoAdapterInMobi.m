@@ -48,14 +48,13 @@
 
     // Initialize InMobi SDK with your account ID
     [IMSdk initWithAccountID:provider.data.key1 consentDictionary:consentDict];
-
-    self.video = [[IMInterstitial alloc] initWithPlacementId:[self.provider.data.key2 longLongValue] delegate:self];
-
+    [[YumiLogger stdLogger] debug:@"---InMobi SDK init"];
+   
     return self;
 }
 
 - (NSString *)networkVersion {
-    return @"8.1.0";
+    return @"7.4.0";
 }
 
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
@@ -72,9 +71,11 @@
     if (gdprStatus == YumiMediationConsentStatusNonPersonalized) {
         [IMSdk updateGDPRConsent:@{ IM_GDPR_CONSENT_AVAILABLE : @(NO) }];
     }
-
+    
+    self.video = [[IMInterstitial alloc] initWithPlacementId:[self.provider.data.key2 longLongValue] delegate:self];
     [self.video load];
     self.isReward = NO;
+    [[YumiLogger stdLogger] debug:@"---InMobi video start request ad"];
 }
 
 - (BOOL)isReady {
@@ -82,16 +83,19 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---InMobi video did present"];
     [self.video showFromViewController:rootViewController];
 }
 
 #pragma mark - IMInterstitialDelegate
 - (void)interstitialDidFinishLoading:(IMInterstitial *)interstitial {
     [self.delegate coreAdapter:self didReceivedCoreAd:interstitial adType:self.adType];
+    [[YumiLogger stdLogger] debug:@"---InMobi video did load"];
 }
 
 - (void)interstitial:(IMInterstitial *)interstitial didFailToLoadWithError:(IMRequestStatus *)error {
     [self.delegate coreAdapter:self coreAd:interstitial didFailToLoad:error.localizedDescription adType:self.adType];
+    [[YumiLogger stdLogger] debug:@"---InMobi video load fail"];
 }
 
 - (void)interstitialDidPresent:(IMInterstitial *)interstitial {
@@ -110,9 +114,13 @@
 
     if (self.isReward) {
         [self.delegate coreAdapter:self coreAd:interstitial didReward:YES adType:self.adType];
+        [[YumiLogger stdLogger] debug:@"---InMobi video did reward"];
     }
     [self.delegate coreAdapter:self didCloseCoreAd:interstitial isCompletePlaying:self.isReward adType:self.adType];
     self.isReward = NO;
+    self.video.delegate = nil;
+    self.video = nil;
+    [[YumiLogger stdLogger] debug:@"---InMobi video did close"];
 }
 
 - (void)interstitial:(IMInterstitial *)interstitial rewardActionCompletedWithRewards:(NSDictionary *)rewards {

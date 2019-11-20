@@ -35,6 +35,8 @@
     [[YumiMediationAdapterRegistry registry] registerSplashAdapter:self
                                                      forProviderID:kYumiMediationAdapterIDAdMob
                                                        requestType:YumiMediationSDKAdRequest];
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults removeObjectForKey:YumiMediationAdmobAdapterUUID];
 }
 
 #pragma mark - YumiMediationSplashAdapter
@@ -58,7 +60,7 @@
 }
 
 - (NSString *)networkVersion {
-    return @"7.44.0";
+    return @"7.50.0";
 }
 
 - (void)setInterfaceOrientation:(UIInterfaceOrientation)orientation {

@@ -61,7 +61,7 @@
 
 #pragma mark - YumiMediationBannerAdapter
 - (NSString *)networkVersion {
-    return @"8.1.0";
+    return @"7.4.0";
 }
 
 - (void)requestAdWithIsPortrait:(BOOL)isPortrait isiPad:(BOOL)isiPad {
@@ -82,15 +82,14 @@
                                @"kYumiMediationAdViewSmartBannerLandscape"];
         return;
     }
-
-    CGRect adFrame = isiPad ? CGRectMake(0, 0, 728, 90) : CGRectMake(0, 0, 320, 50);
-    if (self.isSmartBanner) {
-        CGSize size = [[YumiTool sharedTool] fetchBannerAdSizeWith:self.bannerSize smartBanner:self.isSmartBanner];
-        adFrame = CGRectMake(0, 0, size.width, size.height);
-    }
+    
     if (self.bannerSize == kYumiMediationAdViewBanner300x250) {
-        adFrame = CGRectMake(0, 0, 300, 250);
-    }
+           [self.delegate adapter:self
+           didFailToReceiveAd:@"inmobi not support kYumiMediationAdViewBanner300x250 "];
+        return;
+       }
+    CGRect adFrame = isiPad ? CGRectMake(0, 0, 728, 90) : CGRectMake(0, 0, 320, 50);
+   
     long long placementId = [self.provider.data.key2 longLongValue];
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{

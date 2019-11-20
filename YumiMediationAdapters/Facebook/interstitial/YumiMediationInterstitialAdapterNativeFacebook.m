@@ -10,6 +10,7 @@
 #import "YumiFacebookAdapterInterstitialVc.h"
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
 #import <YumiMediationSDK/YumiTool.h>
+#import <YumiMediationSDK/YumiLogger.h>
 
 @interface YumiMediationInterstitialAdapterNativeFacebook () <FBNativeAdDelegate, FBMediaViewDelegate>
 
@@ -22,6 +23,9 @@
 @end
 
 @implementation YumiMediationInterstitialAdapterNativeFacebook
+- (NSString *)networkVersion {
+    return @"5.5.1";
+}
 
 + (void)load {
     [[YumiMediationAdapterRegistry registry] registerCoreAdapter:self
@@ -56,10 +60,11 @@
 }
 
 - (void)closeFacebookIntestitial {
+    [[YumiLogger stdLogger] debug:@"---Facebook-ys did closed"];
     [self.rootViewController dismissViewControllerAnimated:YES completion:nil];
-
     [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:NO adType:self.adType];
     self.interstitial = nil;
+    self.isAdReady = NO;
 }
 
 #pragma mark - YumiMediationInterstitialAdapter
@@ -79,13 +84,9 @@
     self.provider = provider;
 }
 
-- (NSString *)networkVersion {
-    return @"5.4.0";
-}
-
 - (void)requestAd {
+    [[YumiLogger stdLogger] debug:@"---Facebook-ys start request"];
     self.rootViewController = [[YumiTool sharedTool] topMostController];
-    self.isAdReady = NO;
     self.interstitial = [self createInterstitialVc];
     FBNativeAd *nativeAd = [[FBNativeAd alloc] initWithPlacementID:self.provider.data.key1];
     nativeAd.delegate = self;
@@ -93,10 +94,12 @@
 }
 
 - (BOOL)isReady {
+    [[YumiLogger stdLogger] debug:[NSString stringWithFormat:@"---Facebook cheack ready status.%d",self.isAdReady]];
     return self.isAdReady;
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---Facebook-ys present"];
     __weak __typeof(self) weakSelf = self;
     self.interstitial.modalPresentationStyle = UIModalPresentationFullScreen;
     [rootViewController
@@ -109,7 +112,6 @@
 }
 
 #pragma mark FBNativeAdDelegate
-
 - (void)nativeAdDidLoad:(FBNativeAd *)nativeAd {
     if (self.nativeAd) {
         [self.nativeAd unregisterView];
@@ -140,10 +142,12 @@
     self.interstitial.adChoicesView.hidden = NO;
 
     self.isAdReady = YES;
+    [[YumiLogger stdLogger] debug:@"---Facebook did load"];
     [self.delegate coreAdapter:self didReceivedCoreAd:self.interstitial adType:self.adType];
 }
 
 - (void)nativeAd:(FBNativeAd *)nativeAd didFailWithError:(NSError *)error {
+    [[YumiLogger stdLogger] debug:[NSString stringWithFormat:@"---Facebook did fail to load with error.%@",error]];
     self.isAdReady = NO;
     [self.delegate coreAdapter:self
                         coreAd:self.interstitial

@@ -56,11 +56,12 @@
         return nil;
     }
     [IronSource initISDemandOnly:self.provider.data.key1 adUnits:@[ IS_REWARDED_VIDEO ]];
+    [[YumiLogger stdLogger] debug:@"---IronSource init Demand video"];
     return self;
 }
 
 - (NSString *)networkVersion {
-    return @"6.8.3";
+    return @"6.8.7";
 }
 
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
@@ -79,6 +80,9 @@
         [IronSource setConsent:NO];
     }
     self.isReward = NO;
+    
+    [IronSource loadISDemandOnlyRewardedVideo:self.provider.data.key2];
+    [[YumiLogger stdLogger] debug:@"---IronSource video start request"];
 }
 
 - (BOOL)isReady {
@@ -86,48 +90,46 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---IronSource video did present"];
     [IronSource showISDemandOnlyRewardedVideo:rootViewController instanceId:self.provider.data.key2];
 }
 
 #pragma mark - ISDemandOnlyRewardedVideoDelegate
-// Called after a rewarded video has changed its availability.
-//@param available The new rewarded video availability. YES if available and ready to be shown, NO otherwise.
-- (void)rewardedVideoHasChangedAvailability:(BOOL)available instanceId:(NSString *)instanceId {
-    if (available) {
-        [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
-    } else {
-        [self.delegate coreAdapter:self coreAd:nil didFailToLoad:@"ironSource is not available" adType:self.adType];
-    }
+
+- (void)rewardedVideoDidLoad:(NSString *)instanceId {
+    [[YumiLogger stdLogger] debug:@"---IronSource video did load"];
+   [self.delegate coreAdapter:self didReceivedCoreAd:nil adType:self.adType];
 }
 
-// Called after a rewarded video has been viewed completely and the user is eligible for reward.
-//@param placementInfo An object that contains the placement's reward name and amount.
-- (void)didReceiveRewardForPlacement:(ISPlacementInfo *)placementInfo instanceId:(NSString *)instanceId {
-    self.isReward = YES;
-    [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
+- (void)rewardedVideoDidFailToLoadWithError:(NSError *)error instanceId:(NSString *)instanceId {
+    [[YumiLogger stdLogger] debug:@"---IronSource video load fail"];
+    [self.delegate coreAdapter:self coreAd:nil didFailToLoad:error.localizedDescription adType:self.adType];
 }
 
-// Called after a rewarded video has attempted to show but failed.
-//@param error The reason for the error
-- (void)rewardedVideoDidFailToShowWithError:(NSError *)error instanceId:(NSString *)instanceId {
-    [self.delegate coreAdapter:self failedToShowAd:nil errorString:error.localizedDescription adType:self.adType];
-}
-
-// Called after a rewarded video has been opened.
 - (void)rewardedVideoDidOpen:(NSString *)instanceId {
     [self.delegate coreAdapter:self didOpenCoreAd:nil adType:self.adType];
     [self.delegate coreAdapter:self didStartPlayingAd:nil adType:self.adType];
 }
 
-// Called after a rewarded video has been dismissed.
 - (void)rewardedVideoDidClose:(NSString *)instanceId {
+    [[YumiLogger stdLogger] debug:@"---IronSource video did close"];
     [self.delegate coreAdapter:self didCloseCoreAd:nil isCompletePlaying:self.isReward adType:self.adType];
     self.isReward = NO;
 }
 
-// Invoked when the end user clicked on the RewardedVideo ad
-- (void)didClickRewardedVideo:(ISPlacementInfo *)placementInfo instanceId:(NSString *)instanceId {
+- (void)rewardedVideoDidFailToShowWithError:(NSError *)error instanceId:(NSString *)instanceId {
+    [self.delegate coreAdapter:self failedToShowAd:nil errorString:error.localizedDescription adType:self.adType];
+}
+
+- (void)rewardedVideoDidClick:(NSString *)instanceId {
     [self.delegate coreAdapter:self didClickCoreAd:nil adType:self.adType];
 }
+
+- (void)rewardedVideoAdRewarded:(NSString *)instanceId {
+    self.isReward = YES;
+    [self.delegate coreAdapter:self coreAd:nil didReward:YES adType:self.adType];
+    [[YumiLogger stdLogger] debug:@"---IronSource video did reward"];
+}
+
 
 @end

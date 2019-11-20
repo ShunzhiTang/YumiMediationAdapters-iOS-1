@@ -86,12 +86,13 @@
         // Initialize InMobi SDK with your account ID
         [IMSdk initWithAccountID:provider.data.key1 consentDictionary:consentDict];
         [IMSdk setLogLevel:kIMSDKLogLevelNone];
+        [[YumiLogger stdLogger] debug:@"---InMobi SDK init"];
     });
     return self;
 }
 
 - (NSString *)networkVersion {
-    return @"8.1.0";
+    return @"7.4.0";
 }
 
 - (void)updateProviderData:(YumiMediationCoreProvider *)provider {
@@ -112,10 +113,10 @@
             [IMSdk updateGDPRConsent:@{ IM_GDPR_CONSENT_AVAILABLE : @(NO) }];
         }
 
-        weakSelf.imnative = [[IMNative alloc] initWithPlacementId:[self.provider.data.key2 longLongValue]];
-        weakSelf.imnative.delegate = self;
+        weakSelf.imnative = [[IMNative alloc] initWithPlacementId:[weakSelf.provider.data.key2 longLongValue]];
+        weakSelf.imnative.delegate = weakSelf;
         [weakSelf.imnative load];
-
+        [[YumiLogger stdLogger] debug:@"---InMobi native ad start request ad"];
     });
 }
 
@@ -125,6 +126,7 @@
 }
 
 - (void)presentFromRootViewController:(UIViewController *)rootViewController {
+    [[YumiLogger stdLogger] debug:@"---InMobi native interstitial did present"];
     [self.interstitial presentFromRootViewController:rootViewController];
 
     // inmobi present
@@ -179,6 +181,7 @@
     interstitialStr = [NSString stringWithFormat:interstitialStr, @"100%", @"100%", @"100%", @"100%", clickUrl, url];
 
     [self.interstitial loadHTMLString:interstitialStr];
+    [[YumiLogger stdLogger] debug:@"---InMobi interstitial load native html"];
 }
 
 - (void)native:(IMNative *)native didFailToLoadWithError:(IMRequestStatus *)error {
@@ -186,7 +189,7 @@
                         coreAd:self.interstitial
                  didFailToLoad:error.localizedDescription
                         adType:self.adType];
-    ;
+    [[YumiLogger stdLogger] debug:@"---InMobi native load fail"];
 }
 
 - (void)nativeWillPresentScreen:(IMNative *)native {
@@ -209,6 +212,8 @@
              interstitialFrame:CGRectZero
                 withTemplateID:(int)self.currentID
                         adType:self.adType];
+    
+    [[YumiLogger stdLogger] debug:@"---InMobi native interstitial did load"];
 }
 
 - (void)yumiAdsWKCustomViewController:(UIViewController *)viewController didFailToReceiveAdWithError:(NSError *)error {
@@ -216,7 +221,7 @@
                         coreAd:self.interstitial
                  didFailToLoad:error.localizedDescription
                         adType:self.adType];
-    ;
+    [[YumiLogger stdLogger] debug:@"---InMobi native interstitial load fail"];
 }
 
 - (void)didClickOnYumiAdsWKCustomViewController:(UIViewController *)viewController point:(CGPoint)point {
@@ -238,6 +243,8 @@
 
 - (void)yumiAdsWKCustomViewControllerDidClosed:(UIViewController *)viewController {
     [self.delegate coreAdapter:self didCloseCoreAd:self.interstitial isCompletePlaying:NO adType:self.adType];
+    self.interstitial = nil;
+    [[YumiLogger stdLogger] debug:@"---InMobi native interstitial did close"];
 }
 
 @end
