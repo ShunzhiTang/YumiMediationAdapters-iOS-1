@@ -43,7 +43,7 @@
 }
 
 - (NSString *)networkVersion {
-    return @"2.1.0";
+    return @"2.3.0";
 }
 
 - (void)requestAd {
@@ -100,6 +100,10 @@
 
 - (void)oneWaySDKRewardedAdDidClick:(NSString *)tag {
     [self.delegate coreAdapter:self didClickCoreAd:nil adType:self.adType];
+}
+
+- (void)oneWaySDKRewardedAdDidFinish:(NSString *)tag withState:(NSNumber *)state session:(NSString *)session {
+    
 }
 
 @end
